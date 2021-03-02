@@ -1,5 +1,0 @@
-// git bash
-
-git add InceptionV3Test.ipynb
-git commit -m "commit message"
-git push -u origin main
