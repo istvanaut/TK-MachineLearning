@@ -1,0 +1,21 @@
+!SESSION 2021-03-05 13:22:49.027 -----------------------------------------------
+eclipse.buildId=Version 1.6.0
+java.version=11.0.9.1
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=hu_HU
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data D:\onlabgithub\TK-MachineLearning\Supervision\Sensors
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2021-03-05 13:23:03.129
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-03-05 13:23:03.233
+!MESSAGE Log4j initialized with config file D:\onlabgithub\TK-MachineLearning\Supervision\Sensors\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-03-05 13:23:06.391
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-03-05 13:23:07.015
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-03-05 13:24:47.392
+!MESSAGE Indexed 'Sensors' (28 sources, 88 headers) in 4.77 sec: 7,031 declarations; 43,484 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.004%)
