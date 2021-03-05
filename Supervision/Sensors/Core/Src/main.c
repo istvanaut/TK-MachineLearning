@@ -22,10 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "myCOM.h"
-#include "string.h"
-#include "stdlib.h"
-#include "stdio.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -39,12 +36,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-int enc1 = 0;
-int enc2 = 0;
-int speed1en = 1;
-int speed2en = 1;
-int timerTempVal1 = 0;
-int timerTempVal2 = 0;
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -52,14 +44,15 @@ int timerTempVal2 = 0;
 I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim1;
-TIM_HandleTypeDef htim3;
-TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim6;
 
-UART_HandleTypeDef huart3;
-
 /* USER CODE BEGIN PV */
-
+int encoderSumOfRotations1 = 0;
+int encoderSumOfRotations2 = 0;
+int speed1en = 1;
+int speed2en = 1;
+int timerCntrVal1 = 0;
+int timerCntrVal2 = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -77,37 +70,7 @@ static void MX_TIM6_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void Timer3_Start()
-  {
-  	HAL_TIM_Base_Start_IT(&htim3);
-  }
 
-  void Timer4_Start()
-  {
-  	HAL_TIM_Base_Start_IT(&htim4);
-  }
-
-  void Timer3_Stop()
-  {
-  	HAL_TIM_Base_Stop_IT(&htim3);
-  }
-
-  void Timer4_Stop()
-  {
-  	HAL_TIM_Base_Stop_IT(&htim4);
-  }
-
-  void Timer3_CntrVal()
-  {
-	  timerTempVal1 = TIM3->CNT;
-	  TIM3->CNT = 0;
-  }
-
-  void Timer4_CntrVal()
-  {
-	  timerTempVal2 = TIM4->CNT;
-	  TIM4->CNT = 0;
-  }
 /* USER CODE END 0 */
 
 /**
@@ -145,63 +108,33 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
-  enc1 = 0;
-    enc2 = 0;
-    Timer3_Start();
-    Timer4_Start();
+  Encoder_Init();
 
-    char* buff[50];
-
+  // Variables
     int distanceRight = 0;
     int distanceLeft = 0;
     double actualSpeedRight = 0;
     double actualSpeedLeft = 0;
 
-    int actualSpeedLeftTemp = 0;
-    int actualSpeedRightTemp = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  distanceRight = enc1;
-	  	distanceLeft = enc2;
-	  	if(speed1en)
-	  	{
-	  		actualSpeedRight = (1/26711.18531)*timerTempVal1*100;
-	  	}
-	  	else
-	  	{
-	  		actualSpeedRight = 0;
-	  	}
+	  distanceRight = encoderSumOfRotations1;
+	  distanceLeft = encoderSumOfRotations2;
+	  actualSpeedRight = CalculateSpeed(timerCntrVal1, speed1en);
+	  actualSpeedLeft = CalculateSpeed(timerCntrVal2, speed2en);
 
-	  	if(speed2en)
-	  	{
-	  		actualSpeedLeft = (1/26711.18531)*timerTempVal2*100;
-	  	}
-	  	else
-	  	{
-	  		actualSpeedLeft = 0;
-	  	}
-	  	actualSpeedLeftTemp = actualSpeedLeft;
-	  	actualSpeedRightTemp = actualSpeedRight;
+	  /* delay kiíráshoz
+	  for(int i=0; i<1600000; i++)
+	  {
 
-	  	for(int i=0; i<1600000; i++)
-	  	{
+	  }*/
 
-	  	}
+	  WriteEncoderToPC(distanceRight, distanceLeft, (int)actualSpeedRight, (int)actualSpeedLeft);
 
-
-	  	PCsend("Distance right (cm): ");
-	  	PCsend(itoa(distanceRight, buff, 10));
-	  	PCsend(", Speed right (cm/s): ");
-	  	PCsend(itoa(actualSpeedRightTemp, buff, 10));
-	  	PCsend(", Distance left (cm): ");
-	  	PCsend(itoa(distanceLeft, buff, 10));
-	  	PCsend(", Speed left (cm/s): ");
-	  	PCsend(itoa(actualSpeedLeftTemp, buff, 10));
-	  	PCsend("\n");
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -654,45 +587,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-  if (GPIO_Pin == GPIO_PIN_3)
-  {
-	  enc1++;
-	  if(enc1 % 5 == 0)
-	  {
-		  speed1en = 1;
-		  Timer3_Stop();
-		  Timer3_CntrVal();
-		  Timer3_Start();
-	  }
-  }
-  if (GPIO_Pin == GPIO_PIN_4)
-  {
-	  enc2++;
-	  if(enc2 % 5 == 0)
-	  {
-		 speed2en = 1;
-	     Timer4_Stop();
-	     Timer4_CntrVal();
-	     Timer4_Start();
-	  }
-  }
 
-}
-
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-  {
-  	if(htim->Instance == TIM3)
-  	{
-  		speed1en = 0;
-  	}
-
-  	if(htim->Instance == TIM4)
-  	{
-  		speed2en = 0;
-  	}
-  }
 /* USER CODE END 4 */
 
 /**
