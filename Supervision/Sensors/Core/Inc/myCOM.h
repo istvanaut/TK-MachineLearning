@@ -1,7 +1,12 @@
-#include "stdint.h"
-#include "stm32f7xx_hal.h"
-#include "string.h"
+#include "main.h"
+#include "stdio.h"
 
-UART_HandleTypeDef huart3;
+void initMyCOM(UART_HandleTypeDef* PC_UART);
 
-void PCsend(char* sendData);
+int __io_putchar(int ch);
+
+int __io_getchar(void);
+
+int _write(int file, char* data, int len);
+
+int _read(int file, char *ptr, int len);

@@ -42,9 +42,11 @@
 /* Private variables ---------------------------------------------------------*/
 
 I2C_HandleTypeDef hi2c1;
-
+UART_HandleTypeDef huart3;
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim6;
+TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim4;
 
 /* USER CODE BEGIN PV */
 int encoderSumOfRotations1 = 0;
@@ -89,7 +91,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  initMyCOM(&huart3);
   /* USER CODE END Init */
 
   /* Configure the system clock */
