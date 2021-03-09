@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 import torch
+import numpy as np
 from torchvision import transforms
 transforms.ToTensor()
 State = namedtuple('State',
