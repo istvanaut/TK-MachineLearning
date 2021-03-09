@@ -118,7 +118,8 @@ int main(void)
     double actualSpeedRight = 0;
     double actualSpeedLeft = 0;
     int test = 6;
-    int test2 = 0;
+    int test2 = 2;
+    int test3 = 0;
 
   /* USER CODE END 2 */
 
