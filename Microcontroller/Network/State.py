@@ -15,8 +15,7 @@ def transform_state(state):
     state = [[ [state.radar, state.collision, state.velocity[0], state.velocity[1], state.velocity[2],
              state.acceleration[0], state.acceleration[1], state.acceleration[2],
              state.obstacle, state.distance_from_line]]]
-    transform=transforms.ToTensor()
-    return torch.from_numpy(image).float(), torch.tensor(state)
+    return torch.from_numpy(image).float(), torch.tensor(state).float()
 
 
 feature_dimension = 10
