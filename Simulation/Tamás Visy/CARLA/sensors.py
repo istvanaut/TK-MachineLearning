@@ -1,29 +1,13 @@
-import glob
-import math
-import os
-import sys
 import time
-
 import cv2
-from key import Key
-import numpy as np
 
-try:
-    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
-        sys.version_info.major,
-        sys.version_info.minor,
-        'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
-except IndexError:
-    print('IndexError while trying to find carla egg')
-    sys.exit()
-try:
-    import carla  # Carla package uses the egg from Carla - Python didn't work
-except ModuleNotFoundError:
-    print('ModuleNotFoundError while importing carla')
-    sys.exit()
+import carla_wrapper
+from support.datakey import DataKey
+import numpy as np
 
 IM_WIDTH = 400
 IM_HEIGHT = 400
+RADAR_RANGE = 40.0
 
 
 def recently(event_time):
@@ -45,40 +29,38 @@ def process_image(data, image):
     i = np.array(image.raw_data)
     i = i.reshape((IM_HEIGHT, IM_WIDTH, 4))
     i = i[:, :, :3]
-    data.put(Key.SENSOR_CAMERA, i / 255.0)  # normalization
+    data.put(DataKey.SENSOR_CAMERA, i / 255.0)  # normalization
 
 
 def resize(image, x, y):
+    if image is None:
+        return None
     return cv2.resize(image, (x, y))
 
 
 def process_radar(data, rd):
     points = []
-    current_rot = rd.transform.rotation
     for detect in rd:
-        azi = math.degrees(detect.azimuth)
-        alt = math.degrees(detect.altitude)
 
-        fw_vec = carla.Vector3D(x=detect.depth - 0.25)
-        carla.Transform(
-            carla.Location(),
-            carla.Rotation(
-                pitch=current_rot.pitch + alt,
-                yaw=current_rot.yaw + azi,
-                roll=current_rot.roll)).transform(fw_vec)
+        fw_vec = carla_wrapper.vector3D(x=detect.depth - 0.25)
 
         if abs(detect.azimuth) < 0.001 and abs(detect.altitude) < 0.001:
             points.append(np.linalg.norm([fw_vec.x, fw_vec.y, fw_vec.z]))
 
     if len(points) is not 0:
-        # print(points[-1])
-        data.put(Key.SENSOR_RADAR, points[-1])
+        data.put(DataKey.SENSOR_RADAR, points[-1])
+
+
+def limit_range(radar):
+    if radar is not None and radar > RADAR_RANGE:
+        return None
+    else:
+        return radar
 
 
 def process_coll(data, coll):
-    # print('Collision detected, maybe restart?')
-    data.put(Key.SENSOR_COLLISION, time.time_ns())
+    data.put(DataKey.SENSOR_COLLISION, time.time_ns())
 
 
 def process_obs(data, obs):
-    data.put(Key.SENSOR_OBSTACLE, time.time_ns())
+    data.put(DataKey.SENSOR_OBSTACLE, time.time_ns())

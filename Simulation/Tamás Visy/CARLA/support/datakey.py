@@ -3,7 +3,7 @@
 from enum import Enum
 
 
-class Key(Enum):
+class DataKey(Enum):
     SENSOR_CAMERA = 20
     SENSOR_RADAR = 21
     SENSOR_COLLISION = 25

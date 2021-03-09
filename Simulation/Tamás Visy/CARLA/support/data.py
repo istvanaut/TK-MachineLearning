@@ -1,4 +1,4 @@
-# from Tamás Visy's temalab_gta repo
+# based on data.py from Tamás Visy's temalab_gta repo
 
 from threading import Lock
 
@@ -14,16 +14,11 @@ class Data:
         self.lock = Lock()
 
     def put(self, key, data):
-        self.lock.acquire()
-        if self.lock.locked():
+        with self.lock:
             self.data[key] = data
-            self.lock.release()
-        else:
-            raise Exception('Data locking')
 
     def get(self, key=None, delete=False):
-        self.lock.acquire()
-        if self.lock.locked():
+        with self.lock:
             data = None
             if key is None:
                 data = self.data
@@ -33,14 +28,10 @@ class Data:
                 data = self.data[key]
                 if delete:
                     self.data[key] = None
-            self.lock.release()
             return data
-        else:
-            raise Exception('Data locking')
 
     def push(self, data, key):
-        self.lock.acquire()
-        if self.lock.locked():
+        with self.lock:
             d = None
             if key in self.data.keys():
                 d = self.data[key]
@@ -49,27 +40,23 @@ class Data:
 
             d.append(data)
             self.data[key] = d
-            self.lock.release()
-        else:
-            raise Exception('Data locking')
 
     def pop(self, key):
-        self.lock.acquire()
-        if self.lock.locked():
+        with self.lock:
             d = None
             if key in self.data.keys():
                 d = self.data[key]
             if d is None or len(d) is 0:
-                self.lock.release()
                 return None
             else:
                 element = d[0]
                 d = d[1::]
                 self.data[key] = d
-                self.lock.release()
                 return element
-        else:
-            raise Exception('Data locking')
 
     def copy(self):
         return Data(self.data)
+
+    def clear(self):
+        with self.lock:
+            self.data = dict()
