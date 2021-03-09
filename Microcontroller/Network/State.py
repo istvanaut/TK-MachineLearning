@@ -10,7 +10,7 @@ State = namedtuple('State',
 
 def transform_state(state):
     state = State(*state)
-    image=state.image
+    image=np.expand_dims(state.image, axis=0)
     state = [[ [state.radar, state.collision, state.velocity[0], state.velocity[1], state.velocity[2],
              state.acceleration[0], state.acceleration[1], state.acceleration[2],
              state.obstacle, state.distance_from_line]]]
