@@ -117,7 +117,7 @@ int main(void)
     int distanceLeft = 0;
     double actualSpeedRight = 0;
     double actualSpeedLeft = 0;
-    int test = 5;
+    int test = 6;
     int test2 = 0;
 
   /* USER CODE END 2 */
