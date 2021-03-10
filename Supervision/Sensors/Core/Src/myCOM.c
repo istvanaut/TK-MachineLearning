@@ -1,3 +1,10 @@
+/**
+ * myCom.c
+ * 		Author: Kolontari Peter
+ * 	Created on: Mar 8, 2021
+ * 	All Rights Reserved.
+ */
+
 #include "myCOM.h"
 
 UART_HandleTypeDef* myHuart;
