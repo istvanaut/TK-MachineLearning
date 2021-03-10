@@ -127,7 +127,7 @@ int main(void)
   double actualSpeedLeft = 0;*/
 
   //rightMotor(1);
-  //leftMotor(0.5);
+  //leftMotor(-1);
 
   /* USER CODE END 2 */
 
@@ -139,12 +139,6 @@ int main(void)
 	  distanceLeft = encoderSumOfRotations2;
 	  actualSpeedRight = CalculateSpeed(timerCntrVal1, speed1en);
 	  actualSpeedLeft = CalculateSpeed(timerCntrVal2, speed2en);*/
-
-	  /* delay kiíráshoz
-	  for(int i=0; i<1600000; i++)
-	  {
-
-	  }*/
 
 	  //WriteEncoderToPC(distanceRight, distanceLeft, (int)actualSpeedRight, (int)actualSpeedLeft);
 
