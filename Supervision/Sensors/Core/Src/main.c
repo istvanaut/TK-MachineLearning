@@ -32,7 +32,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define ARR 2251u
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -71,26 +71,13 @@ static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM2_Init(void);
-void leftMotor(float value);
-void rightMotor(float value);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void leftMotor(float value)
-{
-    // value > 0 --> forward, value < 0 --> backward
-    TIM2->CCR1 = (uint32_t) (value > 0 ? ARR * value : 0);
-    TIM2->CCR2 = (uint32_t) (value > 0 ? 0 : ARR * value);
-}
-void rightMotor(float value)
-{
-    // value > 0 --> forward, value < 0 --> backward
-    TIM2->CCR3 = (uint32_t) (value > 0 ? ARR * value : 0);
-    TIM2->CCR4 = (uint32_t) (value > 0 ? 0 : ARR * value);
-}
+
 /* USER CODE END 0 */
 
 /**
@@ -105,11 +92,10 @@ int main(void)
 
   /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the  HAL_Init();
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
-  initMyCOM(&huart3);
-
 
   /* USER CODE END Init */
 
@@ -130,33 +116,21 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  initMyCOM(&huart3);
   Encoder_Init();
+  Motors_Init(&htim2);
 
-  //start pwm
-     //left motor
-     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-     //rigth motor
-     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
-     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
-
-
-
-     //init to zero
-     TIM2->CCR1 = 0u;
-     TIM2->CCR2 = 0u;
-     TIM2->CCR3 = 0u;
-     TIM2->CCR4 = 0u;
 
   // Variables
-    int distanceRight = 0;
-    int distanceLeft = 0;
-    double actualSpeedRight = 0;
-    double actualSpeedLeft = 0;
+  /*int distanceRight = 0;
+  int distanceLeft = 0;
+  double actualSpeedRight = 0;
+  double actualSpeedLeft = 0;*/
 
 
-    rightMotor(1);
-    leftMotor(0.5);
+  //rightMotor(1);
+  //leftMotor(0.5);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -435,7 +409,7 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 599;
+  htim3.Init.Prescaler = 3599;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 65535;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;

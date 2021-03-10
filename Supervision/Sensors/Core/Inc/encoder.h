@@ -1,8 +1,8 @@
 #include "stm32f7xx_hal.h"
 #include "myCOM.h"
 
-TIM_HandleTypeDef htim3;
-TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
 
 extern int speed1en;
 extern int speed2en;
