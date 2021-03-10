@@ -132,7 +132,8 @@ int main(void)
   leds[1] = 0xFF;
   leds[2] = 0xFF;
   leds[3] = 0xFF;
-  SPItransmit_LED(leds, 1);*/
+  SPItransmit_LED(leds, 1);
+  SPItransmit_LED(leds, 0);*/
 
   // Variables
   /*int distanceRight = 0;
