@@ -1,5 +1,8 @@
 #include "encoder.h"
 
+#define sysCLK 72000000
+#define PSC 3599
+
 void Encoder_Init()
 {
 	encoderSumOfRotations1 = 0;
@@ -42,9 +45,9 @@ void Timer3_Start()
 
   void WriteEncoderToPC(int dr, int dl, int sr, int sl)
   {
-	  char* buff[50];
+	  //char* buff[50];
 
-	  PCsend("Distance right (cm): ");
+	  /*PCsend("Distance right (cm): ");
 	  PCsend(itoa(dr, buff, 10));
 	  PCsend(", Speed right (cm/s): ");
 	  PCsend(itoa(sr, buff, 10));
@@ -52,12 +55,12 @@ void Timer3_Start()
 	  PCsend(itoa(dl, buff, 10));
 	  PCsend(", Speed left (cm/s): ");
 	  PCsend(itoa(sl, buff, 10));
-	  PCsend("\n");
+	  PCsend("\n");*/
   }
 
   double CalculateSpeed(int cntrVal, int speedEn)
   {
-	  double timeOfStep = 1/26711.18531;
+	  double timeOfStep = 1/(sysCLK / PSC);
 	  if(speedEn)
 	  {
 		  return timeOfStep*cntrVal*100; // 100-as szozó, hogy m/s helyett cm/s legyen
