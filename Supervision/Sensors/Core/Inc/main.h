@@ -33,11 +33,13 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "myCOM.h"
+#include "encoder.h"
+#include "motors.h"
+
 #include "string.h"
 #include "stdint.h"
 #include "stdlib.h"
 #include "stdio.h"
-#include "encoder.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
