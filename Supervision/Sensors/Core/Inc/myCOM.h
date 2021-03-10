@@ -1,3 +1,10 @@
+/**
+ * myCom.h
+ * 		Author: Kolontari Peter
+ * 	Created on: Mar 8, 2021
+ * 	All Rights Reserved.
+ */
+
 #include "main.h"
 #include "stdio.h"
 
