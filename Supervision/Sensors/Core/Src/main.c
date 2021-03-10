@@ -118,6 +118,7 @@ int main(void)
   Motors_Init(&htim2);
   initUS(&htim1);
 
+  SPItransmit();
 
   // Variables
   /*int distanceRight = 0;
