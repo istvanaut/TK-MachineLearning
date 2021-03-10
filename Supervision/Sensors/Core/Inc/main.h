@@ -35,6 +35,7 @@ extern "C" {
 #include "myCOM.h"
 #include "encoder.h"
 #include "motors.h"
+#include "lightSensor.h"
 
 #include "string.h"
 #include "stdint.h"
@@ -73,6 +74,8 @@ void Error_Handler(void);
 #define MCO_GPIO_Port GPIOH
 #define LD1_Pin GPIO_PIN_0
 #define LD1_GPIO_Port GPIOB
+#define LED_LE_Pin GPIO_PIN_12
+#define LED_LE_GPIO_Port GPIOB
 #define LD3_Pin GPIO_PIN_14
 #define LD3_GPIO_Port GPIOB
 #define STLK_RX_Pin GPIO_PIN_8
@@ -87,6 +90,8 @@ void Error_Handler(void);
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
+#define LED_OE__Pin GPIO_PIN_15
+#define LED_OE__GPIO_Port GPIOA
 #define SW0_Pin GPIO_PIN_3
 #define SW0_GPIO_Port GPIOB
 #define LD2_Pin GPIO_PIN_7
