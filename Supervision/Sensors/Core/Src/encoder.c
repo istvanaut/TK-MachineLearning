@@ -43,19 +43,9 @@ void Timer3_Start()
 	  TIM4->CNT = 0;
   }
 
-  void WriteEncoderToPC(int dr, int dl, int sr, int sl)
+  void WriteEncoderToPC(int dr, int dl, double sr, double sl)
   {
-	  //char* buff[50];
-
-	  /*PCsend("Distance right (cm): ");
-	  PCsend(itoa(dr, buff, 10));
-	  PCsend(", Speed right (cm/s): ");
-	  PCsend(itoa(sr, buff, 10));
-	  PCsend(", Distance left (cm): ");
-	  PCsend(itoa(dl, buff, 10));
-	  PCsend(", Speed left (cm/s): ");
-	  PCsend(itoa(sl, buff, 10));
-	  PCsend("\n");*/
+	  printf("Distance right: %d, Speed right: %f, Distance left: %d, Speed left: %f\n", dr, sr, dl, sl);
   }
 
   double CalculateSpeed(int cntrVal, int speedEn)
@@ -63,7 +53,7 @@ void Timer3_Start()
 	  double timeOfStep = 1/(sysCLK / PSC);
 	  if(speedEn)
 	  {
-		  return timeOfStep*cntrVal*100; // 100-as szozó, hogy m/s helyett cm/s legyen
+		  return timeOfStep*cntrVal;
 	  }
 	  else
 	  {
