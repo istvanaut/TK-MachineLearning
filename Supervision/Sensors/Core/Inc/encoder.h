@@ -20,7 +20,7 @@ void Timer4_Stop();
 void Timer3_CntrVal();
 void Timer4_CntrVal();
 
-void WriteEncoderToPC(int dr, int dl, int sr, int sl);
+void WriteEncoderToPC(int dr, int dl, double sr, double sl);
 double CalculateSpeed(int cntrVal, int speedEn);
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);

@@ -154,7 +154,7 @@ int main(void)
 	  actualSpeedRight = CalculateSpeed(timerCntrVal1, speed1en);
 	  actualSpeedLeft = CalculateSpeed(timerCntrVal2, speed2en);*/
 
-	  //WriteEncoderToPC(distanceRight, distanceLeft, (int)actualSpeedRight, (int)actualSpeedLeft);
+	  //WriteEncoderToPC(distanceRight, distanceLeft, actualSpeedRight, actualSpeedLeft);
 
 
 
