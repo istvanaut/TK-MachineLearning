@@ -44,7 +44,7 @@ void Timer3_Start()
   {
 	  char* buff[50];
 
-	  PCsend("Distance right (cm): ");
+	  /*PCsend("Distance right (cm): ");
 	  PCsend(itoa(dr, buff, 10));
 	  PCsend(", Speed right (cm/s): ");
 	  PCsend(itoa(sr, buff, 10));
@@ -52,7 +52,7 @@ void Timer3_Start()
 	  PCsend(itoa(dl, buff, 10));
 	  PCsend(", Speed left (cm/s): ");
 	  PCsend(itoa(sl, buff, 10));
-	  PCsend("\n");
+	  PCsend("\n");*/
   }
 
   double CalculateSpeed(int cntrVal, int speedEn)
