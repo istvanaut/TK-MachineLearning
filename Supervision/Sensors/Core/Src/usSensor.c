@@ -21,6 +21,7 @@ void initUS(TIM_HandleTypeDef *htim){
 	HAL_TIM_PWM_Start(UStim, TIM_CHANNEL_2);
 }
 
+
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance == UStim->Instance){
 		if(risingEdgeDetected == 0){
