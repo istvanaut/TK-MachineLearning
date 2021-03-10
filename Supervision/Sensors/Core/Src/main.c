@@ -71,6 +71,8 @@ static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM2_Init(void);
+void leftMotor(float value);
+void rightMotor(float value);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -103,27 +105,12 @@ int main(void)
 
   /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+  /* Reset of all peripherals, Initializes the Flash interface and the  HAL_Init();
 
   /* USER CODE BEGIN Init */
   initMyCOM(&huart3);
 
-  //start pwm
-   //left motor
-   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-   //rigth motor
-   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
-   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
 
-
-
-   //init to zero
-   TIM2->CCR1 = 0u;
-   TIM2->CCR2 = 0u;
-   TIM2->CCR3 = 0u;
-   TIM2->CCR4 = 0u;
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -145,22 +132,41 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Encoder_Init();
 
+  //start pwm
+     //left motor
+     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+     //rigth motor
+     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+
+
+
+     //init to zero
+     TIM2->CCR1 = 0u;
+     TIM2->CCR2 = 0u;
+     TIM2->CCR3 = 0u;
+     TIM2->CCR4 = 0u;
+
   // Variables
     int distanceRight = 0;
     int distanceLeft = 0;
     double actualSpeedRight = 0;
     double actualSpeedLeft = 0;
 
+
+    rightMotor(1);
+    leftMotor(0.5);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  distanceRight = encoderSumOfRotations1;
+	  /*distanceRight = encoderSumOfRotations1;
 	  distanceLeft = encoderSumOfRotations2;
 	  actualSpeedRight = CalculateSpeed(timerCntrVal1, speed1en);
-	  actualSpeedLeft = CalculateSpeed(timerCntrVal2, speed2en);
+	  actualSpeedLeft = CalculateSpeed(timerCntrVal2, speed2en);*/
 
 	  /* delay kiíráshoz
 	  for(int i=0; i<1600000; i++)
@@ -168,7 +174,9 @@ int main(void)
 
 	  }*/
 
-	  WriteEncoderToPC(distanceRight, distanceLeft, (int)actualSpeedRight, (int)actualSpeedLeft);
+	  //WriteEncoderToPC(distanceRight, distanceLeft, (int)actualSpeedRight, (int)actualSpeedLeft);
+
+
 
     /* USER CODE END WHILE */
 
@@ -198,7 +206,7 @@ void SystemClock_Config(void)
   * in the RCC_OscInitTypeDef structure.
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
