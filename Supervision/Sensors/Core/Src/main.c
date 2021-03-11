@@ -61,6 +61,8 @@ int speed1en = 1;
 int speed2en = 1;
 int timerCntrVal1 = 0;
 int timerCntrVal2 = 0;
+
+int valami = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
