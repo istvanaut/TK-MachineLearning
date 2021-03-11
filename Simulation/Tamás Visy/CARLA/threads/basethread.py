@@ -1,7 +1,8 @@
 # based on basethread.py from Tamás Visy's temalab_gta repo
-
+import time
 from threading import Thread
 
+from support.datakey import DataKey
 from support.logger import logger
 
 
@@ -15,7 +16,9 @@ class BaseThread(Thread):
     def run(self):
         self.beginning()
         while not self.stop:
-            self.loop()
+            while not self.data.get(DataKey.THREAD_HALT) and not self.stop:
+                self.loop()
+            time.sleep(1.0)
         self.finish()
 
     def set_stop(self):

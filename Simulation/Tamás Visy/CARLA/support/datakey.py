@@ -4,6 +4,7 @@ from enum import Enum
 
 
 class DataKey(Enum):
+    THREAD_HALT = 10
     SENSOR_CAMERA = 20
     SENSOR_RADAR = 21
     SENSOR_COLLISION = 25

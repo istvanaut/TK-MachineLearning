@@ -14,6 +14,7 @@ class AgentThread(BaseThread):
         super().__init__(data)
         self.agent = NetworkAgent()
         self.line = None
+        self.agent.load(AGENT_MODEL_PATH)
 
     def set_line(self, line):
         self.line = line
@@ -24,9 +25,9 @@ class AgentThread(BaseThread):
         state = convert_v2(data)  # convert() would be better TODO (6)
 
         if state is not None:
-            out = self.agent.predict(state)
-            # TODO (5) only optimize when we started moving?
             self.agent.optimize(new_state=state)
+            out = self.agent.predict(state)
+
             self.data.put(DataKey.CONTROL_OUT, out)
 
         time.sleep(0.05)
@@ -44,10 +45,6 @@ class AgentThread(BaseThread):
         else:
             d = None
         return ca, r, co, v, a, p, o, d
-
-    def beginning(self):
-        super().beginning()
-        self.agent.load(AGENT_MODEL_PATH)
 
     def finish(self):
         self.agent.save(AGENT_MODEL_PATH)

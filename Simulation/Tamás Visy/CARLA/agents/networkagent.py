@@ -1,8 +1,9 @@
 import cv2
 import numpy as np
 
+from ReinforcementModel import ReinforcementModel
 from agents.agent import Agent, convert
-from agents.network.ReinforcementModel import ReinforcementModel
+
 from support.logger import logger
 
 feature_dimension = 10
@@ -55,8 +56,10 @@ class NetworkAgent(Agent):
 def convert_v2(state):
     # TODO (9) fix this mess
     known_state, hidden_state = convert(state)
+
     camera, radar, velocity, acceleration, position = known_state
     collision, obstacle, distance = hidden_state
+
     important = camera, velocity, acceleration, position
 
     # Removing colors

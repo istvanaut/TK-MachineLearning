@@ -3,6 +3,7 @@ from State import State
 
 # This is where the reward functions will be defined
 
+
 def base_reward(prev_state, new_state):
     # The functions checks for distance from line,
     # assigns positive reward if its close to it,

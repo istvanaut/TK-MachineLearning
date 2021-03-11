@@ -5,12 +5,13 @@ import sys
 from support.logger import logger
 
 try:
-    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
+    sys.path.append(glob.glob('files/carla-*%d.%d-%s.egg' % (
         sys.version_info.major,
         sys.version_info.minor,
         'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
 except IndexError:
     logger.critical('IndexError while trying to find carla egg')
+    logger.info('Place carla egg into files directory')
     sys.exit()
 try:
     import carla  # Carla package uses the egg from Carla - Python installed package doesn't work
