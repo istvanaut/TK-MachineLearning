@@ -1,8 +1,9 @@
 import cv2
 import numpy as np
 
+from ReinforcementModel import ReinforcementModel
 from agents.agent import Agent, convert
-from agents.network.ReinforcementModel import ReinforcementModel
+
 from support.logger import logger
 
 feature_dimension = 10

@@ -6,11 +6,14 @@ import numpy as np
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
+
 from Networks.CNNwRNN import CNNwRNN
-from ReinforcementlearningElements.ReplayMemory import ReplayMemory, Transition
-import ReinforcementlearningElements.RewardFunctions as RewardFunctions
+from ReinforcementlearningElements import RewardFunctions
+from ReinforcementlearningElements.ReplayMemory import ReplayMemory
 from State import State, transform_state
 import matplotlib.pyplot as plt
+
+from support.logger import logger
 
 
 class ReinforcementModel:
@@ -62,10 +65,13 @@ class ReinforcementModel:
     def select_action(self, image, features):
         sample = random.random()
         eps_threshold = self.EPS_END + (self.EPS_START - self.EPS_END) * \
-                        math.exp(-1. * self.steps_done / self.EPS_DECAY)
+            math.exp(-1. * self.steps_done / self.EPS_DECAY)
         self.steps_done += 1
-        print("Epoch: "+  str(self.steps_done)+ " -----------------")
-        print("Selecting action, epoch")
+        if self.steps_done % 10 == 0:
+            logger.info(f'Epoch: {self.steps_done}')
+        # else:
+        #     logger.debug(f'Epoch: {self.steps_done}')
+        # logger.debug('Selecting action')
         if sample > eps_threshold:
             with torch.no_grad():
                 # t.max(1) will return largest column value of each row.
@@ -76,7 +82,7 @@ class ReinforcementModel:
             return torch.tensor([[random.randrange(self.n_actions)]], device=self.device, dtype=torch.long)
 
     def optimize(self, new_state):
-        print("Optimization started")
+        # logger.debug('Optimization started')
         # Calculates the rewards, saves the state and the transition.
         # After TARGET_UPDATE steps, replaces the target network's weights with the policy network's
         reward = self.reward(prev_state=self.prev_state, new_state=new_state)
@@ -94,12 +100,14 @@ class ReinforcementModel:
             self.target_net.load_state_dict(self.policy_net.state_dict())
             self.episode_durations.append(self.time_step + 1)
             self.plot_durations()
-        print("Optimization finished")
+        # logger.debug('Optimization finished')
 
     def optimize_model(self):
         if len(self.memory) < self.BATCH_SIZE:
             return
-        print("Batch optimization started")
+        logger.debug('Batch optimization started')  # This can be slow
+        logger.warning('Skipping batch optimization')  # TODO (8) re-enable this
+        return
         transitions = self.memory.sample(self.BATCH_SIZE)
         # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
         # detailed explanation). This converts batch-array of Transitions
@@ -132,8 +140,9 @@ class ReinforcementModel:
         # This is merged based on the mask, such that we'll have either the expected
         # state value or 0 in case the state was final.
         next_state_values = torch.zeros(self.BATCH_SIZE, device=self.device)
-        next_state_values[non_final_mask_image] = self.target_net(non_final_next_states_image, non_final_next_state_features).max(1)[
-            0].detach()
+        next_state_values[non_final_mask_image] = \
+            self.target_net(non_final_next_states_image, non_final_next_state_features).max(1)[
+                0].detach()
         # Compute the expected Q values
         expected_state_action_values = (next_state_values * self.GAMMA) + reward_batch
 
@@ -143,12 +152,14 @@ class ReinforcementModel:
         # Optimize the model
         self.optimizer.zero_grad()
         loss.backward()
-        #for param in self.policy_net.parameters():
-            #param.grad.data.clamp_(-1, 1)
+        # for param in self.policy_net.parameters():
+        # param.grad.data.clamp_(-1, 1)
         self.optimizer.step()
-        print("Batch optimization finished")
+        logger.debug('Batch optimization finished')
 
     def plot_durations(self):
+        logger.warning('Not showing plots')
+        return
         plt.figure(2)
         plt.clf()
         durations_t = torch.tensor(self.episode_durations, dtype=torch.float)
@@ -165,7 +176,8 @@ class ReinforcementModel:
         plt.pause(0.001)  # pause a bit so that plots are updated
 
     def save_model(self, path):
-        torch.save(self.target_net.state_dict(), path)
+        model = self.target_net.state_dict()
+        torch.save(model, path)
 
     def load_model(self, path, dim_features, image_height, image_width, n_actions):
         model = CNNwRNN(dim_features, image_height, image_width, n_actions)

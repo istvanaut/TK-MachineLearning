@@ -53,19 +53,19 @@ class CNNwRNN(nn.Module):
         self.transformer_encoder = nn.TransformerEncoder(self.encoder_layer, 32)
 
         # Output layer
-        self.dense2 = nn.Linear(64+dim_features, 32)
+        self.dense2 = nn.Linear(64 + dim_features, 32)
         self.dense3 = nn.Linear(32, n_actions)
 
     # Called with either one element to determine next action, or a batch
     # during optimization. Returns tensor([[left0exp,right0exp]...]).
-    def forward(self,  image, features):
+    def forward(self, image, features):
         x = F.leaky_relu(self.bn1(self.conv1(image)))
         x = F.leaky_relu(self.bn2(self.conv2(x)))
         x = F.leaky_relu(self.bn3(self.conv3(x)))
         x = F.leaky_relu(self.bn4(self.conv4(x)))
         x = F.leaky_relu(self.bn5(self.conv5(x)))
         x = F.leaky_relu(self.dense1(x.view(x.size(0), -1)))
-        y = features.view(features.size(1),features.size(0), features.size(2))
+        y = features.view(features.size(1), features.size(0), features.size(2))
         y = self.transformer_encoder(y)
         y = y.view(y.size(1), y.size(2))
         x = torch.cat((x, y), dim=1)
