@@ -21,11 +21,12 @@ class ControllerThread(BaseThread):
             d = self.data.get(DataKey.CONTROL_OUT)
             if d is not None:
                 self.control(d[0], d[1])
+            else:
+                self.control(0, 0)
         else:
             time.sleep(1.0)
 
     def control(self, throttle, steering):
-        # It is possible to control individual wheels of the car - check carla.WheelPhysicsControl
         if self.vehicle is not None:
             if throttle >= 0.0:
                 try:

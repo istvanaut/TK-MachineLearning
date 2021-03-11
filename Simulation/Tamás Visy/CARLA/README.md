@@ -46,4 +46,5 @@ If another script gives a timeout error, you probably have to specify the host (
 ---
 ## 5. Run custom Python script
 Run main.py (with python 3.7) from ``/PythonAPI/custom``
+
 To check logs, go to ``/PythonAPI/custom/files/carla.log``

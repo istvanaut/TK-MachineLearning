@@ -1,4 +1,5 @@
 import sys
+import time
 
 import sensors
 from support.datakey import DataKey
@@ -40,9 +41,12 @@ class Window:
         self.local_data = (display_surface, window_size, colors, font, small_font)
 
     def work(self):
-        """Attention! Contains infinite loop"""
+        # Attention! Contains infinite loop
         while True:
-            update_screen(self.local_data, self.data)
+            if self.data.get(DataKey.THREAD_HALT):
+                clear_screen(self.local_data)
+            else:
+                update_screen(self.local_data, self.data)
 
             for event in pygame.event.get():
                 # print(event)
@@ -55,6 +59,24 @@ class Window:
 
     def add_event(self, event):
         pygame.event.post(pygame.event.Event(event))
+
+
+def clear_screen(local_data):
+    draw_image(local_data, None)
+
+    draw_text(local_data, None, 'control', (500, 100))
+
+    draw_text(local_data, None, 'dist', (500, 200))
+
+    draw_text(local_data, None, 'coll', (500, 300))
+
+    draw_text(local_data, None, 'vel', (700, 100))
+
+    draw_text(local_data, None, 'acc', (700, 200))
+
+    draw_text(local_data, None, 'pos', (700, 300))
+
+    draw_text(local_data, None, 'obs', (600, 375))
 
 
 def update_screen(local_data, data):
@@ -91,18 +113,20 @@ def update_screen(local_data, data):
 
 
 def draw_image(local_data, image):
+    if image is None:
+        image = 0.2*np.ones([400, 400, 3])
     display_surface, window_size, colors, font, small_font = local_data
     display_surface.fill(colors[0])
-    if image is not None:
-        i = sensors.resize(image, min(window_size), min(window_size))
-        i = i * 255 // 1
-        i = i[:, :, ::-1]  # This probably fixed color issues
-        # cv2.cvtColor(i, cv2.COLOR_BGR2RGB)  # change color scheme # Error: 'Unsupported depth of input image ...'
-        i = np.fliplr(i)
-        i = np.rot90(i)
-        s = pygame.surfarray.make_surface(i)
-        i_rect = pygame.rect.Rect(0, 0, min(window_size), min(window_size))
-        display_surface.blit(s, i_rect)
+    i = sensors.resize(image, 128, 128)  # This is what agent sees, but not really how we should get to it # TODO (4)
+    i = sensors.resize(i, min(window_size), min(window_size))
+    i = i * 255 // 1
+    i = i[:, :, ::-1]  # This fixes color issues BGR -> RGB
+    # cv2.cvtColor(i, cv2.COLOR_BGR2RGB)  # change color scheme # Error: 'Unsupported depth of input image ...'
+    i = np.fliplr(i)
+    i = np.rot90(i)
+    s = pygame.surfarray.make_surface(i)
+    i_rect = pygame.rect.Rect(0, 0, min(window_size), min(window_size))
+    display_surface.blit(s, i_rect)
 
 
 def draw_text(local_data, text, tag, pos):

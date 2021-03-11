@@ -1,2 +1,2 @@
-This is the directory for the Simulation team.
+## This is the directory of the Simulation team.
 (At least one file is required so Github recognizes the directory)

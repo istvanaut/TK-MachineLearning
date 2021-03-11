@@ -68,9 +68,9 @@ class ReinforcementModel:
         self.steps_done += 1
         if self.steps_done % 10 == 0:
             logger.info(f'Epoch: {self.steps_done}')
-        else:
-            logger.debug(f'Epoch: {self.steps_done}')
-        logger.debug('Selecting action')
+        # else:
+        #     logger.debug(f'Epoch: {self.steps_done}')
+        # logger.debug('Selecting action')
         if sample > eps_threshold:
             with torch.no_grad():
                 # t.max(1) will return largest column value of each row.
@@ -81,7 +81,7 @@ class ReinforcementModel:
             return torch.tensor([[random.randrange(self.n_actions)]], device=self.device, dtype=torch.long)
 
     def optimize(self, new_state):
-        logger.debug('Optimization started')
+        # logger.debug('Optimization started')
         # Calculates the rewards, saves the state and the transition.
         # After TARGET_UPDATE steps, replaces the target network's weights with the policy network's
         reward = self.reward(prev_state=self.prev_state, new_state=new_state)
@@ -99,7 +99,7 @@ class ReinforcementModel:
             self.target_net.load_state_dict(self.policy_net.state_dict())
             self.episode_durations.append(self.time_step + 1)
             self.plot_durations()
-        logger.debug('Optimization finished')
+        # logger.debug('Optimization finished')
 
     def optimize_model(self):
         if len(self.memory) < self.BATCH_SIZE:

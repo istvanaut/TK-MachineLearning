@@ -55,8 +55,10 @@ class NetworkAgent(Agent):
 def convert_v2(state):
     # TODO (9) fix this mess
     known_state, hidden_state = convert(state)
+
     camera, radar, velocity, acceleration, position = known_state
     collision, obstacle, distance = hidden_state
+
     important = camera, velocity, acceleration, position
 
     # Removing colors

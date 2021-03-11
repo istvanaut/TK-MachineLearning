@@ -17,6 +17,7 @@ class DashboardThread(Thread):
         logger.info(f'{self.__class__.__name__} started')
         self.window = Window(self.data)
         self.window.work()
+        logger.info(f'{self.__class__.__name__} finished')
 
     def set_stop(self):
         self.window.add_event(QUIT)

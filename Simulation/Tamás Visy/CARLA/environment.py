@@ -23,7 +23,7 @@ COLL_BLUEPRINT_NAME = 'sensor.other.collision'
 OBS_BLUEPRINT_NAME = 'sensor.other.obstacle'
 DEFAULT_SPAWN_POINT = carla_wrapper.transform()
 
-SENSOR_SPAWN_POINT = carla_wrapper.transform(x=2.1, z=1.2)
+SENSOR_SPAWN_POINT = carla_wrapper.transform(x=2.0, z=1.4)
 
 TASK_FOLLOW_LINE = 1
 TASK_CREATE_LINE = 2
@@ -48,7 +48,7 @@ class Environment:
     def task_follow_line(self):
         line = Line([191.6866, 296], [191.6866, 112])
         start = [line.start[0], line.start[1], 0.25]
-        self.spawn(start, direction=[0, 270, 0])
+        self.spawn(start, direction=[0, -90, 0])
         self.setup(line)
         self.run(line)
 
@@ -63,16 +63,17 @@ class Environment:
 
     def setup(self, line):
         logger.info('Environment setup')
-        self.move(self.vehicle, carla_wrapper.transform(line.start[0], line.start[1]+5, 200.0).location)
-        self.rotate(self.vehicle, [0, 270, 0])
-        self.move(self.world.get_spectator(), carla_wrapper.transform(line.start[0], line.start[1], 1.0).location)
-        self.rotate(self.world.get_spectator(), [0, 270, 0])
+        self.move(self.vehicle, carla_wrapper.transform(line.start[0], line.start[1], 0.25).location)
+        self.rotate(self.vehicle, [0, -90, 0])
+        self.move(self.world.get_spectator(), carla_wrapper.transform(line.start[0], line.start[1]+5, 3.0).location)
+        self.rotate(self.world.get_spectator(), [-15, -90, 0])
 
     def move(self, actor, pos):
         actor.set_location(pos)
+        time.sleep(0.25)  # we must wait for the simulator to process this
         d = actor.get_location().distance(pos)
         if d > 1.0:
-            logger.warning(f'Failed moving {actor.type_id} to {pos} - d: {d/10//0.1} m')
+            logger.warning(f'Failed moving {actor.type_id} to {pos}')
         else:
             logger.info(f'Moved {actor.type_id} to {pos}')
 
@@ -80,9 +81,18 @@ class Environment:
         t = actor.get_transform()
         t.rotation = carla_wrapper.rotation(*rot)
         actor.set_transform(t)
-        logger.info(f'Possibly rotated {actor.type_id} to {t.rotation}')
+        time.sleep(0.25)  # we must wait for the simulator to process this
+        r1 = actor.get_transform().rotation
+        r2 = carla_wrapper.rotation(*rot)
+        diff = ((r1.pitch - r2.pitch)**2 + (r1.yaw - r2.yaw)**2 + (r1.roll - r2.roll)**2)**0.5
+        if diff > 1.0:
+            logger.warning(f'Failed rotating {actor.type_id} to {t.rotation}')
+        else:
+            logger.info(f'Rotated {actor.type_id} to {t.rotation}')
 
     def run(self, line):
+        logger.warning('Halting threads')
+        self.data.put(DataKey.THREAD_HALT, True)
         a = AgentThread(self.data)
         c = ControllerThread(self.data)
         p = PollerThread(self.data)
@@ -101,23 +111,26 @@ class Environment:
 
             self.reset(line)
 
-            c.set_vehicle(self.vehicle)
-            p.set_vehicle(self.vehicle)
-
     def test(self, line):
         reason = 'UNKNOWN'
         successful = False
         finished = False
         t = time.time()
         pos = None
+        logger.debug('Clearing data')
+        self.data.clear()
         while not finished:
             time.sleep(1.0)
 
             coll = self.data.get(DataKey.SENSOR_COLLISION)
 
             pos = self.data.get(DataKey.SENSOR_POSITION)
-            pos = [pos[0], pos[1]]
-            dist = line.distance(pos)
+            if pos is not None:
+                pos = [pos[0], pos[1]]
+                dist = line.distance(pos)
+            else:
+                pos = None
+                dist = -1.0
 
             if coll is not None:
                 finished = True
@@ -157,13 +170,14 @@ class Environment:
         return self.actors
 
     def reset(self, line):
-        for a in self.actors:
-            a.destroy()
-        self.actors = []
-        start = [line.start[0], line.start[1], 0.25]
-        self.spawn(start, direction=[0, 270, 0])
-        self.setup(line)
+        logger.debug('Clearing data')
         self.data.clear()
+        logger.warning('Halting threads')
+        self.data.put(DataKey.THREAD_HALT, True)
+        logger.info('Sleeping...')
+        time.sleep(1.0)
+        self.setup(line)
+        logger.info('Environment reset successful')
 
     def spawn_camera(self):
         bpl = self.world.get_blueprint_library()

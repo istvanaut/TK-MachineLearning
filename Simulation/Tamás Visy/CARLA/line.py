@@ -34,6 +34,8 @@ class Line:
 
 
 def in_range(p0, p1, r=1.0):
+    if p0 is None or p1 is None:
+        return False
     diff = np.subtract(p0, p1)
     dist = np.sqrt(diff[0] ** 2 + diff[1] ** 2)
     return dist < r
