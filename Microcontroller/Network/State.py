@@ -7,7 +7,7 @@ transforms.ToTensor()
 State = namedtuple('State',
                    ('image', 'radar', 'collision', 'velocity', 'acceleration', 'position',
                     'obstacle', 'distance_from_line'))
-
+feature_dimension = 10
 
 def transform_state(state):
     state = State(*state)
@@ -18,4 +18,4 @@ def transform_state(state):
     return torch.from_numpy(image).float(), torch.tensor(state).float()
 
 
-feature_dimension = 10
+
