@@ -12,4 +12,4 @@ extern SPI_HandleTypeDef hspi2;
 
 void lightSensorCycle();
 void SPItransmit_LED(uint8_t* leds, int ledType);
-uint16_t SPIreceive_AD(int idx);
+uint16_t SPIreceive_AD(uint16_t idx, uint8_t AD_Num);

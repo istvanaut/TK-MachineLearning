@@ -35,23 +35,65 @@ void SPItransmit_LED(uint8_t* leds, int ledType)
 		HAL_GPIO_WritePin(GPIOB, LED_LE_Pin, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOB, LED_LE_Pin, GPIO_PIN_RESET);
 	}
-	/*else
+	else
 	{
-		HAL_GPIO_WritePin(GPIOB, IRLED_LE_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOB, IRLED_LE_Pin, GPIO_PIN_RESET);
-	}*/
+		HAL_GPIO_WritePin(GPIOB, INF_LE_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOB, INF_LE_Pin, GPIO_PIN_RESET);
+	}
 
 
 }
 
-uint16_t SPIreceive_AD(int idx)
+uint16_t SPIreceive_AD(uint16_t idx, uint8_t AD_Num)
 {
 	uint16_t AD_OUT;
-	uint16_t temp = idx << 12;
+	uint16_t temp = idx << 11;
+
+	switch(AD_Num)
+	{
+		case 1:
+			HAL_GPIO_WritePin(GPIOB, AD_CS1_Pin, GPIO_PIN_RESET);
+			break;
+
+		case 2:
+			HAL_GPIO_WritePin(GPIOB, AD_CS2_Pin, GPIO_PIN_RESET);
+			break;
+
+		case 3:
+			HAL_GPIO_WritePin(GPIOB, AD_CS3_Pin, GPIO_PIN_RESET);
+			break;
+
+		case 4:
+			HAL_GPIO_WritePin(GPIOB, AD_CS4_Pin, GPIO_PIN_RESET);
+			break;
+
+		default: break;
+	}
 
 	while (!(SPI1->SR & SPI_SR_TXE));
-	HAL_SPI_TransmitReceive(&hspi1, &temp, &AD_OUT, 1, 100);
+	HAL_SPI_TransmitReceive(&hspi1, (uint8_t*)&temp, (uint8_t*)&AD_OUT, 2, 100);
 	while (SPI1->SR & SPI_SR_BSY);
+
+	switch(AD_Num)
+	{
+		case 1:
+			HAL_GPIO_WritePin(GPIOB, AD_CS1_Pin, GPIO_PIN_SET);
+			break;
+
+		case 2:
+			HAL_GPIO_WritePin(GPIOB, AD_CS2_Pin, GPIO_PIN_SET);
+			break;
+
+		case 3:
+			HAL_GPIO_WritePin(GPIOB, AD_CS3_Pin, GPIO_PIN_SET);
+			break;
+
+		case 4:
+			HAL_GPIO_WritePin(GPIOB, AD_CS4_Pin, GPIO_PIN_SET);
+			break;
+
+		default: break;
+	}
 
 	return AD_OUT;
 }
@@ -62,20 +104,21 @@ void lightSensorCycle()
 	uint16_t AD_IN[32];
 	uint8_t ledVal = 0x01;
 
-	for(int i = 0; i < 8; i++)
+	for(uint16_t i = 0; i < 8; i++)
 	{
 		// IR LED write
 		leds_buff[0] = leds_buff[1] = leds_buff[2] = leds_buff[3] = ledVal;
 		SPItransmit_LED(leds_buff, 0);
 		ledVal *= 2;
 
-		//140us tim???
+		// 140us delay??
+		HAL_Delay(1);
 
 		// AD read (i, i+8, i+16, i+24)
-		AD_IN[i] = SPIreceive_AD(i);
-		AD_IN[i+8] = SPIreceive_AD(i+8);
-		AD_IN[i+16] = SPIreceive_AD(i+16);
-		AD_IN[i+24] = SPIreceive_AD(i+24);
+		AD_IN[i] = SPIreceive_AD(i, 1);;
+		AD_IN[i+8] = SPIreceive_AD(i, 2);
+		AD_IN[i+16] = SPIreceive_AD(i, 3);
+		AD_IN[i+24] = SPIreceive_AD(i, 4);
 	}
 
 	// Compare
@@ -83,6 +126,7 @@ void lightSensorCycle()
 	{
 		for(int ledNumInGroup = 0; ledNumInGroup < 8; ledNumInGroup++)
 		{
+			printf("%u\n", AD_IN[8*ledGroup+ledNumInGroup]);
 			if(AD_IN[8*ledGroup+ledNumInGroup] < CMP_LVL)
 			{
 				leds_buff[ledGroup] += ledNumInGroup;

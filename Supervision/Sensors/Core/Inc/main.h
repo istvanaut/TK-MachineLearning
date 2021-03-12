@@ -69,12 +69,24 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define AD_CS1_Pin GPIO_PIN_2
+#define AD_CS1_GPIO_Port GPIOE
+#define AD_CS2_Pin GPIO_PIN_3
+#define AD_CS2_GPIO_Port GPIOE
+#define AD_CS3_Pin GPIO_PIN_4
+#define AD_CS3_GPIO_Port GPIOE
+#define AD_CS4_Pin GPIO_PIN_5
+#define AD_CS4_GPIO_Port GPIOE
 #define USER_Btn_Pin GPIO_PIN_13
 #define USER_Btn_GPIO_Port GPIOC
 #define MCO_Pin GPIO_PIN_0
 #define MCO_GPIO_Port GPIOH
 #define LD1_Pin GPIO_PIN_0
 #define LD1_GPIO_Port GPIOB
+#define INF_LE_Pin GPIO_PIN_1
+#define INF_LE_GPIO_Port GPIOB
+#define INF_OE__Pin GPIO_PIN_2
+#define INF_OE__GPIO_Port GPIOB
 #define LED_LE_Pin GPIO_PIN_12
 #define LED_LE_GPIO_Port GPIOB
 #define LD3_Pin GPIO_PIN_14
