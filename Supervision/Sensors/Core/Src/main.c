@@ -126,14 +126,6 @@ int main(void)
   Motors_Init(&htim2);
   initUS(&htim1);
 
-  /*char leds[4];
-  leds[0] = 0xFF;
-  leds[1] = 0xFF;
-  leds[2] = 0xFF;
-  leds[3] = 0xFF;
-  SPItransmit_LED(leds, 1);
-  SPItransmit_LED(leds, 0);*/
-
   // Variables
   /*int distanceRight = 0;
   int distanceLeft = 0;
@@ -155,9 +147,8 @@ int main(void)
 	  actualSpeedLeft = CalculateSpeed(timerCntrVal2, speed2en);*/
 
 	  //WriteEncoderToPC(distanceRight, distanceLeft, actualSpeedRight, actualSpeedLeft);
-	  //lightSensorCycle();
-	  HAL_Delay(1000);
-	  printf("%u\n", getUSDistance());
+	  lightSensorCycle();
+	  //printf("%u\n", getUSDistance());
 
 
     /* USER CODE END WHILE */
