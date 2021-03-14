@@ -1,8 +1,5 @@
-import cv2
-import numpy as np
-
 from ReinforcementModel import ReinforcementModel
-from agents.agent import Agent, convert
+from agents.agent import Agent
 
 from support.logger import logger
 
@@ -10,6 +7,7 @@ feature_dimension = 10
 AGENT_IM_HEIGHT = 128
 AGENT_IM_WIDTH = 128
 ACTIONS_NUM = 4
+AGENT_MODEL_PATH = 'files/tensor.pt'
 
 
 class NetworkAgent(Agent):
@@ -20,7 +18,6 @@ class NetworkAgent(Agent):
 
     def predict(self, state):
         p = self.model.predict(state)
-        p = p.item()
         if p is 0:
             return 0.4, -0.4
         if p is 1:
@@ -51,35 +48,3 @@ class NetworkAgent(Agent):
             logger.error(f'Failed to find file at {path} - {f}')
         except RuntimeError as r:
             logger.critical(f'Failed to load agent from {path} - {r}')
-
-
-def convert_v2(state):
-    # TODO (9) fix this mess
-    known_state, hidden_state = convert(state)
-
-    camera, radar, velocity, acceleration, position = known_state
-    collision, obstacle, distance = hidden_state
-
-    important = camera, velocity, acceleration, position
-
-    # Removing colors
-    # if camera is not None:
-    #     camera = camera * 255
-    #     camera = camera.astype(numpy.float32)
-    #     camera = cv2.cvtColor(camera, cv2.COLOR_BGR2GRAY)
-    #     camera = camera / 255
-    if camera is not None:
-        camera = np.reshape(camera, [3, 128, 128])
-        camera = camera.astype(np.float16)
-
-    if radar is None:
-        radar = 100.0
-    if collision is None:
-        collision = False
-    if obstacle is None:
-        obstacle = False
-
-    if not any(map(lambda x: x is None, important)):
-        return camera, radar, collision, velocity, acceleration, position, obstacle, distance
-    else:
-        return None
