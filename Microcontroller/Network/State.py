@@ -10,6 +10,7 @@ State = namedtuple('State',
                     'obstacle', 'distance_from_line'))
 feature_dimension = 10
 
+
 def transform_state(state):
     state = State(*state)
     image = np.expand_dims(state.image, axis=0)
@@ -17,6 +18,3 @@ def transform_state(state):
                state.acceleration[0], state.acceleration[1], state.acceleration[2],
                state.obstacle, state.distance_from_line]]]
     return torch.from_numpy(image).float(), torch.tensor(state).float()
-
-
-

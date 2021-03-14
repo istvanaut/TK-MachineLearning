@@ -2,7 +2,7 @@ import logging
 
 logFormatter = logging.Formatter('%(asctime)s\t  [%(threadName)s]\t[%(levelname)-3.3s]:\t%(message)s',
                                  '%Y.%m.%d %H:%M:%S')
-logger = logging.getLogger()
+logger = logging.getLogger('carla_logger')
 logger.level = logging.DEBUG
 
 file_found = True

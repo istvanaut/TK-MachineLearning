@@ -1,7 +1,6 @@
 import time
-import cv2
 
-import carla_wrapper
+import icarla
 from support.datakey import DataKey
 import numpy as np
 
@@ -32,17 +31,11 @@ def process_image(data, image):
     data.put(DataKey.SENSOR_CAMERA, i / 255.0)  # normalization
 
 
-def resize(image, x, y):
-    if image is None:
-        return None
-    return cv2.resize(image, (x, y))
-
-
 def process_radar(data, rd):
     points = []
     for detect in rd:
 
-        fw_vec = carla_wrapper.vector3D(x=detect.depth - 0.25)
+        fw_vec = icarla.vector3d(x=detect.depth - 0.25)
 
         if abs(detect.azimuth) < 0.001 and abs(detect.altitude) < 0.001:
             points.append(np.linalg.norm([fw_vec.x, fw_vec.y, fw_vec.z]))
