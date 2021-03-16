@@ -136,8 +136,8 @@ int main(void)
   double actualSpeedRight = 0;
   double actualSpeedLeft = 0;*/
 
-  //rightMotor(1);
-  //leftMotor(-1);
+  //rightMotor(0.5);
+  //leftMotor(0.5);
 
   /* USER CODE END 2 */
 
@@ -151,13 +151,17 @@ int main(void)
 	  actualSpeedLeft = CalculateSpeed(timerCntrVal2, speed2en);*/
 
 	  //WriteEncoderToPC(distanceRight, distanceLeft, actualSpeedRight, actualSpeedLeft);
-	  lightSensorCycle();
+	  //lightSensorCycle();
 	  //printf("%u\n", getUSDistance());
 	  //printf("%d\n",tofReadDistance());
 	  printf("Acceleration: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z);
 	  HAL_Delay(1000);
-
-
+/*	  rightMotor(0.5);
+	  leftMotor(0.5);
+	  HAL_Delay(10000);
+	  rightMotor(-0.5);
+	  leftMotor(-0.5);
+	  HAL_Delay(10000);*/
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
