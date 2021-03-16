@@ -162,8 +162,8 @@ void lightSensorCycle()
 
 void switchBytes(uint16_t* num)
 {
-	uint16_t tmp = 0xFF00 & (&num);
-	(&num) <<= 8;
+	uint16_t tmp = 0xFF00 & (*num);
+	(*num) <<= 8;
 	tmp >>= 8;
-	(&num) |= tmp;
+	(*num) |= tmp;
 }

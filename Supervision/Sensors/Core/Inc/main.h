@@ -37,6 +37,7 @@ extern "C" {
 #include "motors.h"
 #include "lightSensor.h"
 #include "usSensor.h"
+#include "ACCSensor.h"
 
 #include "string.h"
 #include "stdint.h"
