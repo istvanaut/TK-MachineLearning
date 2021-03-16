@@ -56,12 +56,6 @@ TIM_HandleTypeDef htim4;
 UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
-int encoderSumOfRotations1 = 0;
-int encoderSumOfRotations2 = 0;
-int speed1en = 1;
-int speed2en = 1;
-int timerCntrVal1 = 0;
-int timerCntrVal2 = 0;
 
 /* USER CODE END PV */
 
@@ -131,13 +125,9 @@ int main(void)
   initACCSensor(&hi2c2);
 
   // Variables
-  /*int distanceRight = 0;
-  int distanceLeft = 0;
-  double actualSpeedRight = 0;
-  double actualSpeedLeft = 0;*/
 
-  //rightMotor(1);
-  //leftMotor(-1);
+  rightMotor(1);
+  leftMotor(-1);
 
   /* USER CODE END 2 */
 
@@ -145,17 +135,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /*distanceRight = encoderSumOfRotations1;
-	  distanceLeft = encoderSumOfRotations2;
-	  actualSpeedRight = CalculateSpeed(timerCntrVal1, speed1en);
-	  actualSpeedLeft = CalculateSpeed(timerCntrVal2, speed2en);*/
-
-	  //WriteEncoderToPC(distanceRight, distanceLeft, actualSpeedRight, actualSpeedLeft);
+	  //WriteEncoderToPC();
 	  lightSensorCycle();
 	  //printf("%u\n", getUSDistance());
 	  //printf("%d\n",tofReadDistance());
-	  printf("Acceleration: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z);
-	  HAL_Delay(1000);
+	  //printf("Acceleration: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z);
+	  //HAL_Delay(1000);
 
 
     /* USER CODE END WHILE */
