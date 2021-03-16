@@ -121,13 +121,10 @@ void lightSensorCycle()
 		HAL_Delay(1);
 
 		// AD read (i -> group4(24-31), i+8 -> group3(16-23), i+16 -> group2(8-15), i+24 -> group1(0-7))
-		AD_IN[i] 	= SPIreceive_AD(i, 4); //CS4 Group4
-		//HAL_Delay(1);
-		AD_IN[i+8] 	= SPIreceive_AD(i, 3); //CS3 Group3
-	//	HAL_Delay(1);
-		AD_IN[i+16] = SPIreceive_AD(i, 2); //CS2 Group2
-	//	HAL_Delay(1);
-		AD_IN[i+24] = SPIreceive_AD(i, 1); //CS1 Group1
+		AD_IN[i] 	= SPIreceive_AD(i, 4); //CS4
+		AD_IN[i+8] 	= SPIreceive_AD(i, 3); //CS3
+		AD_IN[i+16] = SPIreceive_AD(i, 2); //CS2
+		AD_IN[i+24] = SPIreceive_AD(i, 1); //CS1
 	}
 
 	// Compare

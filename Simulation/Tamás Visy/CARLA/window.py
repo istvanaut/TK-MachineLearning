@@ -1,11 +1,9 @@
-import sys
-import time
-
 import sensors
 from support.datakey import DataKey
 import numpy as np
 import os
 
+from support.image_manipulation import im_resize
 from support.logger import logger
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
@@ -38,15 +36,18 @@ class Window:
         font = pygame.font.Font(FONT, 20)
         small_font = pygame.font.Font(FONT, 10)
 
-        self.local_data = (display_surface, window_size, colors, font, small_font)
+        self.display = display_surface
+        self.window_size = window_size
+        self.colors = colors
+        self.fonts = [font, small_font]
 
     def work(self):
         # Attention! Contains infinite loop
         while True:
             if self.data.get(DataKey.THREAD_HALT):
-                clear_screen(self.local_data)
+                self.clear_screen()
             else:
-                update_screen(self.local_data, self.data)
+                self.update_screen()
 
             for event in pygame.event.get():
                 # print(event)
@@ -60,102 +61,98 @@ class Window:
     def add_event(self, event):
         pygame.event.post(pygame.event.Event(event))
 
+    def clear_screen(self):
+        self.draw_image(None)
 
-def clear_screen(local_data):
-    draw_image(local_data, None)
+        self.draw_text(None, 'control', (500, 100))
 
-    draw_text(local_data, None, 'control', (500, 100))
+        self.draw_text(None, 'dist', (500, 200))
 
-    draw_text(local_data, None, 'dist', (500, 200))
+        self.draw_text(None, 'coll', (500, 300))
 
-    draw_text(local_data, None, 'coll', (500, 300))
+        self.draw_text(None, 'vel', (700, 100))
 
-    draw_text(local_data, None, 'vel', (700, 100))
+        self.draw_text(None, 'acc', (700, 200))
 
-    draw_text(local_data, None, 'acc', (700, 200))
+        self.draw_text(None, 'pos', (700, 300))
 
-    draw_text(local_data, None, 'pos', (700, 300))
+        self.draw_text(None, 'obs', (600, 375))
 
-    draw_text(local_data, None, 'obs', (600, 375))
+    def update_screen(self):
+        image = self.data.get(DataKey.SENSOR_CAMERA)
+        self.draw_image(image)
 
+        text = self.data.get(DataKey.CONTROL_OUT)
+        self.draw_text(text, 'control', (500, 100))
 
-def update_screen(local_data, data):
-    image = data.get(DataKey.SENSOR_CAMERA)
-    draw_image(local_data, image)
+        radar = self.data.get(DataKey.SENSOR_RADAR)
+        text = sensors.limit_range(radar)
+        self.draw_text(text, 'dist', (500, 200))
 
-    text = data.get(DataKey.CONTROL_OUT)
-    draw_text(local_data, text, 'control', (500, 100))
+        last_collision = self.data.get(DataKey.SENSOR_COLLISION)
+        text = sensors.recently(last_collision)
+        if text is True:
+            text = 'COLLISION'
+        self.draw_text(text, 'coll', (500, 300))
 
-    radar = data.get(DataKey.SENSOR_RADAR)
-    text = sensors.limit_range(radar)
-    draw_text(local_data, text, 'dist', (500, 200))
+        text = self.data.get(DataKey.SENSOR_VELOCITY)
+        self.draw_text(text, 'vel', (700, 100))
 
-    last_collision = data.get(DataKey.SENSOR_COLLISION)
-    text = sensors.recently(last_collision)
-    if text is True:
-        text = 'COLLISION'
-    draw_text(local_data, text, 'coll', (500, 300))
+        text = self.data.get(DataKey.SENSOR_ACCELERATION)
+        self.draw_text(text, 'acc', (700, 200))
 
-    text = data.get(DataKey.SENSOR_VELOCITY)
-    draw_text(local_data, text, 'vel', (700, 100))
+        text = self.data.get(DataKey.SENSOR_POSITION)
+        self.draw_text(text, 'pos', (700, 300))
 
-    text = data.get(DataKey.SENSOR_ACCELERATION)
-    draw_text(local_data, text, 'acc', (700, 200))
+        last_obstacle = self.data.get(DataKey.SENSOR_OBSTACLE)
+        text = sensors.recently(last_obstacle)
+        if text is True:
+            text = '!!!'
+        self.draw_text(text, 'obs', (600, 375))
 
-    text = data.get(DataKey.SENSOR_POSITION)
-    draw_text(local_data, text, 'pos', (700, 300))
+    def draw_image(self, image):
+        if image is None:
+            image = 0.2 * np.ones([100, 100, 3])
+        self.display.fill(self.colors[0])
+        # Formatting image
+        i = im_resize(image, (min(self.window_size), min(self.window_size)))
+        i = i * 255 // 1
+        i = i[:, :, ::-1]  # This fixes color issues: BGR -> RGB
+        i = np.fliplr(i)
+        i = np.rot90(i)
+        # Drawing image
+        s = pygame.surfarray.make_surface(i)
+        i_rect = pygame.rect.Rect(0, 0, min(self.window_size), min(self.window_size))
+        self.display.blit(s, i_rect)
 
-    last_obstacle = data.get(DataKey.SENSOR_OBSTACLE)
-    text = sensors.recently(last_obstacle)
-    if text is True:
-        text = '!!!'
-    draw_text(local_data, text, 'obs', (600, 375))
+    def draw_text(self, text, tag, pos):
+        if text is None:
+            text = '...'
+        elif text is False:
+            text = '---'
+        elif type(text) is str:
+            pass
+        elif isinstance(text, list) or isinstance(text, tuple):
+            # If text is a list - show first 3 char's of first 3 items
+            t = []
+            for i in range(min(len(text), 4)):
+                t.append(str(text[i])[:5])
+                t.append(' ')
+            text = ''.join(t)
+        else:
+            # If text is not str or list - show first 4 chars
+            text = str(text)
+            if len(text) > 4:
+                text = text[:4]
 
+        # Rendering text
+        text = self.fonts[0].render(text, True, self.colors[3])
+        text_rect = text.get_rect()
+        text_rect.center = pos
+        self.display.blit(text, text_rect)
 
-def draw_image(local_data, image):
-    if image is None:
-        image = 0.2*np.ones([400, 400, 3])
-    display_surface, window_size, colors, font, small_font = local_data
-    display_surface.fill(colors[0])
-    i = sensors.resize(image, 128, 128)  # This is what agent sees, but not really how we should get to it # TODO (4)
-    i = sensors.resize(i, min(window_size), min(window_size))
-    i = i * 255 // 1
-    i = i[:, :, ::-1]  # This fixes color issues BGR -> RGB
-    # cv2.cvtColor(i, cv2.COLOR_BGR2RGB)  # change color scheme # Error: 'Unsupported depth of input image ...'
-    i = np.fliplr(i)
-    i = np.rot90(i)
-    s = pygame.surfarray.make_surface(i)
-    i_rect = pygame.rect.Rect(0, 0, min(window_size), min(window_size))
-    display_surface.blit(s, i_rect)
-
-
-def draw_text(local_data, text, tag, pos):
-    if text is None:
-        text = '...'
-    elif text is False:
-        text = '---'
-    elif type(text) is str:
-        pass
-    elif isinstance(text, list) or isinstance(text, tuple):
-        # If text is a list - show first 3 char's of first 3 items
-        t = []
-        for i in range(min(len(text), 4)):
-            t.append(str(text[i])[:5])
-            t.append(' ')
-        text = ''.join(t)
-    else:
-        # If text is not str or list - show first 4 chars
-        text = str(text)
-        if len(text) > 4:
-            text = text[:4]
-    display_surface, window_size, colors, font, small_font = local_data
-
-    text = font.render(text, True, colors[3])
-    text_rect = text.get_rect()
-    text_rect.center = pos
-    display_surface.blit(text, text_rect)
-
-    text = small_font.render(tag, True, colors[3])
-    text_rect = text.get_rect()
-    text_rect.center = (pos[0], pos[1] - 20)
-    display_surface.blit(text, text_rect)
+        # Rendering tag
+        tag = self.fonts[1].render(tag, True, self.colors[3])
+        tag_rect = tag.get_rect()
+        tag_rect.center = (pos[0], pos[1] - 20)
+        self.display.blit(tag, tag_rect)

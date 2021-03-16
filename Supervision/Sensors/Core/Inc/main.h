@@ -38,6 +38,7 @@ extern "C" {
 #include "lightSensor.h"
 #include "usSensor.h"
 //#include "lezer.h"
+#include "ACCSensor.h"
 
 #include "string.h"
 #include "stdint.h"

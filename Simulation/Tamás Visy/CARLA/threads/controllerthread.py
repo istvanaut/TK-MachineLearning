@@ -1,6 +1,6 @@
 import time
 
-import carla_wrapper
+import icarla
 from support.logger import logger
 from threads.basethread import BaseThread
 from support.datakey import DataKey
@@ -30,7 +30,7 @@ class ControllerThread(BaseThread):
         if self.vehicle is not None:
             if throttle >= 0.0:
                 try:
-                    self.vehicle.apply_control(carla_wrapper.vehicleControl(throttle=throttle, steer=steering))
+                    self.vehicle.apply_control(icarla.vehicle_control(throttle=throttle, steer=steering))
                 except RuntimeError as r:
                     logger.error(f'Error: {r}')
                     logger.warning(f'Setting vehicle to None')
@@ -38,8 +38,7 @@ class ControllerThread(BaseThread):
             else:
                 try:
                     throttle *= -1.0
-                    self.vehicle.apply_control(
-                        carla_wrapper.vehicleControl(reverse=True, throttle=throttle, steer=steering))
+                    self.vehicle.apply_control(icarla.vehicle_control(reverse=True, throttle=throttle, steer=steering))
                 except RuntimeError as r:
                     logger.error(f'Error: {r}')
                     logger.warning(f'Setting vehicle to None')

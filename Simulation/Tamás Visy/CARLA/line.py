@@ -4,19 +4,10 @@ from support.logger import logger
 
 
 class Line:
-    """2D line"""
-
+    # TODO (8) add more complex lines
     def __init__(self, start, end):
         self.start = start
         self.end = end
-
-    # def where(self, point):
-    #     if in_range(point, self.start):
-    #         logger.info(f'Point close to start')
-    #     if in_range(point, self.end):
-    #         logger.info(f'Point close to end')
-    #     dist = self.distance(point)
-    #     logger.info(f'The distance from line is {dist}')
 
     def distance(self, point):
         # Is this correct? Haven't checked... - probably not correct? TODO (5)
@@ -25,17 +16,16 @@ class Line:
         point = np.array(point)
         return abs(np.cross(end-start, point-start) / np.linalg.norm(end-start))
 
-    def distance_from_start(self, point):
-        if point is None:
-            return None
-        diff = np.subtract(self.start, point)
-        dist = np.sqrt(diff[0] ** 2 + diff[1] ** 2)
-        return dist
+    def direction(self):
+        # TODO (6) calculate
+        logger.warning('Returning not calculated line direction')
+        # Returns the direction the vehicle must spawn
+        return [0, -90, 0]
 
 
-def in_range(p0, p1, r=1.0):
-    if p0 is None or p1 is None:
+def distance(point0, point1):
+    if point0 is None or point1 is None:
         return False
-    diff = np.subtract(p0, p1)
-    dist = np.sqrt(diff[0] ** 2 + diff[1] ** 2)
-    return dist < r
+    diff = np.subtract(point0, point1)
+    # Calculates distance in 2D
+    return np.sqrt(diff[0] ** 2 + diff[1] ** 2)

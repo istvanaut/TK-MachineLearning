@@ -2,8 +2,8 @@
 
 import time
 
-from agents.agent import Agent, convert, AGENT_MODEL_PATH
-from agents.networkagent import NetworkAgent, convert_v2
+from agents.agent import Agent, convert
+from agents.networkagent import NetworkAgent, AGENT_MODEL_PATH
 from threads.basethread import BaseThread
 from support.datakey import DataKey
 
@@ -15,6 +15,7 @@ class AgentThread(BaseThread):
         self.agent = NetworkAgent()
         self.line = None
         self.agent.load(AGENT_MODEL_PATH)
+        self.first = True
 
     def set_line(self, line):
         self.line = line
@@ -22,11 +23,13 @@ class AgentThread(BaseThread):
     def loop(self):
         data = self.unpack_data()
 
-        state = convert_v2(data)  # convert() would be better TODO (6)
+        state = convert(data)
 
         if state is not None:
-            self.agent.optimize(new_state=state)
+            if not self.first:
+                self.agent.optimize(new_state=state)
             out = self.agent.predict(state)
+            self.first = False
 
             self.data.put(DataKey.CONTROL_OUT, out)
 
