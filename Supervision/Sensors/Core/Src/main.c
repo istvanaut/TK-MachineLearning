@@ -125,6 +125,8 @@ int main(void)
   Encoder_Init();
   Motors_Init(&htim2);
   initUS(&htim1);
+  //tofInit(0);
+
 
   // Variables
   /*int distanceRight = 0;
@@ -149,6 +151,7 @@ int main(void)
 	  //WriteEncoderToPC(distanceRight, distanceLeft, actualSpeedRight, actualSpeedLeft);
 	  lightSensorCycle();
 	  //printf("%u\n", getUSDistance());
+	  //printf("%d\n",tofReadDistance());
 
 
     /* USER CODE END WHILE */
