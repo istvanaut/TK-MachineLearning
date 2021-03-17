@@ -7,7 +7,7 @@
 
 #include "lightSensor.h"
 
-#define CMP_LVL 3650
+#define CMP_LVL 3000
 
 // ledType: IR = 0; Debug LED = 1;
 void SPItransmit_LED(uint8_t* leds, int ledType)
@@ -15,12 +15,8 @@ void SPItransmit_LED(uint8_t* leds, int ledType)
 	// Wait until SPI is ready
 	while (!(SPI2->SR & SPI_SR_TXE));
 	// Send bytes over the SPI
-	//HAL_SPI_Transmit(&hspi2, leds, 4, 100);
+	HAL_SPI_Transmit(&hspi2, leds, 4, 100);
 	//printf("Transmit OUT: 4: %x, 3: %x, 2: %x, 1: %x\n", leds[0], leds[1], leds[2], leds[3]);
-	HAL_SPI_Transmit(&hspi2, &leds[0], 1, 100);
-	HAL_SPI_Transmit(&hspi2, &leds[1], 1, 100);
-	HAL_SPI_Transmit(&hspi2, &leds[2], 1, 100);
-	HAL_SPI_Transmit(&hspi2, &leds[3], 1, 100);
 	// Wait until the transmission is complete
 	while (SPI2->SR & SPI_SR_BSY);
 
@@ -38,17 +34,14 @@ void SPItransmit_LED(uint8_t* leds, int ledType)
 
 uint16_t SPIreceive_AD(uint16_t idx, uint8_t AD_Num)
 {
-	uint16_t AD_OUT;
-	//idx <<= 11;
-	//printf("%u\n", idx);
-	//switchBytes(&idx); // Ez nem biztos h kell, tesztelni kell majd
-	//printf("%u\n", idx);
+	uint16_t AD_OUT1;
+	uint16_t AD_OUT2;
 
 	//TEST CASE
 	uint8_t buff_out[2];
 	buff_out[0] = (uint8_t)(idx << 3);
 	buff_out[1] = (uint8_t)(idx << 3);
-	//printf("AD: %u, LED: %u, ", AD_Num, idx+1);
+	//printf("AD: %u, LED: %u, ", AD_Num, idx+1); //DEBUGHOZ
 
 	switch(AD_Num)
 	{
@@ -72,8 +65,8 @@ uint16_t SPIreceive_AD(uint16_t idx, uint8_t AD_Num)
 	}
 
 	while (!(SPI1->SR & SPI_SR_TXE));
-	HAL_SPI_TransmitReceive(&hspi1, buff_out, (uint8_t*)&AD_OUT, 2, 100); //DEBUGHOZ
-	//HAL_SPI_TransmitReceive(&hspi1, (uint8_t*)&idx, (uint8_t*)&AD_OUT, 2, 100);
+	HAL_SPI_TransmitReceive(&hspi1, buff_out, (uint8_t*)&AD_OUT1, 2, 100); //DEBUGHOZ
+	HAL_SPI_TransmitReceive(&hspi1, buff_out, (uint8_t*)&AD_OUT2, 2, 100); //DEBUGHOZ
 	while (SPI1->SR & SPI_SR_BSY);
 
 	switch(AD_Num)
@@ -97,9 +90,9 @@ uint16_t SPIreceive_AD(uint16_t idx, uint8_t AD_Num)
 		default: break;
 	}
 
-	switchBytes(&AD_OUT);
-	printf("Out: %u\n", AD_OUT);
-	return AD_OUT;
+	switchBytes(&AD_OUT2);
+	//printf("Out: %u, %u\n", AD_OUT1, AD_OUT2); //DEBUGHOZ
+	return AD_OUT2;
 }
 
 void lightSensorCycle()
@@ -112,9 +105,8 @@ void lightSensorCycle()
 	{
 		// IR LED write
 		leds_buff[0] = leds_buff[1] = leds_buff[2] = leds_buff[3] = ledVal;
-		//printf("IR: 4: %x, 3: %x, 2: %x, 1: %x\n", leds_buff[0], leds_buff[1], leds_buff[2], leds_buff[3]);
+		//printf("IR: 4: %x, 3: %x, 2: %x, 1: %x\n", leds_buff[0], leds_buff[1], leds_buff[2], leds_buff[3]); //DEBUGHOZ
 		SPItransmit_LED(leds_buff, 0);
-		//SPItransmit_LED(leds_buff, 1); //DEBUGHOZ
 		ledVal <<= 1;
 
 		// 140us delay szükséges??
@@ -145,7 +137,6 @@ void lightSensorCycle()
 
 	// Debug LED write
 	SPItransmit_LED(leds_buff, 1);
-	//HAL_Delay(500);
 }
 
 void switchBytes(uint16_t* num)
