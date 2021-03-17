@@ -42,12 +42,13 @@ class AgentThread(BaseThread):
         v = self.data.get(DataKey.SENSOR_VELOCITY)
         a = self.data.get(DataKey.SENSOR_ACCELERATION)
         p = self.data.get(DataKey.SENSOR_POSITION)
+        di = self.data.get(DataKey.SENSOR_DIRECTION)
         o = self.data.get(DataKey.SENSOR_OBSTACLE)
         if p is not None:
             d = self.line.distance([p[0], p[1]])
         else:
             d = None
-        return ca, r, co, v, a, p, o, d
+        return ca, r, co, v, a, p, di, o, d
 
     def finish(self):
         self.agent.save(AGENT_MODEL_PATH)

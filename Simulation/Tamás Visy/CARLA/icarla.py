@@ -25,8 +25,15 @@ def client(host, port):
     return carla.Client(host, port)
 
 
-def transform(x=0.0, y=0.0, z=0.0):
-    return carla.Transform(carla.Location(x=x, y=y, z=z))
+def transform(x=0.0, y=0.0, z=0.0, pitch=0.0, yaw=0.0, roll=0.0):
+    return carla.Transform(carla.Location(x=x, y=y, z=z), carla.Rotation(pitch=pitch, yaw=yaw, roll=roll))
+
+
+def copy(transformation):
+    loc = transformation.location
+    rot = transformation.rotation
+    return carla.Transform(carla.Location(x=loc.x, y=loc.y, z=loc.z),
+                           carla.Rotation(pitch=rot.pitch, yaw=rot.yaw, roll=rot.roll))
 
 
 def location(x=0.0, y=0.0, z=0.0):
@@ -51,12 +58,15 @@ def move(actor, loc):
     d = actor.get_location().distance(loc)
     if d > 1.0:
         logger.warning(f'Failed moving {actor.type_id} to {loc}, retry...')
-        actor.set_location(addloc(loc, location(0, 0, 1)))
+        logger.info(f'Actors transform is {actor.get_transform()}')
+        actor.set_transform(carla.Transform(addloc(loc, location(0, 0, 1)), rotation(0, 0, 0)))
+        time.sleep(0.5)
         d = actor.get_location().distance(loc)
         if d > 3.0:
             logger.error(f'Failed moving {actor.type_id} to {loc}')
-    else:
-        logger.info(f'Moved {actor.type_id} to {loc}')
+            logger.info(f'Actors transform is {actor.get_transform()}')
+            return
+    logger.info(f'Moved {actor.type_id} to {loc}')
 
 
 def addloc(loc0, loc1):

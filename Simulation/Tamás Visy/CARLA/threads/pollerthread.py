@@ -20,9 +20,13 @@ class PollerThread(BaseThread):
                 a = [a.x, a.y, a.z]  # m/s2
                 self.data.put(DataKey.SENSOR_ACCELERATION, a)
 
-                p = self.vehicle.get_location()
+                t = self.vehicle.get_transform()
+                p = t.location
+                r = t.rotation
                 p = [p.x, p.y, p.z]  # m
+                r = [r.pitch, r.yaw, r.roll] # degrees?
                 self.data.put(DataKey.SENSOR_POSITION, p)
+                self.data.put(DataKey.SENSOR_DIRECTION, r)
 
                 v = self.vehicle.get_velocity()
                 v = [v.x, v.y, v.z]  # m/s

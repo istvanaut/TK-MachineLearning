@@ -10,7 +10,7 @@ from support.logger import logger
 HOST = 'localhost'
 PORT = 2000
 # Town05 has best paths on the inside of the motorway (still in the town)
-MAP_NAME = 'Town02'  # Best map: Town05 or Town03, least performance demanding map: Town02
+MAP_NAME = 'Town05'  # Best map: Town05 or Town03, least performance demanding map: Town02
 
 
 def main():
@@ -44,11 +44,11 @@ def set_conditions(client, world):
     # Loading correct map
     if current_map_name != MAP_NAME:
         logger.info(f'Loading map: {MAP_NAME} <- {current_map_name}')
-        world = client.load_world(MAP_NAME)
+        world = client.load_world(MAP_NAME)  # TODO (2) this often does not work in time
     else:
         # Destroying old actors
         actors = world.get_actors()
-        # TODO (3) check if this destroys sensors as well - performance hit?
+        # TODO (3) check if this destroys sensor actors as well - if not, performance hit?
         for actor in actors.filter('vehicle.*.*'):
             actor.destroy()
         if len(actors.filter('vehicle.*.*')) > 0:

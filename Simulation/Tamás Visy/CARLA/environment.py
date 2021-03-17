@@ -2,7 +2,7 @@
 # spawns vehicle, sensors etc. and launches other threads
 
 import time
-
+import numpy as np
 import icarla
 from line import Line, distance
 from support.datakey import DataKey
@@ -23,10 +23,14 @@ COLL_BLUEPRINT_NAME = 'sensor.other.collision'
 OBS_BLUEPRINT_NAME = 'sensor.other.obstacle'
 DEFAULT_SPAWN_POINT = icarla.transform()
 
-SENSOR_SPAWN_POINT = icarla.transform(x=2.0, z=1.4)
+SENSOR_SPAWN_POINT = icarla.transform(x=2.2, z=1.5)  # don't forget: the transform is mutable, use icarla.copy
 
 TASK_FOLLOW_LINE = 1
 TASK_CREATE_LINE = 2
+
+
+def load_line():
+    return Line([[156, 9], [152, 40]])  # np.load('files/line.npy')
 
 
 class Environment:
@@ -46,8 +50,7 @@ class Environment:
             raise RuntimeError(f'Task {task} not recognized')
 
     def task_follow_line(self):
-        # TODO (7) create option to load line from file or similar
-        line = Line([191.6866, 296], [191.6866, 112])
+        line = load_line()
         start = [line.start[0], line.start[1], 0.25]
         self.spawn(start, line.direction())
         self.setup(line)
@@ -71,9 +74,10 @@ class Environment:
     def setup(self, line):
         logger.info('Environment setup')
         icarla.move(self.vehicle, icarla.transform(line.start[0], line.start[1], 0.25).location)
-        icarla.rotate(self.vehicle, [0, -90, 0])
-        icarla.move(self.world.get_spectator(), icarla.transform(line.start[0], line.start[1] + 5, 3.0).location)
-        icarla.rotate(self.world.get_spectator(), [-15, -90, 0])
+        icarla.rotate(self.vehicle, line.direction())
+        icarla.move(self.world.get_spectator(),
+                    icarla.transform(line.start[0], line.start[1] - np.sign(line.direction()[1]) * 5, 3.0).location)
+        icarla.rotate(self.world.get_spectator(), line.direction())
 
     def run(self, line):
         logger.warning('Halting threads')
@@ -107,6 +111,7 @@ class Environment:
         logger.debug('Clearing data')
         self.data.clear()
         while not finished:
+            logger.info('Sleeping...')
             time.sleep(1.0)
 
             coll = self.data.get(DataKey.SENSOR_COLLISION)
@@ -122,13 +127,13 @@ class Environment:
             if coll is not None:
                 finished = True
                 reason = 'Collision'
-            if dist > 8.0:
+            if dist > 3.0:
                 finished = True
                 reason = 'Too far from line'
             if time.time() - t > 100:
                 finished = True
                 reason = 'Time ran out'
-            if distance(pos, line.end) < 1.0:
+            if pos is not None and distance(pos, line.end) < 1.0:
                 finished = True
                 successful = True
                 reason = 'At finish'
@@ -152,6 +157,7 @@ class Environment:
         return self.actors
 
     def reset(self):
+        # TODO (9) reset vehicle speed in some way
         logger.debug('Clearing data')
         self.data.clear()
         logger.warning('Halting threads')
@@ -166,7 +172,8 @@ class Environment:
         camera_blueprint.set_attribute('image_size_x', f'{IM_WIDTH}')
         camera_blueprint.set_attribute('image_size_y', f'{IM_HEIGHT}')
         # camera_blueprint.set_attribute('fov', '90')
-        spawn_point = SENSOR_SPAWN_POINT
+        spawn_point = icarla.copy(SENSOR_SPAWN_POINT)
+        spawn_point.rotation = icarla.rotation(-45, 0, 0)
         camera = self.world.spawn_actor(camera_blueprint, spawn_point, attach_to=self.vehicle)
         camera.listen(lambda i: process_image(self.data, i))
         self.actors.append(camera)
@@ -220,11 +227,11 @@ class Environment:
 
             while not success:
                 try:
-                    spawn_point.location.z += 0.1
                     self.vehicle = self.world.spawn_actor(vehicle_blueprint, spawn_point)
                     success = True
                 except RuntimeError as r:
                     logger.error(f'{r} {spawn_point.location}')
+                    spawn_point.location.z += 0.1
         else:
             logger.debug(f'No spawn set, spawning vehicle at default spawn')
             spawn_point = self.world.get_map().get_spawn_points()[0]

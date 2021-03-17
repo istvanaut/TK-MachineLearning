@@ -39,9 +39,8 @@ class Agent:
 
 def convert(state):
     """Converts incoming data into the format the agent accepts"""
-    camera, radar, collision, velocity, acceleration, position, obstacle, distance = state
+    camera, radar, collision, velocity, acceleration, position, direction, obstacle, distance = state
 
-    # TODO (8) get direction car faces and calc. subjective vectors for acceleration
     # TODO (2) check if all conversions are needed
 
     # SENSOR: unit, format
@@ -69,8 +68,11 @@ def convert(state):
     #     velocity = (velocity[0]**2+velocity[1]**2)**0.5
 
     # acceleration: m/s2, [a_x, a_y, a_z] (floats?)
+    # TODO (8) get direction car faces and calc. "subjective" vector for acceleration
+    acceleration = acceleration
+    # use direction to calc this (dir: degrees, [pitch, yaw, roll])
 
-    # position: m, [x, y, z] (floats?)
+    # position: m, [x, y, z, pitch, yaw, roll] (floats?)
 
     # collision: bool, was collision registered? - None if never, False or True if (not) in the last 1.0* second
     collision = recently(collision)

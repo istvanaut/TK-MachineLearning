@@ -2,6 +2,8 @@
 
 from threading import Lock
 
+from support.logger import logger
+
 
 class Data:
     data = None
@@ -58,5 +60,9 @@ class Data:
         return Data(self.data)
 
     def clear(self):
+        # This had an issue one time
+        logger.debug('Acquiring lock')
         with self.lock:
+            logger.debug('Clearing dict')
             self.data = dict()
+        logger.debug('Done')
