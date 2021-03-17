@@ -40,8 +40,8 @@ def location(x=0.0, y=0.0, z=0.0):
     return carla.Location(x=x, y=y, z=z)
 
 
-def vector3d(x=0.0):
-    return carla.Vector3D(x=x)
+def vector3d(x=0.0, y=0.0, z=0.0):
+    return carla.Vector3D(x=x, y=y, z=0)
 
 
 def vehicle_control(reverse=False, throttle=0.0, steer=0.0):
@@ -85,3 +85,7 @@ def rotate(actor, rot):
         logger.warning(f'Failed rotating {actor.type_id} to {t.rotation}')
     else:
         logger.info(f'Rotated {actor.type_id} to {t.rotation}')
+
+
+def set_velocity(actor, velocity):
+    actor.set_target_velocity(velocity)

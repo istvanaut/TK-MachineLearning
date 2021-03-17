@@ -4,7 +4,7 @@
 import time
 import numpy as np
 import icarla
-from line import Line, distance
+from line import distance, get_line, LINE_FILE_NAME, fix
 from support.datakey import DataKey
 from support.logger import logger
 from threads.agentthread import AgentThread
@@ -29,10 +29,6 @@ TASK_FOLLOW_LINE = 1
 TASK_CREATE_LINE = 2
 
 
-def load_line():
-    return Line([[156, 9], [152, 40]])  # np.load('files/line.npy')
-
-
 class Environment:
 
     def __init__(self):
@@ -50,29 +46,38 @@ class Environment:
             raise RuntimeError(f'Task {task} not recognized')
 
     def task_follow_line(self):
-        line = load_line()
+        line = get_line()
         start = [line.start[0], line.start[1], 0.25]
         self.spawn(start, line.direction())
         self.setup(line)
         self.run(line)
 
     def task_create_line(self):
+        """Reads the position of the spectator after launch
+
+        | Saves coordinates to line.npy"""
         spectator = self.world.get_spectator()
-        input('Waiting for input...')
+        logger.warning('Awaiting input')
+        input()
         logger.info('Received input, starting in 3 seconds')
         time.sleep(1.0)
         logger.info('Starting in 2 seconds...')
         time.sleep(1.0)
         logger.info('Starting in 1 seconds...')
         time.sleep(1.0)
+        points = []
         while True:
-            # TODO (5) update line calculation
             loc = spectator.get_location()
-            print(f'[{loc.x},{loc.y}]')
-            time.sleep(0.2)
+            logger.debug(f'Point #{len(points)}: [{loc.x},{loc.y}]')
+            points.append(np.asarray([loc.x, loc.y]))
+            x = fix(points)
+            np.save(LINE_FILE_NAME, x)
+            logger.info(f'Saved {len(x)} points to {LINE_FILE_NAME}')
+            time.sleep(0.1)
 
     def setup(self, line):
         logger.info('Environment setup')
+        icarla.set_velocity(self.vehicle, icarla.vector3d())
         icarla.move(self.vehicle, icarla.transform(line.start[0], line.start[1], 0.25).location)
         icarla.rotate(self.vehicle, line.direction())
         icarla.move(self.world.get_spectator(),
@@ -113,7 +118,7 @@ class Environment:
         while not finished:
             logger.info('Sleeping...')
             time.sleep(1.0)
-
+            logger.info('Checking')
             coll = self.data.get(DataKey.SENSOR_COLLISION)
 
             pos = self.data.get(DataKey.SENSOR_POSITION)
@@ -157,7 +162,6 @@ class Environment:
         return self.actors
 
     def reset(self):
-        # TODO (9) reset vehicle speed in some way
         logger.debug('Clearing data')
         self.data.clear()
         logger.warning('Halting threads')
