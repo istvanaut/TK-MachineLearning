@@ -1,28 +1,18 @@
-/**
- * usSensor.c
- * 		Author: Kolontari Peter
- * 	Created on: Mar 10, 2021
- * 	All Rights Reserved.
- */
+#include "main.h"
 
-#include "usSensor.h"
+//US Sensor BEGIN
+extern uint32_t UStimeDifference;
+extern uint32_t USStartTime;
+extern uint32_t USStopTime;
+extern uint32_t USdistance;
+extern uint8_t USrisingEdgeDetected;
 
-volatile uint32_t UStimeDifference = 0;
-volatile uint32_t USStartTime;
-volatile uint32_t USStopTime;
-volatile uint32_t USdistance = 0;
-volatile uint8_t USrisingEdgeDetected = 0;
+extern TIM_HandleTypeDef* UStim;
+//US Sensor END
 
-TIM_HandleTypeDef* UStim;
-
-void initUS(TIM_HandleTypeDef *htim){
-	UStim = htim;
-	HAL_TIM_IC_Start_IT(UStim, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(UStim, TIM_CHANNEL_2);
-}
-
-/*
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
+
+//US Sensor BEGIN
 	if(htim->Instance == UStim->Instance){
 		if(USrisingEdgeDetected == 0){
 			USStartTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
@@ -43,12 +33,5 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
 		}
 	}
-}
-*/
-uint32_t getUSTime(void){
-	return UStimeDifference;
-}
-
-uint32_t getUSDistance(void){
-	return USdistance;
+//US Sensor END
 }

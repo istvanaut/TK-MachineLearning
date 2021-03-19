@@ -139,11 +139,12 @@ int main(void)
 	  //WriteEncoderToPC();
 	  //lightSensorCycle();
 	  //printf("%u\n", getUSDistance());
+	  printf("%d\n", getUSTime());
 	  //printf("%d\n",tofReadDistance());
 	  //printf("Acceleration: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z);
 	  //printf("Gyroscope: x: %f y: %f z: %f\n", getGyroWithMeasure().x, getMeasuredGyro().y, getMeasuredGyro().z);
 	  //printf("Euler: x: %f y: %f z: %f\n", getEulerWithMeasure().x, getMeasuredEuler().y, getMeasuredEuler().z);
-	  //HAL_Delay(1000);
+	  HAL_Delay(1000);
 
 
     /* USER CODE END WHILE */
