@@ -1,20 +1,23 @@
 #include "encoder.h"
 
-#define sysCLK 72000000
-#define PSC 3599
-#define oneRot 10.35
+#define sysCLK 72000000.0
+#define PSC 3599.0
+#define oneRot 10.35 //one hole rotation is millimeters
+#define W 0.146 //width of car in meters
 
-int speed1en; //Left
-int speed2en; //Right
-int encoderSumOfRotations1; //Left
-int encoderSumOfRotations2; //Right
-int timerCntrVal1; //Left
-int timerCntrVal2; //Right
+volatile int speed1en; //Left
+volatile int speed2en; //Right
+volatile int encoderSumOfRotations1; //Left
+volatile int encoderSumOfRotations2; //Right
+volatile int timerCntrVal1; //Left
+volatile int timerCntrVal2; //Right
 
-/*double distanceLeft; //Left
-double distanceRight; //Right
-double speedLeft; //Left
-double speedRight; //Right*/
+volatile int rotChange1; //Left
+volatile int rotChange2; //Right
+
+
+volatile position pos = {0, 0};
+volatile double angle = 0; //radian
 
 void Encoder_Init()
 {
@@ -27,53 +30,47 @@ void Encoder_Init()
 }
 
 void Timer3_Start() //Left
-  {
-  	HAL_TIM_Base_Start_IT(&htim3);
-  }
+{
+	HAL_TIM_Base_Start_IT(&htim3);
+}
 
-  void Timer4_Start() //Right
-  {
-  	HAL_TIM_Base_Start_IT(&htim4);
-  }
+void Timer4_Start() //Right
+{
+	HAL_TIM_Base_Start_IT(&htim4);
+}
 
-  void Timer3_Stop() //Left
-  {
-  	HAL_TIM_Base_Stop_IT(&htim3);
-  }
+void Timer3_Stop() //Left
+{
+	HAL_TIM_Base_Stop_IT(&htim3);
+}
 
-  void Timer4_Stop() //Right
-  {
-  	HAL_TIM_Base_Stop_IT(&htim4);
-  }
+void Timer4_Stop() //Right
+{
+	HAL_TIM_Base_Stop_IT(&htim4);
+}
 
-  void Timer3_CntrVal() //Left
-  {
-	  timerCntrVal1 = TIM3->CNT;
-	  TIM3->CNT = 0;
-  }
+void WriteEncoderToPC()
+{
+	//__disable_irq();
 
-  void Timer4_CntrVal() //Right
-  {
-	  timerCntrVal2 = TIM4->CNT;
-	  TIM4->CNT = 0;
-  }
+	position tmp;
+	if(rotChange1 > 5 || rotChange2 > 5)
+	{
+		tmp = GetPositionFromOrigin();
+	}
+	printf("Distance right: %f, Speed right: %f, Distance left: %f, Speed left: %f, Position from origin: %f, %f, Angle: %f\n", GetDistanceOfMotor(1), GetSpeedOfMotor(1), GetDistanceOfMotor(0), GetSpeedOfMotor(0), tmp.x, tmp.y, angle);
 
-  void WriteEncoderToPC()
-  {
-	  printf("Distance right: %f, Speed right: %f, Distance left: %f, Speed left: %f\n", GetDistanceOfMotor(1), GetSpeedOfMotor(1), GetDistanceOfMotor(0), GetSpeedOfMotor(0));
-  }
+	//__enable_irq();
+}
 
   double CalculateSpeed(int cntrVal, int speedEn)
   {
-	  double timeOfStep = 1/(sysCLK / PSC);
+	  double timeOfStep = 1.0/(sysCLK / PSC);
+
 	  if(speedEn)
-	  {
-		  return timeOfStep*cntrVal;
-	  }
+		  return 0.05175/(timeOfStep*cntrVal);
 	  else
-	  {
 		  return 0;
-	  }
   }
 
   double GetSpeedOfMotor(int motor) // 0 => left, 1 => right [m/s]
@@ -92,36 +89,80 @@ void Timer3_Start() //Left
 		  return encoderSumOfRotations1*oneRot/1000;
   }
 
-  double GetPositionFromOrigin() // x: [m], y: [m]
+  position GetPositionFromOrigin() // x: [m], y: [m]
   {
-	  return 0;
+	  double posChgFwd;
+	  double angleTMP = angle;
+	  if (rotChange1 > rotChange2)
+	  {
+		  posChgFwd = rotChange2*oneRot/1000;
+		  pos.x += cos(angle)*posChgFwd;
+		  pos.y += sin(angle)*posChgFwd;
+		  angle -= ((rotChange1*oneRot/1000)-(rotChange2*oneRot/1000))/W;
+	  }
+	  else
+	  {
+		  posChgFwd = rotChange1*oneRot/1000;
+		  pos.x += cos(angle)*posChgFwd;
+		  pos.y += sin(angle)*posChgFwd;
+		  angle += ((rotChange2*oneRot/1000)-(rotChange1*oneRot/1000))/W;
+	  }
+	  // correction because of rot
+	  //pos.x += W*M_PI*((angle-angleTMP)/2*M_PI)*cos((M_PI-angle-angleTMP)/2);
+	  //pos.y += W*M_PI*((angle-angleTMP)/2*M_PI)*sin((M_PI-angle-angleTMP)/2);
+
+	  rotChange1 = 0;
+	  rotChange2 = 0;
+
+	  return pos;
   }
 
   void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   {
-    if (GPIO_Pin == GPIO_PIN_3)
-    {
-  	  encoderSumOfRotations1++;
-  	  if(encoderSumOfRotations1 % 5 == 0)
-  	  {
-  		  speed1en = 1;
-  		  Timer3_Stop();
-  		  Timer3_CntrVal();
-  		  Timer3_Start();
-  	  }
-    }
-    if (GPIO_Pin == GPIO_PIN_4)
-    {
-  	  encoderSumOfRotations2++;
-  	  if(encoderSumOfRotations2 % 5 == 0)
-  	  {
-  		 speed2en = 1;
-  	     Timer4_Stop();
-  	     Timer4_CntrVal();
-  	     Timer4_Start();
-  	  }
-    }
+	  if (GPIO_Pin == GPIO_PIN_3) //Left
+	  {
+		  if (getLeftMotorValue() > 0)
+		  {
+			  encoderSumOfRotations1++;
+			  rotChange1++;
+		  }
+		  else
+		  {
+			  encoderSumOfRotations1--;
+			  rotChange1--;
+		  }
 
+		  if(encoderSumOfRotations1 % 5 == 0)
+		  {
+			  speed1en = 1;
+			  Timer3_Stop();
+			  timerCntrVal1 = TIM3->CNT;
+			  TIM3->CNT = 0;
+			  Timer3_Start();
+		  }
+	  }
+	  if (GPIO_Pin == GPIO_PIN_4) //Right
+	  {
+		  if (getLeftMotorValue() > 0)
+		  {
+			  encoderSumOfRotations2++;
+			  rotChange2++;
+		  }
+		  else
+		  {
+			  encoderSumOfRotations2--;
+			  rotChange2--;
+		  }
+
+		  if(encoderSumOfRotations2 % 5 == 0)
+		  {
+			  speed2en = 1;
+			  Timer4_Stop();
+			  timerCntrVal2 = TIM4->CNT;
+			  TIM4->CNT = 0;
+			  Timer4_Start();
+		  }
+	  }
   }
 
   void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)

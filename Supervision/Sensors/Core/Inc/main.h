@@ -107,8 +107,6 @@ void Error_Handler(void);
 #define TCK_GPIO_Port GPIOA
 #define LED_OE__Pin GPIO_PIN_15
 #define LED_OE__GPIO_Port GPIOA
-#define SW0_Pin GPIO_PIN_3
-#define SW0_GPIO_Port GPIOB
 #define LD2_Pin GPIO_PIN_7
 #define LD2_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
