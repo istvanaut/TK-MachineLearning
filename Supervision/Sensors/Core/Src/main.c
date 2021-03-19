@@ -123,6 +123,7 @@ int main(void)
   Motors_Init(&htim2);
   initUS(&htim1);
   initACCSensor(&hi2c2);
+  initlezer(&htim1);
 
   // Variables
 
@@ -139,8 +140,8 @@ int main(void)
 	  //WriteEncoderToPC();
 	  //lightSensorCycle();
 	  //printf("%u\n", getUSDistance());
-	  printf("%d\n", getUSTime());
-	  //printf("%d\n",tofReadDistance());
+	  printf("%d\n", getlezerLedistance());
+	  //printf("%d\n",tofReadDistance());s
 	  //printf("Acceleration: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z);
 	  //printf("Gyroscope: x: %f y: %f z: %f\n", getGyroWithMeasure().x, getMeasuredGyro().y, getMeasuredGyro().z);
 	  //printf("Euler: x: %f y: %f z: %f\n", getEulerWithMeasure().x, getMeasuredEuler().y, getMeasuredEuler().z);
@@ -450,6 +451,10 @@ static void MX_TIM1_Init(void)
   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_IC_ConfigChannel(&htim1, &sConfigIC, TIM_CHANNEL_3) != HAL_OK)
   {
     Error_Handler();
   }

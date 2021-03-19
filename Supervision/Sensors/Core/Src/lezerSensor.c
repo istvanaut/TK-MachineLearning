@@ -17,7 +17,7 @@ TIM_HandleTypeDef* Letim;
 
 void initlezer(TIM_HandleTypeDef *htim){
 	Letim = htim;
-	HAL_TIM_IC_Start_IT(Letim, TIM_CHANNEL_1);
+	HAL_TIM_IC_Start_IT(Letim, TIM_CHANNEL_3);
 
 }
 
