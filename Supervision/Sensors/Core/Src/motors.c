@@ -10,6 +10,8 @@
 #define ARR 2251u
 
 TIM_HandleTypeDef* myhtim;
+double leftMotorActualValue = 0;
+double rightMotorActualValue = 0;
 
 void Motors_Init(TIM_HandleTypeDef *htim)
 {
@@ -31,13 +33,25 @@ void Motors_Init(TIM_HandleTypeDef *htim)
 
 void leftMotor(float value)
 {
+	leftMotorActualValue = value;
     // value > 0 --> forward, value < 0 --> backward
 	myhtim->Instance->CCR1 = (uint32_t) (value > 0 ? ARR * value : 0);
 	myhtim->Instance->CCR2 = (uint32_t) (value > 0 ? 0 : ARR * value);
 }
 void rightMotor(float value)
 {
+	rightMotorActualValue = value;
     // value > 0 --> forward, value < 0 --> backward
 	myhtim->Instance->CCR3 = (uint32_t) (value > 0 ? ARR * value : 0);
 	myhtim->Instance->CCR4 = (uint32_t) (value > 0 ? 0 : ARR * value);
+}
+
+double getLeftMotorValue()
+{
+	return leftMotorActualValue;
+}
+
+double getRightMotorValue()
+{
+	return rightMotorActualValue;
 }

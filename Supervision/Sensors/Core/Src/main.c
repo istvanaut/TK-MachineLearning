@@ -123,13 +123,13 @@ int main(void)
   Motors_Init(&htim2);
   initUS(&htim1);
   initACCSensor(&hi2c2);
-  initlezer(&htim1);
 
   // Variables
 
+  //position pos = {0, 0};
 
-  //rightMotor(1);
-  //leftMotor(1);
+  rightMotor(0.55);
+  leftMotor(0.55);
 
   /* USER CODE END 2 */
 
@@ -137,16 +137,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  //WriteEncoderToPC();
+	  WriteEncoderToPC();
 	  //lightSensorCycle();
-	  printf("USA: %u\n", getUSDistance());
-	  printf("Lezer: %d\n", getlezerLedistance());
-
-	  //printf("%d\n",tofReadDistance());s
+	  //printf("%u\n", getUSDistance());
+	  //printf("%d\n",tofReadDistance());
 	  //printf("Acceleration: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z);
-	  //printf("Gyroscope: x: %f y: %f z: %f\n", getGyroWithMeasure().x, getMeasuredGyro().y, getMeasuredGyro().z);
-	  //printf("Euler: x: %f y: %f z: %f\n", getEulerWithMeasure().x, getMeasuredEuler().y, getMeasuredEuler().z);
-	  HAL_Delay(1000);
+	  //HAL_Delay(1000);
 
 
     /* USER CODE END WHILE */
@@ -575,7 +571,7 @@ static void MX_TIM3_Init(void)
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 65535;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
   {
     Error_Handler();
@@ -616,11 +612,11 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 599;
+  htim4.Init.Prescaler = 3599;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim4.Init.Period = 65535;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
   {
     Error_Handler();
