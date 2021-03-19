@@ -10,6 +10,20 @@ extern uint8_t USrisingEdgeDetected;
 extern TIM_HandleTypeDef* UStim;
 //US Sensor END
 
+
+//Lezer Sensor BEGIN
+extern uint32_t Letimed ;
+extern uint32_t LeaTime;
+extern uint32_t LeoTime;
+extern uint32_t Ledistance;
+extern uint8_t LeEdgeDetected;
+
+
+extern TIM_HandleTypeDef* Letim;
+
+//Lezer Sensor END
+
+
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 
 //US Sensor BEGIN
@@ -32,6 +46,31 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 			USrisingEdgeDetected = 0;
 			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
 		}
+
+		//US Sensor END
+
+		//Lezer BEGIN
+		if(htim->Instance == Letim->Instance){
+				if(LeEdgeDetected == 0){
+					LeaTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+					__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_FALLING);
+					LeEdgeDetected = 1;
+				}
+				else if (LeEdgeDetected == 1){
+					LeoTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+					if(LeaTime < LeoTime){
+						Letimed = LeoTime - LeaTime;
+					}
+					else{
+						Letimed = (0xffff - LeaTime) + LeoTime;
+					}
+					Ledistance=Letimed/10;
+
+					LeEdgeDetected = 0;
+					__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
+				}
+			}
 	}
-//US Sensor END
+	//Lezer END
+
 }
