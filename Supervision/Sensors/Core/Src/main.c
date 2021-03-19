@@ -127,8 +127,8 @@ int main(void)
   // Variables
 
 
-  //rightMotor(0.5);
-  //leftMotor(0.5);
+  //rightMotor(1);
+  //leftMotor(1);
 
   /* USER CODE END 2 */
 
@@ -141,6 +141,8 @@ int main(void)
 	  //printf("%u\n", getUSDistance());
 	  //printf("%d\n",tofReadDistance());
 	  //printf("Acceleration: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z);
+	  //printf("Gyroscope: x: %f y: %f z: %f\n", getGyroWithMeasure().x, getMeasuredGyro().y, getMeasuredGyro().z);
+	  //printf("Euler: x: %f y: %f z: %f\n", getEulerWithMeasure().x, getMeasuredEuler().y, getMeasuredEuler().z);
 	  //HAL_Delay(1000);
 
 
