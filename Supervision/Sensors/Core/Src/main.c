@@ -139,8 +139,9 @@ int main(void)
   {
 	  //WriteEncoderToPC();
 	  //lightSensorCycle();
-	  //printf("%u\n", getUSDistance());
-	  printf("%d\n", getlezerLedistance());
+	  printf("USA: %u\n", getUSDistance());
+	  printf("Lezer: %d\n", getlezerLedistance());
+
 	  //printf("%d\n",tofReadDistance());s
 	  //printf("Acceleration: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z);
 	  //printf("Gyroscope: x: %f y: %f z: %f\n", getGyroWithMeasure().x, getMeasuredGyro().y, getMeasuredGyro().z);

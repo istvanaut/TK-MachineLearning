@@ -27,7 +27,8 @@ extern TIM_HandleTypeDef* Letim;
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 
 //US Sensor BEGIN
-	if(htim->Instance == UStim->Instance && htim->Channel == TIM_CHANNEL_1){
+
+	if(htim->Instance == UStim->Instance && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1){
 		if(USrisingEdgeDetected == 0){
 			USStartTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
 			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_FALLING);
@@ -51,7 +52,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 		//US Sensor END
 
 //Lezer BEGIN
-	if(htim->Instance == Letim->Instance && htim->Channel == TIM_CHANNEL_3){
+	if(htim->Instance == Letim->Instance && htim->Channel ==HAL_TIM_ACTIVE_CHANNEL_3){
 		if(LeEdgeDetected == 0){
 			LeaTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
 			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_FALLING);
