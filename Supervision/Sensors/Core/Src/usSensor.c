@@ -7,11 +7,11 @@
 
 #include "usSensor.h"
 
-volatile uint32_t timeDifference = 0;
-volatile uint32_t StartTime;
-volatile uint32_t StopTime;
+volatile uint32_t UStimeDifference = 0;
+volatile uint32_t USStartTime;
+volatile uint32_t USStopTime;
 volatile uint32_t USdistance = 0;
-volatile uint8_t risingEdgeDetected = 0;
+volatile uint8_t USrisingEdgeDetected = 0;
 
 TIM_HandleTypeDef* UStim;
 
@@ -21,32 +21,32 @@ void initUS(TIM_HandleTypeDef *htim){
 	HAL_TIM_PWM_Start(UStim, TIM_CHANNEL_2);
 }
 
-
+/*
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance == UStim->Instance){
-		if(risingEdgeDetected == 0){
-			StartTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+		if(USrisingEdgeDetected == 0){
+			USStartTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
 			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_FALLING);
-			risingEdgeDetected = 1;
+			USrisingEdgeDetected = 1;
 		}
-		else if (risingEdgeDetected == 1){
-			StopTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
-			if(StartTime < StopTime){
-				timeDifference = StopTime - StartTime;
+		else if (USrisingEdgeDetected == 1){
+			USStopTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+			if(USStartTime < USStopTime){
+				UStimeDifference = USStopTime - USStartTime;
 			}
 			else{
-				timeDifference = (0xffff - StartTime) + StopTime;
+				UStimeDifference = (0xffff - USStartTime) + USStopTime;
 			}
-			USdistance = timeDifference * 0.034 / 2.0;
+			USdistance = UStimeDifference * 0.034 / 2.0;
 
-			risingEdgeDetected = 0;
+			USrisingEdgeDetected = 0;
 			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
 		}
 	}
 }
-
+*/
 uint32_t getUSTime(void){
-	return timeDifference;
+	return UStimeDifference;
 }
 
 uint32_t getUSDistance(void){
