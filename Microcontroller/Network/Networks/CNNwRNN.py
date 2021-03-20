@@ -49,7 +49,7 @@ class CNNwRNN(nn.Module):
         self.dense1 = nn.Linear(linear_input_size, 64)
 
         # Recursive Neural Network
-        self.encoder_layer = nn.TransformerEncoderLayer(d_model=10, nhead=1)
+        self.encoder_layer = nn.TransformerEncoderLayer(d_model=dim_features, nhead=1)
         self.transformer_encoder = nn.TransformerEncoder(self.encoder_layer, 32)
 
         # Output layer

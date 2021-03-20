@@ -48,8 +48,8 @@ def vehicle_control(reverse=False, throttle=0.0, steer=0.0):
     return carla.VehicleControl(reverse=reverse, throttle=throttle, steer=steer)
 
 
-def rotation(p, y, r):
-    return carla.Rotation(pitch=p, yaw=y, roll=r)
+def rotation(d):
+    return carla.Rotation(pitch=d[0], yaw=d[1], roll=d[2])
 
 
 def move(actor, loc):
@@ -74,14 +74,17 @@ def addloc(loc0, loc1):
 
 
 def rotate(actor, rot):
-    t = actor.get_transform()
-    t.rotation = rotation(*rot)
+    loc = actor.get_transform().location
+    t = transform(loc.x, loc.y, loc.z, rot.pitch, rot.yaw, rot.roll)
     actor.set_transform(t)
-    time.sleep(0.5)  # for some reason we must wait for the simulator to process this
+    # for some reason we must wait for the simulator to process this
+    time.sleep(0.5)
+    # Then we test if it worked
     r1 = actor.get_transform().rotation
-    r2 = rotation(*rot)
+    r2 = rot
     diff = ((r1.pitch - r2.pitch) ** 2 + (r1.yaw - r2.yaw) ** 2 + (r1.roll - r2.roll) ** 2) ** 0.5
     if diff > 1.0:
+        # TODO (4) this happens often with spectator
         logger.warning(f'Failed rotating {actor.type_id} to {t.rotation}')
     else:
         logger.info(f'Rotated {actor.type_id} to {t.rotation}')

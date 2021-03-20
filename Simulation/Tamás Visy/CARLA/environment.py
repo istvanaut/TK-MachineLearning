@@ -30,7 +30,7 @@ TASK_CREATE_LINE = 2
 
 
 class Environment:
-
+    # TODO (6) make environment more environment-like -> agent runs in main, data with env.pull, env.push?
     def __init__(self):
         self.actors = []
         self.world = None
@@ -79,10 +79,13 @@ class Environment:
         logger.info('Environment setup')
         icarla.set_velocity(self.vehicle, icarla.vector3d())
         icarla.move(self.vehicle, icarla.transform(line.start[0], line.start[1], 0.25).location)
-        icarla.rotate(self.vehicle, line.direction())
+        icarla.rotate(self.vehicle, icarla.rotation(line.direction()))
         icarla.move(self.world.get_spectator(),
-                    icarla.transform(line.start[0], line.start[1] - np.sign(line.direction()[1]) * 5, 3.0).location)
-        icarla.rotate(self.world.get_spectator(), line.direction())
+                    icarla.transform(line.start[0] + 10 - line.direction()[0]/90 * 10,
+                                     line.start[1] + line.direction()[1]/90 * 10,
+                                     12.0).location)
+        # TODO (3) this is not always the right rotation...
+        icarla.rotate(self.world.get_spectator(), icarla.rotation([-90, line.direction()[1], 0]))
 
     def run(self, line):
         logger.warning('Halting threads')
@@ -177,7 +180,7 @@ class Environment:
         camera_blueprint.set_attribute('image_size_y', f'{IM_HEIGHT}')
         # camera_blueprint.set_attribute('fov', '90')
         spawn_point = icarla.copy(SENSOR_SPAWN_POINT)
-        spawn_point.rotation = icarla.rotation(-45, 0, 0)
+        spawn_point.rotation = icarla.rotation([-45, 0, 0])
         camera = self.world.spawn_actor(camera_blueprint, spawn_point, attach_to=self.vehicle)
         camera.listen(lambda i: process_image(self.data, i))
         self.actors.append(camera)
@@ -226,7 +229,7 @@ class Environment:
         logger.debug(f'Vehicle spawn is {start}')
         if start is not None:
             spawn_point = icarla.transform(*start)
-            spawn_point.rotation = icarla.rotation(*direction)
+            spawn_point.rotation = icarla.rotation(direction)
             success = False
 
             while not success:

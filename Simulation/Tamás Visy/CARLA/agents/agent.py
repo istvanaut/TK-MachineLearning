@@ -60,12 +60,11 @@ def convert(state):
         radar = 100.0  # Radar always some number
 
     # velocity: m/s, [v_x, v_y, v_z] (floats?)
-    # TODO (6) can't convert velocity to 1D because it breaks the NN - even if State is updated properly - why?
-    # Velocity is converted to 1D (float)
-    # if velocity is None:
-    #     velocity = 0.0
-    # else:
-    #     velocity = (velocity[0]**2+velocity[1]**2)**0.5
+    # Velocity is now converted to 1D (float)
+    if velocity is None:
+        velocity = 0.0
+    else:
+        velocity = (velocity[0]**2+velocity[1]**2)**0.5
 
     # acceleration: m/s2, [a_x, a_y, a_z] (floats?)
     # TODO (8) get direction car faces and calc. "subjective" vector for acceleration

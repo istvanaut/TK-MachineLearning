@@ -6,6 +6,7 @@ import numpy as np
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
+from torchsummary import summary
 
 from Networks.CNNwRNN import CNNwRNN
 from ReinforcementlearningElements import RewardFunctions
@@ -179,3 +180,9 @@ class ReinforcementModel:
         model = CNNwRNN(dim_features, image_height, image_width, n_actions)
         model.load_state_dict(torch.load(path))
         model.eval()
+
+    def summary(self):
+        logger.warning('Skipping model summary')
+        return
+        print(self.target_net)
+        # summary(self.target_net, (INPUT_SHAPE)) # must call separately on CNN and RNN?

@@ -27,9 +27,9 @@ def main():
         world = set_conditions(client, world)
         env.set_world(world)
 
-        env.start(TASK_CREATE_LINE)
+        # env.start(TASK_CREATE_LINE)
 
-        # env.start(TASK_FOLLOW_LINE)
+        env.start(TASK_FOLLOW_LINE)
 
     finally:
         for actor in env.get_actors():

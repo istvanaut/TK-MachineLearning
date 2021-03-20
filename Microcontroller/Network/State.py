@@ -8,13 +8,15 @@ transforms.ToTensor()
 State = namedtuple('State',
                    ('image', 'radar', 'collision', 'velocity', 'acceleration', 'position',
                     'obstacle', 'distance_from_line'))
-feature_dimension = 10
 
+
+# from agents.networkagent import feature_dimension
+# feature_dimension
 
 def transform_state(state):
     state = State(*state)
     image = np.expand_dims(state.image, axis=0)
-    state = [[[state.radar, state.collision, state.velocity[0], state.velocity[1], state.velocity[2],
+    state = [[[state.radar, state.collision, state.velocity,
                state.acceleration[0], state.acceleration[1], state.acceleration[2],
                state.obstacle, state.distance_from_line]]]
     return torch.from_numpy(image).float(), torch.tensor(state).float()

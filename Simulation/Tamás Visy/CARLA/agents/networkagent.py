@@ -3,7 +3,7 @@ from agents.agent import Agent
 
 from support.logger import logger
 
-feature_dimension = 10
+feature_dimension = 8
 AGENT_IM_HEIGHT = 128
 AGENT_IM_WIDTH = 128
 ACTIONS_NUM = 4
@@ -15,6 +15,7 @@ class NetworkAgent(Agent):
         super().__init__()
         self.model = ReinforcementModel(dim_features=feature_dimension, height=AGENT_IM_HEIGHT,
                                         width=AGENT_IM_WIDTH, n_actions=ACTIONS_NUM)
+        self.model.summary()
 
     def predict(self, state):
         p = self.model.predict(state)
