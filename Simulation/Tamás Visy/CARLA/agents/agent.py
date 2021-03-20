@@ -2,6 +2,7 @@ import random
 import numpy as np
 
 from sensors import recently, limit_range
+from support.datakey import DataKey
 from support.image_manipulation import im_resize, im_grayscale
 from support.logger import logger
 
@@ -37,11 +38,28 @@ class Agent:
         logger.error('LOAD - not happening')
 
 
+def unpack(data, line):
+    ca = data.get(DataKey.SENSOR_CAMERA)
+    r = data.get(DataKey.SENSOR_RADAR)
+    co = data.get(DataKey.SENSOR_COLLISION)
+    v = data.get(DataKey.SENSOR_VELOCITY)
+    a = data.get(DataKey.SENSOR_ACCELERATION)
+    p = data.get(DataKey.SENSOR_POSITION)
+    di = data.get(DataKey.SENSOR_DIRECTION)
+    o = data.get(DataKey.SENSOR_OBSTACLE)
+    if p is not None:
+        d = line.distance([p[0], p[1]])
+    else:
+        d = None
+    return ca, r, co, v, a, p, di, o, d
+
+
 def convert(state):
     """Converts incoming data into the format the agent accepts"""
     camera, radar, collision, velocity, acceleration, position, direction, obstacle, distance = state
 
     # TODO (2) check if all conversions are needed
+    # TODO (3) move to networkagent
 
     # SENSOR: unit, format
 

@@ -59,7 +59,7 @@ def move(actor, loc):
     if d > 1.0:
         logger.warning(f'Failed moving {actor.type_id} to {loc}, retry...')
         logger.info(f'Actors transform is {actor.get_transform()}')
-        actor.set_transform(carla.Transform(addloc(loc, location(0, 0, 1)), rotation([0, 0, 0])))
+        actor.set_transform(carla.Transform(add_locations(loc, location(0, 0, 1)), rotation([0, 0, 0])))
         time.sleep(0.5)
         d = actor.get_location().distance(loc)
         if d > 3.0:
@@ -69,7 +69,7 @@ def move(actor, loc):
     logger.info(f'Moved {actor.type_id} to {loc}')
 
 
-def addloc(loc0, loc1):
+def add_locations(loc0, loc1):
     return carla.Location(x=loc0.x + loc1.x, y=loc0.y + loc1.y, z=loc0.z + loc1.z)
 
 
@@ -91,4 +91,12 @@ def rotate(actor, rot):
 
 
 def set_velocity(actor, velocity):
-    actor.set_target_velocity(velocity)
+    first = True
+    while (actor.get_velocity().x**2+actor.get_velocity().y**2+actor.get_velocity().z**2)**0.5 > 0.1:
+        if not first:
+            logger.warning('Previous attempt at setting vehicle velocity unsuccessful')
+        logger.debug('Setting vehicle velocity to 0...')
+        actor.set_target_velocity(velocity)
+        time.sleep(0.5)
+        first = False
+    logger.info('Velocity is approx. 0')

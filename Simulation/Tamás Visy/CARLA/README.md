@@ -1,4 +1,4 @@
-# How to simulate the environment for an autonomous vehicle in CARLA
+# How to simulate the environments for an autonomous vehicle in CARLA
 
 ---
 

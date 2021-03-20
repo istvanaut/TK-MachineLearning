@@ -1,0 +1,120 @@
+# @title environment
+
+import numpy as np
+import icarla
+from environments.connection import Connection
+from environments.spawner import spawn_vehicle, spawn_camera, spawn_radar, spawn_collision, spawn_obstacle
+from environments.status import Status
+from line import get_line, Line
+from support.datakey import DataKey
+from support.logger import logger
+from threads.controllerthread import ControllerThread
+from threads.dashboardthread import DashboardThread
+from support.data import Data
+from threads.pollerthread import PollerThread
+
+# Town05 has best paths on the inside of the motorway (still in the town)
+MAP_NAME = 'Town05'  # Best map: Town05 or Town03, least performance demanding map: Town02
+
+
+class Environment:
+    # TODO (5) refactor every "self.connection.world. ..."
+    def __init__(self):
+        self.actors = []
+        self.data = Data()
+        self.vehicle = None
+        self.line = get_line()
+
+        logger.warning('Halting threads')
+        self.data.put(DataKey.THREAD_HALT, True)
+
+        self.c = ControllerThread(self.data)
+        self.p = PollerThread(self.data)
+        self.d = DashboardThread(self.data)
+
+        self.connection = Connection()
+
+    def connect(self):
+        self.connection.connect()
+
+    def setup(self):
+        logger.info('Environment setup')
+        self.set_conditions()
+        self.spawn()
+        self.reset()
+
+    def start(self):
+        self.d.start()
+        self.c.start()
+        self.p.start()
+
+    def set_conditions(self):
+        current_map_name = self.connection.world.get_map().name
+        # Loading correct map
+        if current_map_name != MAP_NAME:
+            logger.info(f'Loading map: {MAP_NAME} <- {current_map_name}')
+            try:
+                self.connection.world = self.connection.client.load_world(MAP_NAME)
+            except RuntimeError as r:
+                logger.critical(f'{r}')
+                raise r
+        else:
+            # Destroying old actors
+            actors = self.connection.world.get_actors()
+            # TODO (3) check if this destroys sensor actors as well - if not, performance hit?
+            for actor in actors.filter('vehicle.*.*'):
+                actor.destroy()
+            if len(actors.filter('vehicle.*.*')) > 0:
+                logger.info('Cleaned up old actors')
+        # Setting nice weather
+        self.set_weather()
+
+    def set_weather(self):
+        weather = self.connection.world.get_weather()
+
+        weather.precipitation = 0.0
+        weather.precipitation_deposits = 0.0
+        weather.wetness = 0.0
+
+        self.connection.world.set_weather(weather)
+        logger.info('Applied nice weather')
+
+    def spawn(self):
+        logger.info('Spawning actors, sensors')
+        spawn_vehicle(self, self.line.start, self.line.direction())
+        spawn_camera(self)
+        spawn_radar(self)
+        spawn_collision(self)
+        spawn_obstacle(self)
+
+    def reset(self):
+        logger.info('Resetting actors')
+        self.clear()
+        logger.warning('Halting threads')
+        self.data.put(DataKey.THREAD_HALT, True)
+        self.vehicle.apply_control(icarla.vehicle_control(throttle=0, steer=0))
+        icarla.set_velocity(self.vehicle, icarla.vector3d())
+        icarla.move(self.vehicle, icarla.transform(self.line.start[0], self.line.start[1], 0.25).location)
+        icarla.rotate(self.vehicle, icarla.rotation(self.line.direction()))
+        icarla.move(self.connection.world.get_spectator(),
+                    icarla.transform(self.line.start[0] + 10 * np.cos(self.line.direction()[1] / 180 * np.pi),
+                                     self.line.start[1] + 10 * np.sin(self.line.direction()[1] / 180 * np.pi),
+                                     12.0).location)
+        # Apparently UE4 spectator doesn't like exact 90 degrees, keep it less?
+        icarla.rotate(self.connection.world.get_spectator(), icarla.rotation([-85, self.line.direction()[1], 0]))
+        logger.info('Environment reset successful')
+
+    def clear(self):
+        logger.info('Clearing data')
+        self.data.clear()
+
+    def pull(self):
+        return self.data.copy(), Line(self.line.points)
+
+    def put(self, key, data):
+        self.data.put(key, data)
+
+    def check(self):
+        s = Status()
+        s.check(self)
+        return s

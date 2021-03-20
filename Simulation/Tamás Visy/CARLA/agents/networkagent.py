@@ -18,6 +18,8 @@ class NetworkAgent(Agent):
         self.model.summary()
 
     def predict(self, state):
+        if state is None:
+            return None
         p = self.model.predict(state)
         if p is 0:
             return 0.4, -0.4
