@@ -13,6 +13,7 @@ TITLE = 'Dashboard'
 FONT = 'freesansbold.ttf'
 
 QUIT = pygame.QUIT
+IM_SIZE = (32, 32)
 
 
 class Window:
@@ -80,6 +81,7 @@ class Window:
 
     def update_screen(self):
         image = self.data.get(DataKey.SENSOR_CAMERA)
+        image = im_resize(image, IM_SIZE)
         self.draw_image(image)
 
         text = self.data.get(DataKey.CONTROL_OUT)

@@ -81,11 +81,11 @@ class Environment:
         icarla.move(self.vehicle, icarla.transform(line.start[0], line.start[1], 0.25).location)
         icarla.rotate(self.vehicle, icarla.rotation(line.direction()))
         icarla.move(self.world.get_spectator(),
-                    icarla.transform(line.start[0] + 10 - line.direction()[0]/90 * 10,
-                                     line.start[1] + line.direction()[1]/90 * 10,
+                    icarla.transform(line.start[0] + 10 * np.cos(line.direction()[1]/180*np.pi),
+                                     line.start[1] + 10 * np.sin(line.direction()[1]/180*np.pi),
                                      12.0).location)
-        # TODO (3) this is not always the right rotation...
-        icarla.rotate(self.world.get_spectator(), icarla.rotation([-90, line.direction()[1], 0]))
+        # Apparently UE4 spectator doesn't like exact 90 degrees, keep it less?
+        icarla.rotate(self.world.get_spectator(), icarla.rotation([-85, line.direction()[1], 0]))
 
     def run(self, line):
         logger.warning('Halting threads')

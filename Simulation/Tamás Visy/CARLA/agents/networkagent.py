@@ -4,8 +4,8 @@ from agents.agent import Agent
 from support.logger import logger
 
 feature_dimension = 8
-AGENT_IM_HEIGHT = 128
-AGENT_IM_WIDTH = 128
+AGENT_IM_HEIGHT = 32
+AGENT_IM_WIDTH = 32
 ACTIONS_NUM = 4
 AGENT_MODEL_PATH = 'files/tensor.pt'
 

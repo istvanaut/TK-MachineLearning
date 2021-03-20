@@ -59,7 +59,7 @@ def move(actor, loc):
     if d > 1.0:
         logger.warning(f'Failed moving {actor.type_id} to {loc}, retry...')
         logger.info(f'Actors transform is {actor.get_transform()}')
-        actor.set_transform(carla.Transform(addloc(loc, location(0, 0, 1)), rotation(0, 0, 0)))
+        actor.set_transform(carla.Transform(addloc(loc, location(0, 0, 1)), rotation([0, 0, 0])))
         time.sleep(0.5)
         d = actor.get_location().distance(loc)
         if d > 3.0:
@@ -75,6 +75,7 @@ def addloc(loc0, loc1):
 
 def rotate(actor, rot):
     loc = actor.get_transform().location
+    time.sleep(0.5)
     t = transform(loc.x, loc.y, loc.z, rot.pitch, rot.yaw, rot.roll)
     actor.set_transform(t)
     # for some reason we must wait for the simulator to process this
@@ -84,10 +85,9 @@ def rotate(actor, rot):
     r2 = rot
     diff = ((r1.pitch - r2.pitch) ** 2 + (r1.yaw - r2.yaw) ** 2 + (r1.roll - r2.roll) ** 2) ** 0.5
     if diff > 1.0:
-        # TODO (4) this happens often with spectator
-        logger.warning(f'Failed rotating {actor.type_id} to {t.rotation}')
+        logger.warning(f'Failed rotating {actor.type_id} to {rot}')
     else:
-        logger.info(f'Rotated {actor.type_id} to {t.rotation}')
+        logger.info(f'Rotated {actor.type_id} to {rot}')
 
 
 def set_velocity(actor, velocity):
