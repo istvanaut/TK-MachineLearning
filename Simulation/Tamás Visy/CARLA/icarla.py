@@ -59,7 +59,7 @@ def move(actor, loc):
     if d > 1.0:
         logger.warning(f'Failed moving {actor.type_id} to {loc}, retry...')
         logger.info(f'Actors transform is {actor.get_transform()}')
-        actor.set_transform(carla.Transform(addloc(loc, location(0, 0, 1)), rotation(0, 0, 0)))
+        actor.set_transform(carla.Transform(addloc(loc, location(0, 0, 1)), rotation([0, 0, 0])))
         time.sleep(0.5)
         d = actor.get_location().distance(loc)
         if d > 3.0:
