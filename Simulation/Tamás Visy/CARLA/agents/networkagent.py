@@ -7,7 +7,7 @@ import numpy as np
 import math
 from support.logger import logger
 
-feature_dimension = 8
+feature_dimension = 9
 AGENT_IM_HEIGHT = 32
 AGENT_IM_WIDTH = 32
 ACTIONS_NUM = 4
@@ -76,7 +76,7 @@ class NetworkAgent(Agent):
                           [0, 0, 1]])
 
     @staticmethod
-    def unpack(data, line):
+    def repack(data, line, starting_dir):
         ca = data.get(DataKey.SENSOR_CAMERA)
         r = data.get(DataKey.SENSOR_RADAR)
         co = data.get(DataKey.SENSOR_COLLISION)
@@ -84,17 +84,19 @@ class NetworkAgent(Agent):
         a = data.get(DataKey.SENSOR_ACCELERATION)
         p = data.get(DataKey.SENSOR_POSITION)
         di = data.get(DataKey.SENSOR_DIRECTION)
+        sdi = starting_dir
         o = data.get(DataKey.SENSOR_OBSTACLE)
         if p is not None:
             d = line.distance([p[0], p[1]])
         else:
             d = None
-        return ca, r, co, v, a, p, di, o, d
+        return ca, r, co, v, a, p, di, sdi, o, d
 
     @staticmethod
     def convert(state):
         """Converts incoming data into the format the agent accepts"""
-        camera, radar, collision, velocity, acceleration, position, direction, obstacle, distance = state
+        camera, radar, collision, velocity, acceleration, position, direction, starting_direction, obstacle, distance \
+            = state
 
         # TODO (2) check if all conversions are needed
 
@@ -120,11 +122,14 @@ class NetworkAgent(Agent):
         else:
             velocity = (velocity[0] ** 2 + velocity[1] ** 2) ** 0.5
 
-        # acceleration: m/s2, [a_x, a_y, a_z] (floats?)
-        # at first direction and acceleration is None
+        # direction: degrees? 3D? - but agent only cares about yaw (around y axis - bit like a compass)
         if direction is None:
             direction = [0, 0, 0]
+            current_direction = [0, 0, 0]
+        else:
+            current_direction = direction[1] - starting_direction[1]
 
+        # acceleration: m/s2, [a_x, a_y, a_z] (floats?)
         if acceleration is None:
             acceleration = [0, 0, 0]
 
@@ -143,11 +148,13 @@ class NetworkAgent(Agent):
         if obstacle is None:
             obstacle = False  # Obstacle always TRUE/FALSE
 
-        important = camera, velocity, acceleration, position
+        important = camera, velocity, acceleration, current_direction, position
+        # Only return data if important inputs (which should not be None) are not None
+        # TODO (2) direction is changed if None - does it matter?
         if not any(map(lambda x: x is None, important)):
             # Order is important for:
             # from State import State
             # State
-            return camera, radar, collision, velocity, acceleration, position, obstacle, distance
+            return camera, radar, collision, velocity, acceleration, current_direction, position, obstacle, distance
         else:
             return None

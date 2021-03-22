@@ -109,7 +109,7 @@ class Environment:
         self.data.clear()
 
     def pull(self):
-        return self.data.copy(), Line(self.line.points)
+        return self.data.copy(), Line(self.line.points), self.line.direction()  # data, line and starting direction
 
     def put(self, key, data):
         self.data.put(key, data)

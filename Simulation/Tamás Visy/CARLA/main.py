@@ -21,20 +21,20 @@ def main():
             env.clear()
             status = Status()
             while status.finished is False:
-                data, line = env.pull()
-                inp = agent.__class__.convert(agent.__class__.unpack(data, line))
+                data, line, starting_dir = env.pull()
+                inp = agent.__class__.convert(agent.__class__.repack(data, line, starting_dir))
                 out = agent.predict(inp)
                 if out is not None:
                     env.put(DataKey.CONTROL_OUT, out)
 
                 status = env.check()
+            env.reset()
+
             logger.info(f'~~~ {status} ~~~')
 
-            user_inp = input('...')
+            user_inp = input('Continue after any input. To save and continue, type "SAVE"')
             if user_inp is 'SAVE':
                 agent.save()
-
-            env.reset()
 
     finally:
         agent.save()
