@@ -5,6 +5,7 @@ from sensors import recently, limit_range
 from support.datakey import DataKey
 from support.image_manipulation import im_resize, im_grayscale
 from support.logger import logger
+import math as m
 
 
 class Agent:
@@ -37,6 +38,21 @@ class Agent:
     def load(self, path):
         logger.error('LOAD - not happening')
 
+# rotation matrices used in calculating car subjective acceleration
+def Rx(theta):
+    return np.matrix([[ 1, 0           , 0           ],
+                      [ 0, m.cos(theta),-m.sin(theta)],
+                      [ 0, m.sin(theta), m.cos(theta)]])
+
+def Ry(theta):
+    return np.matrix([[ m.cos(theta), 0, m.sin(theta)],
+                      [ 0           , 1, 0           ],
+                      [-m.sin(theta), 0, m.cos(theta)]])
+
+def Rz(theta):
+    return np.matrix([[ m.cos(theta), -m.sin(theta), 0 ],
+                      [ m.sin(theta), m.cos(theta) , 0 ],
+                      [ 0           , 0            , 1 ]])
 
 def unpack(data, line):
     ca = data.get(DataKey.SENSOR_CAMERA)
@@ -85,8 +101,15 @@ def convert(state):
         velocity = (velocity[0]**2+velocity[1]**2)**0.5
 
     # acceleration: m/s2, [a_x, a_y, a_z] (floats?)
-    # TODO (8) get direction car faces and calc. "subjective" vector for acceleration
-    acceleration = acceleration
+    # at first direction and acceleration is None
+    if direction is None:
+        direction = [0, 0, 0]
+
+    if acceleration is None:
+        acceleration = [0, 0, 0]
+
+
+    acceleration = (Ry(direction[1]) @ Rz(direction[2]) @ Rx(direction[0])).T @ np.reshape(acceleration, [3, 1])
     # use direction to calc this (dir: degrees, [pitch, yaw, roll])
 
     # position: m, [x, y, z, pitch, yaw, roll] (floats?)
