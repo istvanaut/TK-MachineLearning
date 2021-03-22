@@ -1,4 +1,5 @@
 # @title main
+import time
 
 from agents.networkagent import NetworkAgent
 from environments.environment import Environment
@@ -11,6 +12,8 @@ def main():
     logger.debug('Starting')
     env = Environment()
     agent = NetworkAgent()
+
+    # TODO (10) window to main, using the inp of agent
 
     try:
         env.connect()
@@ -32,7 +35,9 @@ def main():
 
             logger.info(f'~~~ {status} ~~~')
 
-            user_inp = input('Continue after any input. To save and continue, type "SAVE"')
+            logger.info('Continue after any input. To save and continue, type "SAVE"')
+            time.sleep(0.2)
+            user_inp = input()
             if user_inp is 'SAVE':
                 agent.save()
 

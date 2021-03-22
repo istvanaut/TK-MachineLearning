@@ -10,13 +10,21 @@ from support.logger import logger
 feature_dimension = 9
 AGENT_IM_HEIGHT = 32
 AGENT_IM_WIDTH = 32
-ACTIONS_NUM = 4
 AGENT_MODEL_PATH = 'files/tensor.pt'
+choices = [[0.4, 0.4],
+           [0.5, 0.1],
+           [0.5, -0.1],
+           [0.4, -0.4]]
+ACTIONS_NUM = len(choices)
 
 
 class NetworkAgent(Agent):
+
     def __init__(self):
         super().__init__()
+
+        self.choices = choices
+
         self.model = ReinforcementModel(dim_features=feature_dimension, height=AGENT_IM_HEIGHT,
                                         width=AGENT_IM_WIDTH, n_actions=ACTIONS_NUM)
         self.model.summary()
@@ -25,16 +33,11 @@ class NetworkAgent(Agent):
         if state is None:
             return None
         p = self.model.predict(state)
-        if p is 0:
-            return 0.4, -0.4
-        if p is 1:
-            return 0.6, -0.1
-        if p is 2:
-            return 0.6, 0.1
-        if p is 3:
-            return 0.4, 0.4
-        logger.error(f'Could not find right value for {p}')
-        return None
+        try:
+            return self.choices[p]
+        except RuntimeError:
+            logger.error(f'Error when trying to find right value for {p}')
+            return None
 
     def optimize(self, new_state):
         try:
@@ -135,6 +138,7 @@ class NetworkAgent(Agent):
 
         acceleration = (NetworkAgent.__Ry(direction[1]) @ NetworkAgent.__Rz(direction[2]) @ NetworkAgent.__Rx(
             direction[0])).T @ np.reshape(acceleration, [3, 1])
+        acceleration = np.asarray(acceleration).flatten().tolist()
 
         # position: m, [x, y, z, pitch, yaw, roll] (floats?)
 
