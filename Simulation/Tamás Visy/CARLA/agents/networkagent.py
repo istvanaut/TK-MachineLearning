@@ -31,17 +31,17 @@ class NetworkAgent(Agent):
 
     def predict(self, state):
         if state is None:
-            return None
-        p = self.model.predict(state)
+            return None, None
+        action = self.model.predict(state)
         try:
-            return self.choices[p]
+            return action, self.choices[action]
         except RuntimeError:
-            logger.error(f'Error when trying to find right value for {p}')
-            return None
+            logger.error(f'Error when trying to find right value for {action}')
+            return None, None
 
-    def optimize(self, new_state):
+    def optimize(self, new_state, prev_state=None, action=None):
         try:
-            self.model.optimize(new_state)
+            self.model.optimize(new_state, prev_state, action)
         except RuntimeError as r:
             logger.error(f'Error in model.optimize: {r}')
 

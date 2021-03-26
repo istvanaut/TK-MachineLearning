@@ -25,6 +25,6 @@ class Connection:
             # Even on a local machine, CARLA server takes about 2-3 seconds to respond - especially loading maps is long
             self.client.set_timeout(10.0)
             self.world = self.client.get_world()
+            logger.info(f'Connected successfully')
         except RuntimeError as r:
             logger.error(f'Could not connect to server: {r}')
-            return None, None
