@@ -128,8 +128,8 @@ int main(void)
   initACCSensor(&hi2c2);
 
   // Variables
+  uint32_t black; //line detect
 
-  //position pos = {0, 0};
 
   rightMotor(0.55);
   leftMotor(0.55);
@@ -141,12 +141,12 @@ int main(void)
   while (1)
   {
 	  WriteEncoderToPC();
-	  lightSensorCycle();
-	  printf("%u\n", (unsigned int)getUSDistance());
-	  printf("%u\n", (unsigned int)getlezerDistance());
+	  black = lightSensorCycle();
+	  printf("Leds: %x\n", (unsigned int)black);
+	  printf("Left US sensor: %u\n", (unsigned int)getUSDistance());
+	  printf("Right US sensor: %u\n", (unsigned int)getUSDistance());
+	  printf("Laser sensor: %u\n", (unsigned int)getlezerDistance());
 	  printf("Acceleration: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z);
-	  //HAL_Delay(1000);
-
 
     /* USER CODE END WHILE */
 

@@ -95,11 +95,13 @@ uint16_t SPIreceive_AD(uint16_t idx, uint8_t AD_Num)
 	return AD_OUT2;
 }
 
-void lightSensorCycle()
+uint32_t lightSensorCycle()
 {
 	uint8_t leds_buff[4]; //0 -> DxD, 1 -> DxC, 2 -> DxB, 3 -> DxA
 	uint16_t AD_IN[32];
 	uint8_t ledVal = 0x01;
+
+	uint32_t ret;
 
 	for(uint16_t i = 0; i < 8; i++)
 	{
@@ -137,6 +139,12 @@ void lightSensorCycle()
 
 	// Debug LED write
 	SPItransmit_LED(leds_buff, 1);
+
+	ret |= leds_buff[0] << 24;
+	ret |= leds_buff[1] << 16;
+	ret |= leds_buff[2] << 8;
+	ret |= leds_buff[3];
+	return ret;
 }
 
 void switchBytes(uint16_t* num)
