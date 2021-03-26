@@ -9,6 +9,10 @@
 
 void initUS(TIM_HandleTypeDef *htim);
 
-uint32_t getTime(void);
+uint32_t getUSTimeLeft(void);
 
-uint32_t getUSDistance(void);
+uint32_t getUSDistanceLeft(void);
+
+uint32_t getUSTimeRight(void);
+
+uint32_t getUSDistanceRight(void);

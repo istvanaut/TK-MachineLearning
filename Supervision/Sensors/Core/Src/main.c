@@ -142,7 +142,7 @@ int main(void)
   {
 	  WriteEncoderToPC();
 	  lightSensorCycle();
-	  printf("%u\n", (unsigned int)getUSDistance());
+	  printf("%u\n", (unsigned int)getUSDistanceLeft());
 	  printf("%u\n", (unsigned int)getlezerDistance());
 	  printf("Acceleration: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z);
 	  //HAL_Delay(1000);
