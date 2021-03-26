@@ -23,6 +23,11 @@ extern TIM_HandleTypeDef* Letim;
 
 //Lezer Sensor END
 
+// Encoder BEGIN
+extern int speed1en;
+extern int speed2en;
+// Encoder END
+
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 
@@ -74,4 +79,21 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 	}
 	//Lezer END
 
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	//Left encoder BEGIN
+	if(htim->Instance == TIM6)
+	{
+		speed1en = 0;
+	}
+	//Left encoder END
+
+	//Right encoder BEGIN
+	if(htim->Instance == TIM7)
+	{
+		speed2en = 0;
+	}
+	//Right encoder END
 }

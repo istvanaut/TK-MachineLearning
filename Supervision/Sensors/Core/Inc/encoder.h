@@ -29,6 +29,5 @@ double GetDistanceOfMotor(int motor); // 0 => left, 1 => right [m]
 position GetPositionFromOrigin(); // x: [m], y: [m]
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 
 #endif
