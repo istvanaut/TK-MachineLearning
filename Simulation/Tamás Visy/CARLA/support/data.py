@@ -2,8 +2,6 @@
 
 from threading import Lock
 
-from support.logger import logger
-
 
 class Data:
     data = None

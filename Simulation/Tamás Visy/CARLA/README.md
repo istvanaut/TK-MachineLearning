@@ -29,9 +29,9 @@ Optionally use ``-ResX=200 -ResY=200`` to change resolution - but this appears t
 ---
 ## 4. Run example Python scripts
 
-Example Python scripts are in ``/PythonAPI/examples``
+Example Python scripts are in CARLA's folder in ``/PythonAPI/examples``
 
-To run a script, you require certain Python packages (numpy, matplotlib, etc.) and the carla package
+To run a script you must install certain Python packages (numpy, matplotlib, etc.) and the carla package
 
 The carla package is included in the download at ``/PythonAPI/carla/dist`` and uses Python 3.7
 
@@ -39,12 +39,12 @@ If you have multiple Python versions installed, use the command ``py -3.7 xxx.py
 
 For example the scripts ``spawn_npc.py`` and ``manual_control.py`` should be working and have noticeable effect
 
-To change map, run ``config.py`` from ``/PythonAPI/util`` with the argument ``-m MAPNAME``
+To change the map, run ``config.py`` from ``/PythonAPI/util`` with the argument ``-m MAPNAME``
 
 If another script gives a timeout error, you probably have to specify the host (localhost) and port (2000) in the command line arguments
 
 ---
 ## 5. Run custom Python script
-Run main.py (with python 3.7) from ``/PythonAPI/custom``
+Run the main.py of this project (with python 3.7)
 
-To check logs, go to ``/PythonAPI/custom/files/carla.log``
+To check logs, see ``files/carla.log``
