@@ -48,3 +48,7 @@ If another script gives a timeout error, you probably have to specify the host (
 Run the main.py of this project (with python 3.7)
 
 To check logs, see ``files/carla.log``
+
+You need to copy the carla package to ``CARLA/files`` - from ``/PythonAPI/carla/dist/carla-0.9.10-py3.7-win-amd64.egg``
+
+Mark ``Simulation/Tamás Visy/CARLA`` and ``Microcontroller/Network`` as Sources Root
