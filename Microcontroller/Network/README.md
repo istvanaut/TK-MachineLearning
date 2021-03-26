@@ -6,7 +6,7 @@ As the project goes on, different modules with different learning techniques wil
 
 ## Reinforcement Learning
 
-This type of learning tries to maximize a reward function. The agent's actions are controlled by a reinforcement algorithm, which decides the agent's action at every time step. These actions depend on the environment and the state of the agent. Each action takes the agent to a new state, and a reward is calculated based on the difference between the two states. Based on the accumulated rewards the reinforcement algorithm is optimized for better maximization of the reward function.
+This type of learning tries to maximize a reward function. The agent's actions are controlled by a reinforcement algorithm, which decides the agent's action at every time step. These actions depend on the environments and the state of the agent. Each action takes the agent to a new state, and a reward is calculated based on the difference between the two states. Based on the accumulated rewards the reinforcement algorithm is optimized for better maximization of the reward function.
 
 ## Deep Q-Network
 

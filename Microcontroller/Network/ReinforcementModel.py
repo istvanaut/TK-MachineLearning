@@ -6,6 +6,7 @@ import numpy as np
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
+from torchsummary import summary
 
 from Networks.CNNwRNN import CNNwRNN
 from ReinforcementlearningElements import RewardFunctions
@@ -79,10 +80,13 @@ class ReinforcementModel:
         else:
             return torch.tensor([[random.randrange(self.n_actions)]], device=self.device, dtype=torch.long)
 
-    def optimize(self, new_state):
+    def optimize(self, new_state, prev_state=None, action=None):
+        if prev_state and action:
+            self.prev_state=prev_state
+            self.action=action
         # Calculates the rewards, saves the state and the transition.
         # After TARGET_UPDATE steps, replaces the target network's weights with the policy network's
-        reward = self.reward(prev_state=self.prev_state, new_state=new_state)
+        reward = self.reward(self.prev_state, new_state=new_state)
         reward = torch.tensor([reward], device=self.device)
         # Store the transition in memory
         prev_image, prev_features = transform_state(self.prev_state)
@@ -97,6 +101,7 @@ class ReinforcementModel:
             self.target_net.load_state_dict(self.policy_net.state_dict())
             self.episode_durations.append(self.time_step + 1)
             self.plot_durations()
+
 
     def optimize_model(self):
         if len(self.memory) < self.BATCH_SIZE:
@@ -179,3 +184,9 @@ class ReinforcementModel:
         model = CNNwRNN(dim_features, image_height, image_width, n_actions)
         model.load_state_dict(torch.load(path))
         model.eval()
+
+    def summary(self):
+        logger.warning('Skipping model summary')
+        return
+        print(self.target_net)
+        # summary(self.target_net, (INPUT_SHAPE)) # must call separately on CNN and RNN?

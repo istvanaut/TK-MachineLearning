@@ -2,6 +2,8 @@ import numpy as np
 
 from support.logger import logger
 
+LINE_FILE_NAME = 'files/line.npy'
+
 
 class Line:
     # a 2D Line consisting of segments
@@ -38,6 +40,38 @@ class Line:
                 dist1 = distance(point, p)
                 p1 = p
         return Segment(p0, p1)
+
+
+def get_line():
+    points = np.load(LINE_FILE_NAME)
+    logger.info(f'Loaded file {LINE_FILE_NAME}')
+    return Line(points)
+
+
+def fix(points, difference=1.0):
+    """
+    Simplifies the list of points
+
+    | Each point in old list is either appended to the new list or modifies one already present point"""
+    # TODO (4) could probably be simpler and better
+    parr = np.array(points).tolist()
+    points_fixed = []
+    while len(parr) > 0:
+        p = parr.pop(0)
+        # Search from most recently added points
+        inserted = False
+        for pf in points_fixed[::-1]:
+            # If one is close to the current point, we remove it and insert their average
+            if not inserted and distance(p, pf) < difference:
+                i = points_fixed.index(pf)
+                points_fixed.remove(pf)
+                points_fixed.insert(i, np.average([p, pf], 0).tolist())
+                inserted = True
+        # If we haven't removed any point (new point is far away from old ones) we append it
+        if not inserted:
+            points_fixed.append(p)
+    parr = np.asarray(points_fixed)
+    return parr
 
 
 class Segment:

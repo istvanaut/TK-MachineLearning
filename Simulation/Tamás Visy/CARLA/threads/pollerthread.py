@@ -24,9 +24,11 @@ class PollerThread(BaseThread):
                 p = t.location
                 r = t.rotation
                 p = [p.x, p.y, p.z]  # m
-                r = [r.pitch, r.yaw, r.roll] # degrees?
+                r = [r.pitch, r.yaw, r.roll]  # degrees?
                 self.data.put(DataKey.SENSOR_POSITION, p)
                 self.data.put(DataKey.SENSOR_DIRECTION, r)
+
+                # TODO (7) get angular velocity and time of pull
 
                 v = self.vehicle.get_velocity()
                 v = [v.x, v.y, v.z]  # m/s
