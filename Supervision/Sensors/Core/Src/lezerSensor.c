@@ -46,6 +46,6 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 }
 
 */
-uint32_t getlezerLedistance(void){
+uint32_t getlezerDistance(void){
 	return Ledistance;
 }

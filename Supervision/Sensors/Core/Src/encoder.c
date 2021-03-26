@@ -96,20 +96,18 @@ void WriteEncoderToPC()
 	  if (rotChange1 > rotChange2)
 	  {
 		  posChgFwd = rotChange2*oneRot/1000;
-		  pos.x += cos(angle)*posChgFwd;
-		  pos.y += sin(angle)*posChgFwd;
-		  angle -= ((rotChange1*oneRot/1000)-(rotChange2*oneRot/1000))/W;
+		  angle -= ((rotChange1-rotChange2)*oneRot/1000)/W;
 	  }
 	  else
 	  {
 		  posChgFwd = rotChange1*oneRot/1000;
-		  pos.x += cos(angle)*posChgFwd;
-		  pos.y += sin(angle)*posChgFwd;
-		  angle += ((rotChange2*oneRot/1000)-(rotChange1*oneRot/1000))/W;
+		  angle += ((rotChange2-rotChange1)*oneRot/1000)/W;
 	  }
 	  // correction because of rot
-	  //pos.x += W*M_PI*((angle-angleTMP)/2*M_PI)*cos((M_PI-angle-angleTMP)/2);
-	  //pos.y += W*M_PI*((angle-angleTMP)/2*M_PI)*sin((M_PI-angle-angleTMP)/2);
+	  pos.x += cos((angle+angleTMP)/2)*posChgFwd;
+	  pos.y += sin((angle+angleTMP)/2)*posChgFwd;
+	  pos.x += W*M_PI*((angle-angleTMP)/2*M_PI)*cos((M_PI-angle-angleTMP)/2);
+	  pos.y += W*M_PI*((angle-angleTMP)/2*M_PI)*sin((M_PI-angle-angleTMP)/2);
 
 	  rotChange1 = 0;
 	  rotChange2 = 0;
