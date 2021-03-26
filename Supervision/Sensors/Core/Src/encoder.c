@@ -162,16 +162,3 @@ void WriteEncoderToPC()
 		  }
 	  }
   }
-
-  void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-    {
-    	if(htim->Instance == TIM6)
-    	{
-    		speed1en = 0;
-    	}
-
-    	if(htim->Instance == TIM7)
-    	{
-    		speed2en = 0;
-    	}
-    }
