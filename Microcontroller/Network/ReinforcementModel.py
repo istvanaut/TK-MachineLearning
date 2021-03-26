@@ -10,7 +10,7 @@ from torchsummary import summary
 
 from Networks.CNNwRNN import CNNwRNN
 from ReinforcementlearningElements import RewardFunctions
-from ReinforcementlearningElements.ReplayMemory import ReplayMemory
+from ReinforcementlearningElements.ReplayMemory import ReplayMemory, Transition
 from State import State, transform_state
 import matplotlib.pyplot as plt
 
@@ -39,8 +39,8 @@ class ReinforcementModel:
         self.BATCH_SIZE = 128
         self.GAMMA = 0.999
         self.EPS_START = 0.9
-        self.EPS_END = 0.05
-        self.EPS_DECAY = 200
+        self.EPS_END = 0.5
+        self.EPS_DECAY = 2000
         self.TARGET_UPDATE = 10
         self.steps_done = 0
         self.time_step = 0
@@ -70,7 +70,7 @@ class ReinforcementModel:
             math.exp(-1. * self.steps_done / self.EPS_DECAY)
         self.steps_done += 1
         if self.steps_done % 10 == 0:
-            logger.info(f'Epoch: {self.steps_done}')
+            logger.debug(f'Epoch: {self.steps_done}')
         if sample > eps_threshold:
             with torch.no_grad():
                 # t.max(1) will return largest column value of each row.
@@ -82,8 +82,8 @@ class ReinforcementModel:
 
     def optimize(self, new_state, prev_state=None, action=None):
         if prev_state and action:
-            self.prev_state=prev_state
-            self.action=action
+            self.prev_state = prev_state
+            self.action = action
         # Calculates the rewards, saves the state and the transition.
         # After TARGET_UPDATE steps, replaces the target network's weights with the policy network's
         reward = self.reward(self.prev_state, new_state=new_state)
@@ -102,12 +102,12 @@ class ReinforcementModel:
             self.episode_durations.append(self.time_step + 1)
             self.plot_durations()
 
-
     def optimize_model(self):
         if len(self.memory) < self.BATCH_SIZE:
             return
         logger.debug('Batch optimization started')  # This can be slow
-        logger.warning('Skipping batch optimization')  # TODO (8) re-enable this
+        # TODO (8) re-enable this, but receiving TypeError: expected Tensor as element 0 in argument 0, but got int
+        logger.warning('Skipping batch optimization')
         return
         transitions = self.memory.sample(self.BATCH_SIZE)
         # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for

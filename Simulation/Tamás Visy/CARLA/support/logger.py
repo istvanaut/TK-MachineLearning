@@ -1,16 +1,18 @@
 import logging
-WRITE_FILE = False
+WRITE_FILE = True
+LEVEL = logging.INFO
 
 logFormatter = logging.Formatter('%(asctime)s\t  [%(threadName)s]\t[%(levelname)-3.3s]:\t%(message)s',
                                  '%Y.%m.%d %H:%M:%S')
 logger = logging.getLogger('carla_logger')
-logger.level = logging.DEBUG
+logger.level = LEVEL
 
 consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
 logger.addHandler(consoleHandler)
 
 if WRITE_FILE:
+    logger.info('Writing logs to file')
     file_found = True
     try:
         fileHandler = logging.FileHandler('files/carla.log')

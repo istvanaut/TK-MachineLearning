@@ -5,13 +5,14 @@ from support.datakey import DataKey
 
 
 class Status:
-    def __init__(self, finished=False, successful=False, reason='No reason specified'):
+    def __init__(self, finished=False, successful=False, reason='No reason specified', dist=0.0):
         self.finished = finished
         self.successful = successful
         self.reason = reason
+        self.dist = dist
 
     def __str__(self):
-        return f'Finished: {self.finished}, success: {self.successful}, {self.reason}'
+        return f'Finished: {self.finished}, success: {self.successful}, {self.reason} - {self.dist} meters'
 
     def check(self, environment):
         finished = False
@@ -45,3 +46,4 @@ class Status:
         self.finished = finished
         self.successful = successful
         self.reason = reason
+        self.dist = distance(pos, environment.line.start)
