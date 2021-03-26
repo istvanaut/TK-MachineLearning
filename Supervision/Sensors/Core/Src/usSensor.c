@@ -7,11 +7,17 @@
 
 #include "usSensor.h"
 
-volatile uint32_t UStimeDifference = 0;
-volatile uint32_t USStartTime;
-volatile uint32_t USStopTime;
-volatile uint32_t USdistance = 0;
-volatile uint8_t USrisingEdgeDetected = 0;
+volatile uint32_t UStimeDifferenceLeft = 0;
+volatile uint32_t USStartTimeLeft;
+volatile uint32_t USStopTimeLeft;
+volatile uint32_t USdistanceLeft = 0;
+volatile uint8_t USrisingEdgeDetectedLeft = 0;
+
+volatile uint32_t UStimeDifferenceRight = 0;
+volatile uint32_t USStartTimeRight;
+volatile uint32_t USStopTimeRight;
+volatile uint32_t USdistanceRight = 0;
+volatile uint8_t USrisingEdgeDetectedRight = 0;
 
 TIM_HandleTypeDef* UStim;
 

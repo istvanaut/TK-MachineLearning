@@ -5,8 +5,8 @@
 #include "myCOM.h"
 #include "math.h"
 
-extern TIM_HandleTypeDef htim3;
-extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim6;
+extern TIM_HandleTypeDef htim7;
 
 typedef struct Pos
 {
@@ -16,10 +16,10 @@ typedef struct Pos
 
 void Encoder_Init();
 
-void Timer3_Start();
-void Timer4_Start();
-void Timer3_Stop();
-void Timer4_Stop();
+void Timer6_Start();
+void Timer7_Start();
+void Timer6_Stop();
+void Timer7_Stop();
 
 void WriteEncoderToPC();
 double CalculateSpeed(int cntrVal, int speedEn);
@@ -29,6 +29,5 @@ double GetDistanceOfMotor(int motor); // 0 => left, 1 => right [m]
 position GetPositionFromOrigin(); // x: [m], y: [m]
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 
 #endif

@@ -25,28 +25,28 @@ void Encoder_Init()
 	encoderSumOfRotations2 = 0;
 	speed1en = 0;
 	speed2en = 0;
-	Timer3_Start();
-	Timer4_Start();
+	Timer6_Start();
+	Timer7_Start();
 }
 
-void Timer3_Start() //Left
+void Timer6_Start() //Left
 {
-	HAL_TIM_Base_Start_IT(&htim3);
+	HAL_TIM_Base_Start_IT(&htim6);
 }
 
-void Timer4_Start() //Right
+void Timer7_Start() //Right
 {
-	HAL_TIM_Base_Start_IT(&htim4);
+	HAL_TIM_Base_Start_IT(&htim7);
 }
 
-void Timer3_Stop() //Left
+void Timer6_Stop() //Left
 {
-	HAL_TIM_Base_Stop_IT(&htim3);
+	HAL_TIM_Base_Stop_IT(&htim6);
 }
 
-void Timer4_Stop() //Right
+void Timer7_Stop() //Right
 {
-	HAL_TIM_Base_Stop_IT(&htim4);
+	HAL_TIM_Base_Stop_IT(&htim7);
 }
 
 void WriteEncoderToPC()
@@ -96,20 +96,18 @@ void WriteEncoderToPC()
 	  if (rotChange1 > rotChange2)
 	  {
 		  posChgFwd = rotChange2*oneRot/1000;
-		  pos.x += cos(angle)*posChgFwd;
-		  pos.y += sin(angle)*posChgFwd;
-		  angle -= ((rotChange1*oneRot/1000)-(rotChange2*oneRot/1000))/W;
+		  angle -= ((rotChange1-rotChange2)*oneRot/1000)/W;
 	  }
 	  else
 	  {
 		  posChgFwd = rotChange1*oneRot/1000;
-		  pos.x += cos(angle)*posChgFwd;
-		  pos.y += sin(angle)*posChgFwd;
-		  angle += ((rotChange2*oneRot/1000)-(rotChange1*oneRot/1000))/W;
+		  angle += ((rotChange2-rotChange1)*oneRot/1000)/W;
 	  }
 	  // correction because of rot
-	  //pos.x += W*M_PI*((angle-angleTMP)/2*M_PI)*cos((M_PI-angle-angleTMP)/2);
-	  //pos.y += W*M_PI*((angle-angleTMP)/2*M_PI)*sin((M_PI-angle-angleTMP)/2);
+	  pos.x += cos((angle+angleTMP)/2)*posChgFwd;
+	  pos.y += sin((angle+angleTMP)/2)*posChgFwd;
+	  pos.x += W*M_PI*((angle-angleTMP)/2*M_PI)*cos((M_PI-angle-angleTMP)/2);
+	  pos.y += W*M_PI*((angle-angleTMP)/2*M_PI)*sin((M_PI-angle-angleTMP)/2);
 
 	  rotChange1 = 0;
 	  rotChange2 = 0;
@@ -135,10 +133,10 @@ void WriteEncoderToPC()
 		  if(encoderSumOfRotations1 % 5 == 0)
 		  {
 			  speed1en = 1;
-			  Timer3_Stop();
-			  timerCntrVal1 = TIM3->CNT;
-			  TIM3->CNT = 0;
-			  Timer3_Start();
+			  Timer6_Stop();
+			  timerCntrVal1 = TIM6->CNT;
+			  TIM6->CNT = 0;
+			  Timer6_Start();
 		  }
 	  }
 	  if (GPIO_Pin == GPIO_PIN_4) //Right
@@ -157,23 +155,10 @@ void WriteEncoderToPC()
 		  if(encoderSumOfRotations2 % 5 == 0)
 		  {
 			  speed2en = 1;
-			  Timer4_Stop();
-			  timerCntrVal2 = TIM4->CNT;
-			  TIM4->CNT = 0;
-			  Timer4_Start();
+			  Timer7_Stop();
+			  timerCntrVal2 = TIM7->CNT;
+			  TIM7->CNT = 0;
+			  Timer7_Start();
 		  }
 	  }
   }
-
-  void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-    {
-    	if(htim->Instance == TIM3)
-    	{
-    		speed1en = 0;
-    	}
-
-    	if(htim->Instance == TIM4)
-    	{
-    		speed2en = 0;
-    	}
-    }
