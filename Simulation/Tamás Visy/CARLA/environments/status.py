@@ -33,7 +33,7 @@ class Status:
         if coll is not None:
             finished = True
             reason = 'Collision'
-        if dist > 3.0:
+        if dist > 4.0:
             finished = True
             reason = 'Too far from line'
         if time.time() - t > 100:

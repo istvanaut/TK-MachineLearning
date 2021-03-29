@@ -36,6 +36,7 @@ class ReinforcementModel:
         #   TARGET_UPDATE defines when to update the target network with the policy network
         #   A reward function is loaded into the reward variable
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        logger.info(f'Device is {self.device}')
         self.BATCH_SIZE = 128
         self.GAMMA = 0.999
         self.EPS_START = 0.9
@@ -94,15 +95,14 @@ class ReinforcementModel:
         self.memory.push(prev_image, prev_features, self.action, new_image, new_features, reward)
 
         # Perform one step of the optimization (on the target network)
-        self.optimize_model()
+        self.optimize_on_batch()
         self.time_step += 1
         # Update the target network, copying all weights and biases in DQN
         if self.time_step % self.TARGET_UPDATE == 0:
             self.target_net.load_state_dict(self.policy_net.state_dict())
             self.episode_durations.append(self.time_step + 1)
-            self.plot_durations()
 
-    def optimize_model(self):
+    def optimize_on_batch(self):
         if len(self.memory) < self.BATCH_SIZE:
             return
         logger.debug('Batch optimization started')  # This can be slow

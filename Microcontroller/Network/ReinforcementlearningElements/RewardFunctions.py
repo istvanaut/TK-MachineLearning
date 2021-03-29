@@ -3,6 +3,9 @@ from State import State
 
 # This is where the reward functions will be defined
 
+close_distance = 1.0
+middle_distance = 2.0
+
 
 def base_reward(prev_state, new_state):
     # The functions checks for distance from line,
@@ -13,12 +16,12 @@ def base_reward(prev_state, new_state):
     prev_state = State(*prev_state)
     reward = 0.0
     distance_point = 10
-    if new_state.distance_from_line <= 2.0:
+    if new_state.distance_from_line <= close_distance:
         reward += distance_point
-    elif new_state.distance_from_line <= 10.0:
-        reward += distance_point * (10.0 / new_state.distance_from_line)
+    elif new_state.distance_from_line <= middle_distance:
+        reward += distance_point / (middle_distance / new_state.distance_from_line)
     else:
-        reward -= distance_point * (new_state.distance_from_line / 10.0)
+        reward -= distance_point * (new_state.distance_from_line / middle_distance)
     if new_state.distance_from_line > prev_state.distance_from_line:
         reward -= 2 + (new_state.distance_from_line - prev_state.distance_from_line)
 
