@@ -51,16 +51,12 @@ void Timer7_Stop() //Right
 
 void WriteEncoderToPC()
 {
-	//__disable_irq();
-
 	position tmp;
 	if(rotChange1 > 5 || rotChange2 > 5)
 	{
 		tmp = GetPositionFromOrigin();
 	}
-	printf("Distance right: %f, Speed right: %f, Distance left: %f, Speed left: %f, Position from origin: %f, %f, Angle: %f\n", GetDistanceOfMotor(1), GetSpeedOfMotor(1), GetDistanceOfMotor(0), GetSpeedOfMotor(0), tmp.x, tmp.y, angle);
-
-	//__enable_irq();
+	printf("Distance SUM right: %f, Speed right: %f, Distance SUM left: %f, Speed left: %f, Position from origin: %f, %f, Angle in degrees: %f\n", GetDistanceOfMotor(1), GetSpeedOfMotor(1), GetDistanceOfMotor(0), GetSpeedOfMotor(0), tmp.x, tmp.y, angle*360/(2*M_PI));
 }
 
   double CalculateSpeed(int cntrVal, int speedEn)
