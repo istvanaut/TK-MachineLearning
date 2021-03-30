@@ -1,6 +1,5 @@
 import math
 import random
-from collections import namedtuple
 
 import numpy as np
 import torch
@@ -11,10 +10,16 @@ from torchsummary import summary
 from Networks.CNNwRNN import CNNwRNN
 from ReinforcementlearningElements import RewardFunctions
 from ReinforcementlearningElements.ReplayMemory import ReplayMemory, Transition
-from State import State, transform_state
 import matplotlib.pyplot as plt
 
 from support.logger import logger
+
+
+def transform_state(state):
+    image, array, _ = state.get_formatted()
+    image = np.expand_dims(image, axis=0)
+    image = np.expand_dims(image, axis=1)
+    return torch.from_numpy(image).float(), torch.tensor([[array]]).float()
 
 
 class ReinforcementModel:
@@ -67,12 +72,11 @@ class ReinforcementModel:
 
     def select_action(self, image, features):
         sample = random.random()
-        eps_threshold = self.EPS_END + (self.EPS_START - self.EPS_END) * \
-            math.exp(-1. * self.steps_done / self.EPS_DECAY)
+        eps_thresh = self.EPS_END + (self.EPS_START - self.EPS_END) * math.exp(-1. * self.steps_done / self.EPS_DECAY)
         self.steps_done += 1
         if self.steps_done % 10 == 0:
             logger.debug(f'Epoch: {self.steps_done}')
-        if sample > eps_threshold:
+        if sample > eps_thresh:
             with torch.no_grad():
                 # t.max(1) will return largest column value of each row.
                 # second column on max result is index of where max element was
@@ -181,6 +185,7 @@ class ReinforcementModel:
         torch.save(model, path)
 
     def load_model(self, path, dim_features, image_height, image_width, n_actions):
+        # TODO (10) this doesn't actually load or does it?
         model = CNNwRNN(dim_features, image_height, image_width, n_actions)
         model.load_state_dict(torch.load(path))
         model.eval()

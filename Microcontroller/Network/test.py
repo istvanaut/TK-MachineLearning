@@ -2,7 +2,7 @@ import numpy as np
 import torch
 
 from ReinforcementModel import ReinforcementModel
-from State import feature_dimension
+from agents.networkagent import feature_dimension
 
 # Dummy data with 0 128*128 picture
 

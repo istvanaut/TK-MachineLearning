@@ -9,7 +9,6 @@ from line import get_line, Line
 from support.datakey import DataKey
 from support.logger import logger
 from threads.controllerthread import ControllerThread
-from threads.dashboardthread import DashboardThread
 from support.data import Data
 from threads.pollerthread import PollerThread
 
@@ -30,7 +29,6 @@ class Environment:
 
         self.c = ControllerThread(self.data)
         self.p = PollerThread(self.data)
-        self.d = DashboardThread(self.data)
 
         self.connection = Connection()
 
@@ -44,7 +42,6 @@ class Environment:
         self.reset()
 
     def start(self):
-        self.d.start()
         self.c.start()
         self.p.start()
 

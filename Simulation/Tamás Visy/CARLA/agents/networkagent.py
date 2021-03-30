@@ -1,13 +1,14 @@
 from ReinforcementModel import ReinforcementModel
 from agents.agent import Agent
+from agents.state import State, feature_dimension
 from sensors import recently, limit_range
 from support.datakey import DataKey
-from support.image_manipulation import im_resize
+from support.image_manipulation import im_resize, im_grayscale
 import numpy as np
 import math
 from support.logger import logger
 
-feature_dimension = 9
+feature_dimension = feature_dimension()
 AGENT_IM_HEIGHT = 32
 AGENT_IM_WIDTH = 32
 AGENT_MODEL_PATH = 'files/tensor.pt'
@@ -46,8 +47,8 @@ class NetworkAgent(Agent):
             logger.error(f'Error in model.optimize: {r}')
 
     def save(self, path=AGENT_MODEL_PATH):
-        logger.info(f'Saving model to {path}')
-        self.model.save_model(path)
+        logger.warning(f'NOT Saving model to {path}')
+        #        self.model.save_model(path)
 
     def load(self, path=AGENT_MODEL_PATH):
         logger.info(f'Loading model from {path}')
@@ -108,10 +109,11 @@ class NetworkAgent(Agent):
         # camera: -, image (as numpy array ?)
         camera = im_resize(camera, (AGENT_IM_HEIGHT, AGENT_IM_WIDTH))
         # Removing colors
-        # camera = im_grayscale(camera)  # when grayscaling also change shape?
+        camera = im_grayscale(camera)  # when grayscaling also change shape?
         # Reshaping for NN
+        # TODO (2) this does not do anything
         if camera is not None:
-            camera = np.reshape(camera, [3, AGENT_IM_HEIGHT, AGENT_IM_WIDTH])
+            camera = np.reshape(camera, [AGENT_IM_HEIGHT, AGENT_IM_WIDTH])
 
         # radar: m, (float ?) - Can be None (if no valid measurement has occurred, or if the point is outside our range)
         radar = limit_range(radar)
@@ -125,10 +127,10 @@ class NetworkAgent(Agent):
         else:
             velocity = (velocity[0] ** 2 + velocity[1] ** 2) ** 0.5
 
-        # direction: degrees? 3D? - but agent only cares about yaw (around y axis - bit like a compass)
+        # direction: degrees? 3D? - but agent only cares about yaw (around y axis - like a compass)
         if direction is None:
             direction = [0, 0, 0]
-            current_direction = [0, 0, 0]
+            current_direction = 0
         else:
             current_direction = direction[1] - starting_direction[1]
 
@@ -140,7 +142,7 @@ class NetworkAgent(Agent):
             direction[0])).T @ np.reshape(acceleration, [3, 1])
         acceleration = np.asarray(acceleration).flatten().tolist()
 
-        # position: m, [x, y, z, pitch, yaw, roll] (floats?)
+        # position: m, [x, y, z] (floats?)
 
         # collision: bool, was collision registered? - None if never, False or True if (not) in the last 1.0* second
         collision = recently(collision)
@@ -152,13 +154,13 @@ class NetworkAgent(Agent):
         if obstacle is None:
             obstacle = False  # Obstacle always TRUE/FALSE
 
-        important = camera, velocity, acceleration, current_direction, position
+        important = camera, velocity, acceleration, position, current_direction
         # Only return data if important inputs (which should not be None) are not None
+        # TODO (5) why prev line of comment?
         # TODO (2) direction is changed if None - does it matter?
         if not any(map(lambda x: x is None, important)):
-            # Order is important for:
-            # from State import State
-            # State
-            return camera, radar, collision, velocity, acceleration, current_direction, position, obstacle, distance
+            return State(image=camera, radar=radar, collision=collision, velocity=velocity, acceleration=acceleration,
+                         position=position, direction=current_direction,  obstacle=obstacle,
+                         distance_from_line=distance)
         else:
             return None
