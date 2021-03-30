@@ -1,3 +1,6 @@
+import random
+import time
+
 from ReinforcementModel import ReinforcementModel
 from agents.agent import Agent
 from agents.state import State, feature_dimension
@@ -12,10 +15,9 @@ feature_dimension = feature_dimension()
 AGENT_IM_HEIGHT = 32
 AGENT_IM_WIDTH = 32
 AGENT_MODEL_PATH = 'files/tensor.pt'
-choices = [[0.4, 0.4],
-           [0.5, 0.1],
-           [0.5, -0.1],
-           [0.4, -0.4]]
+choices = [[0.35, 0.0],
+           [0.33, 0.3],
+           [0.33, -0.3]]
 ACTIONS_NUM = len(choices)
 
 
@@ -35,7 +37,11 @@ class NetworkAgent(Agent):
             return None, None
         action = self.model.predict(state)
         try:
-            return action, self.choices[action]
+            # Copy value, not reference
+            choice = self.choices[action][:]
+            # TODO (7) remove noise of agent out
+            choice[1] += -0.05 + random.random() / 10
+            return action, choice
         except RuntimeError:
             logger.error(f'Error when trying to find right value for {action}')
             return None, None
@@ -47,8 +53,8 @@ class NetworkAgent(Agent):
             logger.error(f'Error in model.optimize: {r}')
 
     def save(self, path=AGENT_MODEL_PATH):
-        logger.warning(f'NOT Saving model to {path}')
-        #        self.model.save_model(path)
+        logger.warning(f'Saving model to {path}')
+        self.model.save_model(path)
 
     def load(self, path=AGENT_MODEL_PATH):
         logger.info(f'Loading model from {path}')
@@ -132,7 +138,7 @@ class NetworkAgent(Agent):
             direction = [0, 0, 0]
             current_direction = 0
         else:
-            current_direction = direction[1] - starting_direction[1]
+            current_direction = (direction[1] - starting_direction[1]) / 180 * np.pi
 
         # acceleration: m/s2, [a_x, a_y, a_z] (floats?)
         if acceleration is None:

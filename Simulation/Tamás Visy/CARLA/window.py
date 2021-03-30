@@ -70,6 +70,8 @@ class Window:
 
     def update_screen(self):
         image, data, names = self.state.get_formatted()
+
+        # TODO (5) remove inserted placeholders
         names.insert(0, '')
         data.insert(0, '')
 
@@ -128,10 +130,10 @@ class Window:
                 t.append(' ')
             text = ''.join(t)
         else:
-            # If text is not str or list - show first 4 chars
+            # If text is not str or list - show first 5 chars
             text = str(text)
-            if len(text) > 4:
-                text = text[:4]
+            if len(text) > 5:
+                text = text[:5]
 
         # Rendering text
         text = self.fonts[0].render(text, True, self.colors[3])

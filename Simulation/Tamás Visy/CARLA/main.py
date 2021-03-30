@@ -46,6 +46,7 @@ def main():
                 prev_action = action
 
                 status = env.check()
+            logger.debug('Finished')
             dashboard.handle(None)
             env.reset()
 
@@ -59,11 +60,13 @@ def main():
             #     agent.save()
             #     return
             # if user_in == 'TRAIN':
-            for (prev_state, action, new_state) in memory:
-                agent.optimize(new_state, prev_state, action)
-            logger.debug('Successfully optimized')
-            memory = []
-            agent.save()
+            if len(memory) > 2000:
+                logger.debug(f'Starting training with memory of length {len(memory)}')
+                for (prev_state, action, new_state) in memory:
+                    agent.optimize(new_state, prev_state, action)
+                logger.debug('Successfully trained')
+                memory = []
+                agent.save()
             # logger.debug('Sleeping...')
             # time.sleep(3.0)
 

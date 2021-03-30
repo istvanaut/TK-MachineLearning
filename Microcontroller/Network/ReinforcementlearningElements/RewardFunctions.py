@@ -1,7 +1,9 @@
 # This is where the reward functions will be defined
+import random
 
-close_distance = 1.0
-middle_distance = 2.0
+close_distance = 0.5
+middle_distance = 1.0
+long_distance = 2.0
 
 
 def base_reward(prev_state, new_state):
@@ -10,14 +12,17 @@ def base_reward(prev_state, new_state):
     # the further away the less reward, even negative if too far.
     # It also takes into account the distance of the previous state
     reward = 0.0
-    distance_point = 10
-    if new_state.distance_from_line <= close_distance:
-        reward += distance_point
-    elif new_state.distance_from_line <= middle_distance:
-        reward += distance_point / (middle_distance / new_state.distance_from_line)
-    else:
-        reward -= distance_point * (new_state.distance_from_line / middle_distance)
-    if new_state.distance_from_line > prev_state.distance_from_line:
-        reward -= 2 + (new_state.distance_from_line - prev_state.distance_from_line)
+    distance_point = 5
 
+    if new_state.distance_from_line <= close_distance:
+        reward += distance_point**1.5
+    elif new_state.distance_from_line <= middle_distance:
+        reward += distance_point
+    elif new_state.distance_from_line <= long_distance:
+        reward += distance_point**0.5
+    else:
+        reward -= distance_point**0.1 - 1
+    if new_state.distance_from_line > prev_state.distance_from_line:
+        reward -= distance_point**0.1 - 1
+    reward -= new_state.distance_from_line  # 0 < d ~<~ 5-10
     return reward

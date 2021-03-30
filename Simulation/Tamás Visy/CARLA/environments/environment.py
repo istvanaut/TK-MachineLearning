@@ -22,7 +22,9 @@ class Environment:
         self.actors = []
         self.data = Data()
         self.vehicle = None
-        self.line = get_line()
+        self.line = None
+        self.iteration = 0
+        # TODO (9) starting line dir for agent
 
         logger.warning('Halting threads')
         self.data.put(DataKey.THREAD_HALT, True)
@@ -38,6 +40,7 @@ class Environment:
     def setup(self):
         logger.info('Environment setup')
         self.set_conditions()
+        self.line = get_line()
         self.spawn()
         self.reset()
 
@@ -91,6 +94,17 @@ class Environment:
         self.data.put(DataKey.THREAD_HALT, True)
         self.vehicle.apply_control(icarla.vehicle_control(throttle=0, steer=0))
         icarla.set_velocity(self.vehicle, icarla.vector3d())
+
+        self.iteration += 1
+        self.line = get_line()
+        if self.iteration % 3 is 0:
+            pass
+        elif self.iteration % 3 is 1:
+            self.line.slice(30, 60)
+        elif self.iteration % 3 is 2:
+            self.line.slice(40, 70)
+            self.line.invert()
+
         icarla.move(self.vehicle, icarla.transform(self.line.start[0], self.line.start[1], 0.25).location)
         icarla.rotate(self.vehicle, icarla.rotation(self.line.direction()))
         icarla.move(self.connection.world.get_spectator(),

@@ -75,7 +75,14 @@ def add_locations(loc0, loc1):
 
 def rotate(actor, rot):
     loc = actor.get_transform().location
-    time.sleep(0.5)
+
+    while rot.pitch <= -180.0:
+        rot.pitch += 360.0
+    while rot.yaw <= -180.0:
+        rot.yaw += 360.0
+    while rot.roll <= -180.0:
+        rot.roll += 360.0
+
     t = transform(loc.x, loc.y, loc.z, rot.pitch, rot.yaw, rot.roll)
     actor.set_transform(t)
     # for some reason we must wait for the simulator to process this
@@ -86,6 +93,7 @@ def rotate(actor, rot):
     diff = ((r1.pitch - r2.pitch) ** 2 + (r1.yaw - r2.yaw) ** 2 + (r1.roll - r2.roll) ** 2) ** 0.5
     if diff > 1.0:
         logger.warning(f'Failed rotating {actor.type_id} to {rot}')
+        logger.info(f'Rotation is {r1}')
     else:
         logger.info(f'Rotated {actor.type_id} to {rot}')
 

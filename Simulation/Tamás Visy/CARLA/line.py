@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 
 from support.logger import logger
@@ -9,19 +11,35 @@ class Line:
     # a 2D Line consisting of segments
 
     def __init__(self, points):
+        self.points = None
+        self.start = None
+        self.end = None
+        self.__set_points(points)
+
+    def __set_points(self, points):
         self.points = points
         self.start = self.points[0]
         self.end = self.points[-1]
 
+    def slice(self, start=None, to=None):
+        if start is None:
+            start = 0
+        if to is None:
+            to = len(self.points)
+        self.__set_points(self.points[start:to])
+
+    def invert(self):
+        self.__set_points(self.points[::-1])
+
     def distance(self, point):
         return self.find_segment(point).distance(point)
 
-    def segments(self, i):
+    def segment(self, i):
         return Segment(self.points[i], self.points[i + 1])
 
     def direction(self, point=None):
         if point is None:
-            return self.segments(0).direction()
+            return self.segment(0).direction()
         else:
             self.find_segment(point).direction()
             return None
@@ -42,10 +60,12 @@ class Line:
         return Segment(p0, p1)
 
 
+line_file_points = np.load(LINE_FILE_NAME)
+logger.info(f'Loaded file {LINE_FILE_NAME}')
+
+
 def get_line():
-    points = np.load(LINE_FILE_NAME)
-    logger.info(f'Loaded file {LINE_FILE_NAME}')
-    return Line(points)
+    return Line(line_file_points)
 
 
 def fix(points, difference=1.0):
@@ -79,6 +99,9 @@ class Segment:
         self.start = start
         self.end = end
 
+    def length(self):
+        return distance(self.start, self.end)
+
     def distance(self, point):
         start = np.array(self.start)
         end = np.array(self.end)
@@ -92,13 +115,11 @@ class Segment:
         return f
 
     def direction(self):
-        # TODO (2) Is this always calculating correctly? Probably not
         direction = [0, 0, 0]
-        a = self.end[0] - self.start[0]
-        b = self.end[1] - self.start[1]
-        c = (a ** 2 + b ** 2) ** 0.5
-        if not np.isclose(c, 0.0):
-            direction[1] = np.arcsin(b / c) * 180 / np.pi
+        vector = [self.end[0] - self.start[0], self.end[1] - self.start[1]]
+        direction[1] = math.atan2(vector[1], vector[0]) / np.pi * 180.0
+        while direction[1] <= -180.0:
+            direction[1] += 360.0
         return direction
 
 

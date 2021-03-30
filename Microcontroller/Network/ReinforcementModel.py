@@ -22,6 +22,9 @@ def transform_state(state):
     return torch.from_numpy(image).float(), torch.tensor([[array]]).float()
 
 
+logger.warning('Batch optimization is turned off')
+
+
 class ReinforcementModel:
     # This is a wrapper for reinforcement learning
     # The class loads a model and prepares it for training.
@@ -45,8 +48,8 @@ class ReinforcementModel:
         self.BATCH_SIZE = 128
         self.GAMMA = 0.999
         self.EPS_START = 0.9
-        self.EPS_END = 0.5
-        self.EPS_DECAY = 2000
+        self.EPS_END = 0.1
+        self.EPS_DECAY = 10_000
         self.TARGET_UPDATE = 10
         self.steps_done = 0
         self.time_step = 0
@@ -59,7 +62,7 @@ class ReinforcementModel:
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()
         self.optimizer = optim.RMSprop(self.policy_net.parameters())
-        self.memory = ReplayMemory(10000)
+        self.memory = ReplayMemory(10_000)
         self.reward = RewardFunctions.base_reward
 
     def predict(self, state):
@@ -111,7 +114,6 @@ class ReinforcementModel:
             return
         logger.debug('Batch optimization started')  # This can be slow
         # TODO (8) re-enable this, but receiving TypeError: expected Tensor as element 0 in argument 0, but got int
-        logger.warning('Skipping batch optimization')
         return
         transitions = self.memory.sample(self.BATCH_SIZE)
         # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
@@ -189,6 +191,8 @@ class ReinforcementModel:
         model = CNNwRNN(dim_features, image_height, image_width, n_actions)
         model.load_state_dict(torch.load(path))
         model.eval()
+        self.target_net = model
+        self.policy_net = model
 
     def summary(self):
         logger.warning('Skipping model summary')
