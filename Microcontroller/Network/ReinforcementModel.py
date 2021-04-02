@@ -44,7 +44,7 @@ class ReinforcementModel:
         self.BATCH_SIZE = 128
         self.GAMMA = 0.999
         self.EPS_START = 0.9
-        self.EPS_END = 0.5
+        self.EPS_END = 0.05
         self.EPS_DECAY = 2000
         self.TARGET_UPDATE = 10
         self.steps_done = 0
@@ -55,13 +55,16 @@ class ReinforcementModel:
         self.prev_state = None
         self.action = -1
         self.n_actions = n_actions
-        self.policy_net = CNNwRNN(dim_features, height, width, self.n_actions).to(self.device)
-        self.target_net = CNNwRNN(dim_features, height, width, self.n_actions).to(self.device)
+        if kwargs.get('model') is None:
+            kwargs['model']=CNNwRNN
+
+        self.policy_net = kwargs['model'](dim_features, height, width, self.n_actions).to(self.device)
+        self.target_net = kwargs['model'](dim_features, height, width, self.n_actions).to(self.device)
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()
         self.optimizer = optim.RMSprop(self.policy_net.parameters())
         self.memory = ReplayMemory(10000)
-        self.reward = RewardFunctions.base_reward
+        self.reward = RewardFunctions.inline_reward
 
     def predict(self, state):
         # Select an action
@@ -70,6 +73,7 @@ class ReinforcementModel:
         image, features = transform_state(state)
         self.action = self.select_action(image.to(self.device), features.to(self.device))
         # Returning an integer instead of the tensor containing that integer
+        print(self.action.item())
         return self.action.item()
 
     def select_action(self, image, features):
@@ -77,6 +81,7 @@ class ReinforcementModel:
         eps_threshold = self.EPS_END + (self.EPS_START - self.EPS_END) * \
                         math.exp(-1. * self.steps_done / self.EPS_DECAY)
         self.steps_done += 1
+        print("Sample: "+ str(sample) + ", Threshold: " + str(eps_threshold))
         if self.steps_done % 10 == 0:
             logger.debug(f'Epoch: {self.steps_done}')
         if sample > eps_threshold:

@@ -1,6 +1,7 @@
 import random
 import time
 
+from Networks.SCNN import SCNN
 from ReinforcementModel import ReinforcementModel
 from agents.agent import Agent
 from agents.state import State, feature_dimension
@@ -29,7 +30,7 @@ class NetworkAgent(Agent):
         self.choices = choices
 
         self.model = ReinforcementModel(dim_features=feature_dimension, height=AGENT_IM_HEIGHT,
-                                        width=AGENT_IM_WIDTH, n_actions=ACTIONS_NUM)
+                                        width=AGENT_IM_WIDTH, n_actions=ACTIONS_NUM, model=SCNN)
 
     def predict(self, state):
         if state is None:
