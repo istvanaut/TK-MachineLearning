@@ -28,11 +28,9 @@ def base_reward(prev_state, new_state):
     return reward
 
 def inline_reward(prev_state, new_state):
-    new_state = State(*new_state)
-    prev_state = State(*prev_state)
     reward = 0.0
     distance_point = 10
-    if new_state.distance_from_line <= 1.0:
+    if new_state.distance_from_line <=close_distance:
         reward += distance_point
 
     return reward

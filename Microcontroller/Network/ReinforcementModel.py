@@ -6,14 +6,20 @@ import torch
 import torch.optim as optim
 import torch.nn.functional as F
 
-
 from Networks.CNNwRNN import CNNwRNN
 from ReinforcementlearningElements import RewardFunctions
 from ReinforcementlearningElements.ReplayMemory import ReplayMemory, Transition
-from State import State, transform_state
+
 import matplotlib.pyplot as plt
 
 from support.logger import logger
+
+
+def transform_state(state):
+    image, array, _ = state.get_formatted()
+    image = np.expand_dims(image, axis=0)
+    image = np.expand_dims(image, axis=1)
+    return torch.from_numpy(image).float(), torch.tensor([[array]]).float()
 
 
 class ReinforcementModel:
@@ -43,7 +49,7 @@ class ReinforcementModel:
         self.TARGET_UPDATE = 10
         self.steps_done = 0
         self.time_step = 0
-        self.n_training=0
+        self.n_training = 0
         self.rewards = []
         self.rewards.append([])
         self.prev_state = None
@@ -59,6 +65,7 @@ class ReinforcementModel:
 
     def predict(self, state):
         # Select an action
+        state.print()
         self.prev_state = state
         image, features = transform_state(state)
         self.action = self.select_action(image.to(self.device), features.to(self.device))
@@ -68,7 +75,7 @@ class ReinforcementModel:
     def select_action(self, image, features):
         sample = random.random()
         eps_threshold = self.EPS_END + (self.EPS_START - self.EPS_END) * \
-            math.exp(-1. * self.steps_done / self.EPS_DECAY)
+                        math.exp(-1. * self.steps_done / self.EPS_DECAY)
         self.steps_done += 1
         if self.steps_done % 10 == 0:
             logger.debug(f'Epoch: {self.steps_done}')
@@ -83,7 +90,7 @@ class ReinforcementModel:
 
     def optimize(self, new_state, prev_state=None, action=None):
         if prev_state and action:
-            self.prev_state =  prev_state
+            self.prev_state = prev_state
             self.action = torch.tensor([[action]], dtype=torch.int64)
         # Calculates the rewards, saves the state and the transition.
         # After TARGET_UPDATE steps, replaces the target network's weights with the policy network's
@@ -93,7 +100,8 @@ class ReinforcementModel:
         # Store the transition in memory
         prev_image, prev_features = transform_state(self.prev_state)
         new_image, new_features = transform_state(new_state)
-        self.memory.push(prev_image.to(self.device), prev_features.to(self.device), self.action.to(self.device), new_image.to(self.device), new_features.to(self.device), reward.to(self.device))
+        self.memory.push(prev_image.to(self.device), prev_features.to(self.device), self.action.to(self.device),
+                         new_image.to(self.device), new_features.to(self.device), reward.to(self.device))
 
         # Perform one step of the optimization (on the target network)
         self.optimize_model()
@@ -158,7 +166,7 @@ class ReinforcementModel:
 
     def reset(self):
         self.plot_rewards()
-        self.n_training+=1
+        self.n_training += 1
         self.rewards.append([])
 
     def plot_rewards(self):
@@ -169,11 +177,11 @@ class ReinforcementModel:
         plt.ylabel('Reward')
         cumulative = []
         for i in range(len(self.rewards[self.n_training])):
-            if i==0:
+            if i == 0:
                 cumulative.append(self.rewards[self.n_training][i])
             else:
-                cumulative.append(self.rewards[self.n_training][i]+cumulative[-1])
-        x=np.linspace(2.0, len(self.rewards[self.n_training]), num=len(self.rewards[self.n_training]))
+                cumulative.append(self.rewards[self.n_training][i] + cumulative[-1])
+        x = np.linspace(2.0, len(self.rewards[self.n_training]), num=len(self.rewards[self.n_training]))
         plt.plot(x, cumulative)
         plt.show()
         plt.pause(0.001)  # pause a bit so that plots are updated
@@ -186,5 +194,3 @@ class ReinforcementModel:
         model = CNNwRNN(dim_features, image_height, image_width, n_actions)
         model.load_state_dict(torch.load(path))
         model.eval()
-
-
