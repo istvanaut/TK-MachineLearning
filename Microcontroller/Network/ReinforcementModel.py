@@ -199,3 +199,5 @@ class ReinforcementModel:
         model = CNNwRNN(dim_features, image_height, image_width, n_actions)
         model.load_state_dict(torch.load(path))
         model.eval()
+        self.target_net.load_state_dict(model.state_dict())
+        self.policy_net.load_state_dict(model.state_dict())
