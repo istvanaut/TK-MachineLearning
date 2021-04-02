@@ -30,7 +30,6 @@ class NetworkAgent(Agent):
 
         self.model = ReinforcementModel(dim_features=feature_dimension, height=AGENT_IM_HEIGHT,
                                         width=AGENT_IM_WIDTH, n_actions=ACTIONS_NUM)
-        self.model.summary()
 
     def predict(self, state):
         if state is None:
@@ -166,7 +165,7 @@ class NetworkAgent(Agent):
         # TODO (2) direction is changed if None - does it matter?
         if not any(map(lambda x: x is None, important)):
             return State(image=camera, radar=radar, collision=collision, velocity=velocity, acceleration=acceleration,
-                         position=position, direction=current_direction,  obstacle=obstacle,
+                         position=position, direction=current_direction, obstacle=obstacle,
                          distance_from_line=distance)
         else:
             return None

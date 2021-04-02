@@ -8,6 +8,7 @@ from support.datakey import DataKey
 from support.logger import logger
 from threads.dashboardthread import DashboardThread
 
+train_per_decision=True
 
 def main():
     logger.debug('Starting')
@@ -34,7 +35,8 @@ def main():
                 data, line, starting_dir = env.pull()
 
                 state = agent.__class__.convert(agent.__class__.repack(data, line, starting_dir))
-
+                if prev_state is not None and train_per_decision:
+                    agent.optimize(state)
                 action, out = agent.predict(state)
                 dashboard.handle(state, out)
                 if out is not None:
@@ -60,12 +62,13 @@ def main():
             #     agent.save()
             #     return
             # if user_in == 'TRAIN':
-            if len(memory) > 5000:
+            if not train_per_decision and len(memory) > 5000:
                 logger.info(f'Starting training with memory of length {len(memory)}')
                 for (prev_state, action, new_state) in memory:
                     agent.optimize(new_state, prev_state, action)
                 logger.info('Successfully trained')
                 memory = []
+                agent.model.reset()
                 agent.save()
             # logger.debug('Sleeping...')
             # time.sleep(3.0)
