@@ -5,24 +5,15 @@ import numpy as np
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
-from torchsummary import summary
+
 
 from Networks.CNNwRNN import CNNwRNN
 from ReinforcementlearningElements import RewardFunctions
 from ReinforcementlearningElements.ReplayMemory import ReplayMemory, Transition
+from State import State, transform_state
 import matplotlib.pyplot as plt
 
 from support.logger import logger
-
-
-def transform_state(state):
-    image, array, _ = state.get_formatted()
-    image = np.expand_dims(image, axis=0)
-    image = np.expand_dims(image, axis=1)
-    return torch.from_numpy(image).float(), torch.tensor([[array]]).float()
-
-
-logger.warning('Batch optimization is turned off')
 
 
 class ReinforcementModel:
@@ -43,17 +34,18 @@ class ReinforcementModel:
         #   Eps is there to determine the exploration parameter fo the agent.
         #   TARGET_UPDATE defines when to update the target network with the policy network
         #   A reward function is loaded into the reward variable
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        logger.info(f'Device is {self.device}')
+        self.device = torch.device("cuda")
         self.BATCH_SIZE = 128
         self.GAMMA = 0.999
         self.EPS_START = 0.9
-        self.EPS_END = 0.1
-        self.EPS_DECAY = 10_000
+        self.EPS_END = 0.5
+        self.EPS_DECAY = 2000
         self.TARGET_UPDATE = 10
         self.steps_done = 0
         self.time_step = 0
-        self.episode_durations = []
+        self.n_training=0
+        self.rewards = []
+        self.rewards.append([])
         self.prev_state = None
         self.action = -1
         self.n_actions = n_actions
@@ -62,24 +54,25 @@ class ReinforcementModel:
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()
         self.optimizer = optim.RMSprop(self.policy_net.parameters())
-        self.memory = ReplayMemory(10_000)
+        self.memory = ReplayMemory(10000)
         self.reward = RewardFunctions.base_reward
 
     def predict(self, state):
         # Select an action
         self.prev_state = state
         image, features = transform_state(state)
-        self.action = self.select_action(image, features)
+        self.action = self.select_action(image.to(self.device), features.to(self.device))
         # Returning an integer instead of the tensor containing that integer
         return self.action.item()
 
     def select_action(self, image, features):
         sample = random.random()
-        eps_thresh = self.EPS_END + (self.EPS_START - self.EPS_END) * math.exp(-1. * self.steps_done / self.EPS_DECAY)
+        eps_threshold = self.EPS_END + (self.EPS_START - self.EPS_END) * \
+            math.exp(-1. * self.steps_done / self.EPS_DECAY)
         self.steps_done += 1
         if self.steps_done % 10 == 0:
             logger.debug(f'Epoch: {self.steps_done}')
-        if sample > eps_thresh:
+        if sample > eps_threshold:
             with torch.no_grad():
                 # t.max(1) will return largest column value of each row.
                 # second column on max result is index of where max element was
@@ -90,31 +83,30 @@ class ReinforcementModel:
 
     def optimize(self, new_state, prev_state=None, action=None):
         if prev_state and action:
-            self.prev_state = prev_state
-            self.action = action
+            self.prev_state =  prev_state
+            self.action = torch.tensor([[action]], dtype=torch.int64)
         # Calculates the rewards, saves the state and the transition.
         # After TARGET_UPDATE steps, replaces the target network's weights with the policy network's
         reward = self.reward(self.prev_state, new_state=new_state)
+        self.rewards[self.n_training].append(reward)
         reward = torch.tensor([reward], device=self.device)
         # Store the transition in memory
         prev_image, prev_features = transform_state(self.prev_state)
         new_image, new_features = transform_state(new_state)
-        self.memory.push(prev_image, prev_features, self.action, new_image, new_features, reward)
+        self.memory.push(prev_image.to(self.device), prev_features.to(self.device), self.action.to(self.device), new_image.to(self.device), new_features.to(self.device), reward.to(self.device))
 
         # Perform one step of the optimization (on the target network)
-        self.optimize_on_batch()
+        self.optimize_model()
         self.time_step += 1
         # Update the target network, copying all weights and biases in DQN
         if self.time_step % self.TARGET_UPDATE == 0:
             self.target_net.load_state_dict(self.policy_net.state_dict())
-            self.episode_durations.append(self.time_step + 1)
 
-    def optimize_on_batch(self):
+    def optimize_model(self):
         if len(self.memory) < self.BATCH_SIZE:
             return
+
         logger.debug('Batch optimization started')  # This can be slow
-        # TODO (8) re-enable this, but receiving TypeError: expected Tensor as element 0 in argument 0, but got int
-        return
         transitions = self.memory.sample(self.BATCH_SIZE)
         # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
         # detailed explanation). This converts batch-array of Transitions
@@ -154,7 +146,7 @@ class ReinforcementModel:
         expected_state_action_values = (next_state_values * self.GAMMA) + reward_batch
 
         # Compute Huber loss
-        loss = F.smooth_l1_loss(state_action_values, expected_state_action_values.unsqueeze(1))
+        loss = F.smooth_l1_loss(state_action_values.float(), expected_state_action_values.unsqueeze(1).float())
 
         # Optimize the model
         self.optimizer.zero_grad()
@@ -164,22 +156,26 @@ class ReinforcementModel:
         self.optimizer.step()
         logger.debug('Batch optimization finished')
 
-    def plot_durations(self):
-        logger.warning('Not showing plots')
-        return
-        plt.figure(2)
-        plt.clf()
-        durations_t = torch.tensor(self.episode_durations, dtype=torch.float)
-        plt.title('Training...')
-        plt.xlabel('Episode')
-        plt.ylabel('Duration')
-        plt.plot(durations_t.numpy())
-        # Take 100 episode averages and plot them too
-        if len(durations_t) >= 100:
-            means = durations_t.unfold(0, 100, 1).mean(1).view(-1)
-            means = torch.cat((torch.zeros(99), means))
-            plt.plot(means.numpy())
+    def reset(self):
+        self.plot_rewards()
+        self.n_training+=1
+        self.rewards.append([])
 
+    def plot_rewards(self):
+        plt.figure(1)
+        plt.clf()
+        plt.title('Training...')
+        plt.xlabel('Time')
+        plt.ylabel('Reward')
+        cumulative = []
+        for i in range(len(self.rewards[self.n_training])):
+            if i==0:
+                cumulative.append(self.rewards[self.n_training][i])
+            else:
+                cumulative.append(self.rewards[self.n_training][i]+cumulative[-1])
+        x=np.linspace(2.0, len(self.rewards[self.n_training]), num=len(self.rewards[self.n_training]))
+        plt.plot(x, cumulative)
+        plt.show()
         plt.pause(0.001)  # pause a bit so that plots are updated
 
     def save_model(self, path):
@@ -187,15 +183,8 @@ class ReinforcementModel:
         torch.save(model, path)
 
     def load_model(self, path, dim_features, image_height, image_width, n_actions):
-        # TODO (10) this doesn't actually load or does it?
         model = CNNwRNN(dim_features, image_height, image_width, n_actions)
         model.load_state_dict(torch.load(path))
         model.eval()
-        self.target_net = model
-        self.policy_net = model
 
-    def summary(self):
-        logger.warning('Skipping model summary')
-        return
-        print(self.target_net)
-        # summary(self.target_net, (INPUT_SHAPE)) # must call separately on CNN and RNN?
+
