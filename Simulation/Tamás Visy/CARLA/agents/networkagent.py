@@ -1,14 +1,12 @@
 import random
 
 from Networks.SCNN import SCNN
-from ReinforcementModel import ReinforcementModel
+from ReinforcementModel import ReinforcementModel, AGENT_IM_WIDTH, AGENT_IM_HEIGHT
 from agents.agent import Agent
 from agents.state import feature_dimension
 from support.logger import logger
 
 feature_dimension = feature_dimension()
-AGENT_IM_HEIGHT = 32
-AGENT_IM_WIDTH = 32
 AGENT_MODEL_PATH = 'files/tensor.pt'
 choices = [[0.35, 0.0],
            [0.33, 0.3],

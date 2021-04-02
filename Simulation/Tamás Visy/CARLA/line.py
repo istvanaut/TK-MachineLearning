@@ -107,7 +107,12 @@ class Segment:
         return distance(self.start, self.end)
 
     def side(self, point):
-        return np.sign(direction(self.start, point)[1] - direction(self.start, self.end)[1])
+        if direction(self.start, point)[1] > direction(self.start, self.end)[1]:
+            return 1.0
+        elif direction(self.start, point)[1] < direction(self.start, self.end)[1]:
+            return -1.0
+        else:
+            return 0.0
 
     def distance(self, point):
         start = np.array(self.start)

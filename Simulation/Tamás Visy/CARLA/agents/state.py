@@ -2,7 +2,7 @@ import math
 
 import numpy as np
 
-from agents.networkagent import AGENT_IM_HEIGHT, AGENT_IM_WIDTH
+from ReinforcementModel import AGENT_IM_HEIGHT, AGENT_IM_WIDTH
 from sensors import limit_range, recently
 from support.datakey import DataKey
 from support.image_manipulation import im_resize, im_grayscale
@@ -131,7 +131,7 @@ def convert(state):
     if acceleration is None:
         acceleration = [0, 0, 0]
 
-    acceleration = (State.__Ry(direction[1]) @ State.__Rz(direction[2]) @ State.__Rx(
+    acceleration = (__Ry(direction[1]) @ __Rz(direction[2]) @ __Rx(
         direction[0])).T @ np.reshape(acceleration, [3, 1])
     acceleration = np.asarray(acceleration).flatten().tolist()
     ACCELERATION_EACH_MAX = 10.0
