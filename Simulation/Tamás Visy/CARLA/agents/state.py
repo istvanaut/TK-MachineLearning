@@ -16,6 +16,7 @@ class State:
         self.obstacle = obstacle
         self.distance_from_line = distance_from_line
 
+    # TODO (5) refactor to use DataKeys (rename them to Keys)
     def get_formatted(self):
         if self.acceleration is None:
             acc = [None, None, None]

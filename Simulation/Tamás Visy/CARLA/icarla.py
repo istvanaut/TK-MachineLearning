@@ -66,7 +66,7 @@ def move(actor, loc):
             logger.error(f'Failed moving {actor.type_id} to {loc}')
             logger.info(f'Actors transform is {actor.get_transform()}')
             return
-    logger.info(f'Moved {actor.type_id} to {loc}')
+    logger.debug(f'Moved {actor.type_id} to {loc}')
 
 
 def add_locations(loc0, loc1):
@@ -95,7 +95,7 @@ def rotate(actor, rot):
         logger.warning(f'Failed rotating {actor.type_id} to {rot}')
         logger.info(f'Rotation is {r1}')
     else:
-        logger.info(f'Rotated {actor.type_id} to {rot}')
+        logger.debug(f'Rotated {actor.type_id} to {rot}')
 
 
 def set_velocity(actor, velocity):

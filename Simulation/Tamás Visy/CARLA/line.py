@@ -46,6 +46,7 @@ class Line:
 
     def find_segment(self, point):
         # This could be done much better
+        # TODO (3) line can't contain loops or this breaks
         dist0 = distance(point, self.points[0])
         p0 = self.points[0]
         dist1 = distance(point, self.points[1])
