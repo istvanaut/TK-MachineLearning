@@ -78,9 +78,6 @@ class Window:
         names.insert(4, '')
         data.insert(4, '')
 
-        names.insert(8, '')
-        data.insert(8, '')
-
         names.append('out')
         data.append(self.agent_out)
 

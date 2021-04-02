@@ -40,12 +40,13 @@ class ReinforcementModel:
         #   Eps is there to determine the exploration parameter fo the agent.
         #   TARGET_UPDATE defines when to update the target network with the policy network
         #   A reward function is loaded into the reward variable
-        self.device = torch.device("cuda")
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        logger.info(f'Device is {self.device}')
         self.BATCH_SIZE = 128
         self.GAMMA = 0.999
         self.EPS_START = 0.9
         self.EPS_END = 0.05
-        self.EPS_DECAY = 2000
+        self.EPS_DECAY = 10_000  # This equals a couple of short runs
         self.TARGET_UPDATE = 10
         self.steps_done = 0
         self.time_step = 0
@@ -56,24 +57,23 @@ class ReinforcementModel:
         self.action = -1
         self.n_actions = n_actions
         if kwargs.get('model') is None:
-            kwargs['model']=CNNwRNN
+            kwargs['model'] = CNNwRNN
 
         self.policy_net = kwargs['model'](dim_features, height, width, self.n_actions).to(self.device)
         self.target_net = kwargs['model'](dim_features, height, width, self.n_actions).to(self.device)
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()
         self.optimizer = optim.RMSprop(self.policy_net.parameters())
-        self.memory = ReplayMemory(10000)
+        self.memory = ReplayMemory(10_000)
         self.reward = RewardFunctions.inline_reward
 
     def predict(self, state):
         # Select an action
-        state.print()
         self.prev_state = state
         image, features = transform_state(state)
         self.action = self.select_action(image.to(self.device), features.to(self.device))
         # Returning an integer instead of the tensor containing that integer
-        print(self.action.item())
+        logger.debug(self.action.item())
         return self.action.item()
 
     def select_action(self, image, features):
@@ -81,7 +81,7 @@ class ReinforcementModel:
         eps_threshold = self.EPS_END + (self.EPS_START - self.EPS_END) * \
                         math.exp(-1. * self.steps_done / self.EPS_DECAY)
         self.steps_done += 1
-        print("Sample: "+ str(sample) + ", Threshold: " + str(eps_threshold))
+        logger.debug('Sample: {str(sample)}, Threshold: {str(eps_threshold)}')
         if self.steps_done % 10 == 0:
             logger.debug(f'Epoch: {self.steps_done}')
         if sample > eps_threshold:
@@ -170,7 +170,8 @@ class ReinforcementModel:
         logger.debug('Batch optimization finished')
 
     def reset(self):
-        self.plot_rewards()
+        logger.warning('Not plotting')
+        # self.plot_rewards()
         self.n_training += 1
         self.rewards.append([])
 
@@ -195,8 +196,10 @@ class ReinforcementModel:
         model = self.target_net.state_dict()
         torch.save(model, path)
 
-    def load_model(self, path, dim_features, image_height, image_width, n_actions):
-        model = CNNwRNN(dim_features, image_height, image_width, n_actions)
+    def load_model(self, path, dim_features, image_height, image_width, n_actions, **kwargs):
+        if kwargs.get('model') is None:
+            kwargs['model'] = CNNwRNN
+        model = kwargs['model'](dim_features, image_height, image_width, n_actions)
         model.load_state_dict(torch.load(path))
         model.eval()
         self.target_net.load_state_dict(model.state_dict())

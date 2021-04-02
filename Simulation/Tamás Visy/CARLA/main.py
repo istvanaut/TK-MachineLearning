@@ -8,10 +8,15 @@ from support.datakey import DataKey
 from support.logger import logger
 from threads.dashboardthread import DashboardThread
 
-train_per_decision=True
+TRAIN_PER_DECISION = False
+logger.info(f'Train per decision is {TRAIN_PER_DECISION}')
+TRAIN_RESOLUTION_PERCENTAGE = 20
+logger.info(f'Train resolution is {TRAIN_RESOLUTION_PERCENTAGE}%')
+MEMORY_SIZE = 5_000
+
 
 def main():
-    logger.debug('Starting')
+    logger.info('Starting')
 
     env = Environment()
     agent = NetworkAgent()
@@ -35,7 +40,7 @@ def main():
                 data, line, starting_dir = env.pull()
 
                 state = agent.__class__.convert(agent.__class__.repack(data, line, starting_dir))
-                if prev_state is not None and train_per_decision:
+                if TRAIN_PER_DECISION and prev_state is not None:
                     agent.optimize(state)
                 action, out = agent.predict(state)
                 dashboard.handle(state, out)
@@ -55,24 +60,18 @@ def main():
             logger.info(f'~~~ {status} ~~~')
             time.sleep(2.0)
 
-            # logger.info('Continue after any input. To save and exit, type "SAVE". To train on memory, type "TRAIN"')
-            # time.sleep(0.2)
-            # user_in = input()
-            # if user_in == 'SAVE':
-            #     agent.save()
-            #     return
-            # if user_in == 'TRAIN':
-            if not train_per_decision and len(memory) > 5000:
-                logger.info(f'Starting training with memory of length {len(memory)}')
-                for (prev_state, action, new_state) in memory:
-                    agent.optimize(new_state, prev_state, action)
-                logger.info('Successfully trained')
-                memory = []
-                agent.model.reset()
-                agent.save()
-            # logger.debug('Sleeping...')
-            # time.sleep(3.0)
-
+            if not TRAIN_PER_DECISION:
+                if len(memory) > MEMORY_SIZE:
+                    logger.info(f'Starting training with memory of {len(memory)}*{TRAIN_RESOLUTION_PERCENTAGE}%')
+                    for i, (prev_state, action, new_state) in enumerate(memory):
+                        if i % (100 / TRAIN_RESOLUTION_PERCENTAGE) is 0:
+                            agent.optimize(new_state, prev_state, action)
+                    logger.info('Successfully trained')
+                    memory = []
+                    agent.model.reset()
+                    agent.save()
+                else:
+                    logger.info(f'Memory not full, {len(memory)}/{MEMORY_SIZE}')
             logger.info('Continuing...')
 
     finally:

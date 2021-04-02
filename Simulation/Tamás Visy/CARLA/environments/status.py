@@ -1,9 +1,10 @@
 import time
 
 from line import distance
+from support.logger import logger
 from support.datakey import DataKey
 
-MAX_OFF_DISTANCE = 6.0
+MAX_OFF_DISTANCE = 2.0
 
 
 # TODO (6) traveled -> distance form start along line
@@ -40,6 +41,8 @@ class Status:
         if dist > MAX_OFF_DISTANCE:
             finished = True
             reason = f'Too far from line: {MAX_OFF_DISTANCE} meters'
+            logger.debug(pos)
+            logger.debug(environment.line.find_segment(pos).start)
         if time.time() - t > 100:
             finished = True
             reason = 'Time ran out'

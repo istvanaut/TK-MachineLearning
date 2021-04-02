@@ -31,6 +31,9 @@ class Line:
     def invert(self):
         self.__set_points(self.points[::-1])
 
+    def side(self, point):
+        return self.find_segment(point).side(point)
+
     def distance(self, point):
         return self.find_segment(point).distance(point)
 
@@ -103,25 +106,26 @@ class Segment:
     def length(self):
         return distance(self.start, self.end)
 
+    def side(self, point):
+        return np.sign(direction(self.start, point)[1] - direction(self.start, self.end)[1])
+
     def distance(self, point):
         start = np.array(self.start)
         end = np.array(self.end)
         point = np.array(point)
-        f = 0
-        try:
-            f = abs(np.cross(end - start, point - start) / np.linalg.norm(end - start))
-        except RuntimeWarning as w:
-            print(end, start, point)
-            raise w
-        return f
+        return abs(np.cross(end - start, point - start) / np.linalg.norm(end - start))
 
     def direction(self):
-        direction = [0, 0, 0]
-        vector = [self.end[0] - self.start[0], self.end[1] - self.start[1]]
-        direction[1] = math.atan2(vector[1], vector[0]) / np.pi * 180.0
-        while direction[1] <= -180.0:
-            direction[1] += 360.0
-        return direction
+        return direction(self.start, self.end)
+
+
+def direction(point0, point1):
+    d = [0, 0, 0]
+    vector = [point1[0] - point0[0], point1[1] - point0[1]]
+    d[1] = math.atan2(vector[1], vector[0]) / np.pi * 180.0
+    while d[1] <= -180.0:
+        d[1] += 360.0
+    return d
 
 
 def distance(point0, point1):
