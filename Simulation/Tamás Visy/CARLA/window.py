@@ -137,6 +137,13 @@ class Window:
             text = ''.join(t)
         else:
             # If text is not str or list - show first 5 chars
+
+            # TODO (2) pretty disgusting but checking for every non-integer numtype is probably more difficult
+            # Example: text = 4.232e-9 ===> not 4.23... but 0.0...
+            try:
+                text = np.round(text)
+            except RuntimeError:
+                pass
             text = str(text)
             if len(text) > 5:
                 text = text[:5]

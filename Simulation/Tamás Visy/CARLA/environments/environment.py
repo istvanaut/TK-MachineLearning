@@ -18,13 +18,13 @@ MAP_NAME = 'Town05'  # Best map: Town05 or Town03, least performance demanding m
 
 class Environment:
     # TODO (5) refactor every "self.connection.world. ..."
+    #  in this file and in others
     def __init__(self):
         self.actors = []
         self.data = Data()
         self.vehicle = None
         self.line = None
         self.iteration = 0
-        # TODO (9) starting line dir for agent
 
         logger.warning('Halting threads')
         self.data.put(DataKey.THREAD_HALT, True)

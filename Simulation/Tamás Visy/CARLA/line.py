@@ -1,4 +1,5 @@
 import math
+import random
 
 import numpy as np
 
@@ -79,12 +80,16 @@ class Line:
                 break
             else:
                 dist = dist + seg.length()
-        print("distance: ", dist, "; points size: ", len(self.points), "; current index: ", current_i)
+
+        # This segment was updated by Tamás
+        if random.random() > 0.99:
+            logger.info(f'distance: {dist}; points size: {len(self.points)}; current index:{current_i}')
+
         return dist
 
 
 line_file_points = np.load(LINE_FILE_NAME)
-logger.info(f'Loaded file {LINE_FILE_NAME}')
+logger.info(f'Loaded file {LINE_FILE_NAME} for line.py')
 
 
 def get_line():
@@ -126,6 +131,7 @@ class Segment:
         return distance(self.start, self.end)
 
     def side(self, point):
+        # TODO (8) still not working - side can change when distance is > 0 ???
         a = self.start
         b = self.end
         if (b[0] - a[0])*(point[1] - a[1]) > (b[1] - a[1])*(point[0] - a[0]):
@@ -154,9 +160,9 @@ class Segment:
 def direction(point0, point1):
     d = [0, 0, 0]
     vector = [point1[0] - point0[0], point1[1] - point0[1]]
-    d[1] = math.atan2(vector[1], vector[0]) / np.pi * 180.0
-    while d[1] <= -180.0:
-        d[1] += 360.0
+    d[1] = math.atan2(vector[1], vector[0])
+    while d[1] <= -np.pi/2:
+        d[1] += np.pi
     return d
 
 
