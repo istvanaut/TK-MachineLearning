@@ -63,6 +63,25 @@ class Line:
                 p1 = p
         return Segment(p0, p1)
 
+    def distance_along_line(self, point):
+        # TODO (5) test and add
+        if point is None:
+            return None
+        # By Meng Kedalai
+        current_seg = self.find_segment(point)
+        dist = 0
+        current_i = 0
+        for i in range(0, len(self.points) - 1):
+            seg = self.segment(i)
+            if seg.start[0] == current_seg.start[0]:
+                current_i = i
+                dist = dist + seg.length()
+                break
+            else:
+                dist = dist + seg.length()
+        print("distance: ", dist, "; points size: ", len(self.points), "; current index: ", current_i)
+        return dist
+
 
 line_file_points = np.load(LINE_FILE_NAME)
 logger.info(f'Loaded file {LINE_FILE_NAME}')
@@ -107,12 +126,20 @@ class Segment:
         return distance(self.start, self.end)
 
     def side(self, point):
-        if direction(self.start, point)[1] > direction(self.start, self.end)[1]:
+        a = self.start
+        b = self.end
+        if (b[0] - a[0])*(point[1] - a[1]) > (b[1] - a[1])*(point[0] - a[0]):
             return 1.0
-        elif direction(self.start, point)[1] < direction(self.start, self.end)[1]:
+        elif (b[0] - a[0])*(point[1] - a[1]) < (b[1] - a[1])*(point[0] - a[0]):
             return -1.0
         else:
             return 0.0
+        # if direction(self.start, point)[1] > direction(self.start, self.end)[1]:
+        #     return 1.0
+        # elif direction(self.start, point)[1] < direction(self.start, self.end)[1]:
+        #     return -1.0
+        # else:
+        #     return 0.0
 
     def distance(self, point):
         start = np.array(self.start)

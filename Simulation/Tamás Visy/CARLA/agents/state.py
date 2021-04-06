@@ -74,13 +74,12 @@ def repack(data, line, starting_dir):
     p = data.get(DataKey.SENSOR_POSITION)
     di = data.get(DataKey.SENSOR_DIRECTION)
     sdi = starting_dir
-    l = line
-    pack = [ca, r, co, o, v, a, p, di, sdi, l]
-    return pack
+    li = line
+    return ca, r, co, o, v, a, p, di, sdi, li
 
 
 def convert(state):
-    """Converts incoming data into the format the agent accepts"""
+    """Converts and normalizes incoming data (into a format the agent accepts)"""
     camera, radar, collision, obstacle, velocity, acceleration, position, direction, starting_direction, line \
         = state
 
@@ -143,14 +142,20 @@ def convert(state):
 
     # position: m, [x, y, z] (floats?)
     POSITION_EACH_MAX = 200.0
+    position_none_holder = False
     if position is None:
         position = [0, 0, 0]
+        position_none_holder = None
     else:
-        # TODO (8) working workaround - but note that converting here changes values in data bc of references?
-        position = position[:]
+        # TODO (3) working workaround - but note that converting here changes values in data bc of references?
+        #  Actually this is working as intended, but architecture is weird
+        #  Window wants to show accurate inputs of agent, but also objective data...
+        position = position
 
     distance = line.distance(position[:2])
-    # TODO (6) side calc is broken?
+    if position_none_holder is None:
+        distance = None
+    # TODO (5) side calc is broken?
     side = line.side(position[:2])
     # Normalize
     # TODO (3) make prettier
@@ -178,10 +183,11 @@ def convert(state):
     else:
         obstacle = np.tanh(0.0)
 
-    important = camera, velocity, acceleration, position, current_direction
+    # Position is actually not needed, but position none holder
+    important = camera, velocity, acceleration, position, position_none_holder, current_direction, distance,
     # Only return data if important inputs (which should not be None) are not None
-    # TODO (5) why prev line of comment?
-    # TODO (10) normalize each input -1 1
+    # Because None can't be the input of the NN
+    # TODO (5) test normalize of each input
     # TODO (2) direction is changed if None - does it matter?
     if not any(map(lambda x: x is None, important)):
         return State(image=camera, radar=radar, collision=collision, velocity=velocity, acceleration=acceleration,

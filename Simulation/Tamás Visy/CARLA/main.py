@@ -44,7 +44,7 @@ def main():
                 if TRAIN_PER_DECISION and prev_state is not None:
                     agent.optimize(state)
                 action, out = agent.predict(state)
-                dashboard.handle(state, out)
+                dashboard.handle(data, line, starting_dir, state, out)
                 if out is not None:
                     env.put(DataKey.CONTROL_OUT, out)
 
@@ -55,7 +55,7 @@ def main():
 
                 status = env.check()
             logger.info('Finished')
-            dashboard.handle(None)
+            dashboard.clear()
             env.reset()
 
             logger.info(f'~~~ {status} ~~~')

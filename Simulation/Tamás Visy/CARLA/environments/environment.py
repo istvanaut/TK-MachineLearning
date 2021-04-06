@@ -88,9 +88,9 @@ class Environment:
         spawn_obstacle(self)
 
     def reset(self):
-        logger.info('Resetting actors')
+        logger.debug('Resetting actors')
         self.clear()
-        logger.warning('Halting threads')
+        logger.debug('Halting threads')
         self.data.put(DataKey.THREAD_HALT, True)
         self.vehicle.apply_control(icarla.vehicle_control(throttle=0, steer=0))
         icarla.set_velocity(self.vehicle, icarla.vector3d())
@@ -116,7 +116,7 @@ class Environment:
         logger.info('Environment reset successful')
 
     def clear(self):
-        logger.info('Clearing data')
+        logger.debug('Clearing data')
         self.data.clear()
 
     def pull(self):

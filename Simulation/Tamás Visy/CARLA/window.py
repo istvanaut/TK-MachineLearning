@@ -18,6 +18,9 @@ IM_SIZE = (32, 32)
 
 class Window:
     def __init__(self):
+        self.data = None
+        self.line = None
+        self.starting_dir = None
         self.state = None
         self.agent_out = None
         colors = []
@@ -58,7 +61,13 @@ class Window:
             pygame.time.wait(50)
             pygame.display.update()
 
-    def handle(self, state, out):
+    def clear(self):
+        self.handle(None, None, None, None, None)
+
+    def handle(self, data, line, starting_dir, state, out):
+        self.data = data
+        self.line = line
+        self.starting_dir = starting_dir
         self.state = state
         self.agent_out = out
 
@@ -85,7 +94,7 @@ class Window:
 
         count = len(names)
         square_sides = np.ceil(np.sqrt(count))
-        # TODO (3) better without + 20?
+        # TODO (3) better without + 50?
         side_start = min(self.window_size) + 50
         top_start = 50
         side_step = (max(self.window_size) - min(self.window_size))//square_sides
@@ -97,13 +106,11 @@ class Window:
 
     def draw_image(self, image):
         if image is None:
-            # image = 0.2 * np.ones([100, 100, 3])
             image = 0.4 * np.ones([100, 100])
         # Formatting image
         i = im_resize(image, (min(self.window_size), min(self.window_size)))
-        # i = image
         i = i * 255 // 1
-        # i = i[:, :, ::-1]  # This fixes color issues: BGR -> RGB
+        # Fixing directions
         i = np.fliplr(i)
         i = np.rot90(i)
         i = im_color(i)
@@ -113,10 +120,12 @@ class Window:
         self.display.blit(s, i_rect)
 
     def draw_text(self, text, tag, pos):
-        if text is None:
+        if text is None or text is 0.0:
             text = '...'
-        elif text is False:
+        elif text is False or text is -1.0:
             text = '---'
+        elif text is True or text is 1.0:
+            text = '~~~'
         elif type(text) is str:
             pass
         elif isinstance(text, list) or isinstance(text, tuple):

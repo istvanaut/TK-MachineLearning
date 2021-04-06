@@ -17,9 +17,9 @@ class DashboardThread(Thread):
         self.window.work()
         logger.info(f'{self.__class__.__name__} finished')
 
-    def handle(self, state, out=None):
+    def handle(self, data, line, starting_dir, state, out=None):
         if self.window is not None:
-            self.window.handle(state, out)
+            self.window.handle(data, line, starting_dir, state, out)
         else:
             logger.debug('Window is None, can not handle incoming')
 
@@ -28,3 +28,9 @@ class DashboardThread(Thread):
             self.window.add_event(QUIT)
         else:
             logger.debug('Window is None, can not stop')
+
+    def clear(self):
+        if self.window is not None:
+            self.window.clear()
+        else:
+            logger.debug('Window is None, can not handle clear')
