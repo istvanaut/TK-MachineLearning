@@ -9,7 +9,7 @@ from support.image_manipulation import im_resize, im_grayscale
 
 
 def feature_dimension():
-    return 12
+    return 9
 
 
 class State:
@@ -26,6 +26,14 @@ class State:
         self.obstacle = obstacle
         self.distance_from_line = distance_from_line
         self.side = side
+
+    def print(self):
+        if self.acceleration is None:
+            acc = [None, None, None]
+        else:
+            acc = self.acceleration
+        print([self.radar, self.collision, self.velocity, acc[0], acc[1], acc[2],
+               self.direction, self.obstacle, self.distance_from_line*self.side])
 
     # TODO (5) refactor to use DataKeys (rename them to Keys)
     def get_formatted(self):

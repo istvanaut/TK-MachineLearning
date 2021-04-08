@@ -48,7 +48,7 @@ class ReinforcementModel:
         self.GAMMA = 0.999
         self.EPS_START = 0.9
         self.EPS_END = 0.05
-        self.EPS_DECAY = 10_000  # This equals a couple of short runs
+        self.EPS_DECAY = 500  # This equals a couple of short runs
         self.TARGET_UPDATE = 10
         self.steps_done = 0
         self.time_step = 0
@@ -65,8 +65,8 @@ class ReinforcementModel:
         self.target_net = kwargs['model'](dim_features, height, width, self.n_actions).to(self.device)
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()
-        self.optimizer = optim.RMSprop(self.policy_net.parameters())
-        self.memory = ReplayMemory(10_000)
+        self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=0.001)
+        self.memory = ReplayMemory(20000)
         self.reward = RewardFunctions.inline_reward
 
     def predict(self, state):
@@ -83,7 +83,7 @@ class ReinforcementModel:
         eps_threshold = self.EPS_END + (self.EPS_START - self.EPS_END) * \
                         math.exp(-1. * self.steps_done / self.EPS_DECAY)
         self.steps_done += 1
-        logger.debug('Sample: {str(sample)}, Threshold: {str(eps_threshold)}')
+        logger.debug('Sample: {'+str(sample)+')}, Threshold: {'+str(eps_threshold)+'}')
         if self.steps_done % 10 == 0:
             logger.debug(f'Epoch: {self.steps_done}')
         if sample > eps_threshold:
@@ -166,14 +166,14 @@ class ReinforcementModel:
         # Optimize the model
         self.optimizer.zero_grad()
         loss.backward()
-        # for param in self.policy_net.parameters():
-        # param.grad.data.clamp_(-1, 1)
+        for param in self.policy_net.parameters():
+            param.grad.data.clamp_(-1, 1)
         self.optimizer.step()
         logger.debug('Batch optimization finished')
 
     def reset(self):
-        logger.warning('Not plotting')
-        # self.plot_rewards()
+        #logger.warning('Not plotting')
+        self.plot_rewards()
         self.n_training += 1
         self.rewards.append([])
 

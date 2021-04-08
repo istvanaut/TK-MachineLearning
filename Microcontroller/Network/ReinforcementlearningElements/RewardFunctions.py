@@ -1,7 +1,7 @@
 import random
 
 # This is where the reward functions will be defined
-close_distance = 0.25
+close_distance = 0.1
 middle_distance = 0.5
 long_distance = 1.0
 
@@ -30,8 +30,10 @@ def base_reward(prev_state, new_state):
 
 def inline_reward(prev_state, new_state):
     reward = 0.0
-    distance_point = 10
+    distance_point = 1
     if new_state.distance_from_line <= close_distance:
         reward += distance_point
+    else:
+        reward-=1
 
     return reward
