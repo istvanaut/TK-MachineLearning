@@ -48,7 +48,7 @@ class ReinforcementModel:
         self.GAMMA = 0.999
         self.EPS_START = 0.9
         self.EPS_END = 0.05
-        self.EPS_DECAY = 500  # This equals a couple of short runs
+        self.EPS_DECAY = 500  # This should equal a couple of short runs
         self.TARGET_UPDATE = 10
         self.steps_done = 0
         self.time_step = 0
@@ -67,7 +67,7 @@ class ReinforcementModel:
         self.target_net.eval()
         self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=0.001)
         self.memory = ReplayMemory(20000)
-        self.reward = RewardFunctions.inline_reward
+        self.reward = RewardFunctions.base_reward
 
     def predict(self, state):
         # Select an action
@@ -83,7 +83,7 @@ class ReinforcementModel:
         eps_threshold = self.EPS_END + (self.EPS_START - self.EPS_END) * \
                         math.exp(-1. * self.steps_done / self.EPS_DECAY)
         self.steps_done += 1
-        logger.debug('Sample: {'+str(sample)+')}, Threshold: {'+str(eps_threshold)+'}')
+        logger.debug(f'Sample: {str(sample)}, Threshold: {str(eps_threshold)}')
         if self.steps_done % 10 == 0:
             logger.debug(f'Epoch: {self.steps_done}')
         if sample > eps_threshold:
@@ -101,7 +101,9 @@ class ReinforcementModel:
             self.action = torch.tensor([[action]], dtype=torch.int64)
         # Calculates the rewards, saves the state and the transition.
         # After TARGET_UPDATE steps, replaces the target network's weights with the policy network's
-        reward = self.reward(self.prev_state, new_state=new_state)
+        reward = self.reward(prev_state=self.prev_state, new_state=new_state)
+        # if random.random() > 0.5:
+        #     print(action, reward)
         self.rewards[self.n_training].append(reward)
         reward = torch.tensor([reward], device=self.device)
         # Store the transition in memory
@@ -116,6 +118,7 @@ class ReinforcementModel:
         # Update the target network, copying all weights and biases in DQN
         if self.time_step % self.TARGET_UPDATE == 0:
             self.target_net.load_state_dict(self.policy_net.state_dict())
+        return reward
 
     def optimize_model(self):
         if len(self.memory) < self.BATCH_SIZE:
@@ -172,8 +175,8 @@ class ReinforcementModel:
         logger.debug('Batch optimization finished')
 
     def reset(self):
-        #logger.warning('Not plotting')
-        self.plot_rewards()
+        logger.warning('Not plotting')
+        # self.plot_rewards()
         self.n_training += 1
         self.rewards.append([])
 

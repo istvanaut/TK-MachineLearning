@@ -35,7 +35,7 @@ class State:
         print([self.radar, self.collision, self.velocity, acc[0], acc[1], acc[2],
                self.direction, self.obstacle, self.distance_from_line*self.side])
 
-    # TODO (5) refactor to use DataKeys (rename them to Keys)
+    # TODO (4) refactor to use DataKeys (rename them to Keys)?
     def get_formatted(self):
         if self.acceleration is None:
             acc = [None, None, None]
@@ -124,12 +124,12 @@ def convert(state):
     # Normalize
     velocity = np.tanh(velocity / VELOCITY_MAX)
 
-    # direction: degrees? 3D? - but agent only cares about yaw (around y axis - like a compass)
+    # direction: in degrees out radians? 3D? - but agent only cares about yaw (around y axis - like a compass)
     if direction is None:
         direction = [0, 0, 0]
         current_direction = 0
     else:
-        current_direction = (direction[1] - starting_direction[1]) / 180 * np.pi
+        current_direction = (direction[1]/ 180 * np.pi - starting_direction[1])  # / 180 * np.pi
     CURRENT_DIRECTION_MAX = np.pi
     # Normalize
     current_direction = np.tanh(current_direction / CURRENT_DIRECTION_MAX)

@@ -102,9 +102,9 @@ def set_velocity(actor, velocity):
     first = True
     while (actor.get_velocity().x**2+actor.get_velocity().y**2+actor.get_velocity().z**2)**0.5 > 0.1:
         if not first:
-            logger.warning('Previous attempt at setting vehicle velocity unsuccessful')
+            logger.debug('Previous attempt at setting vehicle velocity unsuccessful')
         logger.debug('Setting vehicle velocity to 0...')
         actor.set_target_velocity(velocity)
         time.sleep(0.5)
         first = False
-    logger.info('Velocity is approx. 0')
+    logger.debug('Velocity is approx. 0')

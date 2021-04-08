@@ -8,9 +8,8 @@ from support.logger import logger
 
 feature_dimension = feature_dimension()
 AGENT_MODEL_PATH = 'files/tensor.pt'
-choices = [[0.35, 0.0],
-           [0.33, 0.3],
-           [0.33, -0.3]]
+choices = [[0.35, 0.1],
+           [0.34, 0.1]]
 ACTIONS_NUM = len(choices)
 MODEL_TYPE = SCNN
 
@@ -34,6 +33,13 @@ class NetworkAgent(Agent):
             choice = self.choices[action][:]
             # TODO (7) remove noise of agent out
             choice[1] += -0.05 + random.random() / 10
+
+            # TODO (6) remove cheats
+            if action is 0:
+                choice[1] *= -1 * state.side
+            if action is 1:
+                choice[1] *= 1 * state.side
+
             return action, choice
         except RuntimeError:
             logger.error(f'Error when trying to find right value for {action}')
@@ -41,12 +47,12 @@ class NetworkAgent(Agent):
 
     def optimize(self, new_state, prev_state=None, action=None):
         try:
-            self.model.optimize(new_state, prev_state, action)
+            return self.model.optimize(new_state, prev_state, action)
         except RuntimeError as r:
             logger.error(f'Error in model.optimize: {r}')
 
     def save(self, path=AGENT_MODEL_PATH):
-        logger.warning(f'Saving model to {path}')
+        logger.info(f'Saving model to {path}')
         self.model.save_model(path)
 
     def load(self, path=AGENT_MODEL_PATH):

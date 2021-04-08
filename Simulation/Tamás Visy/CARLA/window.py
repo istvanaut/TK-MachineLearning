@@ -1,3 +1,5 @@
+import random
+
 import sensors
 from support.datakey import DataKey
 import numpy as np
@@ -81,8 +83,15 @@ class Window:
         image, data, names = self.state.get_formatted()
 
         # TODO (5) remove inserted placeholders
-        names.insert(0, '')
-        data.insert(0, '')
+        names.insert(0, 'Placeholder')
+        if random.random() > 1/4:
+            data.insert(0, '-  ')
+        elif random.random() > 2/4:
+            data.insert(0, '-- ')
+        elif random.random() > 3/4:
+            data.insert(0, ' --')
+        else:
+            data.insert(0, '---')
 
         names.insert(4, '')
         data.insert(4, '')
@@ -141,7 +150,7 @@ class Window:
             # TODO (2) pretty disgusting but checking for every non-integer numtype is probably more difficult
             # Example: text = 4.232e-9 ===> not 4.23... but 0.0...
             try:
-                text = np.round(text)
+                text = np.round(text, 4)
             except RuntimeError:
                 pass
             text = str(text)

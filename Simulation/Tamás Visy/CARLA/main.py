@@ -1,4 +1,6 @@
 # @title main
+import random
+import numpy as np
 import time
 
 from agents.networkagent import NetworkAgent
@@ -11,9 +13,10 @@ from threads.dashboardthread import DashboardThread
 
 TRAIN_PER_DECISION = False
 logger.info(f'Train per decision is {TRAIN_PER_DECISION}')
-TRAIN_RESOLUTION_PERCENTAGE = 20
+TRAIN_RESOLUTION_PERCENTAGE = 100
 logger.info(f'Train resolution is {TRAIN_RESOLUTION_PERCENTAGE}%')
-MEMORY_SIZE = 5_000
+TARGET_FRAME_TIME = 0.25  # 0.025
+MEMORY_SIZE = 128+(10*(1/TARGET_FRAME_TIME))//1
 
 
 def main():
@@ -37,7 +40,13 @@ def main():
 
             prev_state = None
             prev_action = None
+            frame_start = None
+            frame_end = None
+
+            logger.info('Starting...')
             while status.finished is False:
+                frame_start = time.time_ns()
+
                 data, line, starting_dir = env.pull()
 
                 state = convert(repack(data, line, starting_dir))
@@ -53,6 +62,12 @@ def main():
                 prev_state = state
                 prev_action = action
 
+                frame_end = time.time_ns()
+                diff = None
+                if frame_end is not None and frame_start is not None:
+                    diff = (frame_end-frame_start)//1_000_000
+                if diff is not None and diff//1_000 < TARGET_FRAME_TIME:
+                    time.sleep(TARGET_FRAME_TIME-diff//1_000)
                 status = env.check()
             logger.info('Finished')
             dashboard.clear()
@@ -62,12 +77,19 @@ def main():
             time.sleep(2.0)
 
             if not TRAIN_PER_DECISION:
-                if len(memory) > MEMORY_SIZE:
+                if len(memory) >= MEMORY_SIZE:
                     logger.info(f'Starting training with memory of {len(memory)}*{TRAIN_RESOLUTION_PERCENTAGE}%')
+                    x = 0
+                    r = [[], []]
                     for i, (prev_state, action, new_state) in enumerate(memory):
-                        if i % (100 / TRAIN_RESOLUTION_PERCENTAGE) is 0:
-                            agent.optimize(new_state, prev_state, action)
-                    logger.info('Successfully trained')
+                        if i % (100 // TRAIN_RESOLUTION_PERCENTAGE) is 0:
+                            x += 1
+                            reward = agent.optimize(new_state, prev_state, action)
+                            r[action].append(reward)
+                    logger.info(f'Successfully trained {x} times')
+                    for i, action_rewards in enumerate(r):
+                        logger.info(f'Action rewards (ID, AVG, AMOUNT) '
+                                    f'-:- {i}; {np.average(action_rewards)}; {len(action_rewards)}')
                     memory = []
                     agent.model.reset()
                     agent.save()

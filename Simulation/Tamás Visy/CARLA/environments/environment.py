@@ -40,7 +40,7 @@ class Environment:
     def setup(self):
         logger.info('Environment setup')
         self.set_conditions()
-        self.line = get_line()
+        self.get_line()
         self.spawn()
         self.reset()
 
@@ -95,15 +95,7 @@ class Environment:
         self.vehicle.apply_control(icarla.vehicle_control(throttle=0, steer=0))
         icarla.set_velocity(self.vehicle, icarla.vector3d())
 
-        self.iteration += 1
-        self.line = get_line()
-        if self.iteration % 3 is 0:
-            pass
-        elif self.iteration % 3 is 1:
-            self.line.slice(30, 60)
-        elif self.iteration % 3 is 2:
-            self.line.slice(40, 70)
-            self.line.invert()
+        self.get_line()
 
         icarla.move(self.vehicle, icarla.transform(self.line.start[0], self.line.start[1], 0.25).location)
         icarla.rotate(self.vehicle, icarla.rotation(self.line.direction()))
@@ -129,3 +121,18 @@ class Environment:
         s = Status()
         s.check(self)
         return s
+
+    def get_line(self):
+        self.line = get_line()
+        # TODO (6) remove return
+        return
+        if self.iteration % 3 is 0:
+            pass
+        elif self.iteration % 3 is 1:
+            # TODO (8) car direction broken here?
+            self.line.slice(30, 60)
+        elif self.iteration % 3 is 2:
+            # TODO (8) or car direction broken here?
+            self.line.slice(40, 70)
+            self.line.invert()
+        self.iteration += 1

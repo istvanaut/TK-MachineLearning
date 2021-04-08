@@ -17,7 +17,7 @@ class Status:
 
     def __str__(self):
         return f'Finished: {self.finished}, success: {self.successful}, {self.reason} ' \
-               f'-:- {self.dist} meters, or {self.traveled} by line '
+               f'-:- {self.traveled} meters by line, or {self.dist} meters (beeline)'
 
     def check(self, environment):
         finished = False

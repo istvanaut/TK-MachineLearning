@@ -82,8 +82,8 @@ class Line:
                 dist = dist + seg.length()
 
         # This segment was updated by Tamás
-        if random.random() > 0.99:
-            logger.info(f'distance: {dist}; points size: {len(self.points)}; current index:{current_i}')
+        # if random.random() > 0.99:
+        #     logger.info(f'distance: {dist}; points size: {len(self.points)}; current index:{current_i}')
 
         return dist
 
