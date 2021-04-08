@@ -25,6 +25,7 @@ class Window:
         self.starting_dir = None
         self.state = None
         self.agent_out = None
+        self.i = 0
         colors = []
         color_1 = (200, 200, 200)
         colors.append(color_1)
@@ -60,6 +61,7 @@ class Window:
                     pygame.quit()
                     logger.warning('PyWindow closing')
                     return
+            self.i += 1
             pygame.time.wait(50)
             pygame.display.update()
 
@@ -82,19 +84,7 @@ class Window:
     def update_screen(self):
         image, data, names = self.state.get_formatted()
 
-        # TODO (5) remove inserted placeholders
-        names.insert(0, 'Placeholder')
-        if random.random() > 1/4:
-            data.insert(0, '-  ')
-        elif random.random() > 2/4:
-            data.insert(0, '-- ')
-        elif random.random() > 3/4:
-            data.insert(0, ' --')
-        else:
-            data.insert(0, '---')
-
-        names.insert(4, '')
-        data.insert(4, '')
+        self.insert_thingies(data, names)
 
         names.append('out')
         data.append(self.agent_out)
@@ -112,6 +102,28 @@ class Window:
         for (i, name) in enumerate(names):
             self.draw_text(data[i], name,
                            (side_start + i // square_sides * side_step, top_start + i % square_sides * top_step))
+
+    def insert_thingies(self, data, names):
+        # TODO (5) remove inserted placeholders
+        names.insert(0, 'Placeholder')
+        if self.i % 8 is 0:
+            data.insert(0, '---')
+        if self.i % 8 is 1:
+            data.insert(0, '>--')
+        elif self.i % 8 is 2:
+            data.insert(0, '->-')
+        elif self.i % 8 is 3:
+            data.insert(0, '-->')
+        elif self.i % 8 is 4:
+            data.insert(0, '---')
+        elif self.i % 8 is 5:
+            data.insert(0, '--<')
+        elif self.i % 8 is 6:
+            data.insert(0, '-<-')
+        elif self.i % 8 is 7:
+            data.insert(0, '<--')
+        names.insert(4, 'hello')
+        data.insert(4, ':)')
 
     def draw_image(self, image):
         if image is None:

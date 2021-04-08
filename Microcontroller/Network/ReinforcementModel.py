@@ -47,7 +47,7 @@ class ReinforcementModel:
         self.BATCH_SIZE = 128
         self.GAMMA = 0.999
         self.EPS_START = 0.9
-        self.EPS_END = 0.05
+        self.EPS_END = 0.4  # with 2 choices this means 0.4/2 -> 20% are wrong random choices (should be tolerable)
         self.EPS_DECAY = 500  # This should equal a couple of short runs
         self.TARGET_UPDATE = 10
         self.steps_done = 0
