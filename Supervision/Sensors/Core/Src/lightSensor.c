@@ -101,7 +101,7 @@ uint32_t lightSensorCycle()
 	uint16_t AD_IN[32];
 	uint8_t ledVal = 0x01;
 
-	uint32_t ret;
+	uint32_t ret = 0;
 
 	for(uint16_t i = 0; i < 8; i++)
 	{
