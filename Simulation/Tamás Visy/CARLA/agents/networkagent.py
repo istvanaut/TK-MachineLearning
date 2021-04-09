@@ -8,9 +8,6 @@ from support.logger import logger
 
 feature_dimension = feature_dimension()
 AGENT_MODEL_PATH = 'files/tensor.pt'
-choices = [[0.3, 0.1],
-           [0.31, 0.1]]
-ACTIONS_NUM = len(choices)
 MODEL_TYPE = SCNN
 
 

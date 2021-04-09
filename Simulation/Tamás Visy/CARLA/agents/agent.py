@@ -3,6 +3,10 @@ import numpy as np
 
 from support.logger import logger
 
+choices = [[0.3, -0.1],
+           [0.3, 0.1]]
+choices_count = len(choices)
+
 
 class Agent:
 
@@ -28,8 +32,8 @@ class Agent:
         camera, radar, collision, velocity, acceleration, position, obstacle, distance = new_state
         pass
 
-    def save(self, path):
+    def save(self):
         logger.error('SAVE - not happening')
 
-    def load(self, path):
+    def load(self):
         logger.error('LOAD - not happening')

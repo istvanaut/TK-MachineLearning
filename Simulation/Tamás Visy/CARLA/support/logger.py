@@ -1,5 +1,5 @@
 import logging
-WRITE_FILE = True
+WRITE_FILE = False
 LEVEL = logging.INFO
 
 logFormatter = logging.Formatter('%(asctime)s.%(msecs)03d\t  [%(threadName)s]\t[%(levelname)-3.3s]:\t%(message)s',
