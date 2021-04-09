@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -55,7 +56,82 @@ TIM_HandleTypeDef htim7;
 
 UART_HandleTypeDef huart3;
 
+/* Definitions for defaultTask */
+osThreadId_t defaultTaskHandle;
+const osThreadAttr_t defaultTask_attributes = {
+  .name = "defaultTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for lightSensorTask */
+osThreadId_t lightSensorTaskHandle;
+const osThreadAttr_t lightSensorTask_attributes = {
+  .name = "lightSensorTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for motorsTask */
+osThreadId_t motorsTaskHandle;
+const osThreadAttr_t motorsTask_attributes = {
+  .name = "motorsTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal1,
+};
+/* Definitions for encodersTask */
+osThreadId_t encodersTaskHandle;
+const osThreadAttr_t encodersTask_attributes = {
+  .name = "encodersTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal2,
+};
+/* Definitions for distanceSensorsTask */
+osThreadId_t distanceSensorsTaskHandle;
+const osThreadAttr_t distanceSensorsTask_attributes = {
+  .name = "distanceSensorsTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal3,
+};
+/* Definitions for gyroTask */
+osThreadId_t gyroTaskHandle;
+const osThreadAttr_t gyroTask_attributes = {
+  .name = "gyroTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal4,
+};
+/* Definitions for communicationTask */
+osThreadId_t communicationTaskHandle;
+const osThreadAttr_t communicationTask_attributes = {
+  .name = "communicationTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityBelowNormal5,
+};
 /* USER CODE BEGIN PV */
+// USSensor BEGIN
+extern uint32_t UStimeDifferenceLeft;
+extern uint32_t USStartTimeLeft;
+extern uint32_t USStopTimeLeft;
+extern uint32_t USdistanceLeft;
+extern uint8_t USrisingEdgeDetectedLeft;
+
+extern uint32_t UStimeDifferenceRight;
+extern uint32_t USStartTimeRight;
+extern uint32_t USStopTimeRight;
+extern uint32_t USdistanceRight;
+extern uint8_t USrisingEdgeDetectedRight;
+
+extern TIM_HandleTypeDef* UStim;
+
+enum US_SENSOR{
+	LEFT, RIGHT
+};
+
+volatile enum US_SENSOR currentUSSensor = LEFT;
+// USSensor END
+
+// Encoder BEGIN
+extern int speed1en;
+extern int speed2en;
+// Encoder END
 
 /* USER CODE END PV */
 
@@ -72,6 +148,14 @@ static void MX_SPI2_Init(void);
 static void MX_I2C2_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM7_Init(void);
+void StartTaskDeafult(void *argument);
+void StartTaskLightSensor(void *argument);
+void StartTaskMotors(void *argument);
+void StartTaskEncoders(void *argument);
+void StartTaskDistanceSensors(void *argument);
+void StartTaskGyro(void *argument);
+void StartTaskCommunication(void *argument);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -120,9 +204,67 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
-
+  initMyCOM(&huart3);
+  Encoder_Init();
+  Motors_Init(&htim2);
+  initUS(&htim3);
+  initACCSensor(&hi2c2);
+  initlezer(&htim1);
   /* USER CODE END 2 */
 
+  /* Init scheduler */
+  osKernelInitialize();
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* creation of defaultTask */
+  defaultTaskHandle = osThreadNew(StartTaskDeafult, NULL, &defaultTask_attributes);
+
+  /* creation of lightSensorTask */
+  lightSensorTaskHandle = osThreadNew(StartTaskLightSensor, NULL, &lightSensorTask_attributes);
+
+  /* creation of motorsTask */
+  motorsTaskHandle = osThreadNew(StartTaskMotors, NULL, &motorsTask_attributes);
+
+  /* creation of encodersTask */
+  encodersTaskHandle = osThreadNew(StartTaskEncoders, NULL, &encodersTask_attributes);
+
+  /* creation of distanceSensorsTask */
+  distanceSensorsTaskHandle = osThreadNew(StartTaskDistanceSensors, NULL, &distanceSensorsTask_attributes);
+
+  /* creation of gyroTask */
+  gyroTaskHandle = osThreadNew(StartTaskGyro, NULL, &gyroTask_attributes);
+
+  /* creation of communicationTask */
+  communicationTaskHandle = osThreadNew(StartTaskCommunication, NULL, &communicationTask_attributes);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_EVENTS */
+  /* add events, ... */
+  /* USER CODE END RTOS_EVENTS */
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -765,10 +907,10 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(LED_OE__GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 
-  HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(EXTI4_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI4_IRQn);
 
 }
@@ -776,6 +918,239 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/* USER CODE BEGIN Header_StartTaskDeafult */
+/**
+  * @brief  Function implementing the defaultTask thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_StartTaskDeafult */
+void StartTaskDeafult(void *argument)
+{
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
+	  osDelay(1);
+  }
+  /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_StartTaskLightSensor */
+/**
+* @brief Function implementing the lightSensorTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTaskLightSensor */
+void StartTaskLightSensor(void *argument)
+{
+  /* USER CODE BEGIN StartTaskLightSensor */
+  /* Infinite loop */
+  for(;;)
+  {
+	  lightSensorCycle();
+	  osDelay(20);
+  }
+  /* USER CODE END StartTaskLightSensor */
+}
+
+/* USER CODE BEGIN Header_StartTaskMotors */
+/**
+* @brief Function implementing the motorsTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTaskMotors */
+void StartTaskMotors(void *argument)
+{
+  /* USER CODE BEGIN StartTaskMotors */
+	leftMotor(0.7);
+	rightMotor(0.7);
+  /* Infinite loop */
+  for(;;)
+  {
+	  osDelay(100);
+  }
+  /* USER CODE END StartTaskMotors */
+}
+
+/* USER CODE BEGIN Header_StartTaskEncoders */
+/**
+* @brief Function implementing the encodersTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTaskEncoders */
+void StartTaskEncoders(void *argument)
+{
+  /* USER CODE BEGIN StartTaskEncoders */
+  /* Infinite loop */
+  for(;;)
+  {
+	  GetEncoderData();
+	  osDelay(100);
+  }
+  /* USER CODE END StartTaskEncoders */
+}
+
+/* USER CODE BEGIN Header_StartTaskDistanceSensors */
+/**
+* @brief Function implementing the distanceSensorsTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTaskDistanceSensors */
+void StartTaskDistanceSensors(void *argument)
+{
+  /* USER CODE BEGIN StartTaskDistanceSensors */
+	 unsigned int lDist = 500;
+	  unsigned int rDist = 500;
+	  unsigned int mDist = 5000;
+  /* Infinite loop */
+  for(;;)
+  {
+	  	  lDist = (unsigned int)getUSDistanceLeft();
+	  	//  printf("Left US sensor: %u\n", lDist);
+	  	  rDist = (unsigned int)getUSDistanceRight();
+	  	//  printf("Right US sensor: %u\n", rDist);
+	  	  mDist = (unsigned int)getlezerDistance();
+	  	/*  printf("Laser sensor: %u\n", mDist); */
+
+	  	if (lDist < 50 || rDist < 50 || mDist < 500)
+	  		  {
+	  			  leftMotor(0);
+	  			  rightMotor(0);
+	  		  }
+	  		  else
+	  		  {
+	  			  leftMotor(0.7);
+	  			  rightMotor(0.7);
+	  		  }
+
+	  osDelay(50);
+
+
+  }
+  /* USER CODE END StartTaskDistanceSensors */
+}
+
+/* USER CODE BEGIN Header_StartTaskGyro */
+/**
+* @brief Function implementing the gyroTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTaskGyro */
+void StartTaskGyro(void *argument)
+{
+  /* USER CODE BEGIN StartTaskGyro */
+  /* Infinite loop */
+  for(;;)
+  {
+	  printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z, getEulerWithMeasure().x, getMeasuredEuler().y, getMeasuredEuler().z);
+	  osDelay(50);
+  }
+  /* USER CODE END StartTaskGyro */
+}
+
+/* USER CODE BEGIN Header_StartTaskCommunication */
+/**
+* @brief Function implementing the communicationTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTaskCommunication */
+void StartTaskCommunication(void *argument)
+{
+  /* USER CODE BEGIN StartTaskCommunication */
+  /* Infinite loop */
+  for(;;)
+  {
+	  printf("Comm");
+	  osDelay(1000);
+  }
+  /* USER CODE END StartTaskCommunication */
+}
+
+ /**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM10 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM10) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+  //Left encoder BEGIN
+  	if(htim->Instance == TIM6)
+  	{
+  		speed1en = 0;
+  	}
+  	//Left encoder END
+
+  	//Right encoder BEGIN
+  	if(htim->Instance == TIM7)
+  	{
+  		speed2en = 0;
+  	}
+  	//Right encoder END
+
+  	//US Sensor BEGIN
+  	if(htim->Instance == UStim->Instance){
+  		//LEFT
+  		if(currentUSSensor == LEFT){
+  			HAL_TIM_Base_Stop_IT(UStim);
+  			//Stop LEFT
+  			HAL_TIM_PWM_Stop(UStim, TIM_CHANNEL_4);
+  			HAL_TIM_IC_Stop_IT(UStim, TIM_CHANNEL_3);
+  			//If echo not detected, distance set to 500 cm
+  			if(USrisingEdgeDetectedLeft == 1) USdistanceLeft = 500;
+  			USrisingEdgeDetectedLeft = 0;
+  			//Set timer to zero
+  			__HAL_TIM_SET_COUNTER(UStim, 0);
+  			//Set RIGHT
+  			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
+  			//Start RIGHT
+  			HAL_TIM_IC_Start_IT(UStim, TIM_CHANNEL_1);
+  			HAL_TIM_PWM_Start(UStim, TIM_CHANNEL_2);
+  			HAL_TIM_Base_Start_IT(UStim);
+
+  			currentUSSensor = RIGHT;
+  		}
+  		//RIGHT
+  		else if(currentUSSensor == RIGHT){
+  			HAL_TIM_Base_Stop_IT(UStim);
+  			//Stop RIGHT
+  			HAL_TIM_PWM_Stop(UStim, TIM_CHANNEL_2);
+  			HAL_TIM_IC_Stop_IT(UStim, TIM_CHANNEL_1);
+  			//If echo not detected, distance set to 500 cm
+  			if(USrisingEdgeDetectedRight == 1) USdistanceRight = 500;
+  			USrisingEdgeDetectedRight = 0;
+  			//Set timer to zero
+  			__HAL_TIM_SET_COUNTER(UStim, 0);
+  			//Set LEFT
+  			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_RISING);
+  			//Start LEFT
+  			HAL_TIM_IC_Start_IT(UStim, TIM_CHANNEL_3);
+  			HAL_TIM_PWM_Start(UStim, TIM_CHANNEL_4);
+  			HAL_TIM_Base_Start_IT(UStim);
+
+  			currentUSSensor = LEFT;
+  		}
+  	}
+  	//US Sensor END
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.
