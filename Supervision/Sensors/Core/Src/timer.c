@@ -135,7 +135,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	//Right encoder END
 
 	//US Sensor BEGIN
-	if(htim->Instance == UStim){
+	if(htim->Instance == UStim->Instance){
 		//LEFT
 		if(currentUSSensor == LEFT){
 			HAL_TIM_Base_Stop_IT(UStim);
@@ -148,7 +148,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			//Set timer to zero
 			__HAL_TIM_SET_COUNTER(UStim, 0);
 			//Set RIGHT
-			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_RISING);
+			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
 			//Start RIGHT
 			HAL_TIM_IC_Start_IT(UStim, TIM_CHANNEL_1);
 			HAL_TIM_PWM_Start(UStim, TIM_CHANNEL_2);
@@ -168,7 +168,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			//Set timer to zero
 			__HAL_TIM_SET_COUNTER(UStim, 0);
 			//Set LEFT
-			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
+			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_RISING);
 			//Start LEFT
 			HAL_TIM_IC_Start_IT(UStim, TIM_CHANNEL_3);
 			HAL_TIM_PWM_Start(UStim, TIM_CHANNEL_4);
