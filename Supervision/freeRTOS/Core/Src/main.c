@@ -110,6 +110,41 @@ osSemaphoreId_t SemACCHandle;
 const osSemaphoreAttr_t SemACC_attributes = {
   .name = "SemACC"
 };
+/* Definitions for SemMotors */
+osSemaphoreId_t SemMotorsHandle;
+const osSemaphoreAttr_t SemMotors_attributes = {
+  .name = "SemMotors"
+};
+/* Definitions for SemLightSensor */
+osSemaphoreId_t SemLightSensorHandle;
+const osSemaphoreAttr_t SemLightSensor_attributes = {
+  .name = "SemLightSensor"
+};
+/* Definitions for SemLeftEncoder */
+osSemaphoreId_t SemLeftEncoderHandle;
+const osSemaphoreAttr_t SemLeftEncoder_attributes = {
+  .name = "SemLeftEncoder"
+};
+/* Definitions for SemRightEncoder */
+osSemaphoreId_t SemRightEncoderHandle;
+const osSemaphoreAttr_t SemRightEncoder_attributes = {
+  .name = "SemRightEncoder"
+};
+/* Definitions for SemLeftUSSensor */
+osSemaphoreId_t SemLeftUSSensorHandle;
+const osSemaphoreAttr_t SemLeftUSSensor_attributes = {
+  .name = "SemLeftUSSensor"
+};
+/* Definitions for SemRightUSSensor */
+osSemaphoreId_t SemRightUSSensorHandle;
+const osSemaphoreAttr_t SemRightUSSensor_attributes = {
+  .name = "SemRightUSSensor"
+};
+/* Definitions for SemLaserSensor */
+osSemaphoreId_t SemLaserSensorHandle;
+const osSemaphoreAttr_t SemLaserSensor_attributes = {
+  .name = "SemLaserSensor"
+};
 /* USER CODE BEGIN PV */
 // USSensor BEGIN
 extern uint32_t UStimeDifferenceLeft;
@@ -227,6 +262,27 @@ int main(void)
   /* Create the semaphores(s) */
   /* creation of SemACC */
   SemACCHandle = osSemaphoreNew(1, 1, &SemACC_attributes);
+
+  /* creation of SemMotors */
+  SemMotorsHandle = osSemaphoreNew(1, 1, &SemMotors_attributes);
+
+  /* creation of SemLightSensor */
+  SemLightSensorHandle = osSemaphoreNew(1, 1, &SemLightSensor_attributes);
+
+  /* creation of SemLeftEncoder */
+  SemLeftEncoderHandle = osSemaphoreNew(1, 1, &SemLeftEncoder_attributes);
+
+  /* creation of SemRightEncoder */
+  SemRightEncoderHandle = osSemaphoreNew(1, 1, &SemRightEncoder_attributes);
+
+  /* creation of SemLeftUSSensor */
+  SemLeftUSSensorHandle = osSemaphoreNew(1, 1, &SemLeftUSSensor_attributes);
+
+  /* creation of SemRightUSSensor */
+  SemRightUSSensorHandle = osSemaphoreNew(1, 1, &SemRightUSSensor_attributes);
+
+  /* creation of SemLaserSensor */
+  SemLaserSensorHandle = osSemaphoreNew(1, 1, &SemLaserSensor_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
