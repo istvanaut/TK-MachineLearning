@@ -133,8 +133,8 @@ int main(void)
   unsigned int rDist = 500;
   unsigned int mDist = 5000;
 
-  rightMotor(0.60);
-  leftMotor(0.60);
+  //rightMotor(0.60);
+  //leftMotor(0.60);
 
   /* USER CODE END 2 */
 
@@ -145,16 +145,18 @@ int main(void)
 	  /*printf("\033[3J");
 	  printf("\e[1;1H\e[2J");*/
 
-	 // WriteEncoderToPC();
-	  black = lightSensorCycle();
+	 //WriteEncoderToPC();
+	 lightSensorCycle();
 	 // printf("Leds: %x\n", (unsigned int)black);
 	  lDist = (unsigned int)getUSDistanceLeft();
 	//  printf("Left US sensor: %u\n", lDist);
 	  rDist = (unsigned int)getUSDistanceRight();
 	//  printf("Right US sensor: %u\n", rDist);
-	  mDist = (unsigned int)getlezerDistance();
-	/*  printf("Laser sensor: %u\n", mDist);
-	  printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z, getEulerWithMeasure().x, getMeasuredEuler().y, getMeasuredEuler().z);
+	 mDist = (unsigned int)getlezerDistance();
+	 //printf("Laser sensor: %u\n", mDist);
+	  //printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z, getEulerWithMeasure().x, getMeasuredEuler().y, getMeasuredEuler().z);
+	 printf("Y: %f\n", getAccWithMeasure().y);
+	 /*
 	  printf("                                                                                                                                \n");
 	  printf("                                                                                                                                \n");
 	  printf("                                                                                                                                \n");
@@ -187,9 +189,13 @@ int main(void)
 		  leftMotor(0.6);
 		  rightMotor(0.6);
 	  }
-
-
-
+/*
+	  double avgSpeed = 0;
+	  for(int i = 0; i < 100; i++){
+		  avgSpeed += GetSpeedOfMotor(1);
+	  }
+	  printf("%f\n", avgSpeed);
+*/
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
