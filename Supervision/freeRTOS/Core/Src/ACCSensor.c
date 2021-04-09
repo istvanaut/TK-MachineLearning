@@ -26,6 +26,10 @@ bno055_vector_t getAccWithMeasure(void){
 	acceleration.y -= accOffset.y;
 	acceleration.z -= accOffset.z;
 
+	acceleration.x *= -1;
+	acceleration.y *= -1;
+
+
 	return acceleration;
 }
 
