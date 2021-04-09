@@ -27,6 +27,10 @@ void AccMeasure(void){
 	acceleration.x -= accOffset.x;
 	acceleration.y -= accOffset.y;
 	acceleration.z -= accOffset.z;
+	
+	acceleration.x *= -1;
+	acceleration.y *= -1;
+	
 	osSemaphoreRelease(SemACCHandle);
 }
 
