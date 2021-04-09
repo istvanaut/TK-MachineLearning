@@ -9,7 +9,7 @@ import numpy as np
 feature_dimension = feature_dimension()
 
 
-def states_to_trainable(data):
+def states_to_trainables(data):
     trainable = []
     for state in data:
         inp = state.image
@@ -20,6 +20,20 @@ def states_to_trainable(data):
             choice[0] = 1
         trainable.append([inp, choice])
     return trainable
+
+
+def balance(trainables):
+    leftchoices = []
+    rightchoices = []
+    for trainable in trainables:
+        if np.argmax(trainable[1]) == 0:
+            leftchoices.append(trainable)
+        elif np.argmax(trainable[1]) == 1:
+            rightchoices.append(trainable)
+    leftchoices = leftchoices[:min(len(leftchoices), len(rightchoices))]
+    rightchoices = rightchoices[:min(len(leftchoices), len(rightchoices))]
+    print(len(trainables), '->', len(leftchoices)+len(rightchoices))
+    return leftchoices+rightchoices
 
 
 class KerasAgent(Agent):
@@ -41,8 +55,22 @@ class KerasAgent(Agent):
         im, _, _ = state.get_formatted()
         prediction = self.model.predict(im)
         action = np.argmax(prediction)
-        print(prediction)
-        choice = choices[action]
+        auto = random.random() < 1/3
+        # random exploration
+        if random.random() < 0.6:
+            if random.random() < 0.5:
+                action = 0
+            else:
+                action = 1
+        # autodriving
+        if auto:
+            action = 1
+        choice = choices[action][:]
+        # autodriving
+        if auto:
+            choice[1] *= -1*state.side
+            # noise
+            choice[1] += -0.1 + random.random() * 0.2
         return action, choice
 
     def optimize(self, new_state, prev_state=None, action=None):
@@ -56,9 +84,11 @@ class KerasAgent(Agent):
             # train = get_train_data()
             pass
         else:
-            trainable = states_to_trainable(data)
-            random.shuffle(trainable)
-            val_len = len(trainable)//10
-            val = trainable[:val_len]
-            train = trainable[val_len:]
+            trainables = states_to_trainables(data)
+            random.shuffle(trainables)
+            trainables = balance(trainables)
+            random.shuffle(trainables)
+            val_len = len(trainables)//10
+            val = trainables[:val_len]
+            train = trainables[val_len:]
         self.model.train(train=train, test=val, epochs=3)

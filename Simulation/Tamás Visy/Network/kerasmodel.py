@@ -37,9 +37,9 @@ PATH_PREFIX = ''
 METRIC = 'val_loss'
 # TODO (6) move files
 # MODEL_FILE_NAME = PATH_PREFIX + 'other/model/{}/py-gta5-sdc-pilotnet-{}.model'
-file_name = 'files/keras.model'
+file_name = 'files/keras/keras.model'
 # KERAS_CHECKPOINT_FILE_NAMES = PATH_PREFIX + 'other/checkpoint/model-pilotnet-{name}_best.h5'
-checkpoint_file_names = 'files/checkpoints/keras_{epoch}.h5'
+checkpoint_file_names = 'files/keras/checkpoints/keras_{epoch}.h5'
 
 
 class KerasModel:  # class KerasModel(Model):
@@ -129,9 +129,9 @@ class KerasModel:  # class KerasModel(Model):
         # self.predict_as_tensor = tf.function(self.model.call)
 
     def load(self):
-        if os.path.isfile(file_name):  # search for actual file
+        if os.path.isfile(f'{file_name}.data-00000-of-00001'):  # search for actual file
             self.network.load_weights(file_name)
-            print(f'Successfully loaded {file_name}model in KerasModel.load()')
+            print(f'Successfully loaded {file_name} model in KerasModel.load()')
         else:
             print(f'ERROR! {file_name} file not found in KerasModel.load()')
 

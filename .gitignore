@@ -1,8 +1,11 @@
 /venv/
-/Simulation/Tamás Visy/CARLA/files/carla-0.9.10-py3.7-win-amd64.egg
 /.idea/
+/venvn/
 /Simulation/Tamás Visy/CARLA/files/carla-0.9.10-py3.7-win-amd64.egg
 /Microcontroller/Network/carla.log
 /Simulation/Tamás Visy/CARLA/files/carla.log
 /Simulation/Tamás Visy/CARLA/files/tensor.pt
-/venvn/
+/Simulation/Tamás Visy/CARLA/files/keras/checkpoints/
+/Simulation/Tamás Visy/CARLA/files/keras/checkpoint
+/Simulation/Tamás Visy/CARLA/files/keras/keras.model.data-00000-of-00001
+/Simulation/Tamás Visy/CARLA/files/keras/keras.model.index

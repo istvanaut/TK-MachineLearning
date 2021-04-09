@@ -17,7 +17,7 @@ logger.info(f'Train per decision is {TRAIN_PER_DECISION}')
 TRAIN_RESOLUTION_PERCENTAGE = 100
 logger.info(f'Train resolution is {TRAIN_RESOLUTION_PERCENTAGE}%')
 TARGET_FRAME_TIME = 0.25  # 0.025
-MEMORY_SIZE = 10 # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
+MEMORY_SIZE = 256  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
 
 
 def main():

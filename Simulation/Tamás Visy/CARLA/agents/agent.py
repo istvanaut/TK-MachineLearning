@@ -3,8 +3,8 @@ import numpy as np
 
 from support.logger import logger
 
-choices = [[0.3, -0.1],
-           [0.3, 0.1]]
+choices = [[0.25, -0.1],
+           [0.25, 0.1]]
 choices_count = len(choices)
 
 

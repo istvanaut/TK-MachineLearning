@@ -124,6 +124,7 @@ class Environment:
 
     def get_line(self):
         self.line = get_line()
+        self.line.slice(None, 20)
         # TODO (6) remove return
         return
         if self.iteration % 3 is 0:
