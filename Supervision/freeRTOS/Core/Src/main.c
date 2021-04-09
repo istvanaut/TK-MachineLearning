@@ -67,7 +67,7 @@ const osThreadAttr_t defaultTask_attributes = {
 osThreadId_t lightSensorTaskHandle;
 const osThreadAttr_t lightSensorTask_attributes = {
   .name = "lightSensorTask",
-  .stack_size = 128 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for motorsTask */
@@ -81,28 +81,28 @@ const osThreadAttr_t motorsTask_attributes = {
 osThreadId_t encodersTaskHandle;
 const osThreadAttr_t encodersTask_attributes = {
   .name = "encodersTask",
-  .stack_size = 128 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal2,
 };
 /* Definitions for distanceSensorsTask */
 osThreadId_t distanceSensorsTaskHandle;
 const osThreadAttr_t distanceSensorsTask_attributes = {
   .name = "distanceSensorsTask",
-  .stack_size = 128 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal3,
 };
 /* Definitions for gyroTask */
 osThreadId_t gyroTaskHandle;
 const osThreadAttr_t gyroTask_attributes = {
   .name = "gyroTask",
-  .stack_size = 128 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal4,
 };
 /* Definitions for communicationTask */
 osThreadId_t communicationTaskHandle;
 const osThreadAttr_t communicationTask_attributes = {
   .name = "communicationTask",
-  .stack_size = 128 * 4,
+  .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityBelowNormal5,
 };
 /* USER CODE BEGIN PV */
@@ -932,7 +932,7 @@ void StartTaskDeafult(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  osDelay(1);
+	  osDelay(100);
   }
   /* USER CODE END 5 */
 }
@@ -951,7 +951,7 @@ void StartTaskLightSensor(void *argument)
   for(;;)
   {
 	  lightSensorCycle();
-	  osDelay(20);
+	  osDelay(10);
   }
   /* USER CODE END StartTaskLightSensor */
 }
@@ -971,7 +971,7 @@ void StartTaskMotors(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  osDelay(100);
+	  osDelay(50);
   }
   /* USER CODE END StartTaskMotors */
 }
@@ -989,8 +989,7 @@ void StartTaskEncoders(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  GetEncoderData();
-	  osDelay(100);
+	  osDelay(10);
   }
   /* USER CODE END StartTaskEncoders */
 }
@@ -1005,33 +1004,29 @@ void StartTaskEncoders(void *argument)
 void StartTaskDistanceSensors(void *argument)
 {
   /* USER CODE BEGIN StartTaskDistanceSensors */
-	 unsigned int lDist = 500;
-	  unsigned int rDist = 500;
-	  unsigned int mDist = 5000;
+  unsigned int lDist = 500;
+  unsigned int rDist = 500;
+  unsigned int mDist = 5000;
   /* Infinite loop */
   for(;;)
   {
-	  	  lDist = (unsigned int)getUSDistanceLeft();
-	  	//  printf("Left US sensor: %u\n", lDist);
-	  	  rDist = (unsigned int)getUSDistanceRight();
-	  	//  printf("Right US sensor: %u\n", rDist);
-	  	  mDist = (unsigned int)getlezerDistance();
-	  	/*  printf("Laser sensor: %u\n", mDist); */
+	  // EMERGENCY BRAKE
+	  lDist = (unsigned int)getUSDistanceLeft();
+	  rDist = (unsigned int)getUSDistanceRight();
+	  mDist = (unsigned int)getlezerDistance();
 
-	  	if (lDist < 50 || rDist < 50 || mDist < 500)
-	  		  {
-	  			  leftMotor(0);
-	  			  rightMotor(0);
-	  		  }
-	  		  else
-	  		  {
-	  			  leftMotor(0.7);
-	  			  rightMotor(0.7);
-	  		  }
+	  if (lDist < 50 || rDist < 50 || mDist < 500)
+	  {
+		  leftMotor(0);
+		  rightMotor(0);
+	  }
+	  else
+	  {
+		  leftMotor(0.7);
+		  rightMotor(0.7);
+	  }
 
 	  osDelay(50);
-
-
   }
   /* USER CODE END StartTaskDistanceSensors */
 }
@@ -1049,8 +1044,7 @@ void StartTaskGyro(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z, getEulerWithMeasure().x, getMeasuredEuler().y, getMeasuredEuler().z);
-	  osDelay(50);
+	  osDelay(10);
   }
   /* USER CODE END StartTaskGyro */
 }
@@ -1068,7 +1062,15 @@ void StartTaskCommunication(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  printf("Comm");
+	  printf("\033[3J");
+	  printf("\e[1;1H\e[2J");
+	  printf("Light sensor: 0x%x\n", lightSensorCycle());
+	  printf("Left US sensor: %u\n", getUSDistanceLeft());
+	  printf("Right US sensor: %u\n", getUSDistanceRight());
+	  printf("Laser sensor: %u\n", getlezerDistance());
+	  printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z, getEulerWithMeasure().x, getMeasuredEuler().y, getMeasuredEuler().z);
+	  GetEncoderData();
+
 	  osDelay(1000);
   }
   /* USER CODE END StartTaskCommunication */
@@ -1091,19 +1093,19 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-  //Left encoder BEGIN
-  	if(htim->Instance == TIM6)
-  	{
-  		speed1en = 0;
-  	}
-  	//Left encoder END
+  	//Left encoder BEGIN
+	if(htim->Instance == TIM6)
+	{
+		speed1en = 0;
+	}
+	//Left encoder END
 
-  	//Right encoder BEGIN
-  	if(htim->Instance == TIM7)
-  	{
-  		speed2en = 0;
-  	}
-  	//Right encoder END
+	//Right encoder BEGIN
+	if(htim->Instance == TIM7)
+	{
+		speed2en = 0;
+	}
+	//Right encoder END
 
   	//US Sensor BEGIN
   	if(htim->Instance == UStim->Instance){

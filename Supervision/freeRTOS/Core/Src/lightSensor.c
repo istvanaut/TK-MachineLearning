@@ -16,7 +16,7 @@ void SPItransmit_LED(uint8_t* leds, int ledType)
 	while (!(SPI2->SR & SPI_SR_TXE));
 	// Send bytes over the SPI
 	HAL_SPI_Transmit(&hspi2, leds, 4, 100);
-	//printf("Transmit OUT: 4: %x, 3: %x, 2: %x, 1: %x\n", leds[0], leds[1], leds[2], leds[3]);
+	//printf("Transmit OUT: 4: %x, 3: %x, 2: %x, 1: %x\n", leds[0], leds[1], leds[2], leds[3]); //DEBUGHOZ
 	// Wait until the transmission is complete
 	while (SPI2->SR & SPI_SR_BSY);
 
@@ -65,8 +65,8 @@ uint16_t SPIreceive_AD(uint16_t idx, uint8_t AD_Num)
 	}
 
 	while (!(SPI1->SR & SPI_SR_TXE));
-	HAL_SPI_TransmitReceive(&hspi1, buff_out, (uint8_t*)&AD_OUT1, 2, 100); //DEBUGHOZ
-	HAL_SPI_TransmitReceive(&hspi1, buff_out, (uint8_t*)&AD_OUT2, 2, 100); //DEBUGHOZ
+	HAL_SPI_TransmitReceive(&hspi1, buff_out, (uint8_t*)&AD_OUT1, 2, 100);
+	HAL_SPI_TransmitReceive(&hspi1, buff_out, (uint8_t*)&AD_OUT2, 2, 100);
 	while (SPI1->SR & SPI_SR_BSY);
 
 	switch(AD_Num)
@@ -112,7 +112,7 @@ uint32_t lightSensorCycle()
 		ledVal <<= 1;
 
 		// 140us delay szükséges??
-		HAL_Delay(1);
+		osDelay(1);
 
 		// AD read (i -> group4(24-31), i+8 -> group3(16-23), i+16 -> group2(8-15), i+24 -> group1(0-7))
 		AD_IN[i] 	= SPIreceive_AD(i, 4); //CS4
