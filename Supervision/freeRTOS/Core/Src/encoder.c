@@ -5,19 +5,22 @@
 #define oneRot 10.35 //one hole rotation is millimeters
 #define W 0.146 //width of car in meters
 
+extern osSemaphoreId_t SemLeftEncoderHandle;
+extern osSemaphoreId_t SemRightEncoderHandle;
+
 volatile int speed1en; //Left
 volatile int speed2en; //Right
-volatile int encoderSumOfRotations1; //Left
-volatile int encoderSumOfRotations2; //Right
-volatile int timerCntrVal1; //Left
-volatile int timerCntrVal2; //Right
+static volatile int encoderSumOfRotations1; //Left
+static volatile int encoderSumOfRotations2; //Right
+static volatile int timerCntrVal1; //Left
+static volatile int timerCntrVal2; //Right
 
-volatile int rotChange1; //Left
-volatile int rotChange2; //Right
+static volatile int rotChange1; //Left
+static volatile int rotChange2; //Right
 
 
-volatile position pos = {0, 0};
-volatile double angle = 0; //radian
+static volatile position pos = {0, 0};
+static volatile double angle = 0; //radian
 
 void Encoder_Init()
 {

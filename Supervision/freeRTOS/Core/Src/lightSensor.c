@@ -9,6 +9,9 @@
 
 #define CMP_LVL 2000
 
+static uint32_t activeLeds = 0;
+extern osSemaphoreId_t SemLightSensorHandle;
+
 // ledType: IR = 0; Debug LED = 1;
 void SPItransmit_LED(uint8_t* leds, int ledType)
 {
@@ -95,13 +98,11 @@ uint16_t SPIreceive_AD(uint16_t idx, uint8_t AD_Num)
 	return AD_OUT2;
 }
 
-uint32_t lightSensorCycle()
+void LightSensorCycle()
 {
 	uint8_t leds_buff[4]; //0 -> DxD, 1 -> DxC, 2 -> DxB, 3 -> DxA
 	uint16_t AD_IN[32];
 	uint8_t ledVal = 0x01;
-
-	uint32_t ret = 0;
 
 	for(uint16_t i = 0; i < 8; i++)
 	{
@@ -111,7 +112,7 @@ uint32_t lightSensorCycle()
 		SPItransmit_LED(leds_buff, 0);
 		ledVal <<= 1;
 
-		// 140us delay szükséges??
+		// 1ms OS delay for LEDs to turn on
 		osDelay(1);
 
 		// AD read (i -> group4(24-31), i+8 -> group3(16-23), i+16 -> group2(8-15), i+24 -> group1(0-7))
@@ -140,11 +141,24 @@ uint32_t lightSensorCycle()
 	// Debug LED write
 	SPItransmit_LED(leds_buff, 1);
 
-	ret |= leds_buff[0] << 24;
-	ret |= leds_buff[1] << 16;
-	ret |= leds_buff[2] << 8;
-	ret |= leds_buff[3];
-	return ret;
+	osSemaphoreAcquire(SemLightSensorHandle, 0);
+	activeLeds = 0;
+	activeLeds |= leds_buff[0] << 24;
+	activeLeds |= leds_buff[1] << 16;
+	activeLeds |= leds_buff[2] << 8;
+	activeLeds |= leds_buff[3];
+	osSemaphoreRelease(SemLightSensorHandle);
+}
+
+uint32_t GetLightSensorValues()
+{
+	uint32_t retTemp;
+
+	osSemaphoreAcquire(SemLightSensorHandle, 5);
+	retTemp = activeLeds;
+	osSemaphoreRelease(SemLightSensorHandle);
+
+	return retTemp;
 }
 
 void switchBytes(uint16_t* num)

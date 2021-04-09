@@ -70,13 +70,6 @@ const osThreadAttr_t lightSensorTask_attributes = {
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for motorsTask */
-osThreadId_t motorsTaskHandle;
-const osThreadAttr_t motorsTask_attributes = {
-  .name = "motorsTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal1,
-};
 /* Definitions for encodersTask */
 osThreadId_t encodersTaskHandle;
 const osThreadAttr_t encodersTask_attributes = {
@@ -84,10 +77,10 @@ const osThreadAttr_t encodersTask_attributes = {
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal2,
 };
-/* Definitions for distanceSensorsTask */
-osThreadId_t distanceSensorsTaskHandle;
-const osThreadAttr_t distanceSensorsTask_attributes = {
-  .name = "distanceSensorsTask",
+/* Definitions for emergencyBreakingTask */
+osThreadId_t emergencyBreakingTaskHandle;
+const osThreadAttr_t emergencyBreakingTask_attributes = {
+  .name = "emergencyBreakingTask",
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal3,
 };
@@ -190,9 +183,8 @@ static void MX_TIM6_Init(void);
 static void MX_TIM7_Init(void);
 void StartTaskDeafult(void *argument);
 void StartTaskLightSensor(void *argument);
-void StartTaskMotors(void *argument);
 void StartTaskEncoders(void *argument);
-void StartTaskDistanceSensors(void *argument);
+void StartTaskEmergencyBreaking(void *argument);
 void StartTaskACC(void *argument);
 void StartTaskCommunication(void *argument);
 
@@ -303,14 +295,11 @@ int main(void)
   /* creation of lightSensorTask */
   lightSensorTaskHandle = osThreadNew(StartTaskLightSensor, NULL, &lightSensorTask_attributes);
 
-  /* creation of motorsTask */
-  motorsTaskHandle = osThreadNew(StartTaskMotors, NULL, &motorsTask_attributes);
-
   /* creation of encodersTask */
   encodersTaskHandle = osThreadNew(StartTaskEncoders, NULL, &encodersTask_attributes);
 
-  /* creation of distanceSensorsTask */
-  distanceSensorsTaskHandle = osThreadNew(StartTaskDistanceSensors, NULL, &distanceSensorsTask_attributes);
+  /* creation of emergencyBreakingTask */
+  emergencyBreakingTaskHandle = osThreadNew(StartTaskEmergencyBreaking, NULL, &emergencyBreakingTask_attributes);
 
   /* creation of ACCTask */
   ACCTaskHandle = osThreadNew(StartTaskACC, NULL, &ACCTask_attributes);
@@ -1015,30 +1004,10 @@ void StartTaskLightSensor(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  lightSensorCycle();
+	  LightSensorCycle();
 	  osDelay(10);
   }
   /* USER CODE END StartTaskLightSensor */
-}
-
-/* USER CODE BEGIN Header_StartTaskMotors */
-/**
-* @brief Function implementing the motorsTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartTaskMotors */
-void StartTaskMotors(void *argument)
-{
-  /* USER CODE BEGIN StartTaskMotors */
-	leftMotor(0.7);
-	rightMotor(0.7);
-  /* Infinite loop */
-  for(;;)
-  {
-	  osDelay(50);
-  }
-  /* USER CODE END StartTaskMotors */
 }
 
 /* USER CODE BEGIN Header_StartTaskEncoders */
@@ -1059,41 +1028,22 @@ void StartTaskEncoders(void *argument)
   /* USER CODE END StartTaskEncoders */
 }
 
-/* USER CODE BEGIN Header_StartTaskDistanceSensors */
+/* USER CODE BEGIN Header_StartTaskEmergencyBreaking */
 /**
-* @brief Function implementing the distanceSensorsTask thread.
+* @brief Function implementing the emergencyBreakingTask thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_StartTaskDistanceSensors */
-void StartTaskDistanceSensors(void *argument)
+/* USER CODE END Header_StartTaskEmergencyBreaking */
+void StartTaskEmergencyBreaking(void *argument)
 {
-  /* USER CODE BEGIN StartTaskDistanceSensors */
-  unsigned int lDist = 500;
-  unsigned int rDist = 500;
-  unsigned int mDist = 5000;
+  /* USER CODE BEGIN StartTaskEmergencyBreaking */
   /* Infinite loop */
   for(;;)
   {
-	  // EMERGENCY BRAKE
-	  lDist = (unsigned int)getUSDistanceLeft();
-	  rDist = (unsigned int)getUSDistanceRight();
-	  mDist = (unsigned int)getlezerDistance();
-
-	  if (lDist < 50 || rDist < 50 || mDist < 500)
-	  {
-		  leftMotor(0);
-		  rightMotor(0);
-	  }
-	  else
-	  {
-		  leftMotor(0.7);
-		  rightMotor(0.7);
-	  }
-
-	  osDelay(50);
+	  osDelay(10);
   }
-  /* USER CODE END StartTaskDistanceSensors */
+  /* USER CODE END StartTaskEmergencyBreaking */
 }
 
 /* USER CODE BEGIN Header_StartTaskACC */
@@ -1129,7 +1079,7 @@ void StartTaskCommunication(void *argument)
   {
 	  printf("\033[3J");
 	  printf("\e[1;1H\e[2J");
-	  printf("Light sensor: 0x%x\n", lightSensorCycle());
+	  printf("Light sensor: 0x%x\n", GetLightSensorValues());
 	  printf("Left US sensor: %u\n", getUSDistanceLeft());
 	  printf("Right US sensor: %u\n", getUSDistanceRight());
 	  printf("Laser sensor: %u\n", getlezerDistance());

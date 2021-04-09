@@ -9,9 +9,11 @@
 
 #define ARR 2251u
 
+extern osSemaphoreId_t SemMotorsHandle;
+
 TIM_HandleTypeDef* myhtim;
-double leftMotorActualValue = 0;
-double rightMotorActualValue = 0;
+static double leftMotorActualValue = 0;
+static double rightMotorActualValue = 0;
 
 void Motors_Init(TIM_HandleTypeDef *htim)
 {
@@ -33,14 +35,20 @@ void Motors_Init(TIM_HandleTypeDef *htim)
 
 void leftMotor(float value)
 {
+	osSemaphoreAcquire(SemMotorsHandle, 0);
 	leftMotorActualValue = value;
+	osSemaphoreRelease(SemMotorsHandle);
+
     // value > 0 --> forward, value < 0 --> backward
 	myhtim->Instance->CCR1 = (uint32_t) (value > 0 ? ARR * value : 0);
 	myhtim->Instance->CCR2 = (uint32_t) (value > 0 ? 0 : ARR * value);
 }
 void rightMotor(float value)
 {
+	osSemaphoreAcquire(SemMotorsHandle, 0);
 	rightMotorActualValue = value;
+	osSemaphoreRelease(SemMotorsHandle);
+
     // value > 0 --> forward, value < 0 --> backward
 	myhtim->Instance->CCR3 = (uint32_t) (value > 0 ? ARR * value : 0);
 	myhtim->Instance->CCR4 = (uint32_t) (value > 0 ? 0 : ARR * value);
@@ -48,10 +56,22 @@ void rightMotor(float value)
 
 double getLeftMotorValue()
 {
-	return leftMotorActualValue;
+	double retTemp;
+
+	osSemaphoreAcquire(SemMotorsHandle, 0);
+	retTemp = leftMotorActualValue;
+	osSemaphoreRelease(SemMotorsHandle);
+
+	return retTemp;
 }
 
 double getRightMotorValue()
 {
-	return rightMotorActualValue;
+	double retTemp;
+
+		osSemaphoreAcquire(SemMotorsHandle, 0);
+		retTemp = rightMotorActualValue;
+		osSemaphoreRelease(SemMotorsHandle);
+
+		return retTemp;
 }

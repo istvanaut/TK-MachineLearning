@@ -22,6 +22,12 @@ void Timer6_Stop();
 void Timer7_Stop();
 
 void GetEncoderData();
+
+int GetLeftDistance();
+int GetRightDistance();
+double GetActualSpeed();
+double GetActualPositionFromOrigin();
+
 double CalculateSpeed(int cntrVal, int speedEn);
 
 double GetSpeedOfMotor(int motor); // 0 => left, 1 => right [m/s]
