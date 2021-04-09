@@ -91,10 +91,10 @@ const osThreadAttr_t distanceSensorsTask_attributes = {
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal3,
 };
-/* Definitions for gyroTask */
-osThreadId_t gyroTaskHandle;
-const osThreadAttr_t gyroTask_attributes = {
-  .name = "gyroTask",
+/* Definitions for ACCTask */
+osThreadId_t ACCTaskHandle;
+const osThreadAttr_t ACCTask_attributes = {
+  .name = "ACCTask",
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal4,
 };
@@ -104,6 +104,11 @@ const osThreadAttr_t communicationTask_attributes = {
   .name = "communicationTask",
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityBelowNormal5,
+};
+/* Definitions for SemACC */
+osSemaphoreId_t SemACCHandle;
+const osSemaphoreAttr_t SemACC_attributes = {
+  .name = "SemACC"
 };
 /* USER CODE BEGIN PV */
 // USSensor BEGIN
@@ -153,7 +158,7 @@ void StartTaskLightSensor(void *argument);
 void StartTaskMotors(void *argument);
 void StartTaskEncoders(void *argument);
 void StartTaskDistanceSensors(void *argument);
-void StartTaskGyro(void *argument);
+void StartTaskACC(void *argument);
 void StartTaskCommunication(void *argument);
 
 /* USER CODE BEGIN PFP */
@@ -219,6 +224,10 @@ int main(void)
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
 
+  /* Create the semaphores(s) */
+  /* creation of SemACC */
+  SemACCHandle = osSemaphoreNew(1, 1, &SemACC_attributes);
+
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
@@ -247,8 +256,8 @@ int main(void)
   /* creation of distanceSensorsTask */
   distanceSensorsTaskHandle = osThreadNew(StartTaskDistanceSensors, NULL, &distanceSensorsTask_attributes);
 
-  /* creation of gyroTask */
-  gyroTaskHandle = osThreadNew(StartTaskGyro, NULL, &gyroTask_attributes);
+  /* creation of ACCTask */
+  ACCTaskHandle = osThreadNew(StartTaskACC, NULL, &ACCTask_attributes);
 
   /* creation of communicationTask */
   communicationTaskHandle = osThreadNew(StartTaskCommunication, NULL, &communicationTask_attributes);
@@ -1031,22 +1040,22 @@ void StartTaskDistanceSensors(void *argument)
   /* USER CODE END StartTaskDistanceSensors */
 }
 
-/* USER CODE BEGIN Header_StartTaskGyro */
+/* USER CODE BEGIN Header_StartTaskACC */
 /**
-* @brief Function implementing the gyroTask thread.
+* @brief Function implementing the ACCTask thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_StartTaskGyro */
-void StartTaskGyro(void *argument)
+/* USER CODE END Header_StartTaskACC */
+void StartTaskACC(void *argument)
 {
-  /* USER CODE BEGIN StartTaskGyro */
+  /* USER CODE BEGIN StartTaskACC */
   /* Infinite loop */
   for(;;)
   {
-	  osDelay(10);
+    osDelay(1);
   }
-  /* USER CODE END StartTaskGyro */
+  /* USER CODE END StartTaskACC */
 }
 
 /* USER CODE BEGIN Header_StartTaskCommunication */

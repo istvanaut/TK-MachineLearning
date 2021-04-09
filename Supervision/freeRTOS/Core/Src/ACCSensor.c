@@ -7,7 +7,7 @@ bno055_vector_t euler;
 
 bno055_vector_t accOffset;
 
-
+extern osSemaphoreId_t SemACCHandle;
 
 void initACCSensor(I2C_HandleTypeDef* hi2c_device){
 	bno055_assignI2C(hi2c_device);
@@ -18,15 +18,16 @@ void initACCSensor(I2C_HandleTypeDef* hi2c_device){
 	//accOffset = bno055_getVectorLinearAccel();
 }
 
-bno055_vector_t getAccWithMeasure(void){
-	acceleration = bno055_getVectorAccelerometer();
+void AccMeasure(void){
+	bno055_vector_t temp;
+	temp = bno055_getVectorAccelerometer();
 	//acceleration = bno055_getVectorLinearAccel();
-
+	osSemaphoreAcquire(SemACCHandle, 0);
+	acceleration = temp;
 	acceleration.x -= accOffset.x;
 	acceleration.y -= accOffset.y;
 	acceleration.z -= accOffset.z;
-
-	return acceleration;
+	osSemaphoreRelease(SemACCHandle);
 }
 
 bno055_vector_t getMeasuredAcc(void){
