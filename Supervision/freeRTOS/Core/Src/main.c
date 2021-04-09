@@ -32,7 +32,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -121,20 +120,6 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
-  initMyCOM(&huart3);
-  Encoder_Init();
-  Motors_Init(&htim2);
-  initUS(&htim3);
-  initACCSensor(&hi2c2);
-  initlezer(&htim1);
-  // Variables
-  uint32_t black; //line detect
-  unsigned int lDist = 500;
-  unsigned int rDist = 500;
-  unsigned int mDist = 5000;
-
-  rightMotor(0.60);
-  leftMotor(0.60);
 
   /* USER CODE END 2 */
 
@@ -142,54 +127,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /*printf("\033[3J");
-	  printf("\e[1;1H\e[2J");*/
-
-	 // WriteEncoderToPC();
-	  black = lightSensorCycle();
-	 // printf("Leds: %x\n", (unsigned int)black);
-	  lDist = (unsigned int)getUSDistanceLeft();
-	//  printf("Left US sensor: %u\n", lDist);
-	  rDist = (unsigned int)getUSDistanceRight();
-	//  printf("Right US sensor: %u\n", rDist);
-	  mDist = (unsigned int)getlezerDistance();
-	/*  printf("Laser sensor: %u\n", mDist);
-	  printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z, getEulerWithMeasure().x, getMeasuredEuler().y, getMeasuredEuler().z);
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-	  printf("                                                                                                                                \n");
-*/
-	  if (lDist < 50 || rDist < 50 || mDist < 500)
-	  {
-		  leftMotor(0);
-		  rightMotor(0);
-	  }
-	  else
-	  {
-		  leftMotor(0.6);
-		  rightMotor(0.6);
-	  }
-
-
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

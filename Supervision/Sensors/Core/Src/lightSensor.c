@@ -7,7 +7,7 @@
 
 #include "lightSensor.h"
 
-#define CMP_LVL 3000
+#define CMP_LVL 2000
 
 // ledType: IR = 0; Debug LED = 1;
 void SPItransmit_LED(uint8_t* leds, int ledType)
