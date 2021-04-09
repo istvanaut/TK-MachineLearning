@@ -1,4 +1,5 @@
 # @title environment
+import random
 
 import numpy as np
 import icarla
@@ -24,7 +25,6 @@ class Environment:
         self.data = Data()
         self.vehicle = None
         self.line = None
-        self.iteration = 0
 
         logger.warning('Halting threads')
         self.data.put(DataKey.THREAD_HALT, True)
@@ -98,13 +98,14 @@ class Environment:
         self.get_line()
 
         icarla.move(self.vehicle, icarla.transform(self.line.start[0], self.line.start[1], 0.25).location)
-        icarla.rotate(self.vehicle, icarla.rotation(self.line.direction()))
+        icarla.rotate(self.vehicle, icarla.rotation_from_radian(self.line.direction()))
         icarla.move(self.connection.world.get_spectator(),
-                    icarla.transform(self.line.start[0] + 10 * np.cos(self.line.direction()[1] / 180 * np.pi),
-                                     self.line.start[1] + 10 * np.sin(self.line.direction()[1] / 180 * np.pi),
+                    icarla.transform(self.line.start[0] + 10 * np.cos(self.line.direction()[1]),
+                                     self.line.start[1] + 10 * np.sin(self.line.direction()[1]),
                                      12.0).location)
         # Apparently UE4 spectator doesn't like exact 90 degrees, keep it less?
-        icarla.rotate(self.connection.world.get_spectator(), icarla.rotation([-85, self.line.direction()[1], 0]))
+        icarla.rotate(self.connection.world.get_spectator(),
+                      icarla.rotation([-85, self.line.direction()[1]/np.pi*180.0, 0]))
         logger.info('Environment reset successful')
 
     def clear(self):
@@ -124,15 +125,24 @@ class Environment:
 
     def get_line(self):
         self.line = get_line()
-        # TODO (6) remove return
-        return
-        if self.iteration % 3 is 0:
+        r = random.random()
+        if r < 1/6:
+            logger.info('Environment: normal short')
+            self.line.slice(None, 20)
+        elif r < 2/6:
+            logger.info('Environment: backwards short')
+            self.line.slice(70, None)
+            self.line.invert()
+        elif r < 3/6:
+            logger.info('Environment: normal full')
             pass
-        elif self.iteration % 3 is 1:
-            # TODO (8) car direction broken here?
+        elif r < 4/6:
+            logger.info('Environment: backwards full')
+            self.line.invert()
+        elif r < 5/6:
+            logger.info('Environment: normal turn (left)')
             self.line.slice(30, 60)
-        elif self.iteration % 3 is 2:
-            # TODO (8) or car direction broken here?
+        else:
+            logger.info('Environment: backwards turn (right)')
             self.line.slice(40, 70)
             self.line.invert()
-        self.iteration += 1

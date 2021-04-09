@@ -112,11 +112,11 @@ def convert(state):
     if radar is None:
         radar = RADAR_MAX  # Radar always some number
     # Normalize
-    radar = np.tanh(radar / RADAR_MAX)
+    radar = np.tanh(radar / RADAR_MAX)  # TODO (3) actually not in range(-1,1) but .76 bc of tanh(1)=0.76 - do we care?
 
     # velocity: m/s, [v_x, v_y, v_z] (floats?)
     # Velocity is now converted to 1D (float)
-    VELOCITY_MAX = 10.0
+    VELOCITY_MAX = 5.0
     if velocity is None:
         velocity = 0.0
     else:
@@ -129,7 +129,7 @@ def convert(state):
         direction = [0, 0, 0]
         current_direction = 0
     else:
-        current_direction = (direction[1]/ 180 * np.pi - starting_direction[1])  # / 180 * np.pi
+        current_direction = (direction[1] - starting_direction[1])  # / 180 * np.pi
     CURRENT_DIRECTION_MAX = np.pi
     # Normalize
     current_direction = np.tanh(current_direction / CURRENT_DIRECTION_MAX)

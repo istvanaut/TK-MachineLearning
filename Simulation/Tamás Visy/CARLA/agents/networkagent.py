@@ -2,15 +2,12 @@ import random
 
 from Networks.SCNN import SCNN
 from ReinforcementModel import ReinforcementModel, AGENT_IM_WIDTH, AGENT_IM_HEIGHT
-from agents.agent import Agent
+from agents.agent import Agent, choices, choices_count
 from agents.state import feature_dimension
 from support.logger import logger
 
 feature_dimension = feature_dimension()
 AGENT_MODEL_PATH = 'files/tensor.pt'
-choices = [[0.35, 0.1],
-           [0.34, 0.1]]
-ACTIONS_NUM = len(choices)
 MODEL_TYPE = SCNN
 
 
@@ -22,23 +19,24 @@ class NetworkAgent(Agent):
         self.choices = choices
 
         self.model = ReinforcementModel(dim_features=feature_dimension, height=AGENT_IM_HEIGHT,
-                                        width=AGENT_IM_WIDTH, n_actions=ACTIONS_NUM, model=MODEL_TYPE)
+                                        width=AGENT_IM_WIDTH, n_actions=choices_count, model=MODEL_TYPE)
 
-    def predict(self, state):
+    def predict(self, state, pure=True, auto=False):
         if state is None:
             return None, None
         action = self.model.predict(state)
         try:
             # Copy value, not reference
             choice = self.choices[action][:]
-            # TODO (7) remove noise of agent out
-            choice[1] += -0.05 + random.random() / 10
 
-            # TODO (6) remove cheats
-            if action is 0:
-                choice[1] *= -1 * state.side
-            if action is 1:
-                choice[1] *= 1 * state.side
+            if pure is not True:
+                choice[1] += -0.05 + random.random() / 10
+
+            if pure is not True and auto is True:
+                if action is 0:
+                    choice[1] *= -1 * state.side
+                if action is 1:
+                    choice[1] *= 1 * state.side
 
             return action, choice
         except RuntimeError:
@@ -59,7 +57,7 @@ class NetworkAgent(Agent):
         logger.info(f'Loading model from {path}')
         try:
             self.model.load_model(path, dim_features=feature_dimension, image_height=AGENT_IM_HEIGHT,
-                                  image_width=AGENT_IM_WIDTH, n_actions=ACTIONS_NUM, model=MODEL_TYPE)
+                                  image_width=AGENT_IM_WIDTH, n_actions=choices_count, model=MODEL_TYPE)
         except FileNotFoundError as f:
             logger.error(f'Failed to find file at {path} - {f}')
         except RuntimeError as r:
