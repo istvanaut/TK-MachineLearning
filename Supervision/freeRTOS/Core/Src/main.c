@@ -60,8 +60,8 @@ UART_HandleTypeDef huart3;
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .stack_size = 512 * 4,
+  .priority = (osPriority_t) osPriorityAboveNormal,
 };
 /* Definitions for lightSensorTask */
 osThreadId_t lightSensorTaskHandle;
@@ -82,7 +82,7 @@ osThreadId_t emergencyBreakingTaskHandle;
 const osThreadAttr_t emergencyBreakingTask_attributes = {
   .name = "emergencyBreakingTask",
   .stack_size = 512 * 4,
-  .priority = (osPriority_t) osPriorityNormal3,
+  .priority = (osPriority_t) osPriorityHigh,
 };
 /* Definitions for ACCTask */
 osThreadId_t ACCTaskHandle;
@@ -95,7 +95,7 @@ const osThreadAttr_t ACCTask_attributes = {
 osThreadId_t communicationTaskHandle;
 const osThreadAttr_t communicationTask_attributes = {
   .name = "communicationTask",
-  .stack_size = 1024 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityBelowNormal5,
 };
 /* Definitions for SemACC */
@@ -138,8 +138,15 @@ osSemaphoreId_t SemLaserSensorHandle;
 const osSemaphoreAttr_t SemLaserSensor_attributes = {
   .name = "SemLaserSensor"
 };
+/* Definitions for SemPos */
+osSemaphoreId_t SemPosHandle;
+const osSemaphoreAttr_t SemPos_attributes = {
+  .name = "SemPos"
+};
 /* USER CODE BEGIN PV */
 // USSensor BEGIN
+int motorDisable = 0;
+
 extern uint32_t UStimeDifferenceLeft;
 extern uint32_t USStartTimeLeft;
 extern uint32_t USStopTimeLeft;
@@ -160,11 +167,6 @@ enum US_SENSOR{
 
 volatile enum US_SENSOR currentUSSensor = LEFT;
 // USSensor END
-
-// Encoder BEGIN
-extern int speed1en;
-extern int speed2en;
-// Encoder END
 
 /* USER CODE END PV */
 
@@ -275,6 +277,9 @@ int main(void)
 
   /* creation of SemLaserSensor */
   SemLaserSensorHandle = osSemaphoreNew(1, 1, &SemLaserSensor_attributes);
+
+  /* creation of SemPos */
+  SemPosHandle = osSemaphoreNew(1, 1, &SemPos_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -983,10 +988,68 @@ static void MX_GPIO_Init(void)
 void StartTaskDeafult(void *argument)
 {
   /* USER CODE BEGIN 5 */
+	leftMotor(0.6);
+	rightMotor(0.6);
+	uint32_t LEDs;
+	uint16_t leftSide;
+	uint16_t rightSide;
+	int LLS, LS, RS, RRS;
   /* Infinite loop */
   for(;;)
   {
-	  osDelay(100);
+	  if (!motorDisable)
+	  {
+		  LLS = LS = RS = RRS = 0;
+		  LEDs = GetLightSensorValues();
+		  rightSide = (uint16_t)(LEDs);
+		  leftSide = (uint16_t)(LEDs >> 16);
+
+		  // divide the sensors into 4 sectros
+		  for(int i = 0; i < 8; i++)
+		  {
+			  RRS += (rightSide >> i) & 0x01;
+			  LS += (leftSide >> i) & 0x01;
+		  }
+		  for(int i = 8; i < 16; i++)
+		  {
+			  RS += (rightSide >> i) & 0x01;
+			  LLS += (leftSide >> i) & 0x01;
+		  }
+
+		  // compare the 4 sectors
+		  if (LS + LLS > RS + RRS)
+		  {
+			  if (LLS > LS)
+			  {
+				  leftMotor(0.8);
+				  rightMotor(0.45);
+			  }
+			  else if (LLS < LS)
+			  {
+				  leftMotor(0.6);
+				  rightMotor(0.5);
+			  }
+		  }
+		  else if (LS + LLS < RS + RRS)
+		  {
+			  if (RRS > RS)
+			  {
+				  leftMotor(0.45);
+				  rightMotor(0.8);
+			  }
+			  else if (RRS < RS)
+			  {
+				  leftMotor(0.5);
+				  rightMotor(0.6);
+			  }
+		  }
+		  else
+		  {
+			  leftMotor(0.6);
+			  rightMotor(0.6);
+		  }
+	  }
+	  osDelay(10);
   }
   /* USER CODE END 5 */
 }
@@ -1020,9 +1083,28 @@ void StartTaskLightSensor(void *argument)
 void StartTaskEncoders(void *argument)
 {
   /* USER CODE BEGIN StartTaskEncoders */
+  int i = 0;
+
   /* Infinite loop */
   for(;;)
   {
+	  CalculateDistance(LEFT_ENCODER);
+	  CalculateDistance(RIGHT_ENCODER);
+	  if (i % 10 == 0)
+	  {
+		  CalculateSpeed(LEFT_ENCODER);
+		  CalculateSpeed(RIGHT_ENCODER);
+	  }
+	  else if (i == 50)
+	  {
+		  CalculatePositionAndAngle();
+		  i = 0;
+	  }
+	  else
+	  {
+		  i++;
+	  }
+
 	  osDelay(10);
   }
   /* USER CODE END StartTaskEncoders */
@@ -1038,9 +1120,27 @@ void StartTaskEncoders(void *argument)
 void StartTaskEmergencyBreaking(void *argument)
 {
   /* USER CODE BEGIN StartTaskEmergencyBreaking */
+  unsigned int lDist = 500;
+  unsigned int rDist = 500;
+  unsigned int mDist = 5000;
   /* Infinite loop */
   for(;;)
   {
+	  lDist = (unsigned int)getUSDistanceLeft();
+	  rDist = (unsigned int)getUSDistanceRight();
+	  mDist = (unsigned int)getlezerDistance();
+
+	  if (lDist < 50 || rDist < 50 || mDist < 500)
+	  {
+		  motorDisable = 1;
+		  leftMotor(0);
+		  rightMotor(0);
+	  }
+	  else
+	  {
+		  motorDisable = 0;
+	  }
+
 	  osDelay(10);
   }
   /* USER CODE END StartTaskEmergencyBreaking */
@@ -1059,9 +1159,9 @@ void StartTaskACC(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	 AccMeasure();
-	 GyroMeasure();
-	 EulerMeasure();
+	 //AccMeasure();
+	 //GyroMeasure();
+	 //EulerMeasure();
 	 osDelay(10);
   }
   /* USER CODE END StartTaskACC */
@@ -1080,6 +1180,7 @@ void StartTaskCommunication(void *argument)
   /* Infinite loop */
   for(;;)
   {
+	  /*
 	  printf("\033[3J");
 	  printf("\e[1;1H\e[2J");
 	  printf("Light sensor: 0x%x\n", GetLightSensorValues());
@@ -1088,6 +1189,7 @@ void StartTaskCommunication(void *argument)
 	  printf("Laser sensor: %u\n", getlezerDistance());
 	  printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAcc().x, getAcc().y, getAcc().z, getEuler().x, getEuler().y, getEuler().z);
 	  GetEncoderData();
+	  */
 
 	  osDelay(1000);
   }
@@ -1114,14 +1216,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   	//Left encoder BEGIN
 	if(htim->Instance == TIM6)
 	{
-		speed1en = 0;
+		DisableSpeed(LEFT_ENCODER);
 	}
 	//Left encoder END
 
 	//Right encoder BEGIN
 	if(htim->Instance == TIM7)
 	{
-		speed2en = 0;
+		DisableSpeed(RIGHT_ENCODER);
 	}
 	//Right encoder END
 
