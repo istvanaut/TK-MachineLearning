@@ -12,12 +12,14 @@ from support.datakey import DataKey
 from support.logger import logger
 from threads.dashboardthread import DashboardThread
 
+TRAIN = True
+logger.info(f'Train is {TRAIN}')
 TRAIN_PER_DECISION = False
 logger.info(f'Train per decision is {TRAIN_PER_DECISION}')
 TRAIN_RESOLUTION_PERCENTAGE = 100
 logger.info(f'Train resolution is {TRAIN_RESOLUTION_PERCENTAGE}%')
 TARGET_FRAME_TIME = 0.25  # 0.025
-MEMORY_SIZE = 256  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
+MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
 
 
 def main():
@@ -28,6 +30,7 @@ def main():
     agent = KerasAgent()
     dashboard = DashboardThread()
     memory = []
+    run = 0
 
     try:
         env.connect()
@@ -36,6 +39,7 @@ def main():
 
         env.start()
         dashboard.start()
+        logger.info('Starting...')
         while True:
             env.clear()
             status = Status()
@@ -43,17 +47,23 @@ def main():
             prev_state = None
             prev_action = None
 
-            logger.info('Starting...')
+            # if run % 12 == 0:
+            #     logger.debug('pure')
+            # else:
+            #     logger.debug('explore+noise')
+            # if run % 6 != 0:
+            #     logger.debug('auto')
+
             while status.finished is False:
                 frame_start = time.time_ns()
 
                 data, line, starting_dir = env.pull()
 
                 state = convert(repack(data, line, starting_dir))
-                if TRAIN_PER_DECISION and prev_state is not None:
+                if TRAIN and TRAIN_PER_DECISION and prev_state is not None:
                     agent.optimize(state)
-                action, out = agent.predict(state)
-                dashboard.handle(data, line, starting_dir, state, out)
+                action, out = agent.predict(state, pure=(run % 12 == 0), auto=(run % 6 != 0))
+                dashboard.handle(data, line, starting_dir, state, out, pure=(run % 12 == 0))
                 if out is not None:
                     env.put(DataKey.CONTROL_OUT, out)
 
@@ -76,7 +86,7 @@ def main():
             logger.info(f'~~~ {status} ~~~')
             time.sleep(1.0)
 
-            if not TRAIN_PER_DECISION:
+            if TRAIN and not TRAIN_PER_DECISION:
                 if len(memory) >= MEMORY_SIZE:
                     logger.info(f'Starting training with memory of {len(memory)}*{TRAIN_RESOLUTION_PERCENTAGE}%')
                     # train_networkagent(agent, memory)
@@ -85,6 +95,7 @@ def main():
                 else:
                     logger.info(f'Memory not full, {len(memory)}/{MEMORY_SIZE}')
             logger.info('Continuing...')
+            run += 1
 
     finally:
         agent.save()

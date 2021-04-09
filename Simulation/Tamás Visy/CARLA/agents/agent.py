@@ -13,7 +13,11 @@ class Agent:
     def reset(self):
         logger.error('RESET - not happening')
 
-    def predict(self, state):
+    def predict(self, state, pure=True, auto=False):
+        if pure is not True:
+            logger.warning('Agent can only use pure')
+        if auto is True:
+            logger.critical('Agent can not auto-drive')
         # known_state, hidden_state = state
         # camera, radar, velocity, acceleration, position = known_state
         camera, radar, collision, velocity, acceleration, position, obstacle, distance = state

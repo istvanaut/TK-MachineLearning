@@ -129,7 +129,7 @@ def convert(state):
         direction = [0, 0, 0]
         current_direction = 0
     else:
-        current_direction = (direction[1]/ 180 * np.pi - starting_direction[1])  # / 180 * np.pi
+        current_direction = (direction[1] - starting_direction[1])  # / 180 * np.pi
     CURRENT_DIRECTION_MAX = np.pi
     # Normalize
     current_direction = np.tanh(current_direction / CURRENT_DIRECTION_MAX)

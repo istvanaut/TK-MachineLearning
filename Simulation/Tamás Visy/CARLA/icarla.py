@@ -2,6 +2,7 @@ import glob
 import os
 import sys
 import time
+import numpy as np
 
 from support.logger import logger
 
@@ -49,6 +50,7 @@ def vehicle_control(reverse=False, throttle=0.0, steer=0.0):
 
 
 def rotation(d):
+    # Use degrees
     return carla.Rotation(pitch=d[0], yaw=d[1], roll=d[2])
 
 
@@ -74,6 +76,7 @@ def add_locations(loc0, loc1):
 
 
 def rotate(actor, rot):
+    # rot
     loc = actor.get_transform().location
 
     while rot.pitch <= -180.0:
@@ -108,3 +111,10 @@ def set_velocity(actor, velocity):
         time.sleep(0.5)
         first = False
     logger.debug('Velocity is approx. 0')
+
+
+def rotation_from_radian(rot):
+    d = []
+    for o in rot:
+        d.append(o/np.pi*180.0)
+    return rotation(d)

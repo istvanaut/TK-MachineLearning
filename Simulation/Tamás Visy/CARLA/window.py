@@ -25,6 +25,7 @@ class Window:
         self.starting_dir = None
         self.state = None
         self.agent_out = None
+        self.pure = False
         self.i = 0
         colors = []
         color_1 = (200, 200, 200)
@@ -66,14 +67,15 @@ class Window:
             pygame.display.update()
 
     def clear(self):
-        self.handle(None, None, None, None, None)
+        self.handle(None, None, None, None, None, False)
 
-    def handle(self, data, line, starting_dir, state, out):
+    def handle(self, data, line, starting_dir, state, out, pure):
         self.data = data
         self.line = line
         self.starting_dir = starting_dir
         self.state = state
         self.agent_out = out
+        self.pure = pure
 
     def add_event(self, event):
         pygame.event.post(pygame.event.Event(event))
@@ -84,7 +86,9 @@ class Window:
     def update_screen(self):
         image, data, names = self.state.get_formatted()
 
-        self.insert_thingies(data, names)
+        self.insert_placeholder(data, names)
+        names.insert(4, 'some kind of cheaty drive')
+        data.insert(4, (not self.pure))
 
         names.append('out')
         data.append(self.agent_out)
@@ -103,7 +107,7 @@ class Window:
             self.draw_text(data[i], name,
                            (side_start + i // square_sides * side_step, top_start + i % square_sides * top_step))
 
-    def insert_thingies(self, data, names):
+    def insert_placeholder(self, data, names):
         # TODO (5) remove inserted placeholders
         names.insert(0, 'Placeholder')
         if self.i % 8 is 0:
@@ -122,8 +126,6 @@ class Window:
             data.insert(0, '-<-')
         elif self.i % 8 is 7:
             data.insert(0, '<--')
-        names.insert(4, 'hello')
-        data.insert(4, ':)')
 
     def draw_image(self, image):
         if image is None:
@@ -142,11 +144,11 @@ class Window:
 
     def draw_text(self, text, tag, pos):
         if text is None or text is 0.0:
-            text = '...'
+            text = '.N.'
         elif text is False or text is -1.0:
-            text = '---'
+            text = '-F-'
         elif text is True or text is 1.0:
-            text = '~~~'
+            text = '~T~'
         elif type(text) is str:
             pass
         elif isinstance(text, list) or isinstance(text, tuple):

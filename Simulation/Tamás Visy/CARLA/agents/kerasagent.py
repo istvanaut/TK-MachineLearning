@@ -32,7 +32,7 @@ def balance(trainables):
             rightchoices.append(trainable)
     leftchoices = leftchoices[:min(len(leftchoices), len(rightchoices))]
     rightchoices = rightchoices[:min(len(leftchoices), len(rightchoices))]
-    print(len(trainables), '->', len(leftchoices)+len(rightchoices))
+    logger.info(f'Trainables: {len(trainables)} -> {len(leftchoices)+len(rightchoices)}')
     return leftchoices+rightchoices
 
 
@@ -49,28 +49,33 @@ class KerasAgent(Agent):
         self.model.create()
         self.model.load()
 
-    def predict(self, state):
+    def predict(self, state, pure=True, auto=False):
         if state is None:
             return None, None
+
         im, _, _ = state.get_formatted()
         prediction = self.model.predict(im)
         action = np.argmax(prediction)
-        auto = random.random() < 1/3
+        # print(action)
+
+        # auto driving
+        if pure is not True and auto:
+            action = 1
+
         # random exploration
-        if random.random() < 0.6:
+        if pure is not True and random.random() < 0.4:
             if random.random() < 0.5:
                 action = 0
             else:
                 action = 1
-        # autodriving
-        if auto:
-            action = 1
+
         choice = choices[action][:]
-        # autodriving
-        if auto:
+        # auto driving
+        if pure is not True and auto:
             choice[1] *= -1*state.side
-            # noise
-            choice[1] += -0.1 + random.random() * 0.2
+        # noise
+        if pure is not True:
+            choice[1] += -0.05 + random.random() * 0.1
         return action, choice
 
     def optimize(self, new_state, prev_state=None, action=None):
@@ -91,4 +96,4 @@ class KerasAgent(Agent):
             val_len = len(trainables)//10
             val = trainables[:val_len]
             train = trainables[val_len:]
-        self.model.train(train=train, test=val, epochs=3)
+        self.model.train(train=train, test=val, epochs=4)
