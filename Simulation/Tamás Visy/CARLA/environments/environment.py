@@ -33,6 +33,7 @@ class Environment:
         self.p = PollerThread(self.data)
 
         self.connection = Connection()
+        # TODO (6) double reset at start?
 
     def connect(self):
         self.connection.connect()
@@ -51,6 +52,7 @@ class Environment:
     def set_conditions(self):
         current_map_name = self.connection.world.get_map().name
         # Loading correct map
+        # TODO (7) wait for it to load if fails
         if current_map_name != MAP_NAME:
             logger.info(f'Loading map: {MAP_NAME} <- {current_map_name}')
             try:
@@ -126,20 +128,21 @@ class Environment:
     def get_line(self):
         self.line = get_line()
         r = random.random()
-        if r < 1/6:
-            logger.info('Environment: normal short')
-            self.line.slice(None, 20)
-        elif r < 2/6:
-            logger.info('Environment: backwards short')
-            self.line.slice(70, None)
-            self.line.invert()
-        elif r < 3/6:
+        # if r < 1/6:
+        #     logger.info('Environment: normal short')
+        #     self.line.slice(None, 20)
+        # elif r < 2/6:
+        #     logger.info('Environment: backwards short')
+        #     self.line.slice(70, None)
+        #     self.line.invert()
+        # elif
+        if r < 1/4:
             logger.info('Environment: normal full')
             pass
-        elif r < 4/6:
+        elif r < 2/4:
             logger.info('Environment: backwards full')
             self.line.invert()
-        elif r < 5/6:
+        elif r < 3/4:
             logger.info('Environment: normal turn (left)')
             self.line.slice(30, 60)
         else:

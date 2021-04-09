@@ -12,7 +12,7 @@ from support.datakey import DataKey
 from support.logger import logger
 from threads.dashboardthread import DashboardThread
 
-TRAIN = True
+TRAIN = False
 logger.info(f'Train is {TRAIN}')
 TRAIN_PER_DECISION = False
 logger.info(f'Train per decision is {TRAIN_PER_DECISION}')
@@ -20,6 +20,11 @@ TRAIN_RESOLUTION_PERCENTAGE = 100
 logger.info(f'Train resolution is {TRAIN_RESOLUTION_PERCENTAGE}%')
 TARGET_FRAME_TIME = 0.25  # 0.025
 MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
+
+
+def pure(run):
+    return True
+    return run % 2
 
 
 def main():
@@ -47,13 +52,6 @@ def main():
             prev_state = None
             prev_action = None
 
-            # if run % 12 == 0:
-            #     logger.debug('pure')
-            # else:
-            #     logger.debug('explore+noise')
-            # if run % 6 != 0:
-            #     logger.debug('auto')
-
             while status.finished is False:
                 frame_start = time.time_ns()
 
@@ -62,11 +60,12 @@ def main():
                 state = convert(repack(data, line, starting_dir))
                 if TRAIN and TRAIN_PER_DECISION and prev_state is not None:
                     agent.optimize(state)
-                action, out = agent.predict(state, pure=(run % 12 == 0), auto=(run % 6 != 0))
-                dashboard.handle(data, line, starting_dir, state, out, pure=(run % 12 == 0))
+                action, out = agent.predict(state, pure=pure(run), auto=not pure(run))
+                dashboard.handle(data, line, starting_dir, state, out, pure=pure(run))
                 if out is not None:
                     env.put(DataKey.CONTROL_OUT, out)
-
+                # TODO (8) direction -1 broken somewhere
+                # TODO (6) change order phases in turn end :)
                 if prev_state is not None and prev_action is not None and state is not None:
                     memory.append([prev_state, prev_action, state])
                 prev_state = state
@@ -83,6 +82,8 @@ def main():
             dashboard.clear()
             env.reset()
 
+            if pure(run):
+                logger.info('This run was pure')
             logger.info(f'~~~ {status} ~~~')
             time.sleep(1.0)
 

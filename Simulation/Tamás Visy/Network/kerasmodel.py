@@ -85,7 +85,8 @@ class KerasModel:  # class KerasModel(Model):
             ]
         )
 
-        loss = tf.keras.losses.MeanSquaredError(reduction='auto', name='mean_squared_error')
+        loss = tf.keras.losses.BinaryCrossentropy()
+        # loss = tf.keras.losses.MeanSquaredError(reduction='auto', name='mean_squared_error')
 
         # TODO (4) understand metrics, loss_weights, optimizer (adam and SGD)
         network.compile(loss=loss, optimizer=SGD(lr=LEARNING_RATE), metrics=['accuracy'])
