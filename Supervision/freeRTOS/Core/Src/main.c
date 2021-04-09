@@ -1109,7 +1109,10 @@ void StartTaskACC(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	 AccMeasure();
+	 GyroMeasure();
+	 EulerMeasure();
+	 osDelay(10);
   }
   /* USER CODE END StartTaskACC */
 }
@@ -1133,7 +1136,7 @@ void StartTaskCommunication(void *argument)
 	  printf("Left US sensor: %u\n", getUSDistanceLeft());
 	  printf("Right US sensor: %u\n", getUSDistanceRight());
 	  printf("Laser sensor: %u\n", getlezerDistance());
-	  printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAccWithMeasure().x, getMeasuredAcc().y, getMeasuredAcc().z, getEulerWithMeasure().x, getMeasuredEuler().y, getMeasuredEuler().z);
+	  printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAcc().x, getAcc().y, getAcc().z, getEuler().x, getEuler().y, getEuler().z);
 	  GetEncoderData();
 
 	  osDelay(1000);
