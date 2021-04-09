@@ -66,7 +66,7 @@ def move(actor, loc):
             logger.error(f'Failed moving {actor.type_id} to {loc}')
             logger.info(f'Actors transform is {actor.get_transform()}')
             return
-    logger.info(f'Moved {actor.type_id} to {loc}')
+    logger.debug(f'Moved {actor.type_id} to {loc}')
 
 
 def add_locations(loc0, loc1):
@@ -75,7 +75,14 @@ def add_locations(loc0, loc1):
 
 def rotate(actor, rot):
     loc = actor.get_transform().location
-    time.sleep(0.5)
+
+    while rot.pitch <= -180.0:
+        rot.pitch += 360.0
+    while rot.yaw <= -180.0:
+        rot.yaw += 360.0
+    while rot.roll <= -180.0:
+        rot.roll += 360.0
+
     t = transform(loc.x, loc.y, loc.z, rot.pitch, rot.yaw, rot.roll)
     actor.set_transform(t)
     # for some reason we must wait for the simulator to process this
@@ -86,17 +93,18 @@ def rotate(actor, rot):
     diff = ((r1.pitch - r2.pitch) ** 2 + (r1.yaw - r2.yaw) ** 2 + (r1.roll - r2.roll) ** 2) ** 0.5
     if diff > 1.0:
         logger.warning(f'Failed rotating {actor.type_id} to {rot}')
+        logger.info(f'Rotation is {r1}')
     else:
-        logger.info(f'Rotated {actor.type_id} to {rot}')
+        logger.debug(f'Rotated {actor.type_id} to {rot}')
 
 
 def set_velocity(actor, velocity):
     first = True
     while (actor.get_velocity().x**2+actor.get_velocity().y**2+actor.get_velocity().z**2)**0.5 > 0.1:
         if not first:
-            logger.warning('Previous attempt at setting vehicle velocity unsuccessful')
+            logger.debug('Previous attempt at setting vehicle velocity unsuccessful')
         logger.debug('Setting vehicle velocity to 0...')
         actor.set_target_velocity(velocity)
         time.sleep(0.5)
         first = False
-    logger.info('Velocity is approx. 0')
+    logger.debug('Velocity is approx. 0')

@@ -12,14 +12,21 @@ def im_resize(image, size):
 
 def im_grayscale(im):
     if im is not None:
-        im = im_denormalize(im)
+        # TODO (2) denormalization, normalization
+        # im = im_denormalize(im)
         im = im.astype(np.float32)
-        logger.debug(np.shape(im))
         im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-        im = im_normalize(im)
+        # im = im_normalize(im)
         return im
     return None
 
+def im_color(im):
+    if im is not None:
+        # TODO (2) denormalization, normalization
+        im = im.astype(np.float32)
+        im = cv2.cvtColor(im, cv2.COLOR_GRAY2RGB)
+        return im
+    return None
 
 def im_denormalize(im):
     if im is not None:

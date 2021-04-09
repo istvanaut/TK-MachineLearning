@@ -1,7 +1,8 @@
 # based on data.py from Tamás Visy's temalab_gta repo
-
+import copy
 from threading import Lock
 
+# TODO (4) check if deepcopying everything always is a good idea
 
 class Data:
     data = None
@@ -15,7 +16,7 @@ class Data:
 
     def put(self, key, data):
         with self.lock:
-            self.data[key] = data
+            self.data[key] = copy.deepcopy(data)
 
     def get(self, key=None, delete=False):
         with self.lock:
@@ -28,7 +29,7 @@ class Data:
                 data = self.data[key]
                 if delete:
                     self.data[key] = None
-            return data
+            return copy.deepcopy(data)
 
     def push(self, data, key):
         with self.lock:
@@ -38,7 +39,7 @@ class Data:
             if d is None:
                 d = []
 
-            d.append(data)
+            d.append(copy.deepcopy(data))
             self.data[key] = d
 
     def pop(self, key):
@@ -52,7 +53,7 @@ class Data:
                 element = d[0]
                 d = d[1::]
                 self.data[key] = d
-                return element
+                return copy.deepcopy(element)
 
     def copy(self):
         return Data(self.data)

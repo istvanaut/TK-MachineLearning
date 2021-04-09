@@ -1,9 +1,11 @@
+import random
+
 import sensors
 from support.datakey import DataKey
 import numpy as np
 import os
 
-from support.image_manipulation import im_resize
+from support.image_manipulation import im_resize, im_color
 from support.logger import logger
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
@@ -17,8 +19,12 @@ IM_SIZE = (32, 32)
 
 
 class Window:
-    def __init__(self, data):
-        self.data = data
+    def __init__(self):
+        self.data = None
+        self.line = None
+        self.starting_dir = None
+        self.state = None
+        self.agent_out = None
         colors = []
         color_1 = (200, 200, 200)
         colors.append(color_1)
@@ -45,13 +51,11 @@ class Window:
     def work(self):
         # Attention! Contains infinite loop
         while True:
-            if self.data.get(DataKey.THREAD_HALT):
-                self.clear_screen()
-            else:
+            self.clear_screen()
+            if self.state is not None:
                 self.update_screen()
 
             for event in pygame.event.get():
-                # print(event)
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     logger.warning('PyWindow closing')
@@ -59,79 +63,78 @@ class Window:
             pygame.time.wait(50)
             pygame.display.update()
 
+    def clear(self):
+        self.handle(None, None, None, None, None)
+
+    def handle(self, data, line, starting_dir, state, out):
+        self.data = data
+        self.line = line
+        self.starting_dir = starting_dir
+        self.state = state
+        self.agent_out = out
+
     def add_event(self, event):
         pygame.event.post(pygame.event.Event(event))
 
     def clear_screen(self):
-        self.draw_image(None)
-
-        self.draw_text(None, 'control', (500, 100))
-
-        self.draw_text(None, 'dist', (500, 200))
-
-        self.draw_text(None, 'coll', (500, 300))
-
-        self.draw_text(None, 'vel', (700, 100))
-
-        self.draw_text(None, 'acc', (700, 200))
-
-        self.draw_text(None, 'pos', (700, 300))
-
-        self.draw_text(None, 'obs', (600, 375))
+        self.display.fill(self.colors[0])
 
     def update_screen(self):
-        image = self.data.get(DataKey.SENSOR_CAMERA)
-        image = im_resize(image, IM_SIZE)
+        image, data, names = self.state.get_formatted()
+
+        # TODO (5) remove inserted placeholders
+        names.insert(0, 'Placeholder')
+        if random.random() > 1/4:
+            data.insert(0, '-  ')
+        elif random.random() > 2/4:
+            data.insert(0, '-- ')
+        elif random.random() > 3/4:
+            data.insert(0, ' --')
+        else:
+            data.insert(0, '---')
+
+        names.insert(4, '')
+        data.insert(4, '')
+
+        names.append('out')
+        data.append(self.agent_out)
+
         self.draw_image(image)
 
-        text = self.data.get(DataKey.CONTROL_OUT)
-        self.draw_text(text, 'control', (500, 100))
+        count = len(names)
+        square_sides = np.ceil(np.sqrt(count))
+        # TODO (3) better without + 50?
+        side_start = min(self.window_size) + 50
+        top_start = 50
+        side_step = (max(self.window_size) - min(self.window_size))//square_sides
+        top_step = self.window_size[1]//square_sides
 
-        radar = self.data.get(DataKey.SENSOR_RADAR)
-        text = sensors.limit_range(radar)
-        self.draw_text(text, 'dist', (500, 200))
-
-        last_collision = self.data.get(DataKey.SENSOR_COLLISION)
-        text = sensors.recently(last_collision)
-        if text is True:
-            text = 'COLLISION'
-        self.draw_text(text, 'coll', (500, 300))
-
-        text = self.data.get(DataKey.SENSOR_VELOCITY)
-        self.draw_text(text, 'vel', (700, 100))
-
-        text = self.data.get(DataKey.SENSOR_ACCELERATION)
-        self.draw_text(text, 'acc', (700, 200))
-
-        text = self.data.get(DataKey.SENSOR_POSITION)
-        self.draw_text(text, 'pos', (700, 300))
-
-        last_obstacle = self.data.get(DataKey.SENSOR_OBSTACLE)
-        text = sensors.recently(last_obstacle)
-        if text is True:
-            text = '!!!'
-        self.draw_text(text, 'obs', (600, 375))
+        for (i, name) in enumerate(names):
+            self.draw_text(data[i], name,
+                           (side_start + i // square_sides * side_step, top_start + i % square_sides * top_step))
 
     def draw_image(self, image):
         if image is None:
-            image = 0.2 * np.ones([100, 100, 3])
-        self.display.fill(self.colors[0])
+            image = 0.4 * np.ones([100, 100])
         # Formatting image
         i = im_resize(image, (min(self.window_size), min(self.window_size)))
         i = i * 255 // 1
-        i = i[:, :, ::-1]  # This fixes color issues: BGR -> RGB
+        # Fixing directions
         i = np.fliplr(i)
         i = np.rot90(i)
+        i = im_color(i)
         # Drawing image
         s = pygame.surfarray.make_surface(i)
         i_rect = pygame.rect.Rect(0, 0, min(self.window_size), min(self.window_size))
         self.display.blit(s, i_rect)
 
     def draw_text(self, text, tag, pos):
-        if text is None:
+        if text is None or text is 0.0:
             text = '...'
-        elif text is False:
+        elif text is False or text is -1.0:
             text = '---'
+        elif text is True or text is 1.0:
+            text = '~~~'
         elif type(text) is str:
             pass
         elif isinstance(text, list) or isinstance(text, tuple):
@@ -142,10 +145,17 @@ class Window:
                 t.append(' ')
             text = ''.join(t)
         else:
-            # If text is not str or list - show first 4 chars
+            # If text is not str or list - show first 5 chars
+
+            # TODO (2) pretty disgusting but checking for every non-integer numtype is probably more difficult
+            # Example: text = 4.232e-9 ===> not 4.23... but 0.0...
+            try:
+                text = np.round(text, 4)
+            except RuntimeError:
+                pass
             text = str(text)
-            if len(text) > 4:
-                text = text[:4]
+            if len(text) > 5:
+                text = text[:5]
 
         # Rendering text
         text = self.fonts[0].render(text, True, self.colors[3])

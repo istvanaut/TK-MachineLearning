@@ -9,7 +9,6 @@ from line import get_line, Line
 from support.datakey import DataKey
 from support.logger import logger
 from threads.controllerthread import ControllerThread
-from threads.dashboardthread import DashboardThread
 from support.data import Data
 from threads.pollerthread import PollerThread
 
@@ -19,18 +18,19 @@ MAP_NAME = 'Town05'  # Best map: Town05 or Town03, least performance demanding m
 
 class Environment:
     # TODO (5) refactor every "self.connection.world. ..."
+    #  in this file and in others
     def __init__(self):
         self.actors = []
         self.data = Data()
         self.vehicle = None
-        self.line = get_line()
+        self.line = None
+        self.iteration = 0
 
         logger.warning('Halting threads')
         self.data.put(DataKey.THREAD_HALT, True)
 
         self.c = ControllerThread(self.data)
         self.p = PollerThread(self.data)
-        self.d = DashboardThread(self.data)
 
         self.connection = Connection()
 
@@ -40,11 +40,11 @@ class Environment:
     def setup(self):
         logger.info('Environment setup')
         self.set_conditions()
+        self.get_line()
         self.spawn()
         self.reset()
 
     def start(self):
-        self.d.start()
         self.c.start()
         self.p.start()
 
@@ -88,12 +88,15 @@ class Environment:
         spawn_obstacle(self)
 
     def reset(self):
-        logger.info('Resetting actors')
+        logger.debug('Resetting actors')
         self.clear()
-        logger.warning('Halting threads')
+        logger.debug('Halting threads')
         self.data.put(DataKey.THREAD_HALT, True)
         self.vehicle.apply_control(icarla.vehicle_control(throttle=0, steer=0))
         icarla.set_velocity(self.vehicle, icarla.vector3d())
+
+        self.get_line()
+
         icarla.move(self.vehicle, icarla.transform(self.line.start[0], self.line.start[1], 0.25).location)
         icarla.rotate(self.vehicle, icarla.rotation(self.line.direction()))
         icarla.move(self.connection.world.get_spectator(),
@@ -105,7 +108,7 @@ class Environment:
         logger.info('Environment reset successful')
 
     def clear(self):
-        logger.info('Clearing data')
+        logger.debug('Clearing data')
         self.data.clear()
 
     def pull(self):
@@ -118,3 +121,18 @@ class Environment:
         s = Status()
         s.check(self)
         return s
+
+    def get_line(self):
+        self.line = get_line()
+        # TODO (6) remove return
+        return
+        if self.iteration % 3 is 0:
+            pass
+        elif self.iteration % 3 is 1:
+            # TODO (8) car direction broken here?
+            self.line.slice(30, 60)
+        elif self.iteration % 3 is 2:
+            # TODO (8) or car direction broken here?
+            self.line.slice(40, 70)
+            self.line.invert()
+        self.iteration += 1

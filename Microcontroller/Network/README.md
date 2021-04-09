@@ -23,7 +23,7 @@ First, the user has to define a model. After this to train the model, there are 
 import numpy as np
 import torch
 from ReinforcementModel import ReinforcementModel
-from State import feature_dimension
+from agents.networkagent import feature_dimension
 
 # Create model with feature dimension and 128*128 image
 model=ReinforcementModel(dim_features=feature_dimension, height=128, width=128, n_actions=4)

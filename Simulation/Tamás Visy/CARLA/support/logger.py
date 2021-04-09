@@ -2,7 +2,7 @@ import logging
 WRITE_FILE = True
 LEVEL = logging.INFO
 
-logFormatter = logging.Formatter('%(asctime)s\t  [%(threadName)s]\t[%(levelname)-3.3s]:\t%(message)s',
+logFormatter = logging.Formatter('%(asctime)s.%(msecs)03d\t  [%(threadName)s]\t[%(levelname)-3.3s]:\t%(message)s',
                                  '%Y.%m.%d %H:%M:%S')
 logger = logging.getLogger('carla_logger')
 logger.level = LEVEL

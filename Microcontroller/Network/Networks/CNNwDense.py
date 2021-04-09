@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class CNNwRNN(nn.Module):
+class CNNwDense(nn.Module):
     # THis network is a convolutional network and a parallel recursive network.
     # The outputs of the networks are concatenated to make the model.
     # Currently it uses a 11, 9, 7, 5, 3 five layer convolution and
@@ -22,7 +22,7 @@ class CNNwRNN(nn.Module):
         #   dim_features    - the dimension of the feature vector.
         #   height, width   - the parameters of the input picture.
         #   n_actions         - number of actions on the output of the network
-        super(CNNwRNN, self).__init__()
+        super(CNNwDense, self).__init__()
 
         # Convolutional Network
         self.conv1 = nn.Conv2d(1, 16, kernel_size=11, stride=1)
@@ -49,12 +49,11 @@ class CNNwRNN(nn.Module):
         self.dense1 = nn.Linear(linear_input_size, 64)
 
         # Recursive Neural Network
-        self.encoder_layer = nn.TransformerEncoderLayer(d_model=dim_features, nhead=1)
-        self.transformer_encoder = nn.TransformerEncoder(self.encoder_layer, 32)
-
+        self.dense2 = nn.Linear(dim_features, 32)
+        self.dense3 = nn.Linear(32, 64)
         # Output layer
-        self.dense2 = nn.Linear(64 + dim_features, 32)
-        self.dense3 = nn.Linear(32, n_actions)
+        self.dense4 = nn.Linear(128, 32)
+        self.dense5 = nn.Linear(32, n_actions)
 
     # Called with either one element to determine next action, or a batch
     # during optimization. Returns tensor([[left0exp,right0exp]...]).
@@ -65,9 +64,12 @@ class CNNwRNN(nn.Module):
         x = F.leaky_relu(self.bn4(self.conv4(x)))
         x = F.leaky_relu(self.bn5(self.conv5(x)))
         x = F.leaky_relu(self.dense1(x.view(x.size(0), -1)))
-        y = features.view(features.size(1), features.size(0), features.size(2))
-        y = self.transformer_encoder(y)
-        y = y.view(y.size(1), y.size(2))
+        y = features.view(features.size(0), features.size(2))
+
+        y = F.leaky_relu(self.dense2(y))
+        y=  F.leaky_relu(self.dense3(y))
         x = torch.cat((x, y), dim=1)
-        x = self.dense2(x)
-        return self.dense3(x)
+        x = F.sigmoid(self.dense4(x))
+        x=self.dense5(x)
+        print('Q-values:'+str(x))
+        return x

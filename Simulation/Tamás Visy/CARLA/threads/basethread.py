@@ -18,7 +18,7 @@ class BaseThread(Thread):
         while not self.stop:
             while not self.data.get(DataKey.THREAD_HALT) and not self.stop:
                 self.loop()
-            logger.info(f'{self.__class__.__name__} sleeping')
+            logger.debug(f'{self.__class__.__name__} sleeping')
             time.sleep(1.0)
         self.finish()
 
