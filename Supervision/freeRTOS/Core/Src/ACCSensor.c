@@ -14,7 +14,7 @@ void initACCSensor(I2C_HandleTypeDef* hi2c_device){
 	bno055_setup();
 	bno055_setOperationMode(BNO055_OPERATION_MODE_NDOF);
 	HAL_Delay(100);
-	accOffset = bno055_getVectorAccelerometer();
+	//accOffset = bno055_getVectorAccelerometer();
 	//accOffset = bno055_getVectorLinearAccel();
 }
 
