@@ -12,7 +12,7 @@ from support.datakey import DataKey
 from support.logger import logger
 from threads.dashboardthread import DashboardThread
 
-TRAIN = False
+TRAIN = True
 logger.info(f'Train is {TRAIN}')
 TRAIN_PER_DECISION = False
 logger.info(f'Train per decision is {TRAIN_PER_DECISION}')
@@ -23,7 +23,6 @@ MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
 
 
 def pure(run):
-    return True
     return run % 2
 
 

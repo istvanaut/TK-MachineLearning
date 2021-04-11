@@ -23,7 +23,7 @@ for line in content:
             other.append(0.0)
 
 print(important)
-print(other)
+print(other)  # success or fail
 
 plt.plot(important, label='traveled')
 plt.plot(other, label='success')
