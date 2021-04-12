@@ -6,13 +6,18 @@
  */
 
 #include "main.h"
+#include "cmsis_os.h"
 
 void initUS(TIM_HandleTypeDef *htim);
 
-uint32_t getUSTimeLeft(void);
-
 uint32_t getUSDistanceLeft(void);
 
-uint32_t getUSTimeRight(void);
-
 uint32_t getUSDistanceRight(void);
+
+void setUSDistanceLeftCallBack(uint32_t value);
+
+void setUSDistanceRightCallBack(uint32_t value);
+
+void setUSRisingEdgeLeftCallBack(uint8_t value);
+
+void setUSRisingEdgeRightCallBack(uint8_t value);
