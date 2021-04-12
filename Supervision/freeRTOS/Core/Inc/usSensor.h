@@ -21,3 +21,7 @@ void setUSDistanceRightCallBack(uint32_t value);
 void setUSRisingEdgeLeftCallBack(uint8_t value);
 
 void setUSRisingEdgeRightCallBack(uint8_t value);
+
+uint8_t getUSRisingEdgeLeftCallback(void);
+
+uint8_t getUSRisingEdgeRightCallback(void);

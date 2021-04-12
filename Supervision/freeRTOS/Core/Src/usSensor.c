@@ -9,18 +9,19 @@
 
 extern osSemaphoreId_t SemLeftUSSensorHandle;
 extern osSemaphoreId_t SemRightUSSensorHandle;
+extern osSemaphoreId_t SemUSSensorEdgeHandle;
 
 volatile uint32_t UStimeDifferenceLeft = 0;
 volatile uint32_t USStartTimeLeft;
 volatile uint32_t USStopTimeLeft;
-volatile uint32_t USdistanceLeft = 0;
-volatile uint8_t USrisingEdgeDetectedLeft = 0;
+static volatile uint32_t USdistanceLeft = 0;
+static volatile uint8_t USrisingEdgeDetectedLeft = 0;
 
 volatile uint32_t UStimeDifferenceRight = 0;
 volatile uint32_t USStartTimeRight;
 volatile uint32_t USStopTimeRight;
-volatile uint32_t USdistanceRight = 0;
-volatile uint8_t USrisingEdgeDetectedRight = 0;
+static volatile uint32_t USdistanceRight = 0;
+static volatile uint8_t USrisingEdgeDetectedRight = 0;
 
 TIM_HandleTypeDef* UStim;
 
@@ -90,17 +91,35 @@ void setUSDistanceRightCallBack(uint32_t value){
 }
 
 void setUSRisingEdgeLeftCallBack(uint8_t value){
-	if(osSemaphoreAcquire(SemLeftUSSensorHandle, 0) == osOK){
+	if(osSemaphoreAcquire(SemUSSensorEdgeHandle, 0) == osOK){
 		USrisingEdgeDetectedLeft = value;
-		osSemaphoreRelease(SemLeftUSSensorHandle);
+		osSemaphoreRelease(SemUSSensorEdgeHandle);
 	}
 	return;
 }
 
 void setUSRisingEdgeRightCallBack(uint8_t value){
-	if(osSemaphoreAcquire(SemRightUSSensorHandle, 0) == osOK){
+	if(osSemaphoreAcquire(SemUSSensorEdgeHandle, 0) == osOK){
 		USrisingEdgeDetectedRight = value;
-		osSemaphoreRelease(SemRightUSSensorHandle);
+		osSemaphoreRelease(SemUSSensorEdgeHandle);
 	}
 	return;
+}
+
+uint8_t getUSRisingEdgeLeftCallback(void){
+	uint8_t temp = 0;
+	if(osSemaphoreAcquire(SemUSSensorEdgeHandle, 0) == osOK){
+		temp = USrisingEdgeDetectedLeft;
+		osSemaphoreRelease(SemUSSensorEdgeHandle);
+	}
+	return temp;
+}
+
+uint8_t getUSRisingEdgeRightCallback(void){
+	uint8_t temp = 0;
+	if(osSemaphoreAcquire(SemUSSensorEdgeHandle, 0) == osOK){
+		temp = USrisingEdgeDetectedRight;
+		osSemaphoreRelease(SemUSSensorEdgeHandle);
+	}
+	return temp;
 }

@@ -36,12 +36,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 //US Sensor Left BEGIN
 
 	if(htim->Instance == UStim->Instance && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3){
-		if(USrisingEdgeDetectedLeft == 0){
+		if(getUSRisingEdgeLeftCallback() == 0){
 			USStartTimeLeft = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
 			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_FALLING);
-			USrisingEdgeDetectedLeft = 1;
+			setUSRisingEdgeLeftCallBack(1);
 		}
-		else if (USrisingEdgeDetectedLeft == 1){
+		else if (getUSRisingEdgeLeftCallback() == 1){
 			USStopTimeLeft = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
 			if(USStartTimeLeft < USStopTimeLeft){
 				UStimeDifferenceLeft = USStopTimeLeft - USStartTimeLeft;
@@ -49,9 +49,9 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 			else{
 				UStimeDifferenceLeft = (0xffff - USStartTimeLeft) + USStopTimeLeft;
 			}
-			USdistanceLeft = UStimeDifferenceLeft * 0.034 / 2.0;
+			setUSDistanceLeftCallBack(UStimeDifferenceLeft * 0.034 / 2.0);
 
-			USrisingEdgeDetectedLeft = 0;
+			setUSRisingEdgeLeftCallBack(0);
 			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_RISING);
 		}
 	}
@@ -60,12 +60,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 //US Sensor Right BEGIN
 
 	if(htim->Instance == UStim->Instance && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1){
-			if(USrisingEdgeDetectedRight == 0){
+			if(getUSRisingEdgeRightCallback() == 0){
 				USStartTimeRight = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
 				__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_FALLING);
-				USrisingEdgeDetectedRight = 1;
+				setUSRisingEdgeRightCallBack(1);
 			}
-			else if (USrisingEdgeDetectedRight == 1){
+			else if (getUSRisingEdgeRightCallback() == 1){
 				USStopTimeRight = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
 				if(USStartTimeRight < USStopTimeRight){
 					UStimeDifferenceRight = USStopTimeRight - USStartTimeRight;
@@ -73,9 +73,9 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 				else{
 					UStimeDifferenceRight = (0xffff - USStartTimeRight) + USStopTimeRight;
 				}
-				USdistanceRight = UStimeDifferenceRight * 0.034 / 2.0;
+				setUSDistanceRightCallBack(UStimeDifferenceRight * 0.034 / 2.0);
 
-				USrisingEdgeDetectedRight = 0;
+				setUSRisingEdgeRightCallBack(0);
 				__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
 			}
 		}

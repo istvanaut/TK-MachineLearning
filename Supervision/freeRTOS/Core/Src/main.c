@@ -143,6 +143,11 @@ osSemaphoreId_t SemPosHandle;
 const osSemaphoreAttr_t SemPos_attributes = {
   .name = "SemPos"
 };
+/* Definitions for SemUSSensorEdge */
+osSemaphoreId_t SemUSSensorEdgeHandle;
+const osSemaphoreAttr_t SemUSSensorEdge_attributes = {
+  .name = "SemUSSensorEdge"
+};
 /* USER CODE BEGIN PV */
 // USSensor BEGIN
 int motorDisable = 0;
@@ -150,14 +155,10 @@ int motorDisable = 0;
 extern uint32_t UStimeDifferenceLeft;
 extern uint32_t USStartTimeLeft;
 extern uint32_t USStopTimeLeft;
-extern uint32_t USdistanceLeft;
-extern uint8_t USrisingEdgeDetectedLeft;
 
 extern uint32_t UStimeDifferenceRight;
 extern uint32_t USStartTimeRight;
 extern uint32_t USStopTimeRight;
-extern uint32_t USdistanceRight;
-extern uint8_t USrisingEdgeDetectedRight;
 
 extern TIM_HandleTypeDef* UStim;
 
@@ -280,6 +281,9 @@ int main(void)
 
   /* creation of SemPos */
   SemPosHandle = osSemaphoreNew(1, 1, &SemPos_attributes);
+
+  /* creation of SemUSSensorEdge */
+  SemUSSensorEdgeHandle = osSemaphoreNew(1, 1, &SemUSSensorEdge_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -1236,8 +1240,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   			HAL_TIM_PWM_Stop(UStim, TIM_CHANNEL_4);
   			HAL_TIM_IC_Stop_IT(UStim, TIM_CHANNEL_3);
   			//If echo not detected, distance set to 500 cm
-  			if(USrisingEdgeDetectedLeft == 1) USdistanceLeft = 500;
-  			USrisingEdgeDetectedLeft = 0;
+  			if(getUSRisingEdgeLeftCallback() == 1) setUSDistanceLeftCallBack(500);
+  			setUSRisingEdgeLeftCallBack(0);
   			//Set timer to zero
   			__HAL_TIM_SET_COUNTER(UStim, 0);
   			//Set RIGHT
@@ -1256,8 +1260,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   			HAL_TIM_PWM_Stop(UStim, TIM_CHANNEL_2);
   			HAL_TIM_IC_Stop_IT(UStim, TIM_CHANNEL_1);
   			//If echo not detected, distance set to 500 cm
-  			if(USrisingEdgeDetectedRight == 1) USdistanceRight = 500;
-  			USrisingEdgeDetectedRight = 0;
+  			if(getUSRisingEdgeRightCallback() == 1) setUSDistanceRightCallBack(500);
+  			setUSRisingEdgeRightCallBack(0);
   			//Set timer to zero
   			__HAL_TIM_SET_COUNTER(UStim, 0);
   			//Set LEFT
