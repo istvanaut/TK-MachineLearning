@@ -1160,12 +1160,13 @@ void StartTaskEmergencyBreaking(void *argument)
 void StartTaskACC(void *argument)
 {
   /* USER CODE BEGIN StartTaskACC */
+	setACC_OS_RUNNING(1);
   /* Infinite loop */
   for(;;)
   {
-	 //AccMeasure();
-	 //GyroMeasure();
-	 //EulerMeasure();
+	 AccMeasure();
+	 GyroMeasure();
+	 EulerMeasure();
 	 osDelay(10);
   }
   /* USER CODE END StartTaskACC */

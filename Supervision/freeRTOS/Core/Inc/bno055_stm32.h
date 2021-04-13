@@ -16,17 +16,22 @@
 #include "bno055.h"
 
 I2C_HandleTypeDef *_bno055_i2c_port;
+uint8_t FREERTOS_RUNNING = 0;
 
 void bno055_assignI2C(I2C_HandleTypeDef *hi2c_device) {
   _bno055_i2c_port = hi2c_device;
 }
 
+//0: OS not running 1: OS running
+void bno055_setFreeRTOSRunning(uint8_t value){
+	FREERTOS_RUNNING = value;
+}
+
 void bno055_delay(int time) {
-#ifdef FREERTOS_ENABLED
+if(FREERTOS_RUNNING)
   osDelay(time);
-#else
+else
   HAL_Delay(time);
-#endif
 }
 
 void bno055_writeData(uint8_t reg, uint8_t data) {
