@@ -22,7 +22,6 @@ extern TIM_HandleTypeDef* UStim;
 extern uint32_t Letimed ;
 extern uint32_t LeaTime;
 extern uint32_t LeoTime;
-extern uint32_t Ledistance;
 extern uint8_t LeEdgeDetected;
 
 
@@ -97,7 +96,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 			else{
 				Letimed = (0xffff - LeaTime) + LeoTime;
 			}
-			Ledistance=Letimed/10;
+			setLaserDistanceCallback(Letimed/10);
 
 			LeEdgeDetected = 0;
 			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_RISING);

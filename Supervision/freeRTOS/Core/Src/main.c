@@ -1132,7 +1132,7 @@ void StartTaskEmergencyBreaking(void *argument)
   {
 	  lDist = (unsigned int)getUSDistanceLeft();
 	  rDist = (unsigned int)getUSDistanceRight();
-	  mDist = (unsigned int)getlezerDistance();
+	  mDist = (unsigned int)getLaserDistance();
 
 	  if (lDist < 50 || rDist < 50 || mDist < 500)
 	  {

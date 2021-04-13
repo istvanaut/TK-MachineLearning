@@ -58,6 +58,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 }
 */
 
+//Distance in cm
 uint32_t getUSDistanceLeft(void){
 	uint32_t temp;
 	osSemaphoreAcquire(SemLeftUSSensorHandle, osWaitForever);
@@ -66,6 +67,7 @@ uint32_t getUSDistanceLeft(void){
 	return temp;
 }
 
+//Distance in cm
 uint32_t getUSDistanceRight(void){
 	uint32_t temp;
 	osSemaphoreAcquire(SemRightUSSensorHandle, osWaitForever);
