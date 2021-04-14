@@ -72,20 +72,30 @@ class Line:
         current_seg = self.find_segment(point)
         dist = 0
         current_i = 0
+        seg_found = None
         for i in range(0, len(self.points) - 1):
             seg = self.segment(i)
             if seg.start[0] == current_seg.start[0]:
                 current_i = i
                 dist = dist + seg.length()
+                seg_found = seg
                 break
             else:
                 dist = dist + seg.length()
 
-        # This segment was updated by Tamás
-        # if random.random() > 0.99:
-        #     logger.info(f'distance: {dist}; points size: {len(self.points)}; current index:{current_i}')
-
+        if random.random() > 0.9:
+            logger.info(f'distance: {dist}+{calculate_last_distance(point, seg_found.start, seg_found.end)}'
+                        f' points size: {len(self.points)}; current index:{current_i}')
+        dist = dist + calculate_last_distance(point, seg_found.start, seg_found.end)
         return dist
+
+
+def calculate_last_distance(point, line_point1, line_point2):
+    # vector calculation
+    vec1 = line_point1 - point
+    vec2 = line_point2 - point
+    last_distance_result = np.abs(np.cross(vec1, vec2)) / np.linalg.norm(line_point1 - line_point2)
+    return last_distance_result
 
 
 line_file_points = np.load(LINE_FILE_NAME)
@@ -134,9 +144,9 @@ class Segment:
         # TODO (8) still not working - side can change when distance is > 0 ???
         a = self.start
         b = self.end
-        if (b[0] - a[0])*(point[1] - a[1]) > (b[1] - a[1])*(point[0] - a[0]):
+        if (b[0] - a[0]) * (point[1] - a[1]) > (b[1] - a[1]) * (point[0] - a[0]):
             return 1.0
-        elif (b[0] - a[0])*(point[1] - a[1]) < (b[1] - a[1])*(point[0] - a[0]):
+        elif (b[0] - a[0]) * (point[1] - a[1]) < (b[1] - a[1]) * (point[0] - a[0]):
             return -1.0
         else:
             return 0.0
@@ -161,7 +171,7 @@ def direction(point0, point1):
     d = [0, 0, 0]
     vector = [point1[0] - point0[0], point1[1] - point0[1]]
     d[1] = math.atan2(vector[1], vector[0])
-    while d[1] <= -np.pi/2:
+    while d[1] <= -np.pi / 2:
         d[1] += np.pi
     return d
 

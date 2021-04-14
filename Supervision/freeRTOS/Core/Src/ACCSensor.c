@@ -9,34 +9,37 @@ static bno055_vector_t euler;
 
 static bno055_vector_t accOffset;
 
+
+
 void initACCSensor(I2C_HandleTypeDef* hi2c_device){
+	setACC_OS_RUNNING(0);
 	bno055_assignI2C(hi2c_device);
 	bno055_setup();
 	bno055_setOperationMode(BNO055_OPERATION_MODE_NDOF);
 	HAL_Delay(100);
-	//accOffset = bno055_getVectorAccelerometer();
+	accOffset = bno055_getVectorAccelerometer();
 	//accOffset = bno055_getVectorLinearAccel();
 }
 
 void AccMeasure(void){
 	bno055_vector_t temp;
 	temp = bno055_getVectorAccelerometer();
-	//acceleration = bno055_getVectorLinearAccel();
+	//temp = bno055_getVectorLinearAccel();
+	temp.x -= accOffset.x;
+	temp.y -= accOffset.y;
+	temp.z -= accOffset.z;
+
+	temp.x *= -1;
+	temp.y *= -1;
+
 	osSemaphoreAcquire(SemACCHandle, 0);
 	acceleration = temp;
-	acceleration.x -= accOffset.x;
-	acceleration.y -= accOffset.y;
-	acceleration.z -= accOffset.z;
-	
-	acceleration.x *= -1;
-	acceleration.y *= -1;
-	
 	osSemaphoreRelease(SemACCHandle);
 }
 
 bno055_vector_t getAcc(void){
 	bno055_vector_t temp;
-	osSemaphoreAcquire(SemACCHandle, 5);
+	osSemaphoreAcquire(SemACCHandle, osWaitForever);
 	temp = acceleration;
 	osSemaphoreRelease(SemACCHandle);
 	return temp;
@@ -46,14 +49,14 @@ void GyroMeasure(void){
 	bno055_vector_t temp;
 	temp = bno055_getVectorGyroscope();
 
-	osSemaphoreAcquire(SemACCHandle, 0);
+	osSemaphoreAcquire(SemACCHandle, osWaitForever);
 	gyro = temp;
 	osSemaphoreRelease(SemACCHandle);
 }
 
 bno055_vector_t getGyro(void){
 	bno055_vector_t temp;
-	osSemaphoreAcquire(SemACCHandle, 5);
+	osSemaphoreAcquire(SemACCHandle, osWaitForever);
 	temp = gyro;
 	osSemaphoreRelease(SemACCHandle);
 	return temp;
@@ -62,19 +65,25 @@ bno055_vector_t getGyro(void){
 void EulerMeasure(void){
 	bno055_vector_t temp;
 	temp = bno055_getVectorEuler();
+	temp.x = (temp.x <= 360 && temp.x > 180) ? (temp.x - 360):(temp.x);
+	temp.y = (temp.y <= 360 && temp.y > 180) ? (temp.y - 360):(temp.y);
+	temp.z = (temp.z <= 360 && temp.z > 180) ? (temp.z - 360):(temp.z);
 
-	osSemaphoreAcquire(SemACCHandle, 0);
+	osSemaphoreAcquire(SemACCHandle, osWaitForever);
 	euler = temp;
-	euler.x = (euler.x <= 360 && euler.x > 180) ? (euler.x - 360):(euler.x);
-	euler.y = (euler.y <= 360 && euler.y > 180) ? (euler.y - 360):(euler.y);
-	euler.z = (euler.z <= 360 && euler.z > 180) ? (euler.z - 360):(euler.z);
 	osSemaphoreRelease(SemACCHandle);
 }
 
 bno055_vector_t getEuler(void){
 	bno055_vector_t temp;
-	osSemaphoreAcquire(SemACCHandle, 5);
+	osSemaphoreAcquire(SemACCHandle, osWaitForever);
 	temp = euler;
 	osSemaphoreRelease(SemACCHandle);
 	return temp;
+}
+
+//0: OS not running 1: OS running
+//0: It will use HAL_Delay 1: It will use OS_delay
+void setACC_OS_RUNNING(uint8_t value){
+	bno055_setFreeRTOSRunning(value);
 }

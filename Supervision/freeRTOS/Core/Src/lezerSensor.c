@@ -7,10 +7,12 @@
 
 #include "lezerSensor.h"
 
+extern osSemaphoreId_t SemLaserSensorHandle;
+
 volatile uint32_t Letimed = 0;
 volatile uint32_t LeaTime;
 volatile uint32_t LeoTime;
-volatile uint32_t Ledistance = 0;
+static volatile uint32_t Ledistance = 0;
 volatile uint8_t LeEdgeDetected = 0;
 
 TIM_HandleTypeDef* Letim;
@@ -46,6 +48,20 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 }
 
 */
-uint32_t getlezerDistance(void){
-	return Ledistance;
+//Distance in mm
+uint32_t getLaserDistance(void){
+	uint32_t temp = 0;
+	osSemaphoreAcquire(SemLaserSensorHandle, osWaitForever);
+	temp = Ledistance;
+	osSemaphoreRelease(SemLaserSensorHandle);
+	return temp;
+}
+
+//Distance in mm
+void setLaserDistanceCallback(uint32_t value){
+	if(osSemaphoreAcquire(SemLaserSensorHandle, 0) == osOK){
+		Ledistance = value;
+		osSemaphoreRelease(SemLaserSensorHandle);
+	}
+	return;
 }
