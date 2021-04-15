@@ -1,5 +1,7 @@
 import random
 
+import numpy as np
+
 from Networks.SCNN import SCNN
 from ReinforcementModel import ReinforcementModel, AGENT_IM_WIDTH, AGENT_IM_HEIGHT
 from agents.agent import Agent, choices, choices_count
@@ -42,6 +44,20 @@ class NetworkAgent(Agent):
         except RuntimeError:
             logger.error(f'Error when trying to find right value for {action}')
             return None, None
+
+    def train_on_memory(self, memory):
+        x = 0
+        r = [[], []]
+        for (prev_state, action, new_state) in memory:
+            x += 1
+            reward = self.optimize(new_state, prev_state, action)
+            r[action].append(reward)
+        logger.info(f'Successfully trained {x} times')
+        for i, action_rewards in enumerate(r):
+            logger.info(f'Action rewards (ID, AVG, AMOUNT) '
+                        f'-:- {i}; {np.average(action_rewards)}; {len(action_rewards)}')
+        self.model.reset()
+        self.save()
 
     def optimize(self, new_state, prev_state=None, action=None):
         try:

@@ -52,7 +52,7 @@ def spawn_radar(environment):
     radar_blueprint = bpl.find(RADAR_BLUEPRINT_NAME)
     radar_blueprint.set_attribute('horizontal_fov', '1.0')
     radar_blueprint.set_attribute('vertical_fov', '1.0')
-    # radar_blueprint.set_attribute(dict)  # TODO (2) can it work with dict?
+    # radar_blueprint.set_attribute(dict)  # TODO (2) try setting options with dict
     # radar.set(
     #     Channels=32,
     #     Range=50,

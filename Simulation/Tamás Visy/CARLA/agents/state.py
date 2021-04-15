@@ -6,6 +6,7 @@ from ReinforcementModel import AGENT_IM_HEIGHT, AGENT_IM_WIDTH
 from sensors import limit_range, recently
 from support.datakey import DataKey
 from support.image_manipulation import im_resize, im_grayscale
+from support.names import nameof
 
 
 def feature_dimension():
@@ -33,7 +34,7 @@ class State:
         else:
             acc = self.acceleration
         print([self.radar, self.collision, self.velocity, acc[0], acc[1], acc[2],
-               self.direction, self.obstacle, self.distance_from_line*self.side])
+               self.direction, self.obstacle, self.distance_from_line * self.side])
 
     # TODO (4) refactor to use DataKeys (rename them to Keys)?
     def get_formatted(self):
@@ -45,12 +46,17 @@ class State:
             pos = [None, None, None]
         else:
             pos = self.position
-        # TODO (5) update to self.image.__name__ or something similar
-        return self.image, \
-               [self.radar, self.collision, self.velocity, acc[0], acc[1], acc[2], pos[0], pos[1], pos[2],
-                self.direction, self.obstacle, self.distance_from_line, self.side], \
-               ['radar', 'collision', 'velocity', 'accX', 'accY', 'accZ', 'posX', 'posY', 'posZ',
-                'direction', 'obstacle', 'distance_from_line', 'side']
+        return (self.image,
+                [self.radar, self.collision, self.velocity,
+                 acc[0], acc[1], acc[2],
+                 pos[0], pos[1], pos[2],
+                 self.direction, self.obstacle,
+                 self.distance_from_line, self.side],
+                [nameof(self.radar, locals()), nameof(self.collision, locals()), nameof(self.velocity, locals()),
+                 f'{nameof(acc, locals())}X', f'{nameof(acc, locals())}Y', f'{nameof(acc, locals())}Z',
+                 f'{nameof(pos, locals())}X', f'{nameof(pos, locals())}Y', f'{nameof(pos, locals())}Z',
+                 nameof(self.direction, locals()), nameof(self.obstacle, locals()),
+                 nameof(self.distance_from_line, locals()), nameof(self.side, locals())])
 
 
 # rotation matrices used in calculating car subjective acceleration
@@ -92,8 +98,9 @@ def convert(state):
         = state
 
     # TODO (7) refactor this mess
+    #  possibly use cameraConverter, radarConverter (or at least move to converter.py)
 
-    # TODO (2) check if all conversions are needed
+    # TODO (5) make normalize normalize better -> use better MAXes
 
     # SENSOR: unit, format
 
@@ -102,7 +109,7 @@ def convert(state):
     # Removing colors
     camera = im_grayscale(camera)  # when grayscaling also change shape?
     # Reshaping for NN
-    # TODO (2) this does not do anything?
+    # TODO (3) does this affect the camera?
     if camera is not None:
         camera = np.reshape(camera, [AGENT_IM_HEIGHT, AGENT_IM_WIDTH])
 
@@ -112,7 +119,8 @@ def convert(state):
     if radar is None:
         radar = RADAR_MAX  # Radar always some number
     # Normalize
-    radar = np.tanh(radar / RADAR_MAX)  # TODO (3) actually not in range(-1,1) but .76 bc of tanh(1)=0.76 - do we care?
+    # note: radar between [-0.761 or] 0 and 0.761 <- [tanh(-1) and] tanh(1)
+    radar = np.tanh(radar / RADAR_MAX)
 
     # velocity: m/s, [v_x, v_y, v_z] (floats?)
     # Velocity is now converted to 1D (float)
@@ -143,7 +151,7 @@ def convert(state):
     acceleration = np.asarray(acceleration).flatten().tolist()
     ACCELERATION_EACH_MAX = 10.0
     # Normalize
-    # TODO (3) make prettier
+    # TODO (1) make prettier
     acceleration[0] = np.tanh(acceleration[0] / ACCELERATION_EACH_MAX)
     acceleration[1] = np.tanh(acceleration[1] / ACCELERATION_EACH_MAX)
     acceleration[2] = np.tanh(acceleration[2] / ACCELERATION_EACH_MAX)
@@ -155,7 +163,8 @@ def convert(state):
         position = [0, 0, 0]
         position_none_holder = None
     else:
-        # TODO (3) working workaround - but note that converting here changes values in data bc of references?
+        # TODO (4) - think about using p = p VS. p = p[:] (shallow-copy?)
+        #  working workaround - but note that converting here changes values in data bc of references?
         #  Actually this is working as intended, but architecture is weird
         #  Window wants to show accurate inputs of agent, but also objective data...
         position = position
@@ -163,7 +172,6 @@ def convert(state):
     distance = line.distance(position[:2])
     if position_none_holder is None:
         distance = None
-    # TODO (5) side calc is broken?
     side = line.side(position[:2])
     # Normalize
     # TODO (3) make prettier
@@ -194,8 +202,7 @@ def convert(state):
     # Position is actually not needed, but position none holder
     important = camera, velocity, acceleration, position, position_none_holder, current_direction, distance,
     # Only return data if important inputs (which should not be None) are not None
-    # Because None can't be the input of the NN
-    # TODO (5) test normalize of each input
+    # Because NN cannot accept "None" as any input
     # TODO (2) direction is changed if None - does it matter?
     if not any(map(lambda x: x is None, important)):
         return State(image=camera, radar=radar, collision=collision, velocity=velocity, acceleration=acceleration,

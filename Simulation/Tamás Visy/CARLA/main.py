@@ -1,5 +1,4 @@
 # @title main
-import random
 import numpy as np
 import time
 
@@ -13,16 +12,19 @@ from support.logger import logger
 from threads.dashboardthread import DashboardThread
 
 TRAIN = True
-logger.info(f'Train is {TRAIN}')
+logger.warning(f'Train is {TRAIN}')
 TRAIN_PER_DECISION = False
-logger.info(f'Train per decision is {TRAIN_PER_DECISION}')
+logger.warning(f'Train per decision is {TRAIN_PER_DECISION}')
 TRAIN_RESOLUTION_PERCENTAGE = 100
 logger.info(f'Train resolution is {TRAIN_RESOLUTION_PERCENTAGE}%')
 TARGET_FRAME_TIME = 0.25  # 0.025
 MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
 
 
+# TODO (8) extract settings and add make it not sync
+
 def pure(run):
+    return True
     return run % 2
 
 
@@ -52,6 +54,7 @@ def main():
             prev_action = None
 
             while status.finished is False:
+                # TODO (6) extract this
                 frame_start = time.time_ns()
 
                 data, line, starting_dir = env.pull()
@@ -64,7 +67,7 @@ def main():
                 if out is not None:
                     env.put(DataKey.CONTROL_OUT, out)
                 # TODO (8) direction -1 broken somewhere
-                # TODO (6) change order phases in turn end :)
+                # TODO (6) change order things when of ending a run - why?
                 if prev_state is not None and prev_action is not None and state is not None:
                     memory.append([prev_state, prev_action, state])
                 prev_state = state
@@ -89,8 +92,7 @@ def main():
             if TRAIN and not TRAIN_PER_DECISION:
                 if len(memory) >= MEMORY_SIZE:
                     logger.info(f'Starting training with memory of {len(memory)}*{TRAIN_RESOLUTION_PERCENTAGE}%')
-                    # train_networkagent(agent, memory)
-                    train_kerasagent(agent, memory)
+                    agent.train_on_memory(memory)
                     memory = []
                 else:
                     logger.info(f'Memory not full, {len(memory)}/{MEMORY_SIZE}')
@@ -103,27 +105,6 @@ def main():
             actor.destroy()
         del env  # Forget env after we cleaned up it's actors
         logger.debug('Cleaned up')
-
-
-def train_kerasagent(agent, memory):
-    states = [prev_state for (prev_state, action, new_state) in memory]
-    agent.train(states)
-
-
-def train_networkagent(agent, memory):
-    x = 0
-    r = [[], []]
-    for i, (prev_state, action, new_state) in enumerate(memory):
-        if i % (100 // TRAIN_RESOLUTION_PERCENTAGE) is 0:
-            x += 1
-            reward = agent.optimize(new_state, prev_state, action)
-            r[action].append(reward)
-    logger.info(f'Successfully trained {x} times')
-    for i, action_rewards in enumerate(r):
-        logger.info(f'Action rewards (ID, AVG, AMOUNT) '
-                    f'-:- {i}; {np.average(action_rewards)}; {len(action_rewards)}')
-    agent.model.reset()
-    agent.save()
 
 
 if __name__ == '__main__':

@@ -7,8 +7,12 @@ from support.logger import logger
 
 LINE_FILE_NAME = 'files/line.npy'
 
+line_file_points = np.load(LINE_FILE_NAME)
+logger.info(f'Loaded file {LINE_FILE_NAME} for line.py')
+
 
 class Line:
+    # TODO (7) rename path
     # a 2D Line consisting of segments
 
     def __init__(self, points):
@@ -50,7 +54,7 @@ class Line:
 
     def find_segment(self, point):
         # This could be done much better
-        # TODO (3) line can't contain loops or this breaks
+        # TODO (4) line can't contain loops or this breaks
         dist0 = distance(point, self.points[0])
         p0 = self.points[0]
         dist1 = distance(point, self.points[1])
@@ -65,10 +69,9 @@ class Line:
         return Segment(p0, p1)
 
     def distance_along_line(self, point):
-        # TODO (5) test and add
+        # TODO (6) refactor
         if point is None:
             return None
-        # By Meng Kedalai
         current_seg = self.find_segment(point)
         dist = 0
         current_i = 0
@@ -82,31 +85,26 @@ class Line:
                 break
             else:
                 dist = dist + seg.length()
-
-        if random.random() > 0.9:
-            logger.info(f'distance: {dist}+{calculate_last_distance(point, seg_found.start, seg_found.end)}'
-                        f' points size: {len(self.points)}; current index:{current_i}')
+        # TODO (6) remove logging
+        logger.debug(f'distance: {dist}+{calculate_last_distance(point, seg_found.start, seg_found.end)}'
+                     f' current index:{current_i}')
         dist = dist + calculate_last_distance(point, seg_found.start, seg_found.end)
         return dist
 
 
 def calculate_last_distance(point, line_point1, line_point2):
-    # vector calculation
+    # TODO (6) refactor
     vec1 = line_point1 - point
     vec2 = line_point2 - point
     last_distance_result = np.abs(np.cross(vec1, vec2)) / np.linalg.norm(line_point1 - line_point2)
     return last_distance_result
 
 
-line_file_points = np.load(LINE_FILE_NAME)
-logger.info(f'Loaded file {LINE_FILE_NAME} for line.py')
-
-
 def get_line():
     return Line(line_file_points)
 
 
-def fix(points, difference=1.0):
+def fix(points, min_required_distance=1.0):
     """
     Simplifies the list of points
 
@@ -120,7 +118,7 @@ def fix(points, difference=1.0):
         inserted = False
         for pf in points_fixed[::-1]:
             # If one is close to the current point, we remove it and insert their average
-            if not inserted and distance(p, pf) < difference:
+            if not inserted and distance(p, pf) < min_required_distance:
                 i = points_fixed.index(pf)
                 points_fixed.remove(pf)
                 points_fixed.insert(i, np.average([p, pf], 0).tolist())
@@ -128,11 +126,12 @@ def fix(points, difference=1.0):
         # If we haven't removed any point (new point is far away from old ones) we append it
         if not inserted:
             points_fixed.append(p)
-    parr = np.asarray(points_fixed)
-    return parr
+    return np.asarray(points_fixed)
 
 
 class Segment:
+    # TODO (7) rename line
+
     def __init__(self, start, end):
         self.start = start
         self.end = end
@@ -141,21 +140,16 @@ class Segment:
         return distance(self.start, self.end)
 
     def side(self, point):
-        # TODO (8) still not working - side can change when distance is > 0 ???
+        # TODO (5) can side change when distance is > 0?
         a = self.start
         b = self.end
+        # TODO (3) can't this be done with a numpy function?
         if (b[0] - a[0]) * (point[1] - a[1]) > (b[1] - a[1]) * (point[0] - a[0]):
             return 1.0
         elif (b[0] - a[0]) * (point[1] - a[1]) < (b[1] - a[1]) * (point[0] - a[0]):
             return -1.0
         else:
             return 0.0
-        # if direction(self.start, point)[1] > direction(self.start, self.end)[1]:
-        #     return 1.0
-        # elif direction(self.start, point)[1] < direction(self.start, self.end)[1]:
-        #     return -1.0
-        # else:
-        #     return 0.0
 
     def distance(self, point):
         start = np.array(self.start)
@@ -168,6 +162,7 @@ class Segment:
 
 
 def direction(point0, point1):
+    """Calculates direction in radians"""
     d = [0, 0, 0]
     vector = [point1[0] - point0[0], point1[1] - point0[1]]
     d[1] = math.atan2(vector[1], vector[0])
@@ -177,8 +172,8 @@ def direction(point0, point1):
 
 
 def distance(point0, point1):
+    """Calculates distance in 2D"""
     if point0 is None or point1 is None:
         return None
     diff = np.subtract(point0, point1)
-    # Calculates distance in 2D
     return np.sqrt(diff[0] ** 2 + diff[1] ** 2)

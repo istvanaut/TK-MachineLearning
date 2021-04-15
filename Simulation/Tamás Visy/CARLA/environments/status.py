@@ -1,5 +1,3 @@
-import time
-
 from line import distance
 from support.logger import logger
 from support.datakey import DataKey
@@ -24,8 +22,6 @@ class Status:
         successful = False
         reason = 'UNKNOWN'
 
-        t = time.time()
-
         coll = environment.data.get(DataKey.SENSOR_COLLISION)
 
         pos = environment.data.get(DataKey.SENSOR_POSITION)
@@ -44,10 +40,6 @@ class Status:
             reason = f'Too far from line: {MAX_OFF_DISTANCE} meters'
             logger.debug(pos)
             logger.debug(environment.line.find_segment(pos).start)
-        if time.time() - t > 100:
-            # TODO (5) time maximization is broken - t is set in this function
-            finished = True
-            reason = 'Time ran out'
         if pos is not None and distance(environment.line.find_segment(pos).end, environment.line.end) < 0.1:
             finished = True
             successful = True

@@ -52,7 +52,7 @@ class Environment:
     def set_conditions(self):
         current_map_name = self.connection.world.get_map().name
         # Loading correct map
-        # TODO (7) wait for it to load if fails
+        # TODO (9) wait longer if load fails first
         if current_map_name != MAP_NAME:
             logger.info(f'Loading map: {MAP_NAME} <- {current_map_name}')
             try:
@@ -63,7 +63,7 @@ class Environment:
         else:
             # Destroying old actors
             actors = self.connection.world.get_actors()
-            # TODO (3) check if this destroys sensor actors as well - if not, performance hit?
+            # TODO (10) check if this destroys sensor actors as well - if not, performance hit?
             for actor in actors.filter('vehicle.*.*'):
                 actor.destroy()
             if len(actors.filter('vehicle.*.*')) > 0:
@@ -127,6 +127,7 @@ class Environment:
 
     def get_line(self):
         self.line = get_line()
+        # TODO (3) make prettier
         r = random.random()
         # if r < 1/6:
         #     logger.info('Environment: normal short')
