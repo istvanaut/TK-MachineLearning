@@ -6,3 +6,5 @@
  */
 #include "main.h"
 
+void SetLightSensorValueForTheFirstTime(void);
+int GetReward (void);

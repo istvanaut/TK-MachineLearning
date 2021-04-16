@@ -1185,18 +1185,19 @@ void StartTaskCommunication(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  /*
-	  printf("\033[3J");
-	  printf("\e[1;1H\e[2J");
-	  printf("Light sensor: 0x%x\n", GetLightSensorValues());
+
+	  //printf("\033[3J");
+	  //printf("\e[1;1H\e[2J");
+	  //printf("Light sensor: 0x%x\n", GetLightSensorValues());
 	  printf("Left US sensor: %u\n", getUSDistanceLeft());
 	  printf("Right US sensor: %u\n", getUSDistanceRight());
-	  printf("Laser sensor: %u\n", getlezerDistance());
-	  printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAcc().x, getAcc().y, getAcc().z, getEuler().x, getEuler().y, getEuler().z);
-	  GetEncoderData();
-	  */
+	  printf("Laser sensor: %u\n", getLaserDistance());
+	  //printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAcc().x, getAcc().y, getAcc().z, getEuler().x, getEuler().y, getEuler().z);
 
-	  osDelay(1000);
+	  PrintEncoderAllData();
+
+
+	  osDelay(500);
   }
   /* USER CODE END StartTaskCommunication */
 }
@@ -1211,11 +1212,14 @@ void StartTaskCommunication(void *argument)
 void StartTaskReward(void *argument)
 {
   /* USER CODE BEGIN StartTaskReward */
+  osDelay(20);
+  SetLightSensorValueForTheFirstTime();
+
   /* Infinite loop */
   for(;;)
   {
 
-    osDelay(1);
+    osDelay(10);
   }
   /* USER CODE END StartTaskReward */
 }
