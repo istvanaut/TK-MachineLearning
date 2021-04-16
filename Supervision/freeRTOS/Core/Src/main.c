@@ -1014,12 +1014,12 @@ void StartTaskDeafult(void *argument)
 		  {
 			  if (LLS > LS)
 			  {
-				  leftMotor(0.45);
-				  rightMotor(0.7);
+				  leftMotor(0.4);
+				  rightMotor(0.6);
 			  }
 			  else if (LLS < LS)
 			  {
-				  leftMotor(0.5);
+				  leftMotor(0.45);
 				  rightMotor(0.6);
 			  }
 		  }
@@ -1027,13 +1027,13 @@ void StartTaskDeafult(void *argument)
 		  {
 			  if (RRS > RS)
 			  {
-				  leftMotor(0.7);
-				  rightMotor(0.45);
+				  leftMotor(0.65);
+				  rightMotor(0.4);
 			  }
 			  else if (RRS < RS)
 			  {
-				  leftMotor(0.6);
-				  rightMotor(0.5);
+				  leftMotor(0.63);
+				  rightMotor(0.45);
 			  }
 		  }
 		  else
