@@ -98,13 +98,6 @@ const osThreadAttr_t communicationTask_attributes = {
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityBelowNormal5,
 };
-/* Definitions for rewardTask */
-osThreadId_t rewardTaskHandle;
-const osThreadAttr_t rewardTask_attributes = {
-  .name = "rewardTask",
-  .stack_size = 256 * 4,
-  .priority = (osPriority_t) osPriorityBelowNormal5,
-};
 /* Definitions for SemACC */
 osSemaphoreId_t SemACCHandle;
 const osSemaphoreAttr_t SemACC_attributes = {
@@ -186,7 +179,6 @@ void StartTaskEncoders(void *argument);
 void StartTaskEmergencyBreaking(void *argument);
 void StartTaskACC(void *argument);
 void StartTaskCommunication(void *argument);
-void StartTaskReward(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -312,9 +304,6 @@ int main(void)
 
   /* creation of communicationTask */
   communicationTaskHandle = osThreadNew(StartTaskCommunication, NULL, &communicationTask_attributes);
-
-  /* creation of rewardTask */
-  rewardTaskHandle = osThreadNew(StartTaskReward, NULL, &rewardTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -796,9 +785,9 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 3599;
+  htim6.Init.Prescaler = 599;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 65535;
+  htim6.Init.Period = 59999;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
@@ -834,9 +823,9 @@ static void MX_TIM7_Init(void)
 
   /* USER CODE END TIM7_Init 1 */
   htim7.Instance = TIM7;
-  htim7.Init.Prescaler = 3599;
+  htim7.Init.Prescaler = 599;
   htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 65535;
+  htim7.Init.Period = 59999;
   htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
   {
@@ -1094,12 +1083,10 @@ void StartTaskEncoders(void *argument)
   {
 	  CalculateDistance(LEFT_SIDE);
 	  CalculateDistance(RIGHT_SIDE);
-	  if (i % 10 == 0)
-	  {
-		  CalculateSpeed(LEFT_SIDE);
-		  CalculateSpeed(RIGHT_SIDE);
-	  }
-	  else if (i == 50)
+	  CalculateSpeed(LEFT_SIDE);
+	  CalculateSpeed(RIGHT_SIDE);
+
+	  if (i == 50)
 	  {
 		  CalculatePositionAndAngle();
 		  i = 0;
@@ -1200,28 +1187,6 @@ void StartTaskCommunication(void *argument)
 	  osDelay(500);
   }
   /* USER CODE END StartTaskCommunication */
-}
-
-/* USER CODE BEGIN Header_StartTaskReward */
-/**
-* @brief Function implementing the rewardTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartTaskReward */
-void StartTaskReward(void *argument)
-{
-  /* USER CODE BEGIN StartTaskReward */
-  osDelay(20);
-  SetLightSensorValueForTheFirstTime();
-
-  /* Infinite loop */
-  for(;;)
-  {
-
-    osDelay(10);
-  }
-  /* USER CODE END StartTaskReward */
 }
 
  /**

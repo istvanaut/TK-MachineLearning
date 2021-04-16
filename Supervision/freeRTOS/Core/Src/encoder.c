@@ -1,7 +1,8 @@
 #include "encoder.h"
 
 #define sysCLK 72000000.0
-#define PSC 3599.0
+#define PSC 600.0
+#define speedCalcPeriod 3
 #define oneRot 10.35 //one hole rotation is millimeters
 #define W 0.146 //width of car in meters
 
@@ -66,15 +67,19 @@ void DisableSpeed(int motor) // 0 => left, 1 => right
 {
 	if (motor == LEFT_SIDE)
 	{
-		osSemaphoreAcquire(SemLeftEncoderHandle, osWaitForever);
-		distanceLeft = 0;
-		osSemaphoreRelease(SemLeftEncoderHandle);
+		if(osSemaphoreAcquire(SemLeftEncoderHandle, 0) == osOK)
+		{
+			speedLeftEN = 0;
+			osSemaphoreRelease(SemLeftEncoderHandle);
+		}
 	}
 	else
 	{
-		osSemaphoreAcquire(SemRightEncoderHandle, osWaitForever);
-		distanceRight = 0;
-		osSemaphoreRelease(SemRightEncoderHandle);
+		if(osSemaphoreAcquire(SemRightEncoderHandle, 0) == osOK)
+		{
+			speedRightEN = 0;
+			osSemaphoreRelease(SemRightEncoderHandle);
+		}
 	}
 }
 
@@ -84,13 +89,13 @@ void CalculateDistance(int motor)
 	if (motor == LEFT_SIDE)
 	{
 		osSemaphoreAcquire(SemLeftEncoderHandle, osWaitForever);
-		speedLeftEN = encoderSumOfRotationsLeft*oneRot/1000;
+		distanceLeft = encoderSumOfRotationsLeft*oneRot/1000;
 		osSemaphoreRelease(SemLeftEncoderHandle);
 	}
 	else
 	{
 		osSemaphoreAcquire(SemRightEncoderHandle, osWaitForever);
-		speedRightEN = encoderSumOfRotationsRight*oneRot/1000;
+		distanceRight = encoderSumOfRotationsRight*oneRot/1000;
 		osSemaphoreRelease(SemRightEncoderHandle);
 	}
 }
@@ -103,7 +108,7 @@ void CalculateSpeed(int motor)
 	  {
 		  osSemaphoreAcquire(SemLeftEncoderHandle, osWaitForever);
 		  if(speedLeftEN)
-			  speedLeft = 0.05175/(timeOfStep*timerCntrValLeft); //TMRCNTRVAL csak ha mind egy irányba?
+			  speedLeft = (speedCalcPeriod * oneRot / 1000)/(timeOfStep*timerCntrValLeft); //TMRCNTRVAL csak ha mind egy irányba?
 		  else
 			  speedLeft = 0;
 		  osSemaphoreRelease(SemLeftEncoderHandle);
@@ -112,7 +117,7 @@ void CalculateSpeed(int motor)
 	  {
 		  osSemaphoreAcquire(SemRightEncoderHandle, osWaitForever);
 		  if(speedRightEN)
-			  speedRight = 0.05175/(timeOfStep*timerCntrValRight); //TMRCNTRVAL csak ha mind egy irányba?
+			  speedRight = (speedCalcPeriod * oneRot / 1000)/(timeOfStep*timerCntrValRight); //TMRCNTRVAL csak ha mind egy irányba?
 		  else
 			  speedRight = 0;
 		  osSemaphoreRelease(SemRightEncoderHandle);
@@ -230,7 +235,7 @@ void PrintEncoderAllData()
 				  rotChangeLeft--;
 			  }
 
-			  if(encoderSumOfRotationsLeft % 5 == 0)
+			  if(encoderSumOfRotationsLeft % speedCalcPeriod == 0)
 			  {
 				  speedLeftEN = 1;
 				  Timer6_Stop();
@@ -256,7 +261,7 @@ void PrintEncoderAllData()
 				  rotChangeRight--;
 			  }
 
-			  if(encoderSumOfRotationsRight % 5 == 0)
+			  if(encoderSumOfRotationsRight % speedCalcPeriod == 0)
 			  {
 				  speedRightEN = 1;
 				  Timer7_Stop();
