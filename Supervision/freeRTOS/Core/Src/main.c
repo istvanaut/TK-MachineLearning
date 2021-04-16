@@ -98,6 +98,13 @@ const osThreadAttr_t communicationTask_attributes = {
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityBelowNormal5,
 };
+/* Definitions for rewardTask */
+osThreadId_t rewardTaskHandle;
+const osThreadAttr_t rewardTask_attributes = {
+  .name = "rewardTask",
+  .stack_size = 512 * 4,
+  .priority = (osPriority_t) osPriorityBelowNormal3,
+};
 /* Definitions for SemACC */
 osSemaphoreId_t SemACCHandle;
 const osSemaphoreAttr_t SemACC_attributes = {
@@ -179,6 +186,7 @@ void StartTaskEncoders(void *argument);
 void StartTaskEmergencyBreaking(void *argument);
 void StartTaskACC(void *argument);
 void StartTaskCommunication(void *argument);
+void StartTaskReward(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -304,6 +312,9 @@ int main(void)
 
   /* creation of communicationTask */
   communicationTaskHandle = osThreadNew(StartTaskCommunication, NULL, &communicationTask_attributes);
+
+  /* creation of rewardTask */
+  rewardTaskHandle = osThreadNew(StartTaskReward, NULL, &rewardTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -1172,21 +1183,40 @@ void StartTaskCommunication(void *argument)
   /* Infinite loop */
   for(;;)
   {
-
 	  //printf("\033[3J");
 	  //printf("\e[1;1H\e[2J");
 	  //printf("Light sensor: 0x%x\n", GetLightSensorValues());
-	  printf("Left US sensor: %u\n", getUSDistanceLeft());
-	  printf("Right US sensor: %u\n", getUSDistanceRight());
-	  printf("Laser sensor: %u\n", getLaserDistance());
+	  //printf("Left US sensor: %u\n", getUSDistanceLeft());
+	  //printf("Right US sensor: %u\n", getUSDistanceRight());
+	  //printf("Laser sensor: %u\n", getLaserDistance());
 	  //printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAcc().x, getAcc().y, getAcc().z, getEuler().x, getEuler().y, getEuler().z);
-
-	  PrintEncoderAllData();
-
+	  //PrintEncoderAllData();
 
 	  osDelay(500);
   }
   /* USER CODE END StartTaskCommunication */
+}
+
+/* USER CODE BEGIN Header_StartTaskReward */
+/**
+* @brief Function implementing the rewardTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTaskReward */
+void StartTaskReward(void *argument)
+{
+  /* USER CODE BEGIN StartTaskReward */
+	osDelay(50);
+	SetLightSensorValueForTheFirstTime();
+  /* Infinite loop */
+  for(;;)
+  {
+	GetReward();
+
+    osDelay(1000);
+  }
+  /* USER CODE END StartTaskReward */
 }
 
  /**

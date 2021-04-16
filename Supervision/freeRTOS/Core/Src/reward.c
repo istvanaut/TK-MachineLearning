@@ -36,13 +36,13 @@ void SetLightSensorValueForTheFirstTime()
 
 // return -1 if getting further, return 2 if line is in the middle, return 1 if getting closer, return -2 if no line detected, else 0
 int8_t moveAnalysis(uint32_t LightSensor){
-	int8_t ret = -2; //nothing changed by default
+	int8_t ret = 0; //nothing changed by default
 
 	uint8_t leftIdx = 0;
 	uint8_t rightIdx = 0;
 
 	for(uint8_t i = 0; i < 32; i++){
-		if((LightSensor << i) & 0x8000){
+		if((LightSensor << i) & 0x80000000){
 			if(leftIdx == 0){
 				leftIdx = i;
 			}
@@ -101,7 +101,7 @@ int GetReward ()
 	if(obstacle && (VelocityLeft > 0.01 || VelocityRight > 0.01))
 		reward += OBSTACLE_AND_RUNNING;
 
-	if(!obstacle && (VelocityLeft < 0.01 || VelocityRight < 0.01))
+	if(!obstacle && (VelocityLeft < 0.01 && VelocityRight < 0.01))
 		reward += NO_OBSTACLE_AND_NO_RUNNING;
 
 	if(lineLosted)
@@ -126,6 +126,8 @@ int GetReward ()
 
 	PrevAnalysedMove = analysedMove;
 	PrevLightSensor = LightSensor;
+
+	printf("Analysed move: %d, Reward: %d\n", analysedMove, reward);
 
 	return reward;
 
