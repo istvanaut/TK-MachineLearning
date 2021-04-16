@@ -39,6 +39,7 @@ extern "C" {
 #include "usSensor.h"
 #include "lezerSensor.h"
 #include "ACCSensor.h"
+#include "reward.h"
 
 #include "string.h"
 #include "stdint.h"

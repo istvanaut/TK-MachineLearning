@@ -98,6 +98,13 @@ const osThreadAttr_t communicationTask_attributes = {
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityBelowNormal5,
 };
+/* Definitions for rewardTask */
+osThreadId_t rewardTaskHandle;
+const osThreadAttr_t rewardTask_attributes = {
+  .name = "rewardTask",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityBelowNormal5,
+};
 /* Definitions for SemACC */
 osSemaphoreId_t SemACCHandle;
 const osSemaphoreAttr_t SemACC_attributes = {
@@ -179,6 +186,7 @@ void StartTaskEncoders(void *argument);
 void StartTaskEmergencyBreaking(void *argument);
 void StartTaskACC(void *argument);
 void StartTaskCommunication(void *argument);
+void StartTaskReward(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -304,6 +312,9 @@ int main(void)
 
   /* creation of communicationTask */
   communicationTaskHandle = osThreadNew(StartTaskCommunication, NULL, &communicationTask_attributes);
+
+  /* creation of rewardTask */
+  rewardTaskHandle = osThreadNew(StartTaskReward, NULL, &rewardTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -1188,6 +1199,25 @@ void StartTaskCommunication(void *argument)
 	  osDelay(1000);
   }
   /* USER CODE END StartTaskCommunication */
+}
+
+/* USER CODE BEGIN Header_StartTaskReward */
+/**
+* @brief Function implementing the rewardTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTaskReward */
+void StartTaskReward(void *argument)
+{
+  /* USER CODE BEGIN StartTaskReward */
+  /* Infinite loop */
+  for(;;)
+  {
+
+    osDelay(1);
+  }
+  /* USER CODE END StartTaskReward */
 }
 
  /**
