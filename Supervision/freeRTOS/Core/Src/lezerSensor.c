@@ -65,3 +65,26 @@ void setLaserDistanceCallback(uint32_t value){
 	}
 	return;
 }
+
+void LaserSensorInputCaptureCallback(TIM_HandleTypeDef *htim){
+	if(htim->Instance == Letim->Instance && htim->Channel ==HAL_TIM_ACTIVE_CHANNEL_3){
+		if(LeEdgeDetected == 0){
+			LeaTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
+			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_FALLING);
+			LeEdgeDetected = 1;
+		}
+		else if (LeEdgeDetected == 1){
+			LeoTime = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
+			if(LeaTime < LeoTime){
+				Letimed = LeoTime - LeaTime;
+			}
+			else{
+				Letimed = (0xffff - LeaTime) + LeoTime;
+			}
+			setLaserDistanceCallback(Letimed/10);
+
+			LeEdgeDetected = 0;
+			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_RISING);
+		}
+	}
+}

@@ -25,3 +25,7 @@ void setUSRisingEdgeRightCallBack(uint8_t value);
 uint8_t getUSRisingEdgeLeftCallback(void);
 
 uint8_t getUSRisingEdgeRightCallback(void);
+
+void USSensorInputCaptureCallback(TIM_HandleTypeDef *htim);
+
+void USSensorPeriodElapsedCallback(TIM_HandleTypeDef *htim);

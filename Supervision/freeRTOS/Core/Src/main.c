@@ -149,24 +149,13 @@ const osSemaphoreAttr_t SemUSSensorEdge_attributes = {
   .name = "SemUSSensorEdge"
 };
 /* USER CODE BEGIN PV */
-// USSensor BEGIN
+
 int motorDisable = 0;
 
-extern uint32_t UStimeDifferenceLeft;
-extern uint32_t USStartTimeLeft;
-extern uint32_t USStopTimeLeft;
-
-extern uint32_t UStimeDifferenceRight;
-extern uint32_t USStartTimeRight;
-extern uint32_t USStopTimeRight;
+// USSensor BEGIN
 
 extern TIM_HandleTypeDef* UStim;
 
-enum US_SENSOR{
-	LEFT, RIGHT
-};
-
-volatile enum US_SENSOR currentUSSensor = LEFT;
 // USSensor END
 
 /* USER CODE END PV */
@@ -1234,46 +1223,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
   	//US Sensor BEGIN
   	if(htim->Instance == UStim->Instance){
-  		//LEFT
-  		if(currentUSSensor == LEFT){
-  			HAL_TIM_Base_Stop_IT(UStim);
-  			//Stop LEFT
-  			HAL_TIM_PWM_Stop(UStim, TIM_CHANNEL_4);
-  			HAL_TIM_IC_Stop_IT(UStim, TIM_CHANNEL_3);
-  			//If echo not detected, distance set to 500 cm
-  			if(getUSRisingEdgeLeftCallback() == 1) setUSDistanceLeftCallBack(500);
-  			setUSRisingEdgeLeftCallBack(0);
-  			//Set timer to zero
-  			__HAL_TIM_SET_COUNTER(UStim, 0);
-  			//Set RIGHT
-  			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
-  			//Start RIGHT
-  			HAL_TIM_IC_Start_IT(UStim, TIM_CHANNEL_1);
-  			HAL_TIM_PWM_Start(UStim, TIM_CHANNEL_2);
-  			HAL_TIM_Base_Start_IT(UStim);
-
-  			currentUSSensor = RIGHT;
-  		}
-  		//RIGHT
-  		else if(currentUSSensor == RIGHT){
-  			HAL_TIM_Base_Stop_IT(UStim);
-  			//Stop RIGHT
-  			HAL_TIM_PWM_Stop(UStim, TIM_CHANNEL_2);
-  			HAL_TIM_IC_Stop_IT(UStim, TIM_CHANNEL_1);
-  			//If echo not detected, distance set to 500 cm
-  			if(getUSRisingEdgeRightCallback() == 1) setUSDistanceRightCallBack(500);
-  			setUSRisingEdgeRightCallBack(0);
-  			//Set timer to zero
-  			__HAL_TIM_SET_COUNTER(UStim, 0);
-  			//Set LEFT
-  			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_RISING);
-  			//Start LEFT
-  			HAL_TIM_IC_Start_IT(UStim, TIM_CHANNEL_3);
-  			HAL_TIM_PWM_Start(UStim, TIM_CHANNEL_4);
-  			HAL_TIM_Base_Start_IT(UStim);
-
-  			currentUSSensor = LEFT;
-  		}
+  		USSensorPeriodElapsedCallback(htim);
   	}
   	//US Sensor END
   /* USER CODE END Callback 1 */

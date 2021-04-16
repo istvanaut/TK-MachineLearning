@@ -15,3 +15,5 @@ void initlezer(TIM_HandleTypeDef *htim);
 uint32_t getLaserDistance(void);
 
 void setLaserDistanceCallback(uint32_t value);
+
+void LaserSensorInputCaptureCallback(TIM_HandleTypeDef *htim);
