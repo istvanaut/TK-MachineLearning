@@ -95,7 +95,7 @@ int GetReward ()
 	// Calculated values
 	uint8_t obstacle = (LaserDistance < 500 || USLeft < 50 || USRight < 50);
 	uint8_t lineLosted = PrevLightSensor && !LightSensor;
-	int8_t analyzedMove = moveAnalysis(LightSensor);
+	int8_t analysedMove = moveAnalysis(LightSensor);
 
 	// Calculate reward
 	if(obstacle && (VelocityLeft > 0.01 || VelocityRight > 0.01))
@@ -107,23 +107,24 @@ int GetReward ()
 	if(lineLosted)
 		reward += LINE_LOSTED;
 
-	if(analyzedMove == -1){
+	if(analysedMove == -1){
 		reward += MOVING_AWAY;
 	}
-	else if(analyzedMove == 1){
+	else if(analysedMove == 1){
 		reward += MOVING_CLOSER;
 	}
-	else if(analyzedMove == 2){
+	else if(analysedMove == 2){
 		reward += MOVING_MIDDLE;
 	}
-	else if(analyzedMove == -2){
+	else if(analysedMove == -2){
 		reward += MOVING_OFF_THE_LINE;
 	}
 
-	if(PrevAnalysedMove == -2 && analyzedMove != -2){
+	if(PrevAnalysedMove == -2 && analysedMove != -2){
 		reward += LINE_FOUND;
 	}
 
+	PrevAnalysedMove = analysedMove;
 	PrevLightSensor = LightSensor;
 
 	return reward;
