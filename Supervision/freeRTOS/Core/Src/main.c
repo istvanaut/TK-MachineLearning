@@ -1014,26 +1014,26 @@ void StartTaskDeafult(void *argument)
 		  {
 			  if (LLS > LS)
 			  {
-				  leftMotor(0.8);
-				  rightMotor(0.45);
+				  leftMotor(0.45);
+				  rightMotor(0.7);
 			  }
 			  else if (LLS < LS)
 			  {
-				  leftMotor(0.6);
-				  rightMotor(0.5);
+				  leftMotor(0.5);
+				  rightMotor(0.6);
 			  }
 		  }
 		  else if (LS + LLS < RS + RRS)
 		  {
 			  if (RRS > RS)
 			  {
-				  leftMotor(0.45);
-				  rightMotor(0.8);
+				  leftMotor(0.7);
+				  rightMotor(0.45);
 			  }
 			  else if (RRS < RS)
 			  {
-				  leftMotor(0.5);
-				  rightMotor(0.6);
+				  leftMotor(0.6);
+				  rightMotor(0.5);
 			  }
 		  }
 		  else
@@ -1081,12 +1081,12 @@ void StartTaskEncoders(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  CalculateDistance(LEFT_ENCODER);
-	  CalculateDistance(RIGHT_ENCODER);
+	  CalculateDistance(LEFT_SIDE);
+	  CalculateDistance(RIGHT_SIDE);
 	  if (i % 10 == 0)
 	  {
-		  CalculateSpeed(LEFT_ENCODER);
-		  CalculateSpeed(RIGHT_ENCODER);
+		  CalculateSpeed(LEFT_SIDE);
+		  CalculateSpeed(RIGHT_SIDE);
 	  }
 	  else if (i == 50)
 	  {
@@ -1113,9 +1113,9 @@ void StartTaskEncoders(void *argument)
 void StartTaskEmergencyBreaking(void *argument)
 {
   /* USER CODE BEGIN StartTaskEmergencyBreaking */
-  unsigned int lDist = 500;
-  unsigned int rDist = 500;
-  unsigned int mDist = 5000;
+  unsigned int lDist = 0;
+  unsigned int rDist = 0;
+  unsigned int mDist = 0;
   /* Infinite loop */
   for(;;)
   {
@@ -1210,14 +1210,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   	//Left encoder BEGIN
 	if(htim->Instance == TIM6)
 	{
-		DisableSpeed(LEFT_ENCODER);
+		DisableSpeed(LEFT_SIDE);
 	}
 	//Left encoder END
 
 	//Right encoder BEGIN
 	if(htim->Instance == TIM7)
 	{
-		DisableSpeed(RIGHT_ENCODER);
+		DisableSpeed(RIGHT_SIDE);
 	}
 	//Right encoder END
 
