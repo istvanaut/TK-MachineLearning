@@ -12,7 +12,7 @@ logger.info(f'Loaded file {LINE_FILE_NAME} for line.py')
 
 
 class Line:
-    # TODO (7) rename path
+    # TODO (7) rename to path
     # a 2D Line consisting of segments
 
     def __init__(self, points):
@@ -42,8 +42,8 @@ class Line:
     def distance(self, point):
         return self.find_segment(point).distance(point)
 
-    def segment(self, i):
-        return Segment(self.points[i], self.points[i + 1])
+    def segment(self, index_of_start):
+        return Segment(self.points[index_of_start], self.points[index_of_start + 1])
 
     def direction(self, point=None):
         if point is None:
@@ -61,48 +61,35 @@ class Line:
                 index = i
         return index
 
-    def find_segment(self, point):
+    def find_closest_segment_starting_index(self, point):
         index = self.find_closest_point_index(point)
         if index is 0:
-            return Segment(self.points[0], self.points[1])
-        if index is len(self.points)-1:
-            return Segment(self.points[-2], self.points[-1])
-        distance_from_prev = distance(self.points[index-1], point)
-        distance_from_next = distance(self.points[index+1], point)
+            return 0
+        if index is len(self.points) - 1:
+            return len(self.points) - 2
+        distance_from_prev = distance(self.points[index - 1], point)
+        distance_from_next = distance(self.points[index + 1], point)
         if distance_from_prev <= distance_from_next:
-            return Segment(self.points[index-1], self.points[index])
+            return index - 1
         else:
-            return Segment(self.points[index], self.points[index+1])
+            return index
+
+    def find_segment(self, point):
+        index = self.find_closest_segment_starting_index(point)
+        return Segment(self.points[index], self.points[index + 1])
 
     def distance_along_line(self, point):
-        # TODO (6) refactor
+        # TODO (2) test when getting close to next segment - but its working fine
         if point is None:
             return None
-        closest_segment = self.find_segment(point)
-        dist = 0
-        closest_index = 0
-        seg_found = None
-        # Searches for closest segment index
-        # Sums up lengths
-        for i in range(0, len(self.points) - 1):
-            seg = self.segment(i)
-            if seg.start[0] == closest_segment.start[0]:
-                closest_index = i
-                dist = dist + seg.length()
-                seg_found = seg
-                break
-            else:
-                dist = dist + seg.length()
-        dist = dist + calculate_last_distance(point, seg_found.start, seg_found.end)
+        dist = 0.0
+        index = self.find_closest_segment_starting_index(point)
+        # iterate on previous segments, summing up their length
+        for i in range(index):
+            dist += self.segment(i).length()
+        # add the last distance
+        dist += self.segment(index).distance_along_self(point)
         return dist
-
-
-def calculate_last_distance(point, line_point1, line_point2):
-    # TODO (6) refactor
-    vec1 = line_point1 - point
-    vec2 = line_point2 - point
-    last_distance_result = np.abs(np.cross(vec1, vec2)) / np.linalg.norm(line_point1 - line_point2)
-    return last_distance_result
 
 
 def get_line():
@@ -135,7 +122,7 @@ def fix(points, min_required_distance=1.0):
 
 
 class Segment:
-    # TODO (7) rename line
+    # TODO (7) rename to line
 
     def __init__(self, start, end):
         self.start = start
@@ -148,7 +135,7 @@ class Segment:
         # TODO (5) can side change when distance is > 0?
         a = self.start
         b = self.end
-        # TODO (3) can't this be done with a numpy function?
+        # TODO (3) can this be done with a numpy function?
         if (b[0] - a[0]) * (point[1] - a[1]) > (b[1] - a[1]) * (point[0] - a[0]):
             return 1.0
         elif (b[0] - a[0]) * (point[1] - a[1]) < (b[1] - a[1]) * (point[0] - a[0]):
@@ -157,10 +144,14 @@ class Segment:
             return 0.0
 
     def distance(self, point):
-        start = np.array(self.start)
-        end = np.array(self.end)
-        point = np.array(point)
-        return abs(np.cross(end - start, point - start) / np.linalg.norm(end - start))
+        return np.abs(np.cross(self.end - self.start, point - self.start) / self.length())
+
+    def distance_along_self(self, point):
+        # ac meet in start, ab meet in closest to point on segment, bc meet in point
+        c = distance(self.start, point)
+        b = self.distance(point)
+        a = np.sqrt(c ** 2 - b ** 2)
+        return a
 
     def direction(self):
         return direction(self.start, self.end)
