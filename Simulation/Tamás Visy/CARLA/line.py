@@ -52,42 +52,47 @@ class Line:
             self.find_segment(point).direction()
             return None
 
+    def find_closest_point_index(self, point):
+        dist = distance(point, self.points[0])
+        index = 0
+        for i, p in enumerate(self.points[1:]):
+            if distance(point, p) < dist:
+                dist = distance(point, p)
+                index = i
+        return index
+
     def find_segment(self, point):
-        # This could be done much better
-        # TODO (4) line can't contain loops or this breaks
-        dist0 = distance(point, self.points[0])
-        p0 = self.points[0]
-        dist1 = distance(point, self.points[1])
-        p1 = self.points[1]
-        for p in self.points[2:]:
-            if distance(point, p) < dist0:
-                dist0 = distance(point, p)
-                p0 = p
-            elif distance(point, p) < dist1:
-                dist1 = distance(point, p)
-                p1 = p
-        return Segment(p0, p1)
+        index = self.find_closest_point_index(point)
+        if index is 0:
+            return Segment(self.points[0], self.points[1])
+        if index is len(self.points)-1:
+            return Segment(self.points[-2], self.points[-1])
+        distance_from_prev = distance(self.points[index-1], point)
+        distance_from_next = distance(self.points[index+1], point)
+        if distance_from_prev <= distance_from_next:
+            return Segment(self.points[index-1], self.points[index])
+        else:
+            return Segment(self.points[index], self.points[index+1])
 
     def distance_along_line(self, point):
         # TODO (6) refactor
         if point is None:
             return None
-        current_seg = self.find_segment(point)
+        closest_segment = self.find_segment(point)
         dist = 0
-        current_i = 0
+        closest_index = 0
         seg_found = None
+        # Searches for closest segment index
+        # Sums up lengths
         for i in range(0, len(self.points) - 1):
             seg = self.segment(i)
-            if seg.start[0] == current_seg.start[0]:
-                current_i = i
+            if seg.start[0] == closest_segment.start[0]:
+                closest_index = i
                 dist = dist + seg.length()
                 seg_found = seg
                 break
             else:
                 dist = dist + seg.length()
-        # TODO (6) remove logging
-        logger.debug(f'distance: {dist}+{calculate_last_distance(point, seg_found.start, seg_found.end)}'
-                     f' current index:{current_i}')
         dist = dist + calculate_last_distance(point, seg_found.start, seg_found.end)
         return dist
 
