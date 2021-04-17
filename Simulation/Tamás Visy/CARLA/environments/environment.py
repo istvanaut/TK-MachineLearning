@@ -6,7 +6,7 @@ import icarla
 from environments.connection import Connection
 from environments.spawner import spawn_vehicle, spawn_camera, spawn_radar, spawn_collision, spawn_obstacle
 from environments.status import Status
-from line import get_line, Line
+from path import get_path, Path
 from support.datakey import DataKey
 from support.logger import logger
 from threads.controllerthread import ControllerThread
@@ -24,7 +24,7 @@ class Environment:
         self.actors = []
         self.data = Data()
         self.vehicle = None
-        self.line = None
+        self.path = None
 
         logger.warning('Halting threads')
         self.data.put(DataKey.THREAD_HALT, True)
@@ -41,7 +41,7 @@ class Environment:
     def setup(self):
         logger.info('Environment setup')
         self.set_conditions()
-        self.get_line()
+        self.get_path()
         self.spawn()
         self.reset()
 
@@ -83,7 +83,7 @@ class Environment:
 
     def spawn(self):
         logger.info('Spawning actors, sensors')
-        spawn_vehicle(self, self.line.start, self.line.direction())
+        spawn_vehicle(self, self.path.start, self.path.direction())
         spawn_camera(self)
         spawn_radar(self)
         spawn_collision(self)
@@ -97,17 +97,17 @@ class Environment:
         self.vehicle.apply_control(icarla.vehicle_control(throttle=0, steer=0))
         icarla.set_velocity(self.vehicle, icarla.vector3d())
 
-        self.get_line()
+        self.get_path()
 
-        icarla.move(self.vehicle, icarla.transform(self.line.start[0], self.line.start[1], 0.25).location)
-        icarla.rotate(self.vehicle, icarla.rotation_from_radian(self.line.direction()))
+        icarla.move(self.vehicle, icarla.transform(self.path.start[0], self.path.start[1], 0.25).location)
+        icarla.rotate(self.vehicle, icarla.rotation_from_radian(self.path.direction()))
         icarla.move(self.connection.world.get_spectator(),
-                    icarla.transform(self.line.start[0] + 10 * np.cos(self.line.direction()[1]),
-                                     self.line.start[1] + 10 * np.sin(self.line.direction()[1]),
+                    icarla.transform(self.path.start[0] + 10 * np.cos(self.path.direction()[1]),
+                                     self.path.start[1] + 10 * np.sin(self.path.direction()[1]),
                                      12.0).location)
         # Apparently UE4 spectator doesn't like exact 90 degrees, keep it less?
         icarla.rotate(self.connection.world.get_spectator(),
-                      icarla.rotation([-85, self.line.direction()[1]/np.pi*180.0, 0]))
+                      icarla.rotation([-85, self.path.direction()[1] / np.pi * 180.0, 0]))
         logger.info('Environment reset successful')
 
     def clear(self):
@@ -115,7 +115,7 @@ class Environment:
         self.data.clear()
 
     def pull(self):
-        return self.data.copy(), Line(self.line.points), self.line.direction()  # data, line and starting direction
+        return self.data.copy(), Path(self.path.points), self.path.direction()  # data, path and starting direction
 
     def put(self, key, data):
         self.data.put(key, data)
@@ -125,28 +125,28 @@ class Environment:
         s.check(self)
         return s
 
-    def get_line(self):
-        self.line = get_line()
+    def get_path(self):
+        self.path = get_path()
         # TODO (3) make prettier
         r = random.random()
         # if r < 1/6:
         #     logger.info('Environment: normal short')
-        #     self.line.slice(None, 20)
+        #     self.path.slice(None, 20)
         # elif r < 2/6:
         #     logger.info('Environment: backwards short')
-        #     self.line.slice(70, None)
-        #     self.line.invert()
+        #     self.path.slice(70, None)
+        #     self.path.invert()
         # elif
         if r < 1/4:
             logger.info('Environment: normal full')
             pass
         elif r < 2/4:
             logger.info('Environment: backwards full')
-            self.line.invert()
+            self.path.invert()
         elif r < 3/4:
             logger.info('Environment: normal turn (left)')
-            self.line.slice(30, 60)
+            self.path.slice(30, 60)
         else:
             logger.info('Environment: backwards turn (right)')
-            self.line.slice(40, 70)
-            self.line.invert()
+            self.path.slice(40, 70)
+            self.path.invert()

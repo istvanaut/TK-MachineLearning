@@ -1,6 +1,6 @@
 import logging
 WRITE_FILE = True
-LEVEL = logging.INFO
+LEVEL = logging.DEBUG
 
 logFormatter = logging.Formatter('%(asctime)s.%(msecs)03d\t  [%(threadName)s]\t[%(levelname)-3.3s]:\t%(message)s',
                                  '%Y.%m.%d %H:%M:%S')

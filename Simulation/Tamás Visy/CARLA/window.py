@@ -21,7 +21,7 @@ IM_SIZE = (32, 32)
 class Window:
     def __init__(self):
         self.data = None
-        self.line = None
+        self.path = None
         self.starting_dir = None
         self.state = None
         self.agent_out = None
@@ -69,9 +69,9 @@ class Window:
     def clear(self):
         self.handle(None, None, None, None, None, False)
 
-    def handle(self, data, line, starting_dir, state, out, pure):
+    def handle(self, data, path, starting_dir, state, out, pure):
         self.data = data
-        self.line = line
+        self.path = path
         self.starting_dir = starting_dir
         self.state = state
         self.agent_out = out

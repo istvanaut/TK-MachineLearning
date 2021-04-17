@@ -5,15 +5,14 @@ import numpy as np
 
 from support.logger import logger
 
-LINE_FILE_NAME = 'files/line.npy'
+PATH_FILE_NAME = 'files/path.npy'
 
-line_file_points = np.load(LINE_FILE_NAME)
-logger.info(f'Loaded file {LINE_FILE_NAME} for line.py')
+path_file_points = np.load(PATH_FILE_NAME)
+logger.info(f'Loaded file {PATH_FILE_NAME} for path.py')
 
 
-class Line:
-    # TODO (7) rename to path
-    # a 2D Line consisting of segments
+class Path:
+    # a 2D path consisting of segments
 
     def __init__(self, points):
         self.points = None
@@ -78,7 +77,7 @@ class Line:
         index = self.find_closest_segment_starting_index(point)
         return Segment(self.points[index], self.points[index + 1])
 
-    def distance_along_line(self, point):
+    def distance_along_path(self, point):
         # TODO (2) test when getting close to next segment - but its working fine
         if point is None:
             return None
@@ -92,8 +91,8 @@ class Line:
         return dist
 
 
-def get_line():
-    return Line(line_file_points)
+def get_path():
+    return Path(path_file_points)
 
 
 def fix(points, min_required_distance=1.0):
@@ -122,7 +121,6 @@ def fix(points, min_required_distance=1.0):
 
 
 class Segment:
-    # TODO (7) rename to line
 
     def __init__(self, start, end):
         self.start = start

@@ -16,7 +16,7 @@ def feature_dimension():
 class State:
 
     def __init__(self, image=None, radar=None, collision=None, velocity=None, acceleration=None, position=None,
-                 direction=None, obstacle=None, distance_from_line=None, side=None):
+                 direction=None, obstacle=None, distance_from_path=None, side=None):
         self.image = image
         self.radar = radar
         self.collision = collision
@@ -25,7 +25,7 @@ class State:
         self.position = position
         self.direction = direction
         self.obstacle = obstacle
-        self.distance_from_line = distance_from_line
+        self.distance_from_path = distance_from_path
         self.side = side
 
     def print(self):
@@ -34,7 +34,7 @@ class State:
         else:
             acc = self.acceleration
         print([self.radar, self.collision, self.velocity, acc[0], acc[1], acc[2],
-               self.direction, self.obstacle, self.distance_from_line * self.side])
+               self.direction, self.obstacle, self.distance_from_path * self.side])
 
     # TODO (4) refactor to use DataKeys (rename them to Keys)?
     def get_formatted(self):
@@ -51,12 +51,12 @@ class State:
                  acc[0], acc[1], acc[2],
                  pos[0], pos[1], pos[2],
                  self.direction, self.obstacle,
-                 self.distance_from_line, self.side],
+                 self.distance_from_path, self.side],
                 [nameof(self.radar, locals()), nameof(self.collision, locals()), nameof(self.velocity, locals()),
                  f'{nameof(acc, locals())}X', f'{nameof(acc, locals())}Y', f'{nameof(acc, locals())}Z',
                  f'{nameof(pos, locals())}X', f'{nameof(pos, locals())}Y', f'{nameof(pos, locals())}Z',
                  nameof(self.direction, locals()), nameof(self.obstacle, locals()),
-                 nameof(self.distance_from_line, locals()), nameof(self.side, locals())])
+                 nameof(self.distance_from_path, locals()), nameof(self.side, locals())])
 
 
 # rotation matrices used in calculating car subjective acceleration
@@ -78,23 +78,23 @@ def __Rz(theta):
                       [0, 0, 1]])
 
 
-def repack(data, line, starting_dir):
+def repack(data, path, starting_dir):
     ca = data.get(DataKey.SENSOR_CAMERA)
     r = data.get(DataKey.SENSOR_RADAR)
     co = data.get(DataKey.SENSOR_COLLISION)
     o = data.get(DataKey.SENSOR_OBSTACLE)
     v = data.get(DataKey.SENSOR_VELOCITY)
     a = data.get(DataKey.SENSOR_ACCELERATION)
-    p = data.get(DataKey.SENSOR_POSITION)
+    pos = data.get(DataKey.SENSOR_POSITION)
     di = data.get(DataKey.SENSOR_DIRECTION)
     sdi = starting_dir
-    li = line
-    return ca, r, co, o, v, a, p, di, sdi, li
+    path = path
+    return ca, r, co, o, v, a, pos, di, sdi, path
 
 
 def convert(state):
     """Converts and normalizes incoming data (into a format the agent accepts)"""
-    camera, radar, collision, obstacle, velocity, acceleration, position, direction, starting_direction, line \
+    camera, radar, collision, obstacle, velocity, acceleration, position, direction, starting_direction, path \
         = state
 
     # TODO (7) refactor this mess
@@ -169,10 +169,10 @@ def convert(state):
         #  Window wants to show accurate inputs of agent, but also objective data...
         position = position
 
-    distance = line.distance(position[:2])
+    distance = path.distance(position[:2])
     if position_none_holder is None:
         distance = None
-    side = line.side(position[:2])
+    side = path.side(position[:2])
     # Normalize
     # TODO (3) make prettier
     position[0] = np.tanh(position[0] / POSITION_EACH_MAX)
@@ -207,6 +207,6 @@ def convert(state):
     if not any(map(lambda x: x is None, important)):
         return State(image=camera, radar=radar, collision=collision, velocity=velocity, acceleration=acceleration,
                      position=position, direction=current_direction, obstacle=obstacle,
-                     distance_from_line=distance, side=side)
+                     distance_from_path=distance, side=side)
     else:
         return None

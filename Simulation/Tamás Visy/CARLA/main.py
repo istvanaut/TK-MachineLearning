@@ -57,13 +57,13 @@ def main():
                 # TODO (6) extract this
                 frame_start = time.time_ns()
 
-                data, line, starting_dir = env.pull()
+                data, path, starting_dir = env.pull()
 
-                state = convert(repack(data, line, starting_dir))
+                state = convert(repack(data, path, starting_dir))
                 if TRAIN and TRAIN_PER_DECISION and prev_state is not None:
                     agent.optimize(state)
                 action, out = agent.predict(state, pure=pure(run), auto=not pure(run))
-                dashboard.handle(data, line, starting_dir, state, out, pure=pure(run))
+                dashboard.handle(data, path, starting_dir, state, out, pure=pure(run))
                 if out is not None:
                     env.put(DataKey.CONTROL_OUT, out)
                 # TODO (8) direction -1 broken somewhere
