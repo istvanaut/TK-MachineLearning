@@ -1,5 +1,6 @@
 import icarla
-from sensors import process_image, IM_WIDTH, IM_HEIGHT, process_obs, process_radar, process_coll
+from support.sensors import process_image, process_obs, process_radar, process_coll
+from settings import IM_WIDTH, IM_HEIGHT
 from support.logger import logger
 
 VEHICLE_BLUEPRINT_NAME = 'vehicle.volkswagen.t2'

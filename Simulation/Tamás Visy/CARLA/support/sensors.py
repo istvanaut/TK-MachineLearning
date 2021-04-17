@@ -23,7 +23,7 @@ def recently(event_time):
 
 def process_image(data, image):
     i = np.array(image.raw_data)
-    # i = i.reshape((IM_HEIGHT, IM_WIDTH, 4)) -> resizing is done by converter.convert
+    i = i.reshape((int(np.sqrt(len(i))//2), int(np.sqrt(len(i))//2), 4))  # actual resizing is done by converter.convert
     i = i[:, :, :3]
     data.put(DataKey.SENSOR_CAMERA, i / 255.0)  # normalization
 

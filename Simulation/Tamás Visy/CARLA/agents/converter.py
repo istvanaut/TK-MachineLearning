@@ -82,15 +82,15 @@ def convert(state):
     velocity = np.tanh(velocity / VELOCITY_GOOD_VALUE)
 
     # direction: degrees, {list: 3} - floats,
-    # -> radian/PI, {float64} (around vertical axis)
+    # -> radian/PI, {float64} (around vertical axis), scaled
     if direction is None:
         direction = [0, 0, 0]
         current_direction = 0
     else:
-        current_direction = (direction[1] - starting_direction[1])
-    CURRENT_DIRECTION_GOOD_VALUE = 0.7*np.pi
-    # Normalize
-    current_direction = current_direction / CURRENT_DIRECTION_GOOD_VALUE
+        current_direction = (direction[1]/180*np.pi - starting_direction[1])
+    CURRENT_DIRECTION_MAX = np.pi
+    # Scale -> 1 is 180 degrees or PI, -1 is -180 or -PI
+    current_direction = current_direction / CURRENT_DIRECTION_MAX
 
     # acceleration: m/s2, {list: 3} - floats
     # -> {list: 3} - subjective to the car, scaled, normalized

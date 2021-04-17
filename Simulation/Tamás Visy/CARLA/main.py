@@ -50,31 +50,27 @@ def main():
             prev_action = None
 
             while status.finished is False:
-                # TODO (6) extract this
                 frame_start = time.time_ns()
 
                 data, path, starting_dir = env.pull()
 
                 state = convert(repack(data, path, starting_dir))
+
                 if TRAIN and TRAIN_PER_DECISION and prev_state is not None:
                     agent.optimize(state)
+
                 action, out = agent.predict(state, pure=pure(run_index), auto=not pure(run_index))
                 dashboard.handle(data, path, starting_dir, state, out, pure=pure(run_index))
+
                 if out is not None:
                     env.put(DataKey.CONTROL_OUT, out)
-                # TODO (8) direction -1 broken somewhere
-                # TODO (6) change order things when of ending a run - why?
+
                 if prev_state is not None and prev_action is not None and state is not None:
                     memory.append([prev_state, prev_action, state])
                 prev_state = state
                 prev_action = action
 
-                frame_end = time.time_ns()
-                diff = None
-                if frame_end is not None and frame_start is not None:
-                    diff = (frame_end - frame_start) // 1_000_000
-                if diff is not None and diff // 1_000 < TARGET_FRAME_TIME:
-                    time.sleep(TARGET_FRAME_TIME - diff // 1_000)
+                apply_frame_time(frame_start)
                 status = env.check()
             logger.info('Finished')
             dashboard.clear()
@@ -101,6 +97,17 @@ def main():
             actor.destroy()
         del env  # Forget env after we cleaned up it's actors
         logger.debug('Cleaned up')
+
+
+def apply_frame_time(frame_start):
+    frame_end = time.time_ns()
+    diff = None
+    if frame_end is not None and frame_start is not None:
+        diff = (frame_end - frame_start) // 1_000_000
+    if diff is not None and diff // 1_000 < TARGET_FRAME_TIME:
+        time.sleep(TARGET_FRAME_TIME - diff // 1_000)
+    else:
+        logger.debug('Frame time issue')
 
 
 if __name__ == '__main__':

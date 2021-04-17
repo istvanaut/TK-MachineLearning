@@ -6,7 +6,8 @@ import icarla
 from environments.connection import Connection
 from environments.spawner import spawn_vehicle, spawn_camera, spawn_radar, spawn_collision, spawn_obstacle
 from environments.status import Status
-from path import get_path, Path
+from environments.path import get_path, Path
+from settings import MAP_NAME
 from support.datakey import DataKey
 from support.logger import logger
 from threads.controllerthread import ControllerThread
