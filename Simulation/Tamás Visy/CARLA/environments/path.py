@@ -1,5 +1,4 @@
 import math
-import random
 
 import numpy as np
 
@@ -78,7 +77,7 @@ class Path:
         return Segment(self.points[index], self.points[index + 1])
 
     def distance_along_path(self, point):
-        # TODO (2) test when getting close to next segment - but its working fine
+        # TODO (2) test when getting close to next segment - but mostly it's working fine
         if point is None:
             return None
         dist = 0.0

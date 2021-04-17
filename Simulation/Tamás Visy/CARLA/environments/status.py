@@ -1,8 +1,8 @@
 from path import distance
+from settings import MAX_OFF_DISTANCE
 from support.logger import logger
 from support.datakey import DataKey
 
-MAX_OFF_DISTANCE = 2.0
 
 
 class Status:

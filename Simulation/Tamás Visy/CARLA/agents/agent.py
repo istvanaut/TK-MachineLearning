@@ -3,15 +3,8 @@ import numpy as np
 
 from support.logger import logger
 
-choices = [[0.25, -0.1],
-           [0.25, 0.1]]
-choices_count = len(choices)
-
 
 class Agent:
-
-    def reset(self):
-        logger.error('RESET - not happening')
 
     def predict(self, state, pure=True, auto=False):
         if pure is not True:
@@ -34,6 +27,7 @@ class Agent:
         # camera, radar, velocity, acceleration, position = known_state
         # collision, obstacle, distance = hidden_state
         camera, radar, collision, velocity, acceleration, position, obstacle, distance = new_state
+        logger.error('OPTIMIZE - not happening')
         pass
 
     def save(self):

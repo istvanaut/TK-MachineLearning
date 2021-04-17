@@ -1,12 +1,10 @@
 import random
 
-from agents.agent import Agent, choices
-from agents.state import feature_dimension
+from agents.agent import Agent
+from settings import choices
 from kerasmodel import KerasModel
 from support.logger import logger
 import numpy as np
-
-feature_dimension = feature_dimension()
 
 
 def states_to_trainables(data):

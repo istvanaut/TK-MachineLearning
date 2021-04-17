@@ -10,7 +10,7 @@ COLL_BLUEPRINT_NAME = 'sensor.other.collision'
 OBS_BLUEPRINT_NAME = 'sensor.other.obstacle'
 DEFAULT_SPAWN_POINT = icarla.transform()
 
-SENSOR_SPAWN_POINT = icarla.transform(x=2.2, z=1.5)  # don't forget: the transform is mutable, use icarla.copy
+SENSOR_SPAWN_POINT = icarla.transform(x=2.2, z=1.5)  # the transform is mutable, use icarla.copy when modifying
 
 
 def spawn_camera(environment):

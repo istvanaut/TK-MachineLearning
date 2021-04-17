@@ -3,8 +3,6 @@ import copy
 from threading import Lock
 
 
-# TODO (4) check if deep copying everything always is a good idea
-
 class Data:
     data = None
     lock = None

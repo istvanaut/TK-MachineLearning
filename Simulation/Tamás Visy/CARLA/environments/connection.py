@@ -1,10 +1,8 @@
 import time
 
 import icarla
+from settings import HOST, PORT
 from support.logger import logger
-
-HOST = 'localhost'
-PORT = 2000
 
 
 class Connection:

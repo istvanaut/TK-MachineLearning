@@ -14,7 +14,8 @@ from support.data import Data
 from threads.pollerthread import PollerThread
 
 # Town05 has best paths on the inside of the motorway (still in the town)
-MAP_NAME = 'Town05'  # Best map: Town05 or Town03, least performance demanding map: Town02
+# Best map: Town05 or Town03, least performance demanding map: Town02
+# Current path on Town05
 
 
 class Environment:
@@ -52,7 +53,6 @@ class Environment:
     def set_conditions(self):
         current_map_name = self.connection.world.get_map().name
         # Loading correct map
-        # TODO (9) wait longer if load fails first
         if current_map_name != MAP_NAME:
             logger.info(f'Loading map: {MAP_NAME} <- {current_map_name}')
             try:
@@ -63,11 +63,13 @@ class Environment:
         else:
             # Destroying old actors
             actors = self.connection.world.get_actors()
-            # TODO (10) check if this destroys sensor actors as well - if not, performance hit?
             for actor in actors.filter('vehicle.*.*'):
                 actor.destroy()
-            if len(actors.filter('vehicle.*.*')) > 0:
+            for actor in actors.filter('sensor.*.*'):
+                actor.destroy()
+            if len(actors.filter('vehicle.*.*')) > 0 and len(actors.filter('sensor.*.*')) > 0:
                 logger.info('Cleaned up old actors')
+            actors = self.connection.world.get_actors()
         # Setting nice weather
         self.set_weather()
 

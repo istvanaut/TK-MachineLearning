@@ -50,7 +50,7 @@ def vehicle_control(reverse=False, throttle=0.0, steer=0.0):
 
 
 def rotation(d):
-    # Use degrees
+    # rotation in degrees
     return carla.Rotation(pitch=d[0], yaw=d[1], roll=d[2])
 
 
@@ -76,7 +76,6 @@ def add_locations(loc0, loc1):
 
 
 def rotate(actor, rot):
-    # rot
     loc = actor.get_transform().location
 
     while rot.pitch <= -180.0:
