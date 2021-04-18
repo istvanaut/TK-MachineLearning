@@ -1,31 +1,42 @@
+import os
+
 import numpy as np
 
 from environments.environment import Environment
 from support.logger import logger
 
-RETURNABLES_FILE_NAME = 'files/returnables.npy'
-STATUSES_FILE_NAME = 'files/statuses.npy'
+REPLAY_PULLS_FILE_NAME = 'files/replay_pulls.npy'
+REPLAY_STATUSES_FILE_NAME = 'files/replay_statuses.npy'
 
 
 # "Replays" can be created by collecting then saving the proper data in main
 # Returnables is a numpy array of (data, path, starting_dir) from CarlaEnvironment.pull()
-def load_returnables_from_file():
-    return np.load(RETURNABLES_FILE_NAME)
+def load_replay_pulls_from_file():
+    if os.path.isfile(REPLAY_PULLS_FILE_NAME):
+        return np.load(REPLAY_PULLS_FILE_NAME)
+    else:
+        logger.critical(f'File {REPLAY_PULLS_FILE_NAME} not found for ReplayEnvironment')
+        return None
 
 
 # Statuses is a numpy array of (status) from CarlaEnvironment.check()
-def load_statuses_from_file():
-    return np.load(STATUSES_FILE_NAME)
+def load_replay_statuses_from_file():
+    if os.path.isfile(REPLAY_STATUSES_FILE_NAME):
+        return np.load(REPLAY_STATUSES_FILE_NAME)
+    else:
+        logger.critical(f'File {REPLAY_STATUSES_FILE_NAME} not found for ReplayEnvironment')
+        return None
 
 
 class ReplayEnvironment(Environment):
     def __init__(self):
         self.i = 0
-        self.returnables = load_returnables_from_file()
-        self.statuses = load_statuses_from_file()
+        self.pulls = load_replay_pulls_from_file()
+        self.statuses = load_replay_statuses_from_file()
 
-        if self.returnables is None or self.statuses is None or len(self.returnables) < 1 or len(self.statuses) < 1:
-            logger.critical('Data issues in TestEnvironment')
+        if self.pulls is None or self.statuses is None or len(self.pulls) < 1 or len(self.statuses) < 1:
+            logger.critical('Critical data issues in ReplayEnvironment')
+            raise RuntimeError('Critical data issues in ReplayEnvironment')
 
     def start(self):
         pass
@@ -38,7 +49,7 @@ class ReplayEnvironment(Environment):
 
     def pull(self):
         self.i += 1
-        return self.returnables[self.i % len(self.returnables)]
+        return self.pulls[self.i % len(self.pulls)]
 
     def put(self, key, data):
         pass
