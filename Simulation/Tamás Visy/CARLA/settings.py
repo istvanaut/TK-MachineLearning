@@ -18,7 +18,7 @@ class EnvironmentTypes(Enum):  # Implementations of Environment
 TRAIN = True
 TRAIN_PER_DECISION = False
 AGENT_TYPE = AgentTypes.Keras
-ENVIRONMENT_TYPE = EnvironmentTypes.Test
+ENVIRONMENT_TYPE = EnvironmentTypes.CARLA
 TARGET_FRAME_TIME = 0.25
 MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
 

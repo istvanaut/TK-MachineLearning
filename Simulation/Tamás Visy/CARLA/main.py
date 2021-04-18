@@ -5,7 +5,7 @@ from agents.networkagent import NetworkAgent
 from agents.converter import convert, repack
 from environments.carlaenvironment import CarlaEnvironment
 from environments.status import Status
-from environments.testenvironment import ReplayEnvironment
+from environments.replayenvironment import ReplayEnvironment
 from settings import TRAIN, TRAIN_PER_DECISION, pure, TARGET_FRAME_TIME, MEMORY_SIZE, AGENT_TYPE, AgentTypes, \
     ENVIRONMENT_TYPE, EnvironmentTypes
 from support.datakey import DataKey
