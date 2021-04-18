@@ -1,13 +1,13 @@
-# @title main
-import numpy as np
 import time
 
 from agents.kerasagent import KerasAgent
 from agents.networkagent import NetworkAgent
 from agents.converter import convert, repack
-from environments.environment import Environment
+from environments.carlaenvironment import CarlaEnvironment
 from environments.status import Status
-from settings import TRAIN, TRAIN_PER_DECISION, pure, TARGET_FRAME_TIME, MEMORY_SIZE, AGENT_TYPE, AgentTypes
+from environments.testenvironment import TestEnvironment
+from settings import TRAIN, TRAIN_PER_DECISION, pure, TARGET_FRAME_TIME, MEMORY_SIZE, AGENT_TYPE, AgentTypes, \
+    ENVIRONMENT_TYPE, EnvironmentTypes
 from support.datakey import DataKey
 from support.logger import logger
 from threads.dashboardthread import DashboardThread
@@ -20,7 +20,14 @@ logger.warning(f'Train per decision is {TRAIN_PER_DECISION}')
 def main():
     logger.info('Starting')
 
-    env = Environment()
+    if ENVIRONMENT_TYPE is EnvironmentTypes.CARLA:
+        env = CarlaEnvironment()
+    elif ENVIRONMENT_TYPE is EnvironmentTypes.Test:
+        env = TestEnvironment()
+    else:
+        logger.critical('Unknown environment type in main, raising error')
+        raise RuntimeError('Unknown environment type in main')
+    logger.info(f'Environment type is {type(env).__name__}')
 
     if AGENT_TYPE is AgentTypes.Network:
         agent = NetworkAgent()
@@ -29,13 +36,13 @@ def main():
     else:
         logger.critical('Unknown agent type in main, raising error')
         raise RuntimeError('Unknown agent type in main')
+    logger.info(f'Agent type is {type(agent).__name__}')
 
     dashboard = DashboardThread()
     memory = []
     run_index = 0
 
     try:
-        env.connect()
         env.setup()
         agent.load()
 

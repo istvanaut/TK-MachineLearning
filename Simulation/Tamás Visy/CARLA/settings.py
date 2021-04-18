@@ -9,10 +9,16 @@ class AgentTypes(Enum):  # Implementations of Agent
     Keras = 2
 
 
+class EnvironmentTypes(Enum):  # Implementations of Environment
+    CARLA = 1
+    Test = 2
+
+
 # Settings of training
 TRAIN = True
 TRAIN_PER_DECISION = False
 AGENT_TYPE = AgentTypes.Keras
+ENVIRONMENT_TYPE = EnvironmentTypes.Test
 TARGET_FRAME_TIME = 0.25
 MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
 
