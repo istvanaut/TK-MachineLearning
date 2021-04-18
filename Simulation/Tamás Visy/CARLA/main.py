@@ -5,7 +5,7 @@ from agents.networkagent import NetworkAgent
 from agents.converter import convert, repack
 from environments.carlaenvironment import CarlaEnvironment
 from environments.status import Status
-from environments.testenvironment import TestEnvironment
+from environments.testenvironment import ReplayEnvironment
 from settings import TRAIN, TRAIN_PER_DECISION, pure, TARGET_FRAME_TIME, MEMORY_SIZE, AGENT_TYPE, AgentTypes, \
     ENVIRONMENT_TYPE, EnvironmentTypes
 from support.datakey import DataKey
@@ -23,7 +23,7 @@ def main():
     if ENVIRONMENT_TYPE is EnvironmentTypes.CARLA:
         env = CarlaEnvironment()
     elif ENVIRONMENT_TYPE is EnvironmentTypes.Test:
-        env = TestEnvironment()
+        env = ReplayEnvironment()
     else:
         logger.critical('Unknown environment type in main, raising error')
         raise RuntimeError('Unknown environment type in main')
