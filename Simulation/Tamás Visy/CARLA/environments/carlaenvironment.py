@@ -14,13 +14,13 @@ from threads.controllerthread import ControllerThread
 from support.data import Data
 from threads.pollerthread import PollerThread
 
+
 # Town05 has best paths on the inside of the motorway (still in the town)
 # Best map: Town05 or Town03, least performance demanding map: Town02
 # Current path on Town05
 
 # TODO (5) refactor every "self.connection.world. ..."
 #  in this file and in others
-
 
 class CarlaEnvironment(Environment):
     def __init__(self):
@@ -57,19 +57,24 @@ class CarlaEnvironment(Environment):
         self.vehicle.apply_control(icarla.vehicle_control(throttle=0, steer=0))
         icarla.set_velocity(self.vehicle, icarla.vector3d())
 
-        if do_update_path:
-            self.__update_path()
+        self.__update_path()
 
         icarla.move(self.vehicle, icarla.transform(self.path.start[0], self.path.start[1], 0.25).location)
         icarla.rotate(self.vehicle, icarla.rotation_from_radian(self.path.direction()))
+        position = icarla.transform(self.path.start[0] + 5 * np.cos(self.path.direction()[1]),
+                                    self.path.start[1] + 5 * np.sin(self.path.direction()[1]),
+                                    12.0).location
+        rotation = icarla.rotation([-85, self.path.direction()[1] / np.pi * 180.0, 0])
+        self.__spectator_move_and_rotate(position, rotation)
+        logger.info('Environment reset successful')
+
+    def __spectator_move_and_rotate(self, position, direction):
         icarla.move(self.connection.world.get_spectator(),
-                    icarla.transform(self.path.start[0] + 10 * np.cos(self.path.direction()[1]),
-                                     self.path.start[1] + 10 * np.sin(self.path.direction()[1]),
-                                     12.0).location)
+                    position)
+
         # Apparently UE4 spectator doesn't like exact 90 degrees, keep it less?
         icarla.rotate(self.connection.world.get_spectator(),
-                      icarla.rotation([-85, self.path.direction()[1] / np.pi * 180.0, 0]))
-        logger.info('Environment reset successful')
+                      direction)
 
     def clear(self):
         # Clears all data -> removes thread_halt -> threads can resume
@@ -85,6 +90,19 @@ class CarlaEnvironment(Environment):
     def check(self):
         s = Status()
         s.check(self)
+
+        pos = self.data.get(DataKey.SENSOR_POSITION)
+        # TODO update rot to use line direction at current position
+        rot = self.data.get(DataKey.SENSOR_DIRECTION)
+        if pos is not None and rot is not None:
+            # position = icarla.transform(pos[0] + 5 * np.cos(rot[1]),
+            #                             pos[1] + 5 * np.sin(rot[1]),
+            #                             12.0).location
+            position = icarla.transform(pos[0],
+                                        pos[1],
+                                        12.0).location
+            rotation = icarla.rotation([-85, rot[1], 0])
+            self.__spectator_move_and_rotate(position, rotation)
         return s
 
     def __set_conditions(self):
@@ -106,8 +124,7 @@ class CarlaEnvironment(Environment):
                 actor.destroy()
             if len(actors.filter('vehicle.*.*')) > 0 and len(actors.filter('sensor.*.*')) > 0:
                 logger.info('Cleaned up old actors')
-            actors = self.connection.world.get_actors()
-        # Setting nice weather
+                # Setting nice weather
         self.__set_weather()
 
     def __set_weather(self):
@@ -140,13 +157,13 @@ class CarlaEnvironment(Environment):
         #     self.path.slice(70, None)
         #     self.path.invert()
         # elif
-        if r < 1/4:
+        if r < 1 / 4:
             logger.info('Environment: normal full')
             pass
-        elif r < 2/4:
+        elif r < 2 / 4:
             logger.info('Environment: backwards full')
             self.path.invert()
-        elif r < 3/4:
+        elif r < 3 / 4:
             logger.info('Environment: normal turn (left)')
             self.path.slice(30, 60)
         else:
