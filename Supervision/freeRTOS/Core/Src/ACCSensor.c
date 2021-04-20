@@ -9,7 +9,10 @@ static bno055_vector_t euler;
 
 static bno055_vector_t accOffset;
 
+
+
 void initACCSensor(I2C_HandleTypeDef* hi2c_device){
+	setACC_OS_RUNNING(0);
 	bno055_assignI2C(hi2c_device);
 	bno055_setup();
 	bno055_setOperationMode(BNO055_OPERATION_MODE_NDOF);
@@ -77,4 +80,10 @@ bno055_vector_t getEuler(void){
 	temp = euler;
 	osSemaphoreRelease(SemACCHandle);
 	return temp;
+}
+
+//0: OS not running 1: OS running
+//0: It will use HAL_Delay 1: It will use OS_delay
+void setACC_OS_RUNNING(uint8_t value){
+	bno055_setFreeRTOSRunning(value);
 }

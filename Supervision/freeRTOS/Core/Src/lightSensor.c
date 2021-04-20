@@ -141,7 +141,7 @@ void LightSensorCycle()
 	// Debug LED write
 	SPItransmit_LED(leds_buff, 1);
 
-	osSemaphoreAcquire(SemLightSensorHandle, 0);
+	osSemaphoreAcquire(SemLightSensorHandle, osWaitForever);
 	activeLeds = 0;
 	activeLeds |= leds_buff[0] << 24;
 	activeLeds |= leds_buff[1] << 16;
@@ -154,7 +154,7 @@ uint32_t GetLightSensorValues()
 {
 	uint32_t retTemp;
 
-	osSemaphoreAcquire(SemLightSensorHandle, 5);
+	osSemaphoreAcquire(SemLightSensorHandle, osWaitForever);
 	retTemp = activeLeds;
 	osSemaphoreRelease(SemLightSensorHandle);
 

@@ -1,30 +1,31 @@
 import matplotlib.pyplot as plt
 
-# TODO (5) add more things it can do
-# Important: set working directory to CARLA instead of CARLA/support
+# Important setup: set working directory to CARLA instead of CARLA/support
 
-# ~~~ for distance from start
+# ~~~ are the lines summarizing a run
+from support.names import nameof
+
 LINES_CONTAINING = '~~~'
 
 with open('files/carla.log', 'r') as f:
     content = f.readlines()
 content = [x.strip() for x in content]
 
-important = []
-other = []
+distances = []
+successes = []
 
 for line in content:
     if LINES_CONTAINING in line:
         i = line.index('-:-')
-        important.append(float(str(line[i+4:i+12])))
+        distances.append(float(str(line[i + 4:i + 12])))
         if 'success: True' in line:
-            other.append(10.0)
+            successes.append(10.0)
         else:
-            other.append(0.0)
+            successes.append(0.0)
 
-print(important)
-print(other)  # success or fail
+print(distances)
+print(successes)  # success or fail
 
-plt.plot(important, label='traveled')
-plt.plot(other, label='success')
+plt.plot(distances, label=nameof(distances))
+plt.plot(successes, label=nameof(distances))
 plt.show()

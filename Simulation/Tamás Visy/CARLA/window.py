@@ -1,27 +1,21 @@
-import random
-
-import sensors
-from support.datakey import DataKey
 import numpy as np
 import os
 
+from settings import TITLE, FONT
 from support.image_manipulation import im_resize, im_color
 from support.logger import logger
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 
-TITLE = 'Dashboard'
-FONT = 'freesansbold.ttf'
 
 QUIT = pygame.QUIT
-IM_SIZE = (32, 32)
 
 
 class Window:
     def __init__(self):
         self.data = None
-        self.line = None
+        self.path = None
         self.starting_dir = None
         self.state = None
         self.agent_out = None
@@ -69,9 +63,9 @@ class Window:
     def clear(self):
         self.handle(None, None, None, None, None, False)
 
-    def handle(self, data, line, starting_dir, state, out, pure):
+    def handle(self, data, path, starting_dir, state, out, pure):
         self.data = data
-        self.line = line
+        self.path = path
         self.starting_dir = starting_dir
         self.state = state
         self.agent_out = out
@@ -107,7 +101,7 @@ class Window:
                            (side_start + i // square_sides * side_step, top_start + i % square_sides * top_step))
 
     def insert_placeholder(self, data, names):
-        # TODO (5) remove inserted placeholders
+        # TODO (5) remove inserted placeholder
         names.insert(0, 'Placeholder')
         if self.i % 8 is 0:
             data.insert(0, '---')
@@ -159,9 +153,7 @@ class Window:
             text = ''.join(t)
         else:
             # If text is not str or list - show first 5 chars
-
-            # TODO (2) pretty disgusting but checking for every non-integer numtype is probably more difficult
-            # Example: text = 4.232e-9 ===> not 4.23... but 0.0...
+            # Example when needed: text = 4.232e-9 ===> not 4.23... but 0.0...
             try:
                 text = np.round(text, 4)
             except RuntimeError:

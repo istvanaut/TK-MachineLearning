@@ -1,20 +1,7 @@
 # based on kerasmodel.py from Tamás Visy's temalab_gta repo
 import gc
 
-# try:
-#     RUNTIME
-# except NameError:  # if runtime is not defined, we have to import variables from models.model
-#     from models.model import Model
-#     from support.image_manipulator import normalize, resize, grayscale
-#     from support.settings_and_constants import KERAS, INPUT_SHAPE, LEARNING_RATE, MODEL_FILE_NAME, METRIC, \
-#         TENSORBOARD_DIR, KERAS_CHECKPOINT_FILE_NAMES, WIDTH, HEIGHT
-
-# TODO (8) refactor this file
-# TODO (4) where to put agent_im_stuff
-from ReinforcementModel import AGENT_IM_WIDTH, AGENT_IM_HEIGHT
-
-# if KERAS:
-from agents.agent import choices_count
+from settings import choices_count, AGENT_IM_WIDTH, AGENT_IM_HEIGHT
 from support.logger import logger
 
 logger.debug('Use a NumPy version with allow_pickle enabled')
@@ -38,10 +25,7 @@ INPUT_SHAPE = [AGENT_IM_WIDTH, AGENT_IM_HEIGHT, 1]  # [WIDTH, HEIGHT, 1]
 LEARNING_RATE = 0.1
 PATH_PREFIX = ''
 METRIC = 'val_loss'
-# TODO (6) move files
-# MODEL_FILE_NAME = PATH_PREFIX + 'other/model/{}/py-gta5-sdc-pilotnet-{}.model'
 file_name = 'files/keras/keras.model'
-# KERAS_CHECKPOINT_FILE_NAMES = PATH_PREFIX + 'other/checkpoint/model-pilotnet-{name}_best.h5'
 checkpoint_file_names = 'files/keras/checkpoints/keras_{epoch}.h5'
 
 
@@ -86,9 +70,7 @@ class KerasModel:  # class KerasModel(Model):
         )
 
         loss = tf.keras.losses.BinaryCrossentropy()
-        # loss = tf.keras.losses.MeanSquaredError(reduction='auto', name='mean_squared_error')
 
-        # TODO (4) understand metrics, loss_weights, optimizer (adam and SGD)
         network.compile(loss=loss, optimizer=SGD(lr=LEARNING_RATE), metrics=['accuracy'])
 
         logger.warning('Skipping kerasmodel summary')
@@ -117,14 +99,11 @@ class KerasModel:  # class KerasModel(Model):
             mode='min',
             save_best_only=False)  # revert to True if needed
 
-        # tensorboard_callback = keras.callbacks.TensorBoard(log_dir=TENSORBOARD_DIR)
-
         initial_epoch = 0
         found = False
         path = ''
         for i in list(range(1000))[::-1]:
             path = checkpoint_file_names.format(epoch=i)
-            # KERAS_CHECKPOINT_FILE_NAMES.format(name=self.name).format(epoch=i)  # This must be sequential
             if not found and os.path.isfile(path):
                 logger.info(f'File exists, loading checkpoint {path}')
                 self.network.load_weights(path)
@@ -134,16 +113,12 @@ class KerasModel:  # class KerasModel(Model):
         if not found:
             logger.warning(f'No checkpoint found at {path}')
 
-        # (2.) Load train data, split training and testing sets
-        #       - training data is what we'll fit the neural network with
-        #       - test data is to validate the results &
-        #            test the accuracy of the network
         logger.debug('Reshaping data...')
 
         train_x = []
         train_y = []
         for i in train:
-            train_x.append(i[0])  # train_x.append(normalize(i[0]))
+            train_x.append(i[0])
             train_y.append(i[1])
 
         train_x = np.array(train_x).reshape([-1, INPUT_SHAPE[0], INPUT_SHAPE[1], INPUT_SHAPE[2]])
@@ -151,8 +126,6 @@ class KerasModel:  # class KerasModel(Model):
 
         logger.debug('Training data finished')
 
-        # test_x = np.array([normalize(i[0]) for i in test])
-        # .reshape([-1, INPUT_SHAPE[0], INPUT_SHAPE[1], INPUT_SHAPE[2]])
         test_x = np.array([i[0] for i in test]).reshape([-1, INPUT_SHAPE[0], INPUT_SHAPE[1], INPUT_SHAPE[2]])
         test_y = np.array([i[1] for i in test])
 
@@ -165,11 +138,12 @@ class KerasModel:  # class KerasModel(Model):
         # (4.) Training the CNN
         self.network.fit(train_x, train_y, validation_data=(test_x, test_y),
                          epochs=e, initial_epoch=initial_epoch,
-                         callbacks=[model_checkpoint_callback])  # Removed tensorboard_callback from callbacks
+                         callbacks=[model_checkpoint_callback])
 
         # Saving the weights
         self.network.save_weights(file_name)
         logger.debug('Finished training, cleaning up...')
+        # Long training session can crash
         tf.keras.backend.clear_session()  # TODO (4) check whether it helps
         gc.collect()  # TODO (2) remove if doesn't help
         logger.debug('Done')

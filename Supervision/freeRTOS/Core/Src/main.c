@@ -98,6 +98,13 @@ const osThreadAttr_t communicationTask_attributes = {
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityBelowNormal5,
 };
+/* Definitions for rewardTask */
+osThreadId_t rewardTaskHandle;
+const osThreadAttr_t rewardTask_attributes = {
+  .name = "rewardTask",
+  .stack_size = 512 * 4,
+  .priority = (osPriority_t) osPriorityBelowNormal3,
+};
 /* Definitions for SemACC */
 osSemaphoreId_t SemACCHandle;
 const osSemaphoreAttr_t SemACC_attributes = {
@@ -149,24 +156,13 @@ const osSemaphoreAttr_t SemUSSensorEdge_attributes = {
   .name = "SemUSSensorEdge"
 };
 /* USER CODE BEGIN PV */
-// USSensor BEGIN
+
 int motorDisable = 0;
 
-extern uint32_t UStimeDifferenceLeft;
-extern uint32_t USStartTimeLeft;
-extern uint32_t USStopTimeLeft;
-
-extern uint32_t UStimeDifferenceRight;
-extern uint32_t USStartTimeRight;
-extern uint32_t USStopTimeRight;
+// USSensor BEGIN
 
 extern TIM_HandleTypeDef* UStim;
 
-enum US_SENSOR{
-	LEFT, RIGHT
-};
-
-volatile enum US_SENSOR currentUSSensor = LEFT;
 // USSensor END
 
 /* USER CODE END PV */
@@ -190,6 +186,7 @@ void StartTaskEncoders(void *argument);
 void StartTaskEmergencyBreaking(void *argument);
 void StartTaskACC(void *argument);
 void StartTaskCommunication(void *argument);
+void StartTaskReward(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -315,6 +312,9 @@ int main(void)
 
   /* creation of communicationTask */
   communicationTaskHandle = osThreadNew(StartTaskCommunication, NULL, &communicationTask_attributes);
+
+  /* creation of rewardTask */
+  rewardTaskHandle = osThreadNew(StartTaskReward, NULL, &rewardTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -796,9 +796,9 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 3599;
+  htim6.Init.Prescaler = 599;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 65535;
+  htim6.Init.Period = 59999;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
@@ -834,9 +834,9 @@ static void MX_TIM7_Init(void)
 
   /* USER CODE END TIM7_Init 1 */
   htim7.Instance = TIM7;
-  htim7.Init.Prescaler = 3599;
+  htim7.Init.Prescaler = 599;
   htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 65535;
+  htim7.Init.Period = 59999;
   htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
   {
@@ -1025,26 +1025,26 @@ void StartTaskDeafult(void *argument)
 		  {
 			  if (LLS > LS)
 			  {
-				  leftMotor(0.8);
-				  rightMotor(0.45);
+				  leftMotor(0.4);
+				  rightMotor(0.6);
 			  }
 			  else if (LLS < LS)
 			  {
-				  leftMotor(0.6);
-				  rightMotor(0.5);
+				  leftMotor(0.45);
+				  rightMotor(0.6);
 			  }
 		  }
 		  else if (LS + LLS < RS + RRS)
 		  {
 			  if (RRS > RS)
 			  {
-				  leftMotor(0.45);
-				  rightMotor(0.8);
+				  leftMotor(0.65);
+				  rightMotor(0.4);
 			  }
 			  else if (RRS < RS)
 			  {
-				  leftMotor(0.5);
-				  rightMotor(0.6);
+				  leftMotor(0.63);
+				  rightMotor(0.45);
 			  }
 		  }
 		  else
@@ -1092,14 +1092,12 @@ void StartTaskEncoders(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  CalculateDistance(LEFT_ENCODER);
-	  CalculateDistance(RIGHT_ENCODER);
-	  if (i % 10 == 0)
-	  {
-		  CalculateSpeed(LEFT_ENCODER);
-		  CalculateSpeed(RIGHT_ENCODER);
-	  }
-	  else if (i == 50)
+	  CalculateDistance(LEFT_SIDE);
+	  CalculateDistance(RIGHT_SIDE);
+	  CalculateSpeed(LEFT_SIDE);
+	  CalculateSpeed(RIGHT_SIDE);
+
+	  if (i == 50)
 	  {
 		  CalculatePositionAndAngle();
 		  i = 0;
@@ -1124,15 +1122,15 @@ void StartTaskEncoders(void *argument)
 void StartTaskEmergencyBreaking(void *argument)
 {
   /* USER CODE BEGIN StartTaskEmergencyBreaking */
-  unsigned int lDist = 500;
-  unsigned int rDist = 500;
-  unsigned int mDist = 5000;
+  unsigned int lDist = 0;
+  unsigned int rDist = 0;
+  unsigned int mDist = 0;
   /* Infinite loop */
   for(;;)
   {
 	  lDist = (unsigned int)getUSDistanceLeft();
 	  rDist = (unsigned int)getUSDistanceRight();
-	  mDist = (unsigned int)getlezerDistance();
+	  mDist = (unsigned int)getLaserDistance();
 
 	  if (lDist < 50 || rDist < 50 || mDist < 500)
 	  {
@@ -1160,12 +1158,13 @@ void StartTaskEmergencyBreaking(void *argument)
 void StartTaskACC(void *argument)
 {
   /* USER CODE BEGIN StartTaskACC */
+	setACC_OS_RUNNING(1);
   /* Infinite loop */
   for(;;)
   {
-	 //AccMeasure();
-	 //GyroMeasure();
-	 //EulerMeasure();
+	 AccMeasure();
+	 GyroMeasure();
+	 EulerMeasure();
 	 osDelay(10);
   }
   /* USER CODE END StartTaskACC */
@@ -1184,25 +1183,45 @@ void StartTaskCommunication(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  /*
-	  printf("\033[3J");
-	  printf("\e[1;1H\e[2J");
-	  printf("Light sensor: 0x%x\n", GetLightSensorValues());
-	  printf("Left US sensor: %u\n", getUSDistanceLeft());
-	  printf("Right US sensor: %u\n", getUSDistanceRight());
-	  printf("Laser sensor: %u\n", getlezerDistance());
-	  printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAcc().x, getAcc().y, getAcc().z, getEuler().x, getEuler().y, getEuler().z);
-	  GetEncoderData();
-	  */
+	  //printf("\033[3J");
+	  //printf("\e[1;1H\e[2J");
+	  //printf("Light sensor: 0x%x\n", GetLightSensorValues());
+	  //printf("Left US sensor: %u\n", getUSDistanceLeft());
+	  //printf("Right US sensor: %u\n", getUSDistanceRight());
+	  //printf("Laser sensor: %u\n", getLaserDistance());
+	  //printf("Acceleration: x: %f y: %f z: %f, Euler: x: %f y: %f z: %f\n", getAcc().x, getAcc().y, getAcc().z, getEuler().x, getEuler().y, getEuler().z);
+	  //PrintEncoderAllData();
 
-	  osDelay(1000);
+	  osDelay(500);
   }
   /* USER CODE END StartTaskCommunication */
 }
 
+/* USER CODE BEGIN Header_StartTaskReward */
+/**
+* @brief Function implementing the rewardTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTaskReward */
+void StartTaskReward(void *argument)
+{
+  /* USER CODE BEGIN StartTaskReward */
+	osDelay(50);
+	SetLightSensorValueForTheFirstTime();
+  /* Infinite loop */
+  for(;;)
+  {
+	GetReward();
+
+    osDelay(1000);
+  }
+  /* USER CODE END StartTaskReward */
+}
+
  /**
   * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM10 interrupt took place, inside
+  * @note   This function is called  when TIM13 interrupt took place, inside
   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
   * a global variable "uwTick" used as application time base.
   * @param  htim : TIM handle
@@ -1213,66 +1232,27 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* USER CODE BEGIN Callback 0 */
 
   /* USER CODE END Callback 0 */
-  if (htim->Instance == TIM10) {
+  if (htim->Instance == TIM13) {
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
   	//Left encoder BEGIN
 	if(htim->Instance == TIM6)
 	{
-		DisableSpeed(LEFT_ENCODER);
+		DisableSpeed(LEFT_SIDE);
 	}
 	//Left encoder END
 
 	//Right encoder BEGIN
 	if(htim->Instance == TIM7)
 	{
-		DisableSpeed(RIGHT_ENCODER);
+		DisableSpeed(RIGHT_SIDE);
 	}
 	//Right encoder END
 
   	//US Sensor BEGIN
   	if(htim->Instance == UStim->Instance){
-  		//LEFT
-  		if(currentUSSensor == LEFT){
-  			HAL_TIM_Base_Stop_IT(UStim);
-  			//Stop LEFT
-  			HAL_TIM_PWM_Stop(UStim, TIM_CHANNEL_4);
-  			HAL_TIM_IC_Stop_IT(UStim, TIM_CHANNEL_3);
-  			//If echo not detected, distance set to 500 cm
-  			if(getUSRisingEdgeLeftCallback() == 1) setUSDistanceLeftCallBack(500);
-  			setUSRisingEdgeLeftCallBack(0);
-  			//Set timer to zero
-  			__HAL_TIM_SET_COUNTER(UStim, 0);
-  			//Set RIGHT
-  			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
-  			//Start RIGHT
-  			HAL_TIM_IC_Start_IT(UStim, TIM_CHANNEL_1);
-  			HAL_TIM_PWM_Start(UStim, TIM_CHANNEL_2);
-  			HAL_TIM_Base_Start_IT(UStim);
-
-  			currentUSSensor = RIGHT;
-  		}
-  		//RIGHT
-  		else if(currentUSSensor == RIGHT){
-  			HAL_TIM_Base_Stop_IT(UStim);
-  			//Stop RIGHT
-  			HAL_TIM_PWM_Stop(UStim, TIM_CHANNEL_2);
-  			HAL_TIM_IC_Stop_IT(UStim, TIM_CHANNEL_1);
-  			//If echo not detected, distance set to 500 cm
-  			if(getUSRisingEdgeRightCallback() == 1) setUSDistanceRightCallBack(500);
-  			setUSRisingEdgeRightCallBack(0);
-  			//Set timer to zero
-  			__HAL_TIM_SET_COUNTER(UStim, 0);
-  			//Set LEFT
-  			__HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_RISING);
-  			//Start LEFT
-  			HAL_TIM_IC_Start_IT(UStim, TIM_CHANNEL_3);
-  			HAL_TIM_PWM_Start(UStim, TIM_CHANNEL_4);
-  			HAL_TIM_Base_Start_IT(UStim);
-
-  			currentUSSensor = LEFT;
-  		}
+  		USSensorPeriodElapsedCallback(htim);
   	}
   	//US Sensor END
   /* USER CODE END Callback 1 */

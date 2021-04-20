@@ -1,5 +1,6 @@
 import icarla
-from sensors import process_image, IM_WIDTH, IM_HEIGHT, process_obs, process_radar, process_coll
+from support.sensors import process_image, process_obs, process_radar, process_coll
+from settings import IM_WIDTH, IM_HEIGHT
 from support.logger import logger
 
 VEHICLE_BLUEPRINT_NAME = 'vehicle.volkswagen.t2'
@@ -10,7 +11,7 @@ COLL_BLUEPRINT_NAME = 'sensor.other.collision'
 OBS_BLUEPRINT_NAME = 'sensor.other.obstacle'
 DEFAULT_SPAWN_POINT = icarla.transform()
 
-SENSOR_SPAWN_POINT = icarla.transform(x=2.2, z=1.5)  # don't forget: the transform is mutable, use icarla.copy
+SENSOR_SPAWN_POINT = icarla.transform(x=2.2, z=1.5)  # the transform is mutable, use icarla.copy when modifying
 
 
 def spawn_camera(environment):
@@ -52,7 +53,7 @@ def spawn_radar(environment):
     radar_blueprint = bpl.find(RADAR_BLUEPRINT_NAME)
     radar_blueprint.set_attribute('horizontal_fov', '1.0')
     radar_blueprint.set_attribute('vertical_fov', '1.0')
-    # radar_blueprint.set_attribute(dict)  # TODO (2) can it work with dict?
+    # radar_blueprint.set_attribute(dict)  # TODO (2) try setting options with dict
     # radar.set(
     #     Channels=32,
     #     Range=50,

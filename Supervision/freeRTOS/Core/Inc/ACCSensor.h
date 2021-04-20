@@ -15,3 +15,5 @@ bno055_vector_t getGyro(void);
 void EulerMeasure(void);
 
 bno055_vector_t getEuler(void);
+
+void setACC_OS_RUNNING(uint8_t value);

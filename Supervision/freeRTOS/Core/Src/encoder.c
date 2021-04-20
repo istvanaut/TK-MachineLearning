@@ -1,7 +1,8 @@
 #include "encoder.h"
 
 #define sysCLK 72000000.0
-#define PSC 3599.0
+#define PSC 600.0
+#define speedCalcPeriod 3
 #define oneRot 10.35 //one hole rotation is millimeters
 #define W 0.146 //width of car in meters
 
@@ -64,33 +65,37 @@ void Timer7_Stop() //Right
 // Set functions
 void DisableSpeed(int motor) // 0 => left, 1 => right
 {
-	if (motor == LEFT_ENCODER)
+	if (motor == LEFT_SIDE)
 	{
-		osSemaphoreAcquire(SemLeftEncoderHandle, 0);
-		distanceLeft = 0;
-		osSemaphoreRelease(SemLeftEncoderHandle);
+		if(osSemaphoreAcquire(SemLeftEncoderHandle, 0) == osOK)
+		{
+			speedLeftEN = 0;
+			osSemaphoreRelease(SemLeftEncoderHandle);
+		}
 	}
 	else
 	{
-		osSemaphoreAcquire(SemRightEncoderHandle, 0);
-		distanceRight = 0;
-		osSemaphoreRelease(SemRightEncoderHandle);
+		if(osSemaphoreAcquire(SemRightEncoderHandle, 0) == osOK)
+		{
+			speedRightEN = 0;
+			osSemaphoreRelease(SemRightEncoderHandle);
+		}
 	}
 }
 
 // Calculate functions
 void CalculateDistance(int motor)
 {
-	if (motor == LEFT_ENCODER)
+	if (motor == LEFT_SIDE)
 	{
-		osSemaphoreAcquire(SemLeftEncoderHandle, 0);
-		speedLeftEN = encoderSumOfRotationsLeft*oneRot/1000;
+		osSemaphoreAcquire(SemLeftEncoderHandle, osWaitForever);
+		distanceLeft = encoderSumOfRotationsLeft*oneRot/1000;
 		osSemaphoreRelease(SemLeftEncoderHandle);
 	}
 	else
 	{
-		osSemaphoreAcquire(SemRightEncoderHandle, 0);
-		speedRightEN = encoderSumOfRotationsRight*oneRot/1000;
+		osSemaphoreAcquire(SemRightEncoderHandle, osWaitForever);
+		distanceRight = encoderSumOfRotationsRight*oneRot/1000;
 		osSemaphoreRelease(SemRightEncoderHandle);
 	}
 }
@@ -99,20 +104,20 @@ void CalculateSpeed(int motor)
 {
 	  double timeOfStep = 1.0/(sysCLK / PSC);
 
-	  if (motor == LEFT_ENCODER)
+	  if (motor == LEFT_SIDE)
 	  {
-		  osSemaphoreAcquire(SemLeftEncoderHandle, 0);
+		  osSemaphoreAcquire(SemLeftEncoderHandle, osWaitForever);
 		  if(speedLeftEN)
-			  speedLeft = 0.05175/(timeOfStep*timerCntrValLeft); //TMRCNTRVAL csak ha mind egy irányba?
+			  speedLeft = (speedCalcPeriod * oneRot / 1000)/(timeOfStep*timerCntrValLeft); //TMRCNTRVAL csak ha mind egy irányba?
 		  else
 			  speedLeft = 0;
 		  osSemaphoreRelease(SemLeftEncoderHandle);
 	  }
 	  else
 	  {
-		  osSemaphoreAcquire(SemRightEncoderHandle, 0);
+		  osSemaphoreAcquire(SemRightEncoderHandle, osWaitForever);
 		  if(speedRightEN)
-			  speedRight = 0.05175/(timeOfStep*timerCntrValRight); //TMRCNTRVAL csak ha mind egy irányba?
+			  speedRight = (speedCalcPeriod * oneRot / 1000)/(timeOfStep*timerCntrValRight); //TMRCNTRVAL csak ha mind egy irányba?
 		  else
 			  speedRight = 0;
 		  osSemaphoreRelease(SemRightEncoderHandle);
@@ -120,9 +125,11 @@ void CalculateSpeed(int motor)
 
 }
 
-void CalculatePositionAndAngle() //SZEMAFOR?!?!?!?!
+void CalculatePositionAndAngle()
 {
-	osSemaphoreAcquire(SemPosHandle, 0);
+	osSemaphoreAcquire(SemPosHandle, osWaitForever);
+	osSemaphoreAcquire(SemLeftEncoderHandle, osWaitForever);
+	osSemaphoreAcquire(SemRightEncoderHandle, osWaitForever);
 
 	  double posChgFwd;
 	  double angleTMP = angle;
@@ -145,15 +152,17 @@ void CalculatePositionAndAngle() //SZEMAFOR?!?!?!?!
 	  rotChangeLeft = 0;
 	  rotChangeRight = 0;
 
+	osSemaphoreRelease(SemRightEncoderHandle);
+	osSemaphoreRelease(SemLeftEncoderHandle);
 	osSemaphoreRelease(SemPosHandle);
 }
 
 // Debug functions
 void PrintEncoderAllData()
 {
-	osSemaphoreAcquire(SemPosHandle, 0);
-	osSemaphoreAcquire(SemLeftEncoderHandle, 0);
-	osSemaphoreAcquire(SemRightEncoderHandle, 0);
+	osSemaphoreAcquire(SemPosHandle, osWaitForever);
+	osSemaphoreAcquire(SemLeftEncoderHandle, osWaitForever);
+	osSemaphoreAcquire(SemRightEncoderHandle, osWaitForever);
 	printf("Distance SUM right: %f, Speed right: %f, Distance SUM left: %f, Speed left: %f\n\rPosition from origin: %f, %f, Angle in degrees: %f\n", distanceRight, speedRight, distanceLeft, speedLeft, pos.x, pos.y, angle*360/(2*M_PI));
 	osSemaphoreRelease(SemRightEncoderHandle);
 	osSemaphoreRelease(SemLeftEncoderHandle);
@@ -164,15 +173,15 @@ void PrintEncoderAllData()
   double GetSpeedOfMotor(int motor) // 0 => left, 1 => right [m/s]
   {
 	  double retTemp;
-	  if(motor == LEFT_ENCODER)
+	  if(motor == LEFT_SIDE)
 	  {
-		  osSemaphoreAcquire(SemLeftEncoderHandle, 0);
+		  osSemaphoreAcquire(SemLeftEncoderHandle, osWaitForever);
 		  retTemp = speedLeft;
 		  osSemaphoreRelease(SemLeftEncoderHandle);
 	  }
 	  else
 	  {
-		  osSemaphoreAcquire(SemRightEncoderHandle, 0);
+		  osSemaphoreAcquire(SemRightEncoderHandle, osWaitForever);
 		  retTemp = speedRight;
 		  osSemaphoreRelease(SemRightEncoderHandle);
 	  }
@@ -182,15 +191,15 @@ void PrintEncoderAllData()
   double GetDistanceOfMotor(int motor) // 0 => left, 1 => right [m]
   {
 	  double retTemp;
-	  if(motor == LEFT_ENCODER)
+	  if(motor == LEFT_SIDE)
 	  {
-		  osSemaphoreAcquire(SemLeftEncoderHandle, 0);
+		  osSemaphoreAcquire(SemLeftEncoderHandle, osWaitForever);
 		  retTemp = distanceLeft;
 		  osSemaphoreRelease(SemLeftEncoderHandle);
 	  }
 	  else
 	  {
-		  osSemaphoreAcquire(SemRightEncoderHandle, 0);
+		  osSemaphoreAcquire(SemRightEncoderHandle, osWaitForever);
 		  retTemp = distanceRight;
 		  osSemaphoreRelease(SemRightEncoderHandle);
 	  }
@@ -201,7 +210,7 @@ void PrintEncoderAllData()
   {
 	  position retTemp;
 
-	  osSemaphoreAcquire(SemPosHandle, 0);
+	  osSemaphoreAcquire(SemPosHandle, osWaitForever);
 	  retTemp = pos;
 	  osSemaphoreRelease(SemPosHandle);
 
@@ -213,50 +222,54 @@ void PrintEncoderAllData()
   {
 	  if (GPIO_Pin == GPIO_PIN_3) //Left
 	  {
-		  osSemaphoreAcquire(SemLeftEncoderHandle, 0); // Take semaphore
-		  if (getLeftMotorValue() > 0)
+		  if(osSemaphoreAcquire(SemLeftEncoderHandle, 0) == osOK) // Take semaphore
 		  {
-			  encoderSumOfRotationsLeft++;
-			  rotChangeLeft++;
-		  }
-		  else
-		  {
-			  encoderSumOfRotationsLeft--;
-			  rotChangeLeft--;
-		  }
+			  if (getLeftMotorValue() > 0)
+			  {
+				  encoderSumOfRotationsLeft++;
+				  rotChangeLeft++;
+			  }
+			  else
+			  {
+				  encoderSumOfRotationsLeft--;
+				  rotChangeLeft--;
+			  }
 
-		  if(encoderSumOfRotationsLeft % 5 == 0)
-		  {
-			  speedLeftEN = 1;
-			  Timer6_Stop();
-			  timerCntrValLeft = TIM6->CNT;
-			  TIM6->CNT = 0;
-			  Timer6_Start();
+			  if(encoderSumOfRotationsLeft % speedCalcPeriod == 0)
+			  {
+				  speedLeftEN = 1;
+				  Timer6_Stop();
+				  timerCntrValLeft = TIM6->CNT;
+				  TIM6->CNT = 0;
+				  Timer6_Start();
+			  }
+			  osSemaphoreRelease(SemLeftEncoderHandle); // Release semaphore
 		  }
-		  osSemaphoreRelease(SemLeftEncoderHandle); // Release semaphore
 	  }
 	  if (GPIO_Pin == GPIO_PIN_4) //Right
 	  {
-		  osSemaphoreAcquire(SemRightEncoderHandle, 0); // Take semaphore
-		  if (getLeftMotorValue() > 0)
+		  if(osSemaphoreAcquire(SemRightEncoderHandle, 0) == osOK) // Take semaphore
 		  {
-			  encoderSumOfRotationsRight++;
-			  rotChangeRight++;
-		  }
-		  else
-		  {
-			  encoderSumOfRotationsRight--;
-			  rotChangeRight--;
-		  }
+			  if (getLeftMotorValue() > 0)
+			  {
+				  encoderSumOfRotationsRight++;
+				  rotChangeRight++;
+			  }
+			  else
+			  {
+				  encoderSumOfRotationsRight--;
+				  rotChangeRight--;
+			  }
 
-		  if(encoderSumOfRotationsRight % 5 == 0)
-		  {
-			  speedRightEN = 1;
-			  Timer7_Stop();
-			  timerCntrValRight = TIM7->CNT;
-			  TIM7->CNT = 0;
-			  Timer7_Start();
+			  if(encoderSumOfRotationsRight % speedCalcPeriod == 0)
+			  {
+				  speedRightEN = 1;
+				  Timer7_Stop();
+				  timerCntrValRight = TIM7->CNT;
+				  TIM7->CNT = 0;
+				  Timer7_Start();
+			  }
+			  osSemaphoreRelease(SemRightEncoderHandle); // Release semaphore
 		  }
-		  osSemaphoreRelease(SemRightEncoderHandle); // Release semaphore
 	  }
   }

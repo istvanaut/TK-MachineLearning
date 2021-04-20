@@ -54,3 +54,21 @@ You need to copy the carla package to ``CARLA/files`` - from ``/PythonAPI/carla/
 Mark ``Simulation/Tamás Visy/CARLA`` and ``Microcontroller/Network`` as Sources Root
 
 You can use the plugin Grep Console to make console output prettier
+
+---
+## 5.b Every step to set up simulation from repo in an IDE
+
+1. Clone repo from GitHub
+   
+2. Open project
+
+3. Right click and mark as *Sources root*:
+
+    I) ``Simulation/Tamás Visy/CARLA``
+   
+    II) ``Simulation/Tamás Visy/Network`` 
+   
+    III) ``Microcontroller/Network``
+
+4. Then place ``/PythonAPI/carla/dist/carla-0.9.10-py3.7-win-amd64.egg`` from the CARLA installation
+   into ``Simulation/Carla/files``

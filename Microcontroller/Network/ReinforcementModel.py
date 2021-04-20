@@ -14,8 +14,6 @@ import matplotlib.pyplot as plt
 
 from support.logger import logger
 
-AGENT_IM_HEIGHT = 64
-AGENT_IM_WIDTH = 64
 
 def transform_state(state):
     image, array, _ = state.get_formatted()

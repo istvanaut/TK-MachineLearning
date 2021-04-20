@@ -1,11 +1,12 @@
 import time
 
 import icarla
+from settings import RADAR_RANGE
 from support.datakey import DataKey
 import numpy as np
 
-IM_WIDTH = 300
-IM_HEIGHT = 300
+IM_WIDTH = 400
+IM_HEIGHT = 400
 RADAR_RANGE = 40.0
 
 
@@ -26,7 +27,7 @@ def recently(event_time):
 
 def process_image(data, image):
     i = np.array(image.raw_data)
-    i = i.reshape((IM_HEIGHT, IM_WIDTH, 4))
+    i = i.reshape((int(np.sqrt(len(i))//2), int(np.sqrt(len(i))//2), 4))  # actual resizing is done by converter.convert
     i = i[:, :, :3]
     data.put(DataKey.SENSOR_CAMERA, i / 255.0)  # normalization
 
