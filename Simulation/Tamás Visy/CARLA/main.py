@@ -6,15 +6,15 @@ from agents.converter import convert, repack
 from environments.carlaenvironment import CarlaEnvironment
 from environments.status import Status
 from environments.replayenvironment import ReplayEnvironment
-from settings import TRAIN, TRAIN_PER_DECISION, pure, TARGET_FRAME_TIME, MEMORY_SIZE, AGENT_TYPE, AgentTypes, \
-    ENVIRONMENT_TYPE, EnvironmentTypes
+from settings import *  # This saves us from multiple lines of individual imports
 from support.datakey import DataKey
 from support.logger import logger
 from threads.dashboardthread import DashboardThread
 
-
 logger.warning(f'Train is {TRAIN}')
 logger.warning(f'Train per decision is {TRAIN_PER_DECISION}')
+
+# TODO (10) update control from (steering, vel) to (left-motor, right-motor)
 
 
 def main():
@@ -27,16 +27,20 @@ def main():
     else:
         logger.critical('Unknown environment type in main, raising error')
         raise RuntimeError('Unknown environment type in main')
-    logger.info(f'Environment type is {type(env).__name__}')
+    logger.info(f'Environment is {type(env).__name__}')
 
     if AGENT_TYPE is AgentTypes.Network:
-        agent = NetworkAgent()
+        agent = NetworkAgent(NETWORK_AGENT_MODEL_TYPE)
     elif AGENT_TYPE is AgentTypes.Keras:
         agent = KerasAgent()
+
+        # Converting to TfLite:
+        #   agent.load()
+        #   agent.save_as_tflite()
     else:
         logger.critical('Unknown agent type in main, raising error')
         raise RuntimeError('Unknown agent type in main')
-    logger.info(f'Agent type is {type(agent).__name__}')
+    logger.info(f'Agent is {type(agent).__name__}')
 
     dashboard = DashboardThread()
     memory = []
@@ -114,7 +118,7 @@ def apply_frame_time(frame_start):
     if diff is not None and diff // 1_000 < TARGET_FRAME_TIME:
         time.sleep(TARGET_FRAME_TIME - diff // 1_000)
     else:
-        logger.debug('Frame time issue')
+        logger.warning('Frame time issue')
 
 
 if __name__ == '__main__':

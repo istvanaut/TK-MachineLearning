@@ -8,6 +8,7 @@ logger.debug('Use a NumPy version with allow_pickle enabled')
 
 logger.warning('Tensorflow warnings and info suppressed')
 import os
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 logger.debug('Tensorflow 2 requires 64 bit Python')
@@ -16,6 +17,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.optimizers import SGD
+from tensorflow.lite.python.lite import TFLiteConverterV2
 import numpy as np
 import os
 
@@ -29,13 +31,17 @@ file_name = 'files/keras/keras.model'
 checkpoint_file_names = 'files/keras/checkpoints/keras_{epoch}.h5'
 
 
-class KerasModel:  # class KerasModel(Model):
+class KerasModel:
     network = None
 
     # predict_as_tensor = None
 
-    def create(self):
+    def save_as_tflite(self):
+        converter = TFLiteConverterV2.from_keras_model(self.network)
+        tflite_model = converter.convert()
+        open('files/converted_model.tflite', 'wb').write(tflite_model)
 
+    def create(self):
         # TODO (5) check validity of model architecture
         network = keras.Sequential(
             [

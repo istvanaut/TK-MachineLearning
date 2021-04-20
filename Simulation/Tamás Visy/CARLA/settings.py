@@ -9,6 +9,13 @@ class AgentTypes(Enum):  # Implementations of Agent
     Keras = 2
 
 
+class NetworkAgentModelTypes(Enum):  # Implementations of NetworkAgents Model
+    CNNwDense = 1
+    CNNwRNN = 2
+    LCNN = 3
+    SCNN = 4
+
+
 class EnvironmentTypes(Enum):  # Implementations of Environment
     CARLA = 1
     Test = 2
@@ -18,6 +25,7 @@ class EnvironmentTypes(Enum):  # Implementations of Environment
 TRAIN = True
 TRAIN_PER_DECISION = False
 AGENT_TYPE = AgentTypes.Keras
+NETWORK_AGENT_MODEL_TYPE = NetworkAgentModelTypes.SCNN
 ENVIRONMENT_TYPE = EnvironmentTypes.CARLA
 TARGET_FRAME_TIME = 0.25
 MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
