@@ -4,8 +4,8 @@ import icarla
 from support.datakey import DataKey
 import numpy as np
 
-IM_WIDTH = 400
-IM_HEIGHT = 400
+IM_WIDTH = 300
+IM_HEIGHT = 300
 RADAR_RANGE = 40.0
 
 

@@ -85,7 +85,6 @@ class Window:
 
     def update_screen(self):
         image, data, names = self.state.get_formatted()
-
         self.insert_placeholder(data, names)
         names.insert(4, 'some kind of cheaty drive')
         data.insert(4, (not self.pure))

@@ -13,7 +13,7 @@ class CNNwDense(nn.Module):
     # ----------     -----   |      |
     #                        |Output| => Action
     # __________     _____   |Layer |
-    # |Features| ==> |RNN| =>|      |
+    # |Features| ==> |Dense| =>|      |
     # ----------     -----   ---------
     #
     #
@@ -69,7 +69,7 @@ class CNNwDense(nn.Module):
         y = F.leaky_relu(self.dense2(y))
         y=  F.leaky_relu(self.dense3(y))
         x = torch.cat((x, y), dim=1)
-        x = F.sigmoid(self.dense4(x))
+        x = F.leaky_relu(self.dense4(x))
         x=self.dense5(x)
-        print('Q-values:'+str(x))
+        #print('Q-values:'+str(x))
         return x
