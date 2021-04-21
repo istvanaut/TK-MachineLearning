@@ -8,7 +8,7 @@ def get_feature_dimension():
 class State:
 
     def __init__(self, image=None, radar=None, collision=None, velocity=None, acceleration=None, position=None,
-                 direction=None, obstacle=None, distance_from_path=None, side=None):
+                 direction=None, obstacle=None, distance_from_path=None, side=None, angular_acceleration=None):
         self.image = image
         self.radar = radar
         self.collision = collision
@@ -19,13 +19,21 @@ class State:
         self.obstacle = obstacle
         self.distance_from_path = distance_from_path
         self.side = side
+        self.angular_acceleration = angular_acceleration
 
     def print(self):
         if self.acceleration is None:
             acc = [None, None, None]
         else:
             acc = self.acceleration
+
+        if self.angular_acceleration is None:
+            ang_acc = [None, None, None]
+        else:
+            ang_acc = self.angular_acceleration
+
         print([self.radar, self.collision, self.velocity, acc[0], acc[1], acc[2],
+               ang_acc[0], ang_acc[1], ang_acc[2],
                self.direction, self.obstacle, self.distance_from_path * self.side])
 
     def get_formatted(self):
@@ -37,10 +45,16 @@ class State:
             pos = [None, None, None]
         else:
             pos = self.position
+        if self.angular_acceleration is None:
+            ang_acc = [None, None, None]
+        else:
+            ang_acc = self.angular_acceleration
+
         return (self.image,
                 [self.radar, self.collision, self.velocity,
                  acc[0], acc[1], acc[2],
                  pos[0], pos[1], pos[2],
+                 ang_acc[0], ang_acc[1], ang_acc[2],
                  self.direction, self.obstacle,
                  self.distance_from_path, self.side],
                 [nameof(self.radar, locals()), nameof(self.collision, locals()), nameof(self.velocity, locals()),

@@ -38,12 +38,13 @@ def repack(data, path, starting_dir):
     di = data.get(DataKey.SENSOR_DIRECTION)
     sdi = starting_dir
     path = path
-    return ca, r, co, o, v, a, pos, di, sdi, path
+    aa = data.get(DataKey.SENSOR_ANGULAR_ACCELERATION)
+    return ca, r, co, o, v, a, pos, di, sdi, path, aa
 
 
 def convert(state):
     """Converts and normalizes incoming data (into a format the agent accepts)"""
-    camera, radar, collision, obstacle, velocity, acceleration, position, direction, starting_direction, path \
+    camera, radar, collision, obstacle, velocity, acceleration, position, direction, starting_direction, path, angular_acceleration \
         = state
 
     # SENSOR: unit, format
@@ -106,6 +107,9 @@ def convert(state):
     acceleration[1] = np.tanh(acceleration[1] / ACCELERATION_EACH_GOOD_VALUE)
     acceleration[2] = np.tanh(acceleration[2] / ACCELERATION_EACH_GOOD_VALUE)
 
+    if angular_acceleration is None:
+        angular_acceleration = [0, 0, 0]
+
     # position: m, {list: 3} - floats
     # -> {list: 3}, scaled, normalized
     POSITION_EACH_GOOD_VALUE = 200.0
@@ -147,7 +151,7 @@ def convert(state):
 
     # Only return data if important inputs (which should not be None) are not None
     # Because NN cannot accept "None" as any input
-    important = camera, velocity, acceleration, position_none_holder, current_direction, distance,
+    important = camera, velocity, acceleration, position_none_holder, current_direction, distance, angular_acceleration,
     if not any(map(lambda x: x is None, important)):
         return State(image=camera, radar=radar, collision=collision, velocity=velocity, acceleration=acceleration,
                      position=position, direction=current_direction, obstacle=obstacle,

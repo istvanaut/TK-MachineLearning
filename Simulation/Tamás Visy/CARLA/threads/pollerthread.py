@@ -28,7 +28,11 @@ class PollerThread(BaseThread):
                 self.data.put(DataKey.SENSOR_POSITION, p)
                 self.data.put(DataKey.SENSOR_DIRECTION, r)
 
-                # TODO (7) get angular velocity and time of pull
+                #estimated time passed since last tick
+                t = 0.05
+                aa = self.vehicle.get_angular_velocity() / t
+                aa = [aa.x, aa.y, aa.y]
+                self.data.put(DataKey.SENSOR_ANGULAR_ACCELERATION, aa)
 
                 v = self.vehicle.get_velocity()
                 v = [v.x, v.y, v.z]  # m/s
