@@ -70,6 +70,8 @@ def main():
                 if TRAIN and TRAIN_PER_DECISION and prev_state is not None:
                     agent.optimize(state)
 
+                # TODO (9) probably remove cheating
+                #  apply noise out here
                 action, out = agent.predict(state, pure=pure(run_index), auto=not pure(run_index))
                 dashboard.handle(data, path, starting_dir, state, out, pure=pure(run_index))
 
@@ -93,12 +95,12 @@ def main():
             time.sleep(1.0)
 
             if TRAIN and not TRAIN_PER_DECISION:
-                if len(memory) >= MEMORY_SIZE:
+                if len(memory) >= TRAIN_MEMORY_SIZE:
                     logger.info(f'Starting training with memory of {len(memory)}')
                     agent.train_on_memory(memory)
                     memory = []
                 else:
-                    logger.info(f'Memory not full, {len(memory)}/{MEMORY_SIZE}')
+                    logger.info(f'Memory not full, {len(memory)}/{TRAIN_MEMORY_SIZE}')
             logger.info('Continuing...')
             run_index += 1
 

@@ -28,7 +28,7 @@ AGENT_TYPE = AgentTypes.Keras
 NETWORK_AGENT_MODEL_TYPE = NetworkAgentModelTypes.SCNN
 ENVIRONMENT_TYPE = EnvironmentTypes.CARLA
 TARGET_FRAME_TIME = 0.25
-MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
+TRAIN_MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
 
 
 # Determines if the run is 'pure' -> no noise or auto-driving applied to agent output

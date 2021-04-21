@@ -42,10 +42,11 @@ def repack(data, path, starting_dir):
     return ca, r, co, o, v, a, pos, di, sdi, path, aa
 
 
-def convert(state):
+def convert(packed_state):
     """Converts and normalizes incoming data (into a format the agent accepts)"""
-    camera, radar, collision, obstacle, velocity, acceleration, position, direction, starting_direction, path, angular_acceleration \
-        = state
+    camera, radar, collision, obstacle, velocity, acceleration, \
+        position, direction, starting_direction, path, angular_acceleration \
+        = packed_state
 
     # SENSOR: unit, format
     # -> into format
@@ -88,7 +89,7 @@ def convert(state):
         direction = [0, 0, 0]
         current_direction = 0
     else:
-        current_direction = (direction[1]/180*np.pi - starting_direction[1])
+        current_direction = (direction[1] / 180 * np.pi - starting_direction[1])
     CURRENT_DIRECTION_MAX = np.pi
     # Scale -> 1 is 180 degrees or PI, -1 is -180 or -PI
     current_direction = current_direction / CURRENT_DIRECTION_MAX
@@ -109,6 +110,11 @@ def convert(state):
 
     if angular_acceleration is None:
         angular_acceleration = [0, 0, 0]
+    # Normalized
+    angular_acceleration[0] = np.tanh(angular_acceleration[0])
+    angular_acceleration[1] = np.tanh(angular_acceleration[1])
+    angular_acceleration[2] = np.tanh(angular_acceleration[2])
+    # TODO (8) normalize angular_acceleration
 
     # position: m, {list: 3} - floats
     # -> {list: 3}, scaled, normalized
@@ -151,10 +157,10 @@ def convert(state):
 
     # Only return data if important inputs (which should not be None) are not None
     # Because NN cannot accept "None" as any input
-    important = camera, velocity, acceleration, position_none_holder, current_direction, distance, angular_acceleration,
+    important = camera, velocity, acceleration, position_none_holder, current_direction, distance, angular_acceleration
     if not any(map(lambda x: x is None, important)):
         return State(image=camera, radar=radar, collision=collision, velocity=velocity, acceleration=acceleration,
                      position=position, direction=current_direction, obstacle=obstacle,
-                     distance_from_path=distance, side=side)
+                     distance_from_path=distance, side=side, angular_acceleration=angular_acceleration)
     else:
         return None

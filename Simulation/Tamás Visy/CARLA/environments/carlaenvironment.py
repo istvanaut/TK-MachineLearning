@@ -88,15 +88,16 @@ class CarlaEnvironment(Environment):
         pos = self.data.get(DataKey.SENSOR_POSITION)
         # TODO update rot to use line direction at current position
         rot = self.data.get(DataKey.SENSOR_DIRECTION)
-        if pos is not None and rot is not None:
-            # position = icarla.transform(pos[0] + 5 * np.cos(rot[1]),
-            #                             pos[1] + 5 * np.sin(rot[1]),
-            #                             12.0).location
-            position = icarla.transform(pos[0],
-                                        pos[1],
-                                        12.0).location
-            rotation = icarla.rotation([-85, rot[1], 0])
-            self.__spectator_move_and_rotate(position, rotation)
+        # TODO (8) updating spectator pos takes long ("blocking") -> move to different Thread
+        # if pos is not None and rot is not None:
+        #     # position = icarla.transform(pos[0] + 5 * np.cos(rot[1]),
+        #     #                             pos[1] + 5 * np.sin(rot[1]),
+        #     #                             12.0).location
+        #     position = icarla.transform(pos[0],
+        #                                 pos[1],
+        #                                 12.0).location
+        #     rotation = icarla.rotation([-85, rot[1], 0])
+        #     self.__spectator_move_and_rotate(position, rotation)
         return s
 
     def __spectator_move_and_rotate(self, position, direction):
