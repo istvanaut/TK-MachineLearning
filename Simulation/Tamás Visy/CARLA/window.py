@@ -8,8 +8,8 @@ from support.logger import logger
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 
-
 QUIT = pygame.QUIT
+# TODO (7) make window less ugly
 
 
 class Window:
