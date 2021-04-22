@@ -1,0 +1,10 @@
+21:55:47 **** Incremental Build of configuration Debug for project AGV_freeRTOS ****
+make -j4 all 
+arm-none-eabi-size   AGV_freeRTOS.elf 
+   text	   data	    bss	    dec	    hex	filename
+  82888	   7200	  26120	 116208	  1c5f0	AGV_freeRTOS.elf
+Finished building: default.size.stdout
+ 
+
+21:55:48 Build Finished. 0 errors, 0 warnings. (took 582ms)
+

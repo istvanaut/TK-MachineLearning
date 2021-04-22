@@ -1,0 +1,133 @@
+Neural Network Tools for STM32AI v1.4.1 (STM.ai v6.0.0-RC6)
+Created date       : 2021-04-22 17:22:55
+Parameters         : generate --name simplenn -m C:/Users/krani/Documents/BME/agv/src/Microcontroller/Network/model/MCU_NN.onnx --type onnx --compression 8 --verbosity 1 --workspace C:\Users\krani\AppData\Local\Temp\mxAI_workspace290423630856004654139974336834388 --output C:\Users\krani\.stm32cubemx
+
+Exec/report summary (generate)
+------------------------------------------------------------------------------------------------------------------------
+model file         : C:\Users\krani\Documents\BME\agv\src\Microcontroller\Network\model\MCU_NN.onnx
+type               : onnx
+c_name             : simplenn
+compression        : 8
+quantize           : None
+workspace dir      : C:\Users\krani\AppData\Local\Temp\mxAI_workspace290423630856004654139974336834388
+output dir         : C:\Users\krani\.stm32cubemx
+
+model_name         : MCU_NN
+model_hash         : b35a03c3edd251a7ccf6a9e52bae297b
+input              : image [64 items, 256 B, ai_float, FLOAT32, (64, 1, 1)]
+inputs (total)     : 256 B
+output             : action [4 items, 16 B, ai_float, FLOAT32, (4, 1, 1)]
+outputs (total)    : 16 B
+params #           : 1,212 items (4.73 KiB)
+macc               : 1,256
+weights (ro)       : 4,848 B (4.73 KiB) 
+activations (rw)   : 96 B (96 B) 
+ram (total)        : 368 B (368 B) = 96 + 256 + 16
+
+Model name - MCU_NN ['image'] ['action']
+---------------------------------------------------------------------------------------------------------------------------------------
+id   layer (type)                 shape          param/size    macc    connected to   |   c_size            c_macc         c_type     
+---------------------------------------------------------------------------------------------------------------------------------------
+0    image (Input)                (h:64, c:1)                                         |                                   
+     dense1weight (Placeholder)   (h:64, c:16)   1,024/4,096                          |   -4,096(-100.0%)                 
+     dense1bias (Placeholder)     (c:16)         16/64                                |   -64(-100.0%)                    
+     node_7 (Gemm)                (h:16, c:1)                  1,024   image          |   +4,160(+100.0%)                  gemm()[0]  
+                                                                       dense1weight   |  
+                                                                       dense1bias     |  
+---------------------------------------------------------------------------------------------------------------------------------------
+1    node_8 (Nonlinearity)        (h:16, c:1)                  16      node_7         |                     +32(+200.0%)   nl()[1]    
+---------------------------------------------------------------------------------------------------------------------------------------
+2    dense2weight (Placeholder)   (h:16, c:8)    128/512                              |   -512(-100.0%)                   
+     dense2bias (Placeholder)     (c:8)          8/32                                 |   -32(-100.0%)                    
+     node_9 (Gemm)                (h:8, c:1)                   128     node_8         |   +544(+100.0%)                    gemm()[2]  
+                                                                       dense2weight   |  
+                                                                       dense2bias     |  
+---------------------------------------------------------------------------------------------------------------------------------------
+3    node_10 (Nonlinearity)       (h:8, c:1)                   8       node_9         |                     +16(+200.0%)   nl()[3]    
+---------------------------------------------------------------------------------------------------------------------------------------
+4    dense3weight (Placeholder)   (h:8, c:4)     32/128                               |   -128(-100.0%)                   
+     dense3bias (Placeholder)     (c:4)          4/16                                 |   -16(-100.0%)                    
+     action (Gemm)                (h:4, c:1)                   32      node_10        |   +144(+100.0%)                    gemm()/o[4]
+                                                                       dense3weight   |  
+                                                                       dense3bias     |  
+---------------------------------------------------------------------------------------------------------------------------------------
+model/c-model: macc=1,208/1,256 +48(+4.0%) weights=4,848/4,848  activations=--/96 io=--/272
+
+
+Generated C-graph summary
+------------------------------------------------------------------------------------------------------------------------
+model name         : mcu_nn
+c-name             : simplenn
+c-node #           : 5
+c-array #          : 12
+activations size   : 96
+weights size       : 4848
+macc               : 1256
+inputs             : ['image_output_array']
+outputs            : ['action_output_array']
+
+
+C-Arrays (12)
+------------------------------------------------------------------------------------------------------------------------
+c_id  name (*_array)  item/size           mem-pool     c-type       fmt    comment            
+------------------------------------------------------------------------------------------------------------------------
+0     image_output    64/256              user         float        float  /input             
+1     node_7_output   16/64               activations  float        float                     
+2     node_8_output   16/64               activations  float        float                     
+3     node_9_output   8/32                activations  float        float                     
+4     node_10_output  8/32                activations  float        float                     
+5     action_output   4/16                user         float        float  /output            
+6     dense3bias      4/16                weights      const float  float                     
+7     dense3weight    32/128              weights      const float  float                     
+8     dense2bias      8/32                weights      const float  float                     
+9     dense2weight    128/512             weights      const float  float                     
+10    dense1bias      16/64               weights      const float  float                     
+11    dense1weight    1024/4096           weights      const float  float                     
+------------------------------------------------------------------------------------------------------------------------
+
+
+C-Layers (5)
+------------------------------------------------------------------------------------------------------------------------
+c_id  name (*_layer)  id  layer macc        rom         tensors            shape (array id)                       
+------------------------------------------------------------------------------------------------------------------------
+0     node_7          0   gemm  1024        4160        I: image_output    [1, 64, 1, 1] (0)                      
+                                                        I: dense1weight    [1, 64, 1, 16] (11)                    
+                                                        I: dense1bias      [1, 1, 1, 16] (10)                     
+                                                        O: node_7_output   [1, 16, 1, 1] (1)                      
+------------------------------------------------------------------------------------------------------------------------
+1     node_8          1   nl    48          0           I: node_7_output   [1, 16, 1, 1] (1)                      
+                                                        O: node_8_output   [1, 16, 1, 1] (2)                      
+------------------------------------------------------------------------------------------------------------------------
+2     node_9          2   gemm  128         544         I: node_8_output   [1, 16, 1, 1] (2)                      
+                                                        I: dense2weight    [1, 16, 1, 8] (9)                      
+                                                        I: dense2bias      [1, 1, 1, 8] (8)                       
+                                                        O: node_9_output   [1, 8, 1, 1] (3)                       
+------------------------------------------------------------------------------------------------------------------------
+3     node_10         3   nl    24          0           I: node_9_output   [1, 8, 1, 1] (3)                       
+                                                        O: node_10_output  [1, 8, 1, 1] (4)                       
+------------------------------------------------------------------------------------------------------------------------
+4     action          4   gemm  32          144         I: node_10_output  [1, 8, 1, 1] (4)                       
+                                                        I: dense3weight    [1, 8, 1, 4] (7)                       
+                                                        I: dense3bias      [1, 1, 1, 4] (6)                       
+                                                        O: action_output   [1, 4, 1, 1] (5)                       
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+Complexity report per layer - macc=1,256 weights=4,848 act=96 ram_io=272
+------------------------------------------------------------------------
+id   name      c_macc                    c_rom                     c_id
+------------------------------------------------------------------------
+0    node_7    ||||||||||||||||  81.5%   ||||||||||||||||  85.8%   [0] 
+1    node_8    |                  3.8%   |                  0.0%   [1] 
+2    node_9    ||                10.2%   ||                11.2%   [2] 
+3    node_10   |                  1.9%   |                  0.0%   [3] 
+4    action    |                  2.5%   |                  3.0%   [4] 
+
+Generated files (5)
+------------------------------------------------------------------------------------------------------------------------
+C:\Users\krani\.stm32cubemx\simplenn_config.h
+C:\Users\krani\.stm32cubemx\simplenn.h
+C:\Users\krani\.stm32cubemx\simplenn.c
+C:\Users\krani\.stm32cubemx\simplenn_data.h
+C:\Users\krani\.stm32cubemx\simplenn_data.c
