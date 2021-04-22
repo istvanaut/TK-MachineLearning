@@ -42,7 +42,7 @@ class ReinforcementModel:
         #   A reward function is loaded into the reward variable
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logger.info(f'Device is {self.device}')
-        self.BATCH_SIZE = 512
+        self.BATCH_SIZE = 256
         self.GAMMA = 0.999
         self.EPS_START = 0.9
         self.EPS_END = 0.05  # with 2 choices this means 0.4/2 -> 20% are wrong random choices (should be tolerable)
@@ -63,7 +63,7 @@ class ReinforcementModel:
         self.target_net = kwargs['model'](dim_features, height, width, self.n_actions).to(self.device)
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()
-        self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=0.0001)
+        self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=0.001)
         self.memory = ReplayMemory(10000)
         self.reward = RewardFunctions.inline_reward
 

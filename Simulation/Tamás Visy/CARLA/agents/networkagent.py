@@ -2,6 +2,10 @@ import random
 
 import numpy as np
 
+from Networks.FlatDense import FlatDense
+from Networks.CNNwDense import CNNwDense
+from Networks.CNNwRNN import CNNwRNN
+from Networks.LCNN import LCNN
 from Networks.SCNN import SCNN
 from ReinforcementModel import ReinforcementModel
 from agents.agent import Agent
@@ -11,7 +15,7 @@ from support.logger import logger
 
 feature_dimension = get_feature_dimension()
 AGENT_MODEL_PATH = 'files/tensor.pt'
-MODEL_TYPE = SCNN
+MODEL_TYPE = FlatDense
 
 
 class NetworkAgent(Agent):

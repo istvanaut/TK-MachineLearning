@@ -49,7 +49,7 @@ class CNNwDense(nn.Module):
         self.dense1 = nn.Linear(linear_input_size, 64)
 
         # Recursive Neural Network
-        self.dense2 = nn.Linear(dim_features, 32)
+        self.dense2 = nn.Linear(dim_features(), 32)
         self.dense3 = nn.Linear(32, 64)
         # Output layer
         self.dense4 = nn.Linear(128, 32)
