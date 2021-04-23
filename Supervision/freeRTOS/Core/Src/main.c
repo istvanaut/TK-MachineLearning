@@ -157,7 +157,7 @@ const osSemaphoreAttr_t SemUSSensorEdge_attributes = {
 };
 /* USER CODE BEGIN PV */
 
-int motorDisable = 0;
+uint8_t motorDisable = 0;
 
 // USSensor BEGIN
 
@@ -992,8 +992,8 @@ static void MX_GPIO_Init(void)
 void StartTaskDeafult(void *argument)
 {
   /* USER CODE BEGIN 5 */
-	leftMotor(0.6);
-	rightMotor(0.6);
+	leftMotor(-0.7);
+	rightMotor(-0.7);
 	uint32_t LEDs;
 	uint16_t leftSide;
 	uint16_t rightSide;
@@ -1001,6 +1001,7 @@ void StartTaskDeafult(void *argument)
   /* Infinite loop */
   for(;;)
   {
+	  /*
 	  if (!motorDisable)
 	  {
 		  LLS = LS = RS = RRS = 0;
@@ -1053,6 +1054,7 @@ void StartTaskDeafult(void *argument)
 			  rightMotor(0.6);
 		  }
 	  }
+	  */
 	  osDelay(10);
   }
   /* USER CODE END 5 */

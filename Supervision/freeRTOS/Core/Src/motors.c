@@ -33,25 +33,25 @@ void Motors_Init(TIM_HandleTypeDef *htim)
 	 myhtim->Instance->CCR4 = 0u;
 }
 
-void leftMotor(float value)
+void leftMotor(double value)
 {
 	osSemaphoreAcquire(SemMotorsHandle, osWaitForever);
 	leftMotorActualValue = value;
 	osSemaphoreRelease(SemMotorsHandle);
 
     // value > 0 --> forward, value < 0 --> backward
-	myhtim->Instance->CCR1 = (uint32_t) (value > 0 ? ARR * value : 0);
-	myhtim->Instance->CCR2 = (uint32_t) (value > 0 ? 0 : ARR * value);
+	myhtim->Instance->CCR1 = (uint32_t) (value > 0 ? abs(ARR * value) : 0);
+	myhtim->Instance->CCR2 = (uint32_t) (value > 0 ? 0 : abs(ARR * value));
 }
-void rightMotor(float value)
+void rightMotor(double value)
 {
 	osSemaphoreAcquire(SemMotorsHandle, osWaitForever);
 	rightMotorActualValue = value;
 	osSemaphoreRelease(SemMotorsHandle);
 
     // value > 0 --> forward, value < 0 --> backward
-	myhtim->Instance->CCR3 = (uint32_t) (value > 0 ? ARR * value : 0);
-	myhtim->Instance->CCR4 = (uint32_t) (value > 0 ? 0 : ARR * value);
+	myhtim->Instance->CCR3 = (uint32_t) (value > 0 ? abs(ARR * value) : 0);
+	myhtim->Instance->CCR4 = (uint32_t) (value > 0 ? 0 : abs(ARR * value));
 }
 
 double getLeftMotorValue()
