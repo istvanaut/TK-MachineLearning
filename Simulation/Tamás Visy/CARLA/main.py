@@ -22,7 +22,7 @@ def main():
 
     if ENVIRONMENT_TYPE is EnvironmentTypes.CARLA:
         env = CarlaEnvironment()
-    elif ENVIRONMENT_TYPE is EnvironmentTypes.Test:
+    elif ENVIRONMENT_TYPE is EnvironmentTypes.Replay:
         env = ReplayEnvironment()
     else:
         logger.critical('Unknown environment type in main, raising error')
@@ -70,7 +70,7 @@ def main():
                 if TRAIN and TRAIN_PER_DECISION and prev_state is not None:
                     agent.optimize(state)
 
-                # TODO (9) probably remove cheating
+                # TODO (9) remove cheating
                 #  apply noise out here
                 action, out = agent.predict(state, pure=pure(run_index), auto=not pure(run_index))
                 dashboard.handle(data, path, starting_dir, state, out, pure=pure(run_index))

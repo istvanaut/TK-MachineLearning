@@ -56,24 +56,24 @@ class KerasAgent(Agent):
         action = np.argmax(prediction)
         # print(action)
 
-        # auto driving
-        if pure is not True and auto:
-            action = 1
-
-        # random exploration
-        if pure is not True and random.random() < 0.4:
-            if random.random() < 0.5:
-                action = 0
-            else:
-                action = 1
+        # # auto driving
+        # if pure is not True and auto:
+        #     action = 1
+        #
+        # # random exploration
+        # if pure is not True and random.random() < 0.4:
+        #     if random.random() < 0.5:
+        #         action = 0
+        #     else:
+        #         action = 1
 
         choice = choices[action][:]
-        # auto driving
-        if pure is not True and auto:
-            choice[1] *= -1*state.side
-        # noise
-        if pure is not True:
-            choice[1] += -0.05 + random.random() * 0.1
+        # # auto driving
+        # if pure is not True and auto:
+        #     choice[1] *= -1*state.side
+        # # noise
+        # if pure is not True:
+        #     choice[1] += -0.05 + random.random() * 0.1
         return action, choice
 
     def optimize(self, new_state, prev_state=None, action=None):

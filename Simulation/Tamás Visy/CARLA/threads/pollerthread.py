@@ -29,6 +29,7 @@ class PollerThread(BaseThread):
                 self.data.put(DataKey.SENSOR_DIRECTION, r)
 
                 # estimated time passed since last tick
+                # TODO (6) extract this as setting
                 time_to_sleep = 0.05
                 aa = self.vehicle.get_angular_velocity() / time_to_sleep
                 aa = [aa.x, aa.y, aa.y]

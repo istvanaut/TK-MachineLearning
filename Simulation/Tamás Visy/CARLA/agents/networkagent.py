@@ -2,6 +2,7 @@ import random
 
 import numpy as np
 
+from Networks import CNNwDense, CNNwRNN, LCNN
 from Networks.SCNN import SCNN
 from ReinforcementModel import ReinforcementModel
 from agents.agent import Agent
@@ -10,8 +11,7 @@ from agents.state import get_feature_dimension
 from support.logger import logger
 
 feature_dimension = get_feature_dimension()
-AGENT_MODEL_PATH = 'files/tensor.pt'
-MODEL_TYPE = SCNN
+NETWORKAGENT_MODEL_PATH = 'files/torch/tensor.pt'
 
 
 class NetworkAgent(Agent):
@@ -93,3 +93,5 @@ class NetworkAgent(Agent):
             return LCNN
         if model_type is NetworkAgentModelTypes.SCNN:
             return SCNN
+        else:
+            raise RuntimeError('Model class not found in NetworkAgent')
