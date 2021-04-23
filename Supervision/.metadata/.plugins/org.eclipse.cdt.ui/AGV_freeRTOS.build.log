@@ -1,10 +1,139 @@
-21:55:47 **** Incremental Build of configuration Debug for project AGV_freeRTOS ****
+12:52:21 **** Incremental Build of configuration Debug for project AGV_freeRTOS ****
 make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1 -I../Middlewares/ST/AI/Inc -I../X-CUBE-AI/App -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'aiInit':
+../Core/Src/main.c:1186:8: warning: extra tokens at end of #endif directive [-Wendif-labels]
+ 1186 | #endif AILOG
+      |        ^~~~~
+../Core/Src/main.c:1196:31: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+ 1196 |    HAL_UART_Transmit(&huart3, buf, 100, HAL_MAX_DELAY );
+      |                               ^~~
+      |                               |
+      |                               char *
+In file included from ../Core/Inc/stm32f7xx_hal_conf.h:410,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Src/main.c:21:
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h:1531:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
+ 1531 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+      |                                                                ~~~~~~~~~^~~~~
+../Core/Src/main.c:1212:34: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+ 1212 |       HAL_UART_Transmit(&huart3, buf, 100, HAL_MAX_DELAY );
+      |                                  ^~~
+      |                                  |
+      |                                  char *
+In file included from ../Core/Inc/stm32f7xx_hal_conf.h:410,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Src/main.c:21:
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h:1531:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
+ 1531 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+      |                                                                ~~~~~~~~~^~~~~
+../Core/Src/main.c:1213:8: warning: extra tokens at end of #endif directive [-Wendif-labels]
+ 1213 | #endif AILOG
+      |        ^~~~~
+../Core/Src/main.c: In function 'aiRun':
+../Core/Src/main.c:1229:30: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+ 1229 |   HAL_UART_Transmit(&huart3, buf, 100, HAL_MAX_DELAY );
+      |                              ^~~
+      |                              |
+      |                              char *
+In file included from ../Core/Inc/stm32f7xx_hal_conf.h:410,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Src/main.c:21:
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h:1531:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
+ 1531 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+      |                                                                ~~~~~~~~~^~~~~
+../Core/Src/main.c:1249:34: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+ 1249 |       HAL_UART_Transmit(&huart3, buf, 100, HAL_MAX_DELAY );
+      |                                  ^~~
+      |                                  |
+      |                                  char *
+In file included from ../Core/Inc/stm32f7xx_hal_conf.h:410,
+                 from ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Src/main.c:21:
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h:1531:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
+ 1531 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+      |                                                                ~~~~~~~~~^~~~~
+../Core/Src/main.c: In function 'loadStateHandle':
+../Core/Src/main.c:1331:51: warning: conversion from 'unsigned int' to 'uint16_t' {aka 'short unsigned int'} changes value from '170512' to '39440' [-Woverflow]
+ 1331 |   if(HAL_OK == receiveFromESP(s_simplenn_weights, sizeof(s_simplenn_weights), HAL_MAX_DELAY))
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:1288:7: warning: unused variable 'buf' [-Wunused-variable]
+ 1288 |  char buf[8];
+      |       ^~~
+../Core/Src/main.c: In function 'runningStateHandle':
+../Core/Src/main.c:1455:46: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+ 1455 |         printf("lightsensor value Previous: %u\n", previousStates.lightsensor);
+      |                                             ~^     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                              |                   |
+      |                                              unsigned int        uint32_t {aka long unsigned int}
+      |                                             %lu
+../Core/Src/main.c:1456:41: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+ 1456 |         printf("usLeft value Previous: %u\n", previousStates.usLeft);
+      |                                        ~^     ~~~~~~~~~~~~~~~~~~~~~
+      |                                         |                   |
+      |                                         unsigned int        uint32_t {aka long unsigned int}
+      |                                        %lu
+../Core/Src/main.c:1457:42: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+ 1457 |         printf("usRight value Previous: %u\n", previousStates.usRight);
+      |                                         ~^     ~~~~~~~~~~~~~~~~~~~~~~
+      |                                          |                   |
+      |                                          unsigned int        uint32_t {aka long unsigned int}
+      |                                         %lu
+../Core/Src/main.c:1458:40: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+ 1458 |         printf("laser value Previous: %u\n", previousStates.laser);
+      |                                       ~^     ~~~~~~~~~~~~~~~~~~~~
+      |                                        |                   |
+      |                                        unsigned int        uint32_t {aka long unsigned int}
+      |                                       %lu
+../Core/Src/main.c:1462:45: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+ 1462 |         printf("lightsensor value Current: %u\n", currentStates.lightsensor);
+      |                                            ~^     ~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                             |                  |
+      |                                             unsigned int       uint32_t {aka long unsigned int}
+      |                                            %lu
+../Core/Src/main.c:1463:40: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+ 1463 |         printf("usLeft value Current: %u\n", currentStates.usLeft);
+      |                                       ~^     ~~~~~~~~~~~~~~~~~~~~
+      |                                        |                  |
+      |                                        unsigned int       uint32_t {aka long unsigned int}
+      |                                       %lu
+../Core/Src/main.c:1464:41: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+ 1464 |         printf("usRight value Current: %u\n", currentStates.usRight);
+      |                                        ~^     ~~~~~~~~~~~~~~~~~~~~~
+      |                                         |                  |
+      |                                         unsigned int       uint32_t {aka long unsigned int}
+      |                                        %lu
+../Core/Src/main.c:1465:39: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+ 1465 |         printf("laser value Current: %u\n", currentStates.laser);
+      |                                      ~^     ~~~~~~~~~~~~~~~~~~~
+      |                                       |                  |
+      |                                       unsigned int       uint32_t {aka long unsigned int}
+      |                                      %lu
+../Core/Src/main.c:1401:7: warning: unused variable 'buf' [-Wunused-variable]
+ 1401 |  char buf[100];
+      |       ^~~
+../Core/Src/main.c: In function 'calculateReward':
+../Core/Src/main.c:1388:1: warning: control reaches end of non-void function [-Wreturn-type]
+ 1388 | }
+      | ^
+arm-none-eabi-gcc -o "AGV_freeRTOS.elf" @"objects.list"  -l:NetworkRuntime600_CM7_GCC.a -mcpu=cortex-m7 -T"C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\STM32F746ZGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="AGV_freeRTOS.map" -Wl,--gc-sections -static -Wl,--start-group -l:NetworkRuntime600_CM7_GCC.a -Wl,--end-group -L../Middlewares/ST/AI/Lib -Wl, -u _printf_float --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: AGV_freeRTOS.elf
+ 
+arm-none-eabi-objdump -h -S  AGV_freeRTOS.elf  > "AGV_freeRTOS.list"
+arm-none-eabi-objcopy  -O binary  AGV_freeRTOS.elf  "AGV_freeRTOS.bin"
 arm-none-eabi-size   AGV_freeRTOS.elf 
    text	   data	    bss	    dec	    hex	filename
-  82888	   7200	  26120	 116208	  1c5f0	AGV_freeRTOS.elf
+  86536	 173044	  31152	 290732	  46fac	AGV_freeRTOS.elf
 Finished building: default.size.stdout
  
+Finished building: AGV_freeRTOS.bin
+ 
+Finished building: AGV_freeRTOS.list
+ 
 
-21:55:48 Build Finished. 0 errors, 0 warnings. (took 582ms)
+12:52:25 Build Finished. 0 errors, 18 warnings. (took 3s.737ms)
 

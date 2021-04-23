@@ -12,7 +12,7 @@ from ReinforcementlearningElements.ReplayMemory import ReplayMemory, Transition
 
 import matplotlib.pyplot as plt
 
-from support.logger import logger
+#from support.logger import logger
 
 
 def transform_state(state):
@@ -41,7 +41,7 @@ class ReinforcementModel:
         #   TARGET_UPDATE defines when to update the target network with the policy network
         #   A reward function is loaded into the reward variable
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        logger.info(f'Device is {self.device}')
+       # logger.info(f'Device is {self.device}')
         self.BATCH_SIZE = 256
         self.GAMMA = 0.999
         self.EPS_START = 0.9
@@ -73,7 +73,7 @@ class ReinforcementModel:
         image, features = transform_state(state)
         self.action = self.select_action(image.to(self.device), features.to(self.device))
         # Returning an integer instead of the tensor containing that integer
-        logger.debug(self.action.item())
+        #logger.debug(self.action.item())
         return self.action.item()
 
     def select_action(self, image, features):
@@ -81,9 +81,9 @@ class ReinforcementModel:
         eps_threshold = self.EPS_END + (self.EPS_START - self.EPS_END) * \
                         math.exp(-1. * self.steps_done / self.EPS_DECAY)
         self.steps_done += 1
-        logger.debug(f'Sample: {str(sample)}, Threshold: {str(eps_threshold)}')
-        if self.steps_done % 10 == 0:
-            logger.debug(f'Epoch: {self.steps_done}')
+        #logger.debug(f'Sample: {str(sample)}, Threshold: {str(eps_threshold)}')
+        #if self.steps_done % 10 == 0:
+            #logger.debug(f'Epoch: {self.steps_done}')
         if sample > eps_threshold:
             with torch.no_grad():
                 # t.max(1) will return largest column value of each row.
@@ -124,7 +124,7 @@ class ReinforcementModel:
         if len(self.memory) < self.BATCH_SIZE:
             return
 
-        logger.debug('Batch optimization started')  # This can be slow
+        #logger.debug('Batch optimization started')  # This can be slow
         transitions = self.memory.sample(self.BATCH_SIZE)
         # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
         # detailed explanation). This converts batch-array of Transitions
@@ -172,10 +172,10 @@ class ReinforcementModel:
         for param in self.policy_net.parameters():
             param.grad.data.clamp_(-1, 1)
         self.optimizer.step()
-        logger.debug('Batch optimization finished')
+        #logger.debug('Batch optimization finished')
 
     def reset(self):
-        logger.warning('Not plotting')
+        #logger.warning('Not plotting')
         # self.plot_rewards()
         self.n_training += 1
         self.rewards.append([])
@@ -205,7 +205,7 @@ class ReinforcementModel:
         if kwargs.get('model') is None:
             kwargs['model'] = CNNwRNN
         model = kwargs['model'](dim_features, image_height, image_width, n_actions)
-        model.load_state_dict(torch.load(path))
+        model.load_state_dict(torch.load(path,map_location=torch.device('cpu')))
         model.eval()
         self.target_net.load_state_dict(model.state_dict())
         self.policy_net.load_state_dict(model.state_dict())

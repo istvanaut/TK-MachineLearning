@@ -27,8 +27,9 @@ class FlatDense(nn.Module):
         self.dropout = nn.Dropout(p=0.2)
     # Called with either one element to determine next action, or a batch
     # during optimization. Returns tensor([[left0exp,right0exp]...]).
-    def forward(self, image, features):
-        y = torch.flatten(image, start_dim=1)
+    def forward(self, image, features=0):
+        #y = torch.flatten(image, start_dim=1)
+        y = image
         y = self.dropout(F.leaky_relu(self.dense1(y)))
         y = self.dropout(F.leaky_relu(self.dense2(y)))
         y = self.dropout(F.leaky_relu(self.dense3(y)))

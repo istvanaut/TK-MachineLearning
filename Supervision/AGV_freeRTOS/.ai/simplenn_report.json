@@ -1,7 +1,7 @@
 {
     "_allocate_inputs": 0,
     "_allocate_outputs": 0,
-    "cli_parameters": "generate --name simplenn -m C:/Users/krani/Documents/BME/agv/src/Microcontroller/Network/model/MCU_NN.onnx --type onnx --compression 8 --verbosity 1 --workspace C:\\Users\\krani\\AppData\\Local\\Temp\\mxAI_workspace290423630856004654139974336834388 --output C:\\Users\\krani\\.stm32cubemx",
+    "cli_parameters": "generate --name simplenn -m C:/Users/krani/Documents/BME/agv2/Microcontroller/Network/MCU_NN.onnx --type onnx --compression 4 --verbosity 1 --workspace C:\\Users\\krani\\AppData\\Local\\Temp\\mxAI_workspace508907129040012291216677924489 --output C:\\Users\\krani\\.stm32cubemx",
     "cli_version": {
         "major": 1,
         "micro": 1,
@@ -9,15 +9,19 @@
     },
     "cli_version_str": "1.4.1",
     "compression": {
-        "factor": null,
-        "layers": {}
+        "factor": 3.9354992833253704,
+        "layers": {
+            "node_10_weights": 4.0,
+            "node_14_weights": 4.0,
+            "node_18_weights": 4.0
+        }
     },
-    "date_time": "Thu Apr 22 17:22:55 2021",
+    "date_time": "Fri Apr 23 10:53:18 2021",
     "error": 0,
     "error_str": [],
     "exec_cmd": "generate",
     "exec_duration": 0.0,
-    "hash": "b35a03c3edd251a7ccf6a9e52bae297b",
+    "hash": "164e32791dd83822876da2e8eca7bd09",
     "inputs": [
         "image"
     ],
@@ -28,14 +32,14 @@
                 "n_params": 0,
                 "psize": 0,
                 "rom_output": {
-                    "c_size": 256,
+                    "c_size": 4096,
                     "fmt": {
                         "format": "float"
                     },
                     "shape": [
-                        64,
                         1,
                         1,
+                        1024,
                         1
                     ]
                 },
@@ -48,81 +52,29 @@
         },
         {
             "extras": {
-                "n_macc": 0,
-                "n_params": 1024,
-                "psize": 4096,
-                "rom_size": 0
-            },
-            "id": 0,
-            "inputs": [],
-            "name": "dense1weight",
-            "type": "Placeholder"
-        },
-        {
-            "extras": {
-                "n_macc": 0,
-                "n_params": 16,
-                "psize": 64,
-                "rom_size": 0
-            },
-            "id": 0,
-            "inputs": [],
-            "name": "dense1bias",
-            "type": "Placeholder"
-        },
-        {
-            "extras": {
-                "n_macc": 1024,
-                "n_params": 0,
-                "psize": 0,
+                "n_macc": 131072,
+                "n_params": 131072,
+                "psize": 524288,
                 "rom_output": {
-                    "c_size": 64,
+                    "c_size": 512,
                     "fmt": {
                         "format": "float"
                     },
                     "shape": [
-                        16,
                         1,
                         1,
+                        128,
                         1
                     ]
                 },
-                "rom_size": 4160
+                "rom_size": 132608
             },
             "id": 0,
             "inputs": [
-                "image",
-                "dense1weight",
-                "dense1bias"
+                "image"
             ],
-            "name": "node_7",
-            "type": "Gemm"
-        },
-        {
-            "extras": {
-                "n_macc": 16,
-                "n_params": 0,
-                "psize": 0,
-                "rom_output": {
-                    "c_size": 64,
-                    "fmt": {
-                        "format": "float"
-                    },
-                    "shape": [
-                        16,
-                        1,
-                        1,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 1,
-            "inputs": [
-                "node_7"
-            ],
-            "name": "node_8",
-            "type": "Nonlinearity"
+            "name": "node_10",
+            "type": "Dense"
         },
         {
             "extras": {
@@ -131,19 +83,86 @@
                 "psize": 512,
                 "rom_size": 0
             },
-            "id": 2,
+            "id": 1,
             "inputs": [],
-            "name": "dense2weight",
+            "name": "dense1bias",
             "type": "Placeholder"
         },
         {
             "extras": {
-                "n_macc": 0,
-                "n_params": 8,
-                "psize": 32,
+                "n_macc": 128,
+                "n_params": 0,
+                "psize": 0,
+                "rom_size": 0
+            },
+            "id": 1,
+            "inputs": [
+                "node_10",
+                "dense1bias"
+            ],
+            "name": "node_11",
+            "type": "Eltwise"
+        },
+        {
+            "extras": {
+                "n_macc": 128,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 512,
+                    "fmt": {
+                        "format": "float"
+                    },
+                    "shape": [
+                        1,
+                        1,
+                        128,
+                        1
+                    ]
+                },
                 "rom_size": 0
             },
             "id": 2,
+            "inputs": [
+                "node_11"
+            ],
+            "name": "node_12",
+            "type": "Nonlinearity"
+        },
+        {
+            "extras": {
+                "n_macc": 16384,
+                "n_params": 16384,
+                "psize": 65536,
+                "rom_output": {
+                    "c_size": 512,
+                    "fmt": {
+                        "format": "float"
+                    },
+                    "shape": [
+                        1,
+                        1,
+                        128,
+                        1
+                    ]
+                },
+                "rom_size": 17920
+            },
+            "id": 3,
+            "inputs": [
+                "node_12"
+            ],
+            "name": "node_14",
+            "type": "Dense"
+        },
+        {
+            "extras": {
+                "n_macc": 0,
+                "n_params": 128,
+                "psize": 512,
+                "rom_size": 0
+            },
+            "id": 4,
             "inputs": [],
             "name": "dense2bias",
             "type": "Placeholder"
@@ -153,66 +172,146 @@
                 "n_macc": 128,
                 "n_params": 0,
                 "psize": 0,
-                "rom_output": {
-                    "c_size": 32,
-                    "fmt": {
-                        "format": "float"
-                    },
-                    "shape": [
-                        8,
-                        1,
-                        1,
-                        1
-                    ]
-                },
-                "rom_size": 544
+                "rom_size": 0
             },
-            "id": 2,
+            "id": 4,
             "inputs": [
-                "node_8",
-                "dense2weight",
+                "node_14",
                 "dense2bias"
             ],
-            "name": "node_9",
-            "type": "Gemm"
+            "name": "node_15",
+            "type": "Eltwise"
         },
         {
             "extras": {
-                "n_macc": 8,
+                "n_macc": 128,
                 "n_params": 0,
                 "psize": 0,
                 "rom_output": {
-                    "c_size": 32,
+                    "c_size": 512,
                     "fmt": {
                         "format": "float"
                     },
                     "shape": [
-                        8,
                         1,
                         1,
+                        128,
                         1
                     ]
                 },
                 "rom_size": 0
             },
-            "id": 3,
+            "id": 5,
             "inputs": [
-                "node_9"
+                "node_15"
             ],
-            "name": "node_10",
+            "name": "node_16",
             "type": "Nonlinearity"
         },
         {
             "extras": {
+                "n_macc": 16384,
+                "n_params": 16384,
+                "psize": 65536,
+                "rom_output": {
+                    "c_size": 512,
+                    "fmt": {
+                        "format": "float"
+                    },
+                    "shape": [
+                        1,
+                        1,
+                        128,
+                        1
+                    ]
+                },
+                "rom_size": 17920
+            },
+            "id": 6,
+            "inputs": [
+                "node_16"
+            ],
+            "name": "node_18",
+            "type": "Dense"
+        },
+        {
+            "extras": {
                 "n_macc": 0,
-                "n_params": 32,
-                "psize": 128,
+                "n_params": 128,
+                "psize": 512,
                 "rom_size": 0
             },
-            "id": 4,
+            "id": 7,
             "inputs": [],
-            "name": "dense3weight",
+            "name": "dense3bias",
             "type": "Placeholder"
+        },
+        {
+            "extras": {
+                "n_macc": 128,
+                "n_params": 0,
+                "psize": 0,
+                "rom_size": 0
+            },
+            "id": 7,
+            "inputs": [
+                "node_18",
+                "dense3bias"
+            ],
+            "name": "node_19",
+            "type": "Eltwise"
+        },
+        {
+            "extras": {
+                "n_macc": 128,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 512,
+                    "fmt": {
+                        "format": "float"
+                    },
+                    "shape": [
+                        1,
+                        1,
+                        128,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 8,
+            "inputs": [
+                "node_19"
+            ],
+            "name": "node_20",
+            "type": "Nonlinearity"
+        },
+        {
+            "extras": {
+                "n_macc": 512,
+                "n_params": 512,
+                "psize": 2048,
+                "rom_output": {
+                    "c_size": 16,
+                    "fmt": {
+                        "format": "float"
+                    },
+                    "shape": [
+                        1,
+                        1,
+                        4,
+                        1
+                    ]
+                },
+                "rom_size": 2064
+            },
+            "id": 9,
+            "inputs": [
+                "node_20"
+            ],
+            "name": "node_22",
+            "type": "Dense"
         },
         {
             "extras": {
@@ -221,78 +320,65 @@
                 "psize": 16,
                 "rom_size": 0
             },
-            "id": 4,
+            "id": 10,
             "inputs": [],
-            "name": "dense3bias",
+            "name": "dense4bias",
             "type": "Placeholder"
         },
         {
             "extras": {
-                "n_macc": 32,
+                "n_macc": 4,
                 "n_params": 0,
                 "psize": 0,
-                "rom_output": {
-                    "c_size": 16,
-                    "fmt": {
-                        "format": "float"
-                    },
-                    "shape": [
-                        4,
-                        1,
-                        1,
-                        1
-                    ]
-                },
-                "rom_size": 144
+                "rom_size": 0
             },
-            "id": 4,
+            "id": 10,
             "inputs": [
-                "node_10",
-                "dense3weight",
-                "dense3bias"
+                "node_22",
+                "dense4bias"
             ],
             "name": "action",
-            "type": "Gemm"
+            "type": "Eltwise"
         }
     ],
     "model_files": [
-        "C:\\Users\\krani\\Documents\\BME\\agv\\src\\Microcontroller\\Network\\model\\MCU_NN.onnx"
+        "C:\\Users\\krani\\Documents\\BME\\agv2\\Microcontroller\\Network\\MCU_NN.onnx"
     ],
-    "model_n_params": 1212,
+    "model_n_params": 164740,
     "model_name": "MCU_NN",
-    "model_size": 4848,
+    "model_size": 658960,
     "model_type": "onnx",
     "name": "simplenn",
     "outputs": [
         "action"
     ],
     "ram_io_size": [
-        256,
+        4096,
         16
     ],
     "ram_size": [
-        96,
-        96
+        1024,
+        1024
     ],
     "report_version": 1.1,
     "rom_cfact": 1.0,
     "rom_heap_inspector": 2048,
     "rom_inputs": [
         {
-            "c_size": 256,
+            "c_size": 4096,
             "c_type": "float",
             "name": "image"
         }
     ],
-    "rom_n_macc": 1256,
+    "rom_n_macc": 165892,
     "rom_outputs": [
         {
             "c_size": 16,
             "c_type": "float",
-            "name": "action"
+            "name": "node_22"
         }
     ],
-    "rom_size": 4848,
+    "rom_size": 170512,
     "strategy": "heap_overlay_pool",
     "tools_api_version": {
         "major": 1,

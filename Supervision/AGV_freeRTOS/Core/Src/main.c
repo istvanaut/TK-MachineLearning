@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "simplenn.h"
 #include "simplenn_data.h"
+#include "math.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,11 +46,16 @@ typedef struct
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define LEFT_MOTOR_SPEED_SCALER		0.8f
+#define RIGHT_MOTOR_SPEED_SCALER	0.8f
 /*Define sample time*/
-#define CONTROL_DELAY				1000
+#define CONTROL_DELAY				2000
 #define TIME_LIMIT					30  //in seconds
 #define MAX_CYCLES_0				10 //300
+
+#define EPS_START 					0.9f
+#define EPS_END  					0.05f               // with 2 choices this means 0.4/2 -> 20% are wrong random choices (should be tolerable)
+#define EPS_DECAY 					200                  // This should equal a couple of short runs
 /*define main states*/
 #define INIT        				0u
 #define LOAD        				1u
@@ -223,14 +229,7 @@ AI_ALIGNED(32)
 static ai_u8 activations[AI_SIMPLENN_DATA_ACTIVATIONS_SIZE];
 
 AI_ALIGNED(32)
-static ai_float in_data[AI_SIMPLENN_IN_1_SIZE] = {-0.7457, -1.1531, -1.1670, -1.0088,  0.0900,  0.5970,  0.0350, -0.9028,
-        0.7175, -0.8730, -0.7474, -0.9303,  0.2256, -0.0956, -0.0573, -0.4354,
-        0.2912, -0.4840,  1.2599, -1.9342, -0.3113,  0.3527, -0.4243, -0.3512,
-       -1.5298, -2.3549,  1.0159, -1.9433,  0.9855, -0.0574, -1.4120,  0.1256,
-        0.2381, -1.2942,  0.2785,  0.0653, -0.3301, -0.2700, -0.4297, -0.9966,
-        0.1229,  0.5658, -0.3491,  0.0584, -0.7525, -1.3572,  0.2199, -0.4694,
-       -0.1030, -0.4539, -2.4679,  0.9733,  0.9825, -0.2612,  0.8768, -0.7993,
-       -0.8340,  0.5555, -0.9005, -1.4063, -0.6330,  0.3086,  0.3395,  0.0563};
+static ai_float in_data[AI_SIMPLENN_IN_1_SIZE];
 
 /* Data payload for the output tensor */
 AI_ALIGNED(32)
@@ -396,7 +395,7 @@ int main(void)
   //emergencyBreakingTaskHandle = osThreadNew(StartTaskEmergencyBreaking, NULL, &emergencyBreakingTask_attributes);
 
   /* creation of ACCTask */
-  //ACCTaskHandle = osThreadNew(StartTaskACC, NULL, &ACCTask_attributes);
+ // ACCTaskHandle = osThreadNew(StartTaskACC, NULL, &ACCTask_attributes);
 
   /* creation of communicationTask */
   //communicationTaskHandle = osThreadNew(StartTaskCommunication, NULL, &communicationTask_attributes);
@@ -1396,6 +1395,8 @@ void runningStateHandle(void)
 	sensorSatate currentStates;
 	float reward;
 	HAL_StatusTypeDef status;
+	float eps_threshold;
+	uint8_t maxI = 0;
 #ifdef AILOG
 	char buf[100];
 #endif
@@ -1479,29 +1480,90 @@ void runningStateHandle(void)
 		printf("States transmitted\n");
 	}
 
+	for(uint32_t i = 0; i < AI_SIMPLENN_IN_1_SIZE; i++)
+	{
+		/*Normalize input data*/
+		in_data[i] = ((float)camera_frame[i]) / (255.0f);
+	}
+
 	HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD3_Pin|LD2_Pin, GPIO_PIN_SET);
 	//HAL_Delay(2000);
 	printf("Generating random number\n");
 	/*Generate random number*/
 	if(HAL_OK == HAL_RNG_GenerateRandomNumber(&hrng, &rNum))
 	{
-		printf("Random number generated %d\n", rNum);
+		printf("Random number generated: %g\n", rNum / ((float)0xFFFFFFFFu));
 	}
 
+	eps_threshold = EPS_END + (EPS_START - EPS_END) * expf(-1*(double)cycleCounter / EPS_DECAY);
+	printf("Eps_threshold: %g\n",eps_threshold);
 	/* 2 - Call inference engine */
-	aiRun(in_data, out_data);
-
+	if((rNum / ((float)0xFFFFFFFFu)) < eps_threshold)
+	{
+		aiRun(in_data, out_data);
 #ifdef AILOG
 	//Send Data on Uart if necessary
 	for(uint8_t i = 0u; i<AI_SIMPLENN_OUT_1_SIZE; i++)
 	{
-
-		memset(buf,'\0',100);
-		sprintf(buf, "%f \n \0",out_data[i]);
-		HAL_Delay(10);
-		HAL_UART_Transmit(&huart3, buf, 100, HAL_MAX_DELAY );
+		printf("Output[%u]: ",i);
+		printf("%g\n",out_data[i]);
 	}
 #endif
+		/* Max search*/
+		for(uint8_t k = 0; k < 4; k++)
+		{
+			if(out_data[k] > out_data[maxI])
+			{
+				maxI = k;
+			}
+		}
+		printf("Max num: %g\n",out_data[maxI]);
+
+
+
+	}
+	else
+	{
+		HAL_RNG_GenerateRandomNumber(&hrng, &rNum);
+		maxI = rNum % 4;
+		printf("RandomMAX = %u\n",maxI);
+	}
+	switch(maxI)
+			{
+			case 0:
+				currentStates.leftM = 1.0f;
+				currentStates.rightM = 0.0f;
+				leftMotor(1.0f  * LEFT_MOTOR_SPEED_SCALER);
+				rightMotor(0.0f);
+				break;
+			case 1:
+				currentStates.leftM = 0.0f;
+				currentStates.rightM = 1.0f;
+				rightMotor(1.0f  * RIGHT_MOTOR_SPEED_SCALER);
+				leftMotor(0.0f);
+				break;
+			case 2:
+				currentStates.leftM = 1.0f;
+				currentStates.rightM = 1.0f;
+				rightMotor(1.0f  * RIGHT_MOTOR_SPEED_SCALER);
+				leftMotor(1.0f  * LEFT_MOTOR_SPEED_SCALER);
+				break;
+			case 3:
+				currentStates.leftM = 0.0f;
+				currentStates.rightM = 0.0f;
+				rightMotor(0.0f  * RIGHT_MOTOR_SPEED_SCALER);
+				leftMotor(0.0f  * LEFT_MOTOR_SPEED_SCALER);
+				break;
+			default:
+				currentStates.leftM = 0.0f;
+				currentStates.rightM = 0.0f;
+				rightMotor(0.0f  * RIGHT_MOTOR_SPEED_SCALER);
+				leftMotor(0.0f  * LEFT_MOTOR_SPEED_SCALER);
+				break;
+			}
+
+
+
 	/* Set current actions */
 
 
@@ -1611,16 +1673,16 @@ void StartTaskDeafult(void *argument)
 	  {
 	  case INIT:
 		  osDelay(4000);
-		  printf("INIT state");
+		  printf("INIT state\n");
 		  initStateHandle();
 		  break;
 	  case LOAD:
-		  printf("LOAD state");
+		  printf("LOAD state\n");
 		  loadStateHandle();
 		  break;
 
 	  case RUNNING:
-		  printf("RUNNING state");
+		  printf("RUNNING state\n");
 		  runningStateHandle();
 		  break;
 	  default:

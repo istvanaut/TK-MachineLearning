@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    simplenn.h
   * @author  AST Embedded Analytics Research Platform
-  * @date    Thu Apr 22 17:22:55 2021
+  * @date    Fri Apr 23 10:53:18 2021
   * @brief   AI Tool Automatic Code Generator for Embedded NN computing
   ******************************************************************************
   * @attention
@@ -37,7 +37,7 @@
 /******************************************************************************/
 #define AI_SIMPLENN_IN_NUM        (1)
 #define AI_SIMPLENN_IN { \
-  AI_BUFFER_OBJ_INIT(AI_BUFFER_FORMAT_FLOAT, 64, 1, 1, 1, NULL), \
+  AI_BUFFER_OBJ_INIT(AI_BUFFER_FORMAT_FLOAT, 1, 1, 1024, 1, NULL), \
 }
 #define AI_SIMPLENN_IN_SIZE { \
   AI_SIMPLENN_IN_1_SIZE, \
@@ -45,16 +45,16 @@
 #define AI_SIMPLENN_IN_SIZE_BYTES { \
   AI_SIMPLENN_IN_1_SIZE_BYTES, \
 }
-#define AI_SIMPLENN_IN_1_HEIGHT      (64)
+#define AI_SIMPLENN_IN_1_HEIGHT      (1)
 #define AI_SIMPLENN_IN_1_WIDTH       (1)
-#define AI_SIMPLENN_IN_1_CHANNEL     (1)
-#define AI_SIMPLENN_IN_1_SIZE        (64 * 1 * 1)
+#define AI_SIMPLENN_IN_1_CHANNEL     (1024)
+#define AI_SIMPLENN_IN_1_SIZE        (1 * 1 * 1024)
 #define AI_SIMPLENN_IN_1_SIZE_BYTES  (AI_SIMPLENN_IN_1_SIZE * 4)
 
 /******************************************************************************/
 #define AI_SIMPLENN_OUT_NUM       (1)
 #define AI_SIMPLENN_OUT { \
-  AI_BUFFER_OBJ_INIT(AI_BUFFER_FORMAT_FLOAT, 4, 1, 1, 1, NULL), \
+  AI_BUFFER_OBJ_INIT(AI_BUFFER_FORMAT_FLOAT, 1, 1, 4, 1, NULL), \
 }
 #define AI_SIMPLENN_OUT_SIZE { \
   AI_SIMPLENN_OUT_1_SIZE, \
@@ -62,14 +62,14 @@
 #define AI_SIMPLENN_OUT_SIZE_BYTES { \
   AI_SIMPLENN_OUT_1_SIZE_BYTES, \
 }
-#define AI_SIMPLENN_OUT_1_HEIGHT      (4)
+#define AI_SIMPLENN_OUT_1_HEIGHT      (1)
 #define AI_SIMPLENN_OUT_1_WIDTH       (1)
-#define AI_SIMPLENN_OUT_1_CHANNEL     (1)
-#define AI_SIMPLENN_OUT_1_SIZE        (4 * 1 * 1)
+#define AI_SIMPLENN_OUT_1_CHANNEL     (4)
+#define AI_SIMPLENN_OUT_1_SIZE        (1 * 1 * 4)
 #define AI_SIMPLENN_OUT_1_SIZE_BYTES  (AI_SIMPLENN_OUT_1_SIZE * 4)
 
 /******************************************************************************/
-#define AI_SIMPLENN_N_NODES (5)
+#define AI_SIMPLENN_N_NODES (7)
 
 
 AI_API_DECLARE_BEGIN

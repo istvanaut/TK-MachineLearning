@@ -4453,3 +4453,1583 @@ java.lang.NullPointerException
 2021-04-22 17:23:04,682 [INFO] ProjectBuilder:3584 - Time for Generating toolchain IDE Files: 6734mS.
 2021-04-22 17:23:04,683 [INFO] ProjectBuilder:2339 - Time for Copy CMSIS : 1mS.
 2021-04-22 17:23:04,704 [INFO] ProjectBuilder:2339 - Time for Copy CMSIS : 0mS.
+2021-04-23 10:47:24,376 [INFO] Activator:170 - 
+
+
+2021-04-23 10:47:24,379 [INFO] Activator:171 - !SESSION log4j initialized
+2021-04-23 10:48:21,859 [INFO] McuFinderGlobals:39 - Set McuFinder mode to 2 (CubeIDE integrated)
+2021-04-23 10:48:22,072 [INFO] ApplicationProperties:181 - Using Application install path: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236
+2021-04-23 10:48:22,089 [INFO] DbMcusXml:74 - Set database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/mcu/
+2021-04-23 10:48:22,094 [INFO] DbBoardsPdsc:56 - Set plugin database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/boardmanager/
+2021-04-23 10:48:22,094 [INFO] DbMcus:258 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 10:48:22,094 [INFO] DbBoards:264 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 10:48:22,097 [INFO] DbExamples:333 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 10:48:22,114 [INFO] DbMcusAds:85 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,116 [INFO] DbMcusDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,119 [INFO] DbMcusJson:65 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,120 [INFO] DbBoardsDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,121 [INFO] DbBoardsJson:58 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,194 [INFO] CrossReferenceDbSqlite:196 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/cs/
+2021-04-23 10:48:22,205 [INFO] DbExamplesSqlite:690 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,353 [INFO] RulesReader:52 - Compatibility file has been processed (237 Rules)
+2021-04-23 10:48:22,492 [INFO] MicroXplorer:622 - Detected Java Version = 11.0.9.1
+2021-04-23 10:48:22,513 [INFO] DbMcusXml:74 - Set database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/mcu/
+2021-04-23 10:48:22,513 [INFO] DbBoardsPdsc:56 - Set plugin database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/boardmanager/
+2021-04-23 10:48:22,513 [INFO] DbMcus:258 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 10:48:22,514 [INFO] DbBoards:264 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 10:48:22,514 [INFO] DbExamples:333 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 10:48:22,514 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,514 [INFO] DbMcusAds:85 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,515 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,515 [INFO] DbMcusDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,515 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,515 [INFO] DbMcusJson:65 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,515 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,516 [INFO] DbBoardsDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,516 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,516 [INFO] DbBoardsJson:58 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,516 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,517 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,517 [INFO] CrossReferenceDbSqlite:196 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/cs/
+2021-04-23 10:48:22,517 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,518 [INFO] DbExamplesSqlite:690 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,613 [INFO] MainPanel:204 - HeapMemory: 385875968
+2021-04-23 10:48:22,723 [INFO] DbMcusXml:74 - Set database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/mcu/
+2021-04-23 10:48:22,723 [INFO] DbBoardsPdsc:56 - Set plugin database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/boardmanager/
+2021-04-23 10:48:22,724 [INFO] DbMcus:258 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 10:48:22,724 [INFO] DbBoards:264 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 10:48:22,724 [INFO] DbExamples:333 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 10:48:22,725 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,725 [INFO] DbMcusAds:85 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,725 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,725 [INFO] DbMcusDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,725 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,726 [INFO] DbMcusJson:65 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,726 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,726 [INFO] DbBoardsDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,726 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,726 [INFO] DbBoardsJson:58 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,726 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,726 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,726 [INFO] CrossReferenceDbSqlite:196 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/cs/
+2021-04-23 10:48:22,726 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 10:48:22,727 [INFO] DbExamplesSqlite:690 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 10:48:22,749 [INFO] ApplicationProperties:181 - Using Application install path: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236
+2021-04-23 10:48:22,751 [INFO] PluginManage:178 - Search for loadable plugins [exclusion list=, ]
+2021-04-23 10:48:22,754 [INFO] PluginManage:292 - Check plugin analytics
+2021-04-23 10:48:32,103 [INFO] AnalyticsPlugin:233 - Accepted Software Licenses: STM32CubeMX.6.1.2,STM32CubeMX.6.0.1,STM32CubeMX.6.2.0,STM32CubeMX.6.2.1
+2021-04-23 10:48:32,104 [INFO] AnalyticsPlugin:235 - Accepted CMSIS Pack Licenses: 
+2021-04-23 10:48:32,105 [INFO] AnalyticsPlugin:237 - Accepted Firmware Licenses: 
+2021-04-23 10:48:32,105 [INFO] PluginManage:342 - Loaded plugin analytics (category:tool,tabindex:-1)
+2021-04-23 10:48:32,106 [INFO] PluginManage:292 - Check plugin clock
+2021-04-23 10:48:32,138 [INFO] PluginManage:342 - Loaded plugin clock (category:base,tabindex:2)
+2021-04-23 10:48:32,138 [INFO] PluginManage:292 - Check plugin ddr
+2021-04-23 10:48:32,142 [INFO] PluginManage:342 - Loaded plugin ddr (category:tool,tabindex:6)
+2021-04-23 10:48:32,142 [INFO] PluginManage:292 - Check plugin filemanager
+2021-04-23 10:48:32,348 [INFO] PluginManage:342 - Loaded plugin filemanager (category:base,tabindex:10)
+2021-04-23 10:48:32,348 [INFO] PluginManage:292 - Check plugin ipmanager
+2021-04-23 10:48:32,391 [INFO] PluginManage:342 - Loaded plugin ipmanager (category:base,tabindex:5)
+2021-04-23 10:48:32,391 [INFO] PluginManage:292 - Check plugin pinoutandconfiguration
+2021-04-23 10:48:32,423 [INFO] PluginManage:342 - Loaded plugin pinoutandconfiguration (category:base,tabindex:1)
+2021-04-23 10:48:32,423 [INFO] PluginManage:292 - Check plugin pinoutconfig
+2021-04-23 10:48:32,465 [INFO] PluginManage:342 - Loaded plugin pinoutconfig (category:base,tabindex:0)
+2021-04-23 10:48:32,465 [INFO] PluginManage:292 - Check plugin power
+2021-04-23 10:48:32,486 [INFO] PluginManage:342 - Loaded plugin power (category:power,tabindex:4)
+2021-04-23 10:48:32,486 [INFO] PluginManage:292 - Check plugin projectmanager
+2021-04-23 10:48:32,509 [INFO] PluginManage:342 - Loaded plugin projectmanager (category:projectmanager,tabindex:3)
+2021-04-23 10:48:32,509 [INFO] PluginManage:292 - Check plugin thirdparty
+2021-04-23 10:48:32,751 [INFO] PluginManage:342 - Loaded plugin thirdparty (category:base,tabindex:-1)
+2021-04-23 10:48:32,752 [WARN] IntegrityCheckThread:59 - waiting for thirdparty lock release [integrity check]
+2021-04-23 10:48:32,752 [INFO] PluginManage:292 - Check plugin tools
+2021-04-23 10:48:32,753 [INFO] IntegrityCheckThread:61 - entering critical section [integrity check]
+2021-04-23 10:48:32,753 [INFO] ThirdPartyUpdaterWithRetryManager:56 - Updater plugin not ready yet. [1/15]
+2021-04-23 10:48:32,805 [INFO] PluginManage:342 - Loaded plugin tools (category:base,tabindex:7)
+2021-04-23 10:48:32,806 [INFO] PluginManage:292 - Check plugin tutovideos
+2021-04-23 10:48:33,090 [INFO] PluginManage:342 - Loaded plugin tutovideos (category:base,tabindex:-1)
+2021-04-23 10:48:33,090 [INFO] PluginManage:292 - Check plugin updater
+2021-04-23 10:48:33,106 [INFO] PluginManage:342 - Loaded plugin updater (category:base,tabindex:12)
+2021-04-23 10:48:33,107 [INFO] PluginManage:265 - PluginManage : Loaded plugins [13]
+2021-04-23 10:48:33,365 [INFO] PinOutPanel:1435 - setPackage(No Configuration,No Configuration)
+2021-04-23 10:48:33,541 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:33,542 [INFO] PluginManager:203 - loadIPPluginJar : add adc
+2021-04-23 10:48:33,590 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:33,590 [INFO] PluginManager:203 - loadIPPluginJar : add aes
+2021-04-23 10:48:33,645 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:33,645 [INFO] PluginManager:203 - loadIPPluginJar : add can
+2021-04-23 10:48:33,678 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:33,679 [INFO] PluginManager:203 - loadIPPluginJar : add comp
+2021-04-23 10:48:33,713 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:33,713 [INFO] PluginManager:203 - loadIPPluginJar : add cryp
+2021-04-23 10:48:33,749 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:33,749 [INFO] PluginManager:203 - loadIPPluginJar : add dfsdm
+2021-04-23 10:48:33,766 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:33,767 [INFO] PluginManager:203 - loadIPPluginJar : add dma
+2021-04-23 10:48:33,794 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:33,794 [INFO] PluginManager:203 - loadIPPluginJar : add fatfs
+2021-04-23 10:48:33,860 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:33,860 [INFO] PluginManager:203 - loadIPPluginJar : add fmc
+2021-04-23 10:48:33,881 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:33,881 [INFO] PluginManager:203 - loadIPPluginJar : add freertos
+2021-04-23 10:48:33,909 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:33,909 [INFO] PluginManager:203 - loadIPPluginJar : add genericplugin
+2021-04-23 10:48:34,045 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,045 [INFO] PluginManager:203 - loadIPPluginJar : add gfxmmu
+2021-04-23 10:48:34,194 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,195 [INFO] PluginManager:203 - loadIPPluginJar : add gic
+2021-04-23 10:48:34,209 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,210 [INFO] PluginManager:203 - loadIPPluginJar : add gpio
+2021-04-23 10:48:34,284 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,285 [INFO] PluginManager:203 - loadIPPluginJar : add gtzc
+2021-04-23 10:48:34,318 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,319 [INFO] PluginManager:203 - loadIPPluginJar : add hash
+2021-04-23 10:48:34,371 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,371 [INFO] PluginManager:203 - loadIPPluginJar : add i2c
+2021-04-23 10:48:34,415 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,415 [INFO] PluginManager:203 - loadIPPluginJar : add i2s
+2021-04-23 10:48:34,428 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,428 [INFO] PluginManager:203 - loadIPPluginJar : add ipddr
+2021-04-23 10:48:34,467 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,467 [INFO] PluginManager:203 - loadIPPluginJar : add lorawan
+2021-04-23 10:48:34,506 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,506 [INFO] PluginManager:203 - loadIPPluginJar : add ltdc
+2021-04-23 10:48:34,521 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,521 [INFO] PluginManager:203 - loadIPPluginJar : add mdma
+2021-04-23 10:48:34,534 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,535 [INFO] PluginManager:203 - loadIPPluginJar : add nvic
+2021-04-23 10:48:34,573 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,574 [INFO] PluginManager:203 - loadIPPluginJar : add opamp
+2021-04-23 10:48:34,637 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,637 [INFO] PluginManager:203 - loadIPPluginJar : add openamp
+2021-04-23 10:48:34,680 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,680 [INFO] PluginManager:203 - loadIPPluginJar : add pdm2pcm
+2021-04-23 10:48:34,696 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,700 [INFO] PluginManager:203 - loadIPPluginJar : add plateformsettings
+2021-04-23 10:48:34,727 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,727 [INFO] PluginManager:203 - loadIPPluginJar : add quadspi
+2021-04-23 10:48:34,740 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,740 [INFO] PluginManager:203 - loadIPPluginJar : add resmgrutility
+2021-04-23 10:48:34,793 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,793 [INFO] PluginManager:203 - loadIPPluginJar : add sai
+2021-04-23 10:48:34,833 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,834 [INFO] PluginManager:203 - loadIPPluginJar : add spi
+2021-04-23 10:48:34,889 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,890 [INFO] PluginManager:203 - loadIPPluginJar : add stm32_wpan
+2021-04-23 10:48:34,929 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,929 [INFO] PluginManager:203 - loadIPPluginJar : add tim
+2021-04-23 10:48:34,988 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:34,988 [INFO] PluginManager:203 - loadIPPluginJar : add touchsensing
+2021-04-23 10:48:35,016 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:35,017 [INFO] PluginManager:203 - loadIPPluginJar : add tracer_emb
+2021-04-23 10:48:35,044 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:35,046 [INFO] PluginManager:203 - loadIPPluginJar : add ts
+2021-04-23 10:48:35,072 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:35,072 [INFO] PluginManager:203 - loadIPPluginJar : add tsc
+2021-04-23 10:48:35,100 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:35,100 [INFO] PluginManager:203 - loadIPPluginJar : add ucpd
+2021-04-23 10:48:35,146 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:35,147 [INFO] PluginManager:203 - loadIPPluginJar : add usart
+2021-04-23 10:48:35,543 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 10:48:35,679 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 10:48:35,690 [INFO] DbMcusAds:132 - JSON generation date=Mon Mar 01 11:27:39 CET 2021 (1614594459504)
+2021-04-23 10:48:35,691 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 10:48:35,735 [WARN] DetailPanel:315 - Failed to get advertising image, set to default
+2021-04-23 10:48:35,754 [INFO] ThirdPartyUpdaterWithRetryManager:56 - Updater plugin not ready yet. [2/15]
+2021-04-23 10:48:35,982 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 10:48:35,985 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 10:48:35,986 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 10:48:35,986 [WARN] DetailPanel:315 - Failed to get advertising image, set to default
+2021-04-23 10:48:35,988 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 10:48:36,054 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 10:48:36,055 [WARN] ThirdParty:796 - waiting for thirdparty lock release [close project]
+2021-04-23 10:48:38,755 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 10:48:38,756 [ERROR] AbstractThirdPartyUpdaterManager:153 - class java.lang.Integer cannot be cast to class java.util.List (java.lang.Integer and java.util.List are in module java.base of loader 'bootstrap')
+2021-04-23 10:48:38,756 [INFO] ThirdParty:900 - Integrity check success = false
+2021-04-23 10:48:38,757 [INFO] IntegrityCheckThread:75 - exiting critical section [integrity check]
+2021-04-23 10:48:38,758 [INFO] IntegrityCheckThread:78 - End integrity checks thread
+2021-04-23 10:48:38,758 [INFO] ThirdParty:798 - entering critical section [close project]
+2021-04-23 10:48:38,763 [INFO] ThirdParty:809 - exiting critical section [close project]
+2021-04-23 10:48:38,776 [INFO] PinOutPanel:1435 - setPackage(No Configuration,No Configuration)
+2021-04-23 10:48:38,778 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 10:48:38,799 [ERROR] Updater:1065 - MainUpdater not yet initialized. External WinMGr cannot be set.
+2021-04-23 10:48:38,810 [INFO] Updater:1002 - Updater Version found : 6.2.1
+2021-04-23 10:48:38,844 [INFO] ApplicationProperties:181 - Using Application install path: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236
+2021-04-23 10:48:39,181 [INFO] MainUpdater:2661 - connection check result : 10
+2021-04-23 10:48:39,182 [INFO] MainUpdater:255 - Updater Check For Update Now.
+2021-04-23 10:48:39,182 [INFO] MicroXplorer:472 - Change Database Version : DB.6.0.21
+2021-04-23 10:48:39,252 [INFO] CheckServerUpdateThread:102 - End of CheckServer Thread
+2021-04-23 10:48:39,313 [INFO] MainUpdater:2661 - connection check result : 10
+2021-04-23 10:48:39,322 [INFO] MainUpdater:2661 - connection check result : 10
+2021-04-23 10:48:39,693 [INFO] MicroXplorer:442 - Change Database Path : 
+2021-04-23 10:48:39,693 [INFO] MicroXplorer:472 - Change Database Version : DB.6.0.21
+2021-04-23 10:48:39,693 [WARN] ThirdParty:796 - waiting for thirdparty lock release [close project]
+2021-04-23 10:48:39,693 [INFO] ThirdParty:798 - entering critical section [close project]
+2021-04-23 10:48:39,694 [INFO] ThirdParty:809 - exiting critical section [close project]
+2021-04-23 10:48:39,697 [INFO] PinOutPanel:1435 - setPackage(No Configuration,No Configuration)
+2021-04-23 10:48:39,698 [INFO] UtilMem:74 - Begin LoadConfig() Used Memory: 373577448 Bytes (414187520)
+2021-04-23 10:48:39,704 [INFO] MicroXplorer:442 - Change Database Path : C:/Users/krani/.stm32cubemx/databases/DB.6.0.20/db/
+2021-04-23 10:48:39,704 [INFO] MicroXplorer:472 - Change Database Version : DB.6.0.20
+2021-04-23 10:48:42,060 [INFO] OpenFileManager:303 - Change cursor
+2021-04-23 10:48:42,081 [WARN] IntegrityCheckThread:59 - waiting for thirdparty lock release [integrity check]
+2021-04-23 10:48:42,081 [INFO] IntegrityCheckThread:61 - entering critical section [integrity check]
+2021-04-23 10:48:42,183 [WARN] PackLoader:226 - Cannot read IP mode file for RoweBots.I-CUBE-UNISONRTOS.5.5.0-4
+2021-04-23 10:48:42,212 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-SFXS2LP1.3.0.0
+2021-04-23 10:48:42,232 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-EEPRMA1.3.0.0
+2021-04-23 10:48:42,252 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-NFC4.2.0.2
+2021-04-23 10:48:42,281 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-BLE2.3.2.0
+2021-04-23 10:48:42,309 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-SUBG2.4.0.0
+2021-04-23 10:48:42,330 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-TOF1.1.0.0
+2021-04-23 10:48:42,403 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-AZRTOS-H7.1.0.0
+2021-04-23 10:48:42,507 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-MEMS1.8.3.0
+2021-04-23 10:48:42,780 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-DISPLAY.1.0.0
+2021-04-23 10:48:42,975 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-ALGOBUILD.1.2.0
+2021-04-23 10:48:42,990 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-GNSS1.5.2.0
+2021-04-23 10:48:43,012 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-BLE1.6.1.0
+2021-04-23 10:48:43,024 [WARN] PackLoader:226 - Cannot read IP mode file for wolfSSL.I-CUBE-wolfSSL.4.7.0
+2021-04-23 10:48:43,037 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-TOUCHGFX.4.16.1
+2021-04-23 10:48:43,037 [INFO] ThirdParty:900 - Integrity check success = true
+2021-04-23 10:48:43,037 [INFO] IntegrityCheckThread:75 - exiting critical section [integrity check]
+2021-04-23 10:48:43,037 [INFO] IntegrityCheckThread:78 - End integrity checks thread
+2021-04-23 10:48:46,866 [INFO] Context:587 - Trying to add GPIOservice into a context  which must be forbidden
+2021-04-23 10:48:47,704 [INFO] ApiDbMcu:458 - Load IP Config File for STMicroelectronics.X-CUBE-AI.6.0.0
+2021-04-23 10:48:48,047 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2868A1' from pack STMicroelectronics.X-CUBE-SFXS2LP1.3.0.0: no header file found
+2021-04-23 10:48:48,048 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2868A2' from pack STMicroelectronics.X-CUBE-SFXS2LP1.3.0.0: no header file found
+2021-04-23 10:48:48,048 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2915A1' from pack STMicroelectronics.X-CUBE-SFXS2LP1.3.0.0: no header file found
+2021-04-23 10:48:48,053 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,054 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,054 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,054 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,054 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,054 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,055 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,055 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,055 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,055 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,055 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,055 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,056 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,056 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,056 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,056 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,056 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,056 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,057 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,057 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,057 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,057 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,057 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,057 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,058 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,058 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,058 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 10:48:48,069 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2868A1' from pack STMicroelectronics.X-CUBE-SUBG2.4.0.0: no header file found
+2021-04-23 10:48:48,069 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2868A2' from pack STMicroelectronics.X-CUBE-SUBG2.4.0.0: no header file found
+2021-04-23 10:48:48,069 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2915A1' from pack STMicroelectronics.X-CUBE-SUBG2.4.0.0: no header file found
+2021-04-23 10:48:48,078 [WARN] ApiManager:294 - Cannot register API 'Board Extension:EEPRMA1' from pack STMicroelectronics.X-CUBE-EEPRMA1.3.0.0: no header file found
+2021-04-23 10:48:48,079 [WARN] ApiManager:294 - Cannot register API 'Board Extension:EEPRMA2' from pack STMicroelectronics.X-CUBE-EEPRMA1.3.0.0: no header file found
+2021-04-23 10:48:48,230 [WARN] ApiManager:294 - Cannot register API 'Board Extension:IKS01A3' from pack STMicroelectronics.X-CUBE-MEMS1.8.3.0: no header file found
+2021-04-23 10:48:48,230 [WARN] ApiManager:294 - Cannot register API 'Board Extension:IKS01A2' from pack STMicroelectronics.X-CUBE-MEMS1.8.3.0: no header file found
+2021-04-23 10:48:48,230 [WARN] ApiManager:294 - Cannot register API 'Board Extension:IKS02A1' from pack STMicroelectronics.X-CUBE-MEMS1.8.3.0: no header file found
+2021-04-23 10:48:48,241 [INFO] RtosManager:470 - Registered RTOS mode: class=CMSIS, group=RTOS, mode=CMSIS_V1, owner=FREERTOS
+2021-04-23 10:48:48,241 [INFO] RtosManager:470 - Registered RTOS mode: class=CMSIS, group=RTOS2, mode=CMSIS_V2, owner=FREERTOS
+2021-04-23 10:48:48,241 [INFO] RtosManager:470 - Registered RTOS mode: class=RTOS, group=Core, mode=CMSIS_V1, owner=FREERTOS
+2021-04-23 10:48:48,241 [INFO] RtosManager:470 - Registered RTOS mode: class=RTOS, group=Core, mode=CMSIS_V2, owner=FREERTOS
+2021-04-23 10:48:48,241 [WARN] ModelIntegratedComponent:182 - Missing modes for component STMicroelectronics:FreeRTOS:0.0.1:STMicroelectronics:RTOS:FreeRTOS:Core:::10.2.0:
+2021-04-23 10:48:48,243 [WARN] ApiManager:294 - Cannot register API 'Board Extension:GNSS1A1' from pack STMicroelectronics.X-CUBE-GNSS1.5.2.0: no header file found
+2021-04-23 10:48:48,245 [WARN] ApiManager:294 - Cannot register API 'Board Support:Custom' from pack STMicroelectronics.X-CUBE-GNSS1.5.2.0: no header file found
+2021-04-23 10:48:48,245 [WARN] ApiManager:294 - Cannot register API 'Data Exchange:lib_gnss' from pack STMicroelectronics.X-CUBE-GNSS1.5.2.0: no header file found
+2021-04-23 10:48:48,246 [WARN] ApiManager:294 - Cannot register API 'Wireless:BlueNRG-MS' from pack STMicroelectronics.X-CUBE-BLE1.6.1.0: no header file found
+2021-04-23 10:48:48,247 [WARN] ApiManager:294 - Cannot register API 'Board Extension:NFC04A1' from pack STMicroelectronics.X-CUBE-NFC4.2.0.2: no header file found
+2021-04-23 10:48:48,248 [WARN] ApiManager:294 - Cannot register API 'Wireless:BlueNRG-2' from pack STMicroelectronics.X-CUBE-BLE2.3.2.0: no header file found
+2021-04-23 10:48:48,468 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:48,483 [INFO] PluginManager:203 - loadIPPluginJar : add ai.6.0.0
+2021-04-23 10:48:49,235 [INFO] ApiDbMcu:458 - Load IP Config File for FREERTOS
+2021-04-23 10:48:49,235 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:48:49,235 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:48:49,235 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:48:49,424 [INFO] RtosManager:784 - Current active RTOS is FREERTOS [Cortex-M7NS]
+2021-04-23 10:48:49,436 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (48MHZClocksFreq_Value)
+2021-04-23 10:48:49,437 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (ADC12outputFreq_Value)
+2021-04-23 10:48:49,437 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (ADC34outputFreq_Value)
+2021-04-23 10:48:49,437 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (FamilyName)
+2021-04-23 10:48:49,437 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (I2SClocksFreq_Value)
+2021-04-23 10:48:49,437 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (MCOFreq_Value)
+2021-04-23 10:48:49,438 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (PLLMCOFreq_Value)
+2021-04-23 10:48:49,438 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (PLLMUL)
+2021-04-23 10:48:49,439 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (PRESCALERUSB)
+2021-04-23 10:48:49,439 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (RTCHSEDivFreq_Value)
+2021-04-23 10:48:49,439 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Parameter (SDMMCFreq_Value) has invalid value (72000000)
+2021-04-23 10:48:49,439 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (SYSCLKSourceVirtual)
+2021-04-23 10:48:49,439 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM15Freq_Value)
+2021-04-23 10:48:49,439 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM16Freq_Value)
+2021-04-23 10:48:49,440 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM17Freq_Value)
+2021-04-23 10:48:49,440 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM1Freq_Value)
+2021-04-23 10:48:49,440 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM20Freq_Value)
+2021-04-23 10:48:49,440 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM2Freq_Value)
+2021-04-23 10:48:49,440 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM3Freq_Value)
+2021-04-23 10:48:49,440 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM8Freq_Value)
+2021-04-23 10:48:49,441 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (VCOOutput2Freq_Value)
+2021-04-23 10:48:49,441 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (VcooutputI2S)
+2021-04-23 10:48:49,444 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelName) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 10:48:49,445 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelKind) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 10:48:49,445 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelType) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 10:48:49,445 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Invalid parameter (LatestDirectoryUsed)
+2021-04-23 10:48:49,445 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelStructureFile) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 10:48:49,445 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelCompression) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 10:48:49,445 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelMacc) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 10:48:49,445 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelActualCompression) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 10:48:49,445 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelFlashOccupation) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 10:48:49,445 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelRamOccupation) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 10:48:49,445 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Invalid parameter (MaximumNumberOfInputLayer)
+2021-04-23 10:48:49,445 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Invalid parameter (MaximumNumberOfOutputLayer)
+2021-04-23 10:48:49,957 [INFO] UtilMem:74 - End LoadConfig() Used Memory: 434921984 Bytes (719323136)
+2021-04-23 10:48:49,959 [INFO] DbMcusXml:100 - Load MCU database from C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/mcu/families.xml
+2021-04-23 10:48:50,920 [INFO] DbMcusJson:94 - JSON generation date=Mon Feb 08 14:35:07 CET 2021 (1612791307)
+2021-04-23 10:48:51,620 [INFO] DbMcus:175 - Found 1906 MCUs (1866 are supported by CubeMX, 1866 are visible in CubeMX)
+2021-04-23 10:48:51,623 [INFO] ApiDb:251 - Load user favorites file C:\Users\krani/.stm32cubeide/favorites.mcus.txt: 0 item(s)
+2021-04-23 10:48:51,624 [INFO] ApiDb:255 - User favorites MCUs=[]
+2021-04-23 10:48:51,624 [INFO] DbMcus:187 - Set 0 / 0 favorites MCUs
+2021-04-23 10:48:51,633 [WARN] ThirdParty:762 - waiting for thirdparty lock release [change project]
+2021-04-23 10:48:51,633 [INFO] ThirdParty:764 - entering critical section [change project]
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :RoweBots I-CUBE-UNISONRTOS 5.5.0-4
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-SFXS2LP1 3.0.0
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics USB_HOST 2.0.0
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics USB_DEVICE 3.0.0
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics HAL Drivers 0.0.0
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics MBEDTLS 2.16.2
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics MBEDTLS 2.14.1
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-SUBG2 4.0.0
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-TOF1 1.0.0
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-AZRTOS-H7 1.0.0
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics USB_DEVICE 2.0.0
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-EEPRMA1 3.0.0
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-MEMS1 8.3.0
+2021-04-23 10:48:51,634 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-DISPLAY 1.0.0
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics FreeRTOS 0.0.1
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics USB_DEVICE 1.0.0
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-AI 6.0.0
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-ALGOBUILD 1.2.0
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-GNSS1 5.2.0
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-BLE1 6.1.0
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics lwIP 2.0.3
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics lwIP 2.1.2
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics USB_HOST 1.0.0
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-NFC4 2.0.2
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :wolfSSL I-CUBE-wolfSSL 4.7.0
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-TOUCHGFX 4.16.1
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics PDM2PCM 3.1.0
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics PDM2PCM 3.2.0
+2021-04-23 10:48:51,635 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics PDM2PCM 3.3.0
+2021-04-23 10:48:51,636 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-BLE2 3.2.0
+2021-04-23 10:48:51,636 [INFO] ThirdParty:770 - exiting critical section [change project]
+2021-04-23 10:48:51,976 [INFO] PinOutPanel:1435 - setPackage(No Configuration,No Configuration)
+2021-04-23 10:48:51,981 [INFO] PinOutPanel:1435 - setPackage(STM32F746ZGTx,LQFP144)
+2021-04-23 10:48:53,088 [INFO] UtilMem:74 - Before build in PCC Used Memory: 625475584 Bytes (786432000)
+2021-04-23 10:48:53,586 [INFO] SharedServices:72 - Folder for power plug-in: C:/Users/krani/.stm32cubemx/plugins/power
+2021-04-23 10:48:53,627 [INFO] SharedServices:72 - Folder for power plug-in: C:/Users/krani/.stm32cubemx/plugins/power
+2021-04-23 10:48:53,680 [INFO] SharedServices:72 - Folder for power plug-in: C:/Users/krani/.stm32cubemx/plugins/power
+2021-04-23 10:48:53,686 [INFO] SharedServices:72 - Folder for power plug-in: C:/Users/krani/.stm32cubemx/plugins/power
+2021-04-23 10:48:53,877 [INFO] UtilMem:74 - After build in PCC Used Memory: 608795152 Bytes (786432000)
+2021-04-23 10:48:53,877 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:48:53,878 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:48:53,878 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:48:53,921 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,921 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,921 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,921 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,921 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,921 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,922 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,922 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,922 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,922 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,922 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,923 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,923 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,923 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,923 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,923 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,924 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,924 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,924 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,924 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,924 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,924 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,925 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,925 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,925 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,926 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,926 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,926 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,927 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,927 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,928 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,928 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,928 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,929 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,929 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,930 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,930 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,931 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,931 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,932 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,932 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,933 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,933 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,933 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,934 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,934 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,935 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,936 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,936 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,937 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,937 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,938 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,939 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,939 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,940 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,940 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,941 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,941 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,942 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,943 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,943 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,945 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,945 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,946 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,947 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,947 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,948 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,949 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,950 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,950 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,951 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,952 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,953 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,954 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,955 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 10:48:53,960 [INFO] AI:738 - onDisable adding AI com.st.microxplorer.plugins.ip.ai.AI@52606936 on STMicroelectronics.X-CUBE-AI.6.0.0
+2021-04-23 10:48:53,976 [INFO] ApiDbMcu:458 - Load IP Config File for PDM2PCM
+2021-04-23 10:48:54,024 [WARN] FreeRTOS:989 - Null or empty value: should not occur! (nothing added to the table)
+2021-04-23 10:48:54,054 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] toolchainItems.length=====1
+2021-04-23 10:48:54,166 [INFO] RtosManager:597 - Active RTOS found at IOC load: FREERTOS [Cortex-M7NS]
+2021-04-23 10:48:54,170 [INFO] OpenFileManager:323 - Restore cursor
+2021-04-23 10:48:54,233 [INFO] UtilMem:74 - End SaveConfig() Used Memory: 573573120 Bytes (786432000)
+2021-04-23 10:48:54,946 [INFO] AIMainUI:1000 - Restoring parameters from IP...
+2021-04-23 10:48:54,946 [INFO] AIMainUI:1132 - No old model detected
+2021-04-23 10:48:55,007 [INFO] AInterface:96 - AInterface using toolDir: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows
+2021-04-23 10:48:55,035 [INFO] AIModelDetailledView:1925 - Analysis status: -
+2021-04-23 10:48:55,036 [INFO] AIModelDetailledView:822 - Selected model: ONNX
+2021-04-23 10:48:55,055 [ERROR] PinnrParser:75 - No error detected
+2021-04-23 10:48:55,056 [ERROR] PinnrParser:91 - Keyset: [outputs, val_metrics, rom_cfact, exec_duration, cli_version_str, inputs, _allocate_inputs, error, error_str, date_time, model_name, model_n_params, rom_outputs, layers, rom_inputs, rom_size, tools_api_version, report_version, rom_heap_inspector, rom_n_macc, model_type, val_error_desc, _allocate_outputs, model_size, ram_size, val_error, cli_parameters, exec_cmd, model_files, name, tools_version, cli_version, compression, strategy, hash, ram_io_size]
+2021-04-23 10:48:55,857 [ERROR] PinnrParser:75 - No error detected
+2021-04-23 10:48:55,857 [ERROR] PinnrParser:91 - Keyset: [outputs, val_metrics, rom_cfact, exec_duration, cli_version_str, inputs, _allocate_inputs, error, error_str, date_time, model_name, model_n_params, rom_outputs, layers, rom_inputs, rom_size, tools_api_version, report_version, rom_heap_inspector, rom_n_macc, model_type, val_error_desc, _allocate_outputs, model_size, ram_size, val_error, cli_parameters, exec_cmd, model_files, name, tools_version, cli_version, compression, strategy, hash, ram_io_size]
+2021-04-23 10:49:12,021 [INFO] AI:723 - getUI adding AI com.st.microxplorer.plugins.ip.ai.AI@52606936 on STMicroelectronics.X-CUBE-AI.6.0.0
+2021-04-23 10:49:12,021 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:12,021 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:12,021 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:12,527 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:12,527 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:12,527 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:12,623 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:12,624 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:12,624 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:13,200 [INFO] AI:723 - getUI adding AI com.st.microxplorer.plugins.ip.ai.AI@52606936 on STMicroelectronics.X-CUBE-AI.6.0.0
+2021-04-23 10:49:13,200 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:13,200 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:13,200 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:13,838 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:13,839 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:13,839 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:14,219 [INFO] AI:723 - getUI adding AI com.st.microxplorer.plugins.ip.ai.AI@52606936 on STMicroelectronics.X-CUBE-AI.6.0.0
+2021-04-23 10:49:14,220 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:14,220 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:14,220 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 10:49:48,986 [INFO] AInterface:196 - ModelName:simplenn; files:[C:\Users\krani\Documents\BME\agv2\Microcontroller\Network\MCU_NN.onnx]; type:ONNX; compression:8
+2021-04-23 10:49:48,988 [INFO] AInterface:411 - workspaceTempDir: C:\Users\krani\AppData\Local\Temp\mxAI_workspace48840584880003103861603734719398
+2021-04-23 10:49:48,989 [INFO] AInterface:872 - Setting Env: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows
+2021-04-23 10:49:48,990 [INFO] AInterface:929 - Custom PATH variable: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/mingw64/bin;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/mingw64/libexec/gcc/x86_64-w64-mingw32/7.3.0;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/node/bin
+2021-04-23 10:49:48,992 [INFO] CmdLine:90 - Command: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/stm32ai analyze --name simplenn -m C:/Users/krani/Documents/BME/agv2/Microcontroller/Network/MCU_NN.onnx --type onnx --compression 8 --verbosity 1 --workspace C:\Users\krani\AppData\Local\Temp\mxAI_workspace48840584880003103861603734719398 --output C:\Users\krani\.stm32cubemx 
+2021-04-23 10:49:49,001 [INFO] AIModelDetailledView:1925 - Analysis status: pending
+2021-04-23 10:49:52,668 [INFO] CmdLine:57 - Neural Network Tools for STM32AI v1.4.1 (STM.ai v6.0.0-RC6)
+2021-04-23 10:49:53,060 [INFO] CmdLine:57 -  
+2021-04-23 10:49:53,060 [INFO] CmdLine:57 -  Exec/report summary (analyze)
+2021-04-23 10:49:53,061 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,062 [INFO] CmdLine:57 -  model file         : C:\Users\krani\Documents\BME\agv2\Microcontroller\Network\MCU_NN.onnx
+2021-04-23 10:49:53,062 [INFO] CmdLine:57 -  type               : onnx
+2021-04-23 10:49:53,063 [INFO] CmdLine:57 -  c_name             : simplenn
+2021-04-23 10:49:53,063 [INFO] CmdLine:57 -  compression        : 8
+2021-04-23 10:49:53,064 [INFO] CmdLine:57 -  quantize           : None
+2021-04-23 10:49:53,064 [INFO] CmdLine:57 -  workspace dir      : C:\Users\krani\AppData\Local\Temp\mxAI_workspace48840584880003103861603734719398
+2021-04-23 10:49:53,064 [INFO] CmdLine:57 -  output dir         : C:\Users\krani\.stm32cubemx
+2021-04-23 10:49:53,065 [INFO] CmdLine:57 -  
+2021-04-23 10:49:53,065 [INFO] CmdLine:57 -  model_name         : MCU_NN
+2021-04-23 10:49:53,065 [INFO] CmdLine:57 -  model_hash         : 164e32791dd83822876da2e8eca7bd09
+2021-04-23 10:49:53,066 [INFO] CmdLine:57 -  input              : image [1024 items, 4.00 KiB, ai_float, FLOAT32, (1, 1, 1024)]
+2021-04-23 10:49:53,066 [INFO] CmdLine:57 -  inputs (total)     : 4.00 KiB
+2021-04-23 10:49:53,066 [INFO] CmdLine:57 -  output             : node_22 [4 items, 16 B, ai_float, FLOAT32, (1, 1, 4)]
+2021-04-23 10:49:53,067 [INFO] CmdLine:57 -  outputs (total)    : 16 B
+2021-04-23 10:49:53,067 [INFO] CmdLine:57 -  params #           : 164,740 items (643.52 KiB)
+2021-04-23 10:49:53,068 [INFO] CmdLine:57 -  macc               : 165,892
+2021-04-23 10:49:53,068 [INFO] CmdLine:57 -  weights (ro)       : 85,712 B (83.70 KiB) -573,248(-87.0%)
+2021-04-23 10:49:53,068 [INFO] CmdLine:57 -  activations (rw)   : 1,024 B (1024 B) 
+2021-04-23 10:49:53,069 [INFO] CmdLine:57 -  ram (total)        : 5,136 B (5.02 KiB) = 1,024 + 4,096 + 16
+2021-04-23 10:49:53,069 [INFO] CmdLine:57 -  
+2021-04-23 10:49:53,070 [INFO] CmdLine:57 -  Model name - MCU_NN ['image'] ['action']
+2021-04-23 10:49:53,070 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,070 [INFO] CmdLine:57 -  id   layer (type)               shape      param/size        macc      connected to   |   c_size             c_macc          c_type      
+2021-04-23 10:49:53,071 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,071 [INFO] CmdLine:57 -  0    image (Input)              (c:1024)                                              |                                     
+2021-04-23 10:49:53,071 [INFO] CmdLine:57 -       node_10 (Dense)            (c:128)    131,072/524,288   131,072   image          |   -458,176(-87.4%)   +128(+0.1%)     dense(c4)[0]
+2021-04-23 10:49:53,072 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,072 [INFO] CmdLine:57 -  1    dense1bias (Placeholder)   (c:128)    128/512                                    |   -512(-100.0%)                     
+2021-04-23 10:49:53,073 [INFO] CmdLine:57 -       node_11 (Eltwise)          (c:128)                      128       node_10        |                      -128(-100.0%)  
+2021-04-23 10:49:53,073 [INFO] CmdLine:57 -                                                                         dense1bias     |  
+2021-04-23 10:49:53,073 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,074 [INFO] CmdLine:57 -  2    node_12 (Nonlinearity)     (c:128)                      128       node_11        |                      +256(+200.0%)   nl()[1]     
+2021-04-23 10:49:53,074 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,075 [INFO] CmdLine:57 -  3    node_14 (Dense)            (c:128)    16,384/65,536     16,384    node_12        |   -56,768(-86.6%)    +128(+0.8%)     dense(c4)[2]
+2021-04-23 10:49:53,075 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,076 [INFO] CmdLine:57 -  4    dense2bias (Placeholder)   (c:128)    128/512                                    |   -512(-100.0%)                     
+2021-04-23 10:49:53,076 [INFO] CmdLine:57 -       node_15 (Eltwise)          (c:128)                      128       node_14        |                      -128(-100.0%)  
+2021-04-23 10:49:53,077 [INFO] CmdLine:57 -                                                                         dense2bias     |  
+2021-04-23 10:49:53,077 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,078 [INFO] CmdLine:57 -  5    node_16 (Nonlinearity)     (c:128)                      128       node_15        |                      +256(+200.0%)   nl()[3]     
+2021-04-23 10:49:53,078 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,079 [INFO] CmdLine:57 -  6    node_18 (Dense)            (c:128)    16,384/65,536     16,384    node_16        |   -56,768(-86.6%)    +128(+0.8%)     dense(c4)[4]
+2021-04-23 10:49:53,079 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,079 [INFO] CmdLine:57 -  7    dense3bias (Placeholder)   (c:128)    128/512                                    |   -512(-100.0%)                     
+2021-04-23 10:49:53,080 [INFO] CmdLine:57 -       node_19 (Eltwise)          (c:128)                      128       node_18        |                      -128(-100.0%)  
+2021-04-23 10:49:53,080 [INFO] CmdLine:57 -                                                                         dense3bias     |  
+2021-04-23 10:49:53,081 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,081 [INFO] CmdLine:57 -  8    node_20 (Nonlinearity)     (c:128)                      128       node_19        |                      +256(+200.0%)   nl()[5]     
+2021-04-23 10:49:53,081 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,082 [INFO] CmdLine:57 -  9    node_22 (Dense)            (c:4)      512/2,048         512       node_20        |   +16(+0.8%)         +4(+0.8%)       dense()/o[6]
+2021-04-23 10:49:53,082 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,082 [INFO] CmdLine:57 -  10   dense4bias (Placeholder)   (c:4)      4/16                                       |   -16(-100.0%)                      
+2021-04-23 10:49:53,083 [INFO] CmdLine:57 -       action (Eltwise)           (c:4)                        4         node_22        |                      -4(-100.0%)    
+2021-04-23 10:49:53,083 [INFO] CmdLine:57 -                                                                         dense4bias     |  
+2021-04-23 10:49:53,083 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:49:53,084 [INFO] CmdLine:57 -  model/c-model: macc=165,124/165,892 +768(+0.5%) weights=658,960/85,712 -573,248(-87.0%) activations=--/1,024 io=--/4,112
+2021-04-23 10:49:53,084 [INFO] CmdLine:57 -  
+2021-04-23 10:49:53,085 [INFO] CmdLine:57 -  Complexity report per layer - macc=165,892 weights=85,712 act=1,024 ram_io=4,112
+2021-04-23 10:49:53,085 [INFO] CmdLine:57 -  ------------------------------------------------------------------------
+2021-04-23 10:49:53,085 [INFO] CmdLine:57 -  id   name      c_macc                    c_rom                     c_id
+2021-04-23 10:49:53,086 [INFO] CmdLine:57 -  ------------------------------------------------------------------------
+2021-04-23 10:49:53,087 [INFO] CmdLine:57 -  0    node_10   ||||||||||||||||  79.1%   ||||||||||||||||  77.1%   [0] 
+2021-04-23 10:49:53,087 [INFO] CmdLine:57 -  2    node_12   |                  0.2%   |                  0.0%   [1] 
+2021-04-23 10:49:53,088 [INFO] CmdLine:57 -  3    node_14   ||                10.0%   ||                10.2%   [2] 
+2021-04-23 10:49:53,088 [INFO] CmdLine:57 -  5    node_16   |                  0.2%   |                  0.0%   [3] 
+2021-04-23 10:49:53,088 [INFO] CmdLine:57 -  6    node_18   ||                10.0%   ||                10.2%   [4] 
+2021-04-23 10:49:53,089 [INFO] CmdLine:57 -  8    node_20   |                  0.2%   |                  0.0%   [5] 
+2021-04-23 10:49:53,089 [INFO] CmdLine:57 -  9    node_22   |                  0.3%   |                  2.4%   [6]
+2021-04-23 10:49:53,089 [INFO] CmdLine:57 - Creating txt report file C:\Users\krani\.stm32cubemx\simplenn_analyze_report.txt
+2021-04-23 10:49:53,150 [INFO] CmdLine:57 - elapsed time (analyze): 0.483s
+2021-04-23 10:49:53,562 [INFO] CmdLine:122 - stm32ai exit with status: 0
+2021-04-23 10:49:53,566 [ERROR] PinnrParser:75 - No error detected
+2021-04-23 10:49:53,566 [ERROR] PinnrParser:91 - Keyset: [outputs, val_metrics, rom_cfact, exec_duration, cli_version_str, inputs, _allocate_inputs, error, error_str, date_time, model_name, model_n_params, rom_outputs, layers, rom_inputs, rom_size, tools_api_version, report_version, rom_heap_inspector, rom_n_macc, model_type, val_error_desc, _allocate_outputs, model_size, ram_size, val_error, cli_parameters, exec_cmd, model_files, name, tools_version, cli_version, compression, strategy, hash, ram_io_size]
+2021-04-23 10:49:53,566 [INFO] AInterface:472 - Successfully load: simplenn
+2021-04-23 10:49:53,574 [INFO] AIModelDetailledView:2242 - Analyze complete on AI model
+2021-04-23 10:49:53,814 [INFO] AIModelDetailledView:1925 - Analysis status: done
+2021-04-23 10:50:49,515 [INFO] AIModelDetailledView:1925 - Analysis status: -
+2021-04-23 10:50:49,570 [INFO] AInterface:196 - ModelName:simplenn; files:[C:\Users\krani\Documents\BME\agv2\Microcontroller\Network\MCU_NN.onnx]; type:ONNX; compression:8
+2021-04-23 10:50:49,571 [INFO] AInterface:411 - workspaceTempDir: C:\Users\krani\AppData\Local\Temp\mxAI_workspace49446422665002563515844448123311
+2021-04-23 10:50:49,572 [INFO] AInterface:872 - Setting Env: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows
+2021-04-23 10:50:49,572 [INFO] AInterface:929 - Custom PATH variable: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/mingw64/bin;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/mingw64/libexec/gcc/x86_64-w64-mingw32/7.3.0;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/node/bin
+2021-04-23 10:50:49,573 [INFO] CmdLine:90 - Command: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/stm32ai analyze --name simplenn -m C:/Users/krani/Documents/BME/agv2/Microcontroller/Network/MCU_NN.onnx --type onnx --compression 8 --verbosity 1 --workspace C:\Users\krani\AppData\Local\Temp\mxAI_workspace49446422665002563515844448123311 --output C:\Users\krani\.stm32cubemx 
+2021-04-23 10:50:49,578 [INFO] AIModelDetailledView:1925 - Analysis status: pending
+2021-04-23 10:50:53,017 [INFO] CmdLine:57 - Neural Network Tools for STM32AI v1.4.1 (STM.ai v6.0.0-RC6)
+2021-04-23 10:50:53,405 [INFO] CmdLine:57 -  
+2021-04-23 10:50:53,406 [INFO] CmdLine:57 -  Exec/report summary (analyze)
+2021-04-23 10:50:53,406 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,406 [INFO] CmdLine:57 -  model file         : C:\Users\krani\Documents\BME\agv2\Microcontroller\Network\MCU_NN.onnx
+2021-04-23 10:50:53,407 [INFO] CmdLine:57 -  type               : onnx
+2021-04-23 10:50:53,407 [INFO] CmdLine:57 -  c_name             : simplenn
+2021-04-23 10:50:53,408 [INFO] CmdLine:57 -  compression        : 8
+2021-04-23 10:50:53,408 [INFO] CmdLine:57 -  quantize           : None
+2021-04-23 10:50:53,408 [INFO] CmdLine:57 -  workspace dir      : C:\Users\krani\AppData\Local\Temp\mxAI_workspace49446422665002563515844448123311
+2021-04-23 10:50:53,409 [INFO] CmdLine:57 -  output dir         : C:\Users\krani\.stm32cubemx
+2021-04-23 10:50:53,409 [INFO] CmdLine:57 -  
+2021-04-23 10:50:53,410 [INFO] CmdLine:57 -  model_name         : MCU_NN
+2021-04-23 10:50:53,410 [INFO] CmdLine:57 -  model_hash         : 164e32791dd83822876da2e8eca7bd09
+2021-04-23 10:50:53,411 [INFO] CmdLine:57 -  input              : image [1024 items, 4.00 KiB, ai_float, FLOAT32, (1, 1, 1024)]
+2021-04-23 10:50:53,411 [INFO] CmdLine:57 -  inputs (total)     : 4.00 KiB
+2021-04-23 10:50:53,412 [INFO] CmdLine:57 -  output             : node_22 [4 items, 16 B, ai_float, FLOAT32, (1, 1, 4)]
+2021-04-23 10:50:53,412 [INFO] CmdLine:57 -  outputs (total)    : 16 B
+2021-04-23 10:50:53,412 [INFO] CmdLine:57 -  params #           : 164,740 items (643.52 KiB)
+2021-04-23 10:50:53,412 [INFO] CmdLine:57 -  macc               : 165,892
+2021-04-23 10:50:53,413 [INFO] CmdLine:57 -  weights (ro)       : 85,712 B (83.70 KiB) -573,248(-87.0%)
+2021-04-23 10:50:53,413 [INFO] CmdLine:57 -  activations (rw)   : 1,024 B (1024 B) 
+2021-04-23 10:50:53,414 [INFO] CmdLine:57 -  ram (total)        : 5,136 B (5.02 KiB) = 1,024 + 4,096 + 16
+2021-04-23 10:50:53,414 [INFO] CmdLine:57 -  
+2021-04-23 10:50:53,414 [INFO] CmdLine:57 -  Model name - MCU_NN ['image'] ['action']
+2021-04-23 10:50:53,415 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,415 [INFO] CmdLine:57 -  id   layer (type)               shape      param/size        macc      connected to   |   c_size             c_macc          c_type      
+2021-04-23 10:50:53,416 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,416 [INFO] CmdLine:57 -  0    image (Input)              (c:1024)                                              |                                     
+2021-04-23 10:50:53,416 [INFO] CmdLine:57 -       node_10 (Dense)            (c:128)    131,072/524,288   131,072   image          |   -458,176(-87.4%)   +128(+0.1%)     dense(c4)[0]
+2021-04-23 10:50:53,417 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,418 [INFO] CmdLine:57 -  1    dense1bias (Placeholder)   (c:128)    128/512                                    |   -512(-100.0%)                     
+2021-04-23 10:50:53,419 [INFO] CmdLine:57 -       node_11 (Eltwise)          (c:128)                      128       node_10        |                      -128(-100.0%)  
+2021-04-23 10:50:53,419 [INFO] CmdLine:57 -                                                                         dense1bias     |  
+2021-04-23 10:50:53,420 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,420 [INFO] CmdLine:57 -  2    node_12 (Nonlinearity)     (c:128)                      128       node_11        |                      +256(+200.0%)   nl()[1]     
+2021-04-23 10:50:53,421 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,421 [INFO] CmdLine:57 -  3    node_14 (Dense)            (c:128)    16,384/65,536     16,384    node_12        |   -56,768(-86.6%)    +128(+0.8%)     dense(c4)[2]
+2021-04-23 10:50:53,422 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,422 [INFO] CmdLine:57 -  4    dense2bias (Placeholder)   (c:128)    128/512                                    |   -512(-100.0%)                     
+2021-04-23 10:50:53,422 [INFO] CmdLine:57 -       node_15 (Eltwise)          (c:128)                      128       node_14        |                      -128(-100.0%)  
+2021-04-23 10:50:53,423 [INFO] CmdLine:57 -                                                                         dense2bias     |  
+2021-04-23 10:50:53,424 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,424 [INFO] CmdLine:57 -  5    node_16 (Nonlinearity)     (c:128)                      128       node_15        |                      +256(+200.0%)   nl()[3]     
+2021-04-23 10:50:53,424 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,425 [INFO] CmdLine:57 -  6    node_18 (Dense)            (c:128)    16,384/65,536     16,384    node_16        |   -56,768(-86.6%)    +128(+0.8%)     dense(c4)[4]
+2021-04-23 10:50:53,425 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,426 [INFO] CmdLine:57 -  7    dense3bias (Placeholder)   (c:128)    128/512                                    |   -512(-100.0%)                     
+2021-04-23 10:50:53,426 [INFO] CmdLine:57 -       node_19 (Eltwise)          (c:128)                      128       node_18        |                      -128(-100.0%)  
+2021-04-23 10:50:53,427 [INFO] CmdLine:57 -                                                                         dense3bias     |  
+2021-04-23 10:50:53,427 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,428 [INFO] CmdLine:57 -  8    node_20 (Nonlinearity)     (c:128)                      128       node_19        |                      +256(+200.0%)   nl()[5]     
+2021-04-23 10:50:53,428 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,429 [INFO] CmdLine:57 -  9    node_22 (Dense)            (c:4)      512/2,048         512       node_20        |   +16(+0.8%)         +4(+0.8%)       dense()/o[6]
+2021-04-23 10:50:53,429 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,431 [INFO] CmdLine:57 -  10   dense4bias (Placeholder)   (c:4)      4/16                                       |   -16(-100.0%)                      
+2021-04-23 10:50:53,431 [INFO] CmdLine:57 -       action (Eltwise)           (c:4)                        4         node_22        |                      -4(-100.0%)    
+2021-04-23 10:50:53,431 [INFO] CmdLine:57 -                                                                         dense4bias     |  
+2021-04-23 10:50:53,432 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:50:53,432 [INFO] CmdLine:57 -  model/c-model: macc=165,124/165,892 +768(+0.5%) weights=658,960/85,712 -573,248(-87.0%) activations=--/1,024 io=--/4,112
+2021-04-23 10:50:53,433 [INFO] CmdLine:57 -  
+2021-04-23 10:50:53,433 [INFO] CmdLine:57 -  Complexity report per layer - macc=165,892 weights=85,712 act=1,024 ram_io=4,112
+2021-04-23 10:50:53,434 [INFO] CmdLine:57 -  ------------------------------------------------------------------------
+2021-04-23 10:50:53,434 [INFO] CmdLine:57 -  id   name      c_macc                    c_rom                     c_id
+2021-04-23 10:50:53,434 [INFO] CmdLine:57 -  ------------------------------------------------------------------------
+2021-04-23 10:50:53,435 [INFO] CmdLine:57 -  0    node_10   ||||||||||||||||  79.1%   ||||||||||||||||  77.1%   [0] 
+2021-04-23 10:50:53,435 [INFO] CmdLine:57 -  2    node_12   |                  0.2%   |                  0.0%   [1] 
+2021-04-23 10:50:53,436 [INFO] CmdLine:57 -  3    node_14   ||                10.0%   ||                10.2%   [2] 
+2021-04-23 10:50:53,436 [INFO] CmdLine:57 -  5    node_16   |                  0.2%   |                  0.0%   [3] 
+2021-04-23 10:50:53,436 [INFO] CmdLine:57 -  6    node_18   ||                10.0%   ||                10.2%   [4] 
+2021-04-23 10:50:53,437 [INFO] CmdLine:57 -  8    node_20   |                  0.2%   |                  0.0%   [5] 
+2021-04-23 10:50:53,437 [INFO] CmdLine:57 -  9    node_22   |                  0.3%   |                  2.4%   [6]
+2021-04-23 10:50:53,438 [INFO] CmdLine:57 - Creating txt report file C:\Users\krani\.stm32cubemx\simplenn_analyze_report.txt
+2021-04-23 10:50:53,461 [INFO] CmdLine:57 - elapsed time (analyze): 0.442s
+2021-04-23 10:50:53,833 [INFO] CmdLine:122 - stm32ai exit with status: 0
+2021-04-23 10:50:53,839 [ERROR] PinnrParser:75 - No error detected
+2021-04-23 10:50:53,839 [ERROR] PinnrParser:91 - Keyset: [outputs, val_metrics, rom_cfact, exec_duration, cli_version_str, inputs, _allocate_inputs, error, error_str, date_time, model_name, model_n_params, rom_outputs, layers, rom_inputs, rom_size, tools_api_version, report_version, rom_heap_inspector, rom_n_macc, model_type, val_error_desc, _allocate_outputs, model_size, ram_size, val_error, cli_parameters, exec_cmd, model_files, name, tools_version, cli_version, compression, strategy, hash, ram_io_size]
+2021-04-23 10:50:53,840 [INFO] AInterface:472 - Successfully load: simplenn
+2021-04-23 10:50:53,848 [INFO] AIModelDetailledView:2242 - Analyze complete on AI model
+2021-04-23 10:50:53,852 [INFO] AIModelDetailledView:1925 - Analysis status: done
+2021-04-23 10:51:16,331 [INFO] AIModelDetailledView:1925 - Analysis status: -
+2021-04-23 10:51:17,487 [INFO] AInterface:196 - ModelName:simplenn; files:[C:\Users\krani\Documents\BME\agv2\Microcontroller\Network\MCU_NN.onnx]; type:ONNX; compression:4
+2021-04-23 10:51:17,489 [INFO] AInterface:411 - workspaceTempDir: C:\Users\krani\AppData\Local\Temp\mxAI_workspace49725596740009272882524501928527
+2021-04-23 10:51:17,489 [INFO] AInterface:872 - Setting Env: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows
+2021-04-23 10:51:17,490 [INFO] AInterface:929 - Custom PATH variable: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/mingw64/bin;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/mingw64/libexec/gcc/x86_64-w64-mingw32/7.3.0;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/node/bin
+2021-04-23 10:51:17,490 [INFO] CmdLine:90 - Command: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/stm32ai analyze --name simplenn -m C:/Users/krani/Documents/BME/agv2/Microcontroller/Network/MCU_NN.onnx --type onnx --compression 4 --verbosity 1 --workspace C:\Users\krani\AppData\Local\Temp\mxAI_workspace49725596740009272882524501928527 --output C:\Users\krani\.stm32cubemx 
+2021-04-23 10:51:17,494 [INFO] AIModelDetailledView:1925 - Analysis status: pending
+2021-04-23 10:51:21,138 [INFO] CmdLine:57 - Neural Network Tools for STM32AI v1.4.1 (STM.ai v6.0.0-RC6)
+2021-04-23 10:51:22,338 [INFO] CmdLine:57 -  
+2021-04-23 10:51:22,341 [INFO] CmdLine:57 -  Exec/report summary (analyze)
+2021-04-23 10:51:22,341 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,342 [INFO] CmdLine:57 -  model file         : C:\Users\krani\Documents\BME\agv2\Microcontroller\Network\MCU_NN.onnx
+2021-04-23 10:51:22,342 [INFO] CmdLine:57 -  type               : onnx
+2021-04-23 10:51:22,342 [INFO] CmdLine:57 -  c_name             : simplenn
+2021-04-23 10:51:22,343 [INFO] CmdLine:57 -  compression        : 4
+2021-04-23 10:51:22,343 [INFO] CmdLine:57 -  quantize           : None
+2021-04-23 10:51:22,345 [INFO] CmdLine:57 -  workspace dir      : C:\Users\krani\AppData\Local\Temp\mxAI_workspace49725596740009272882524501928527
+2021-04-23 10:51:22,345 [INFO] CmdLine:57 -  output dir         : C:\Users\krani\.stm32cubemx
+2021-04-23 10:51:22,346 [INFO] CmdLine:57 -  
+2021-04-23 10:51:22,346 [INFO] CmdLine:57 -  model_name         : MCU_NN
+2021-04-23 10:51:22,346 [INFO] CmdLine:57 -  model_hash         : 164e32791dd83822876da2e8eca7bd09
+2021-04-23 10:51:22,347 [INFO] CmdLine:57 -  input              : image [1024 items, 4.00 KiB, ai_float, FLOAT32, (1, 1, 1024)]
+2021-04-23 10:51:22,347 [INFO] CmdLine:57 -  inputs (total)     : 4.00 KiB
+2021-04-23 10:51:22,348 [INFO] CmdLine:57 -  output             : node_22 [4 items, 16 B, ai_float, FLOAT32, (1, 1, 4)]
+2021-04-23 10:51:22,348 [INFO] CmdLine:57 -  outputs (total)    : 16 B
+2021-04-23 10:51:22,348 [INFO] CmdLine:57 -  params #           : 164,740 items (643.52 KiB)
+2021-04-23 10:51:22,349 [INFO] CmdLine:57 -  macc               : 165,892
+2021-04-23 10:51:22,349 [INFO] CmdLine:57 -  weights (ro)       : 170,512 B (166.52 KiB) -488,448(-74.1%)
+2021-04-23 10:51:22,349 [INFO] CmdLine:57 -  activations (rw)   : 1,024 B (1024 B) 
+2021-04-23 10:51:22,350 [INFO] CmdLine:57 -  ram (total)        : 5,136 B (5.02 KiB) = 1,024 + 4,096 + 16
+2021-04-23 10:51:22,350 [INFO] CmdLine:57 -  
+2021-04-23 10:51:22,350 [INFO] CmdLine:57 -  Model name - MCU_NN ['image'] ['action']
+2021-04-23 10:51:22,351 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,351 [INFO] CmdLine:57 -  id   layer (type)               shape      param/size        macc      connected to   |   c_size             c_macc          c_type      
+2021-04-23 10:51:22,351 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,352 [INFO] CmdLine:57 -  0    image (Input)              (c:1024)                                              |                                     
+2021-04-23 10:51:22,352 [INFO] CmdLine:57 -       node_10 (Dense)            (c:128)    131,072/524,288   131,072   image          |   -391,680(-74.7%)   +128(+0.1%)     dense(c8)[0]
+2021-04-23 10:51:22,352 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,353 [INFO] CmdLine:57 -  1    dense1bias (Placeholder)   (c:128)    128/512                                    |   -512(-100.0%)                     
+2021-04-23 10:51:22,353 [INFO] CmdLine:57 -       node_11 (Eltwise)          (c:128)                      128       node_10        |                      -128(-100.0%)  
+2021-04-23 10:51:22,353 [INFO] CmdLine:57 -                                                                         dense1bias     |  
+2021-04-23 10:51:22,354 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,354 [INFO] CmdLine:57 -  2    node_12 (Nonlinearity)     (c:128)                      128       node_11        |                      +256(+200.0%)   nl()[1]     
+2021-04-23 10:51:22,354 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,355 [INFO] CmdLine:57 -  3    node_14 (Dense)            (c:128)    16,384/65,536     16,384    node_12        |   -47,616(-72.7%)    +128(+0.8%)     dense(c8)[2]
+2021-04-23 10:51:22,355 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,356 [INFO] CmdLine:57 -  4    dense2bias (Placeholder)   (c:128)    128/512                                    |   -512(-100.0%)                     
+2021-04-23 10:51:22,356 [INFO] CmdLine:57 -       node_15 (Eltwise)          (c:128)                      128       node_14        |                      -128(-100.0%)  
+2021-04-23 10:51:22,356 [INFO] CmdLine:57 -                                                                         dense2bias     |  
+2021-04-23 10:51:22,357 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,357 [INFO] CmdLine:57 -  5    node_16 (Nonlinearity)     (c:128)                      128       node_15        |                      +256(+200.0%)   nl()[3]     
+2021-04-23 10:51:22,358 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,358 [INFO] CmdLine:57 -  6    node_18 (Dense)            (c:128)    16,384/65,536     16,384    node_16        |   -47,616(-72.7%)    +128(+0.8%)     dense(c8)[4]
+2021-04-23 10:51:22,358 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,359 [INFO] CmdLine:57 -  7    dense3bias (Placeholder)   (c:128)    128/512                                    |   -512(-100.0%)                     
+2021-04-23 10:51:22,359 [INFO] CmdLine:57 -       node_19 (Eltwise)          (c:128)                      128       node_18        |                      -128(-100.0%)  
+2021-04-23 10:51:22,359 [INFO] CmdLine:57 -                                                                         dense3bias     |  
+2021-04-23 10:51:22,360 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,360 [INFO] CmdLine:57 -  8    node_20 (Nonlinearity)     (c:128)                      128       node_19        |                      +256(+200.0%)   nl()[5]     
+2021-04-23 10:51:22,360 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,361 [INFO] CmdLine:57 -  9    node_22 (Dense)            (c:4)      512/2,048         512       node_20        |   +16(+0.8%)         +4(+0.8%)       dense()/o[6]
+2021-04-23 10:51:22,361 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,362 [INFO] CmdLine:57 -  10   dense4bias (Placeholder)   (c:4)      4/16                                       |   -16(-100.0%)                      
+2021-04-23 10:51:22,362 [INFO] CmdLine:57 -       action (Eltwise)           (c:4)                        4         node_22        |                      -4(-100.0%)    
+2021-04-23 10:51:22,363 [INFO] CmdLine:57 -                                                                         dense4bias     |  
+2021-04-23 10:51:22,363 [INFO] CmdLine:57 -  ------------------------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:51:22,364 [INFO] CmdLine:57 -  model/c-model: macc=165,124/165,892 +768(+0.5%) weights=658,960/170,512 -488,448(-74.1%) activations=--/1,024 io=--/4,112
+2021-04-23 10:51:22,364 [INFO] CmdLine:57 -  
+2021-04-23 10:51:22,364 [INFO] CmdLine:57 -  Complexity report per layer - macc=165,892 weights=170,512 act=1,024 ram_io=4,112
+2021-04-23 10:51:22,365 [INFO] CmdLine:57 -  ------------------------------------------------------------------------
+2021-04-23 10:51:22,365 [INFO] CmdLine:57 -  id   name      c_macc                    c_rom                     c_id
+2021-04-23 10:51:22,366 [INFO] CmdLine:57 -  ------------------------------------------------------------------------
+2021-04-23 10:51:22,366 [INFO] CmdLine:57 -  0    node_10   ||||||||||||||||  79.1%   ||||||||||||||||  77.8%   [0] 
+2021-04-23 10:51:22,366 [INFO] CmdLine:57 -  2    node_12   |                  0.2%   |                  0.0%   [1] 
+2021-04-23 10:51:22,367 [INFO] CmdLine:57 -  3    node_14   ||                10.0%   |||               10.5%   [2] 
+2021-04-23 10:51:22,367 [INFO] CmdLine:57 -  5    node_16   |                  0.2%   |                  0.0%   [3] 
+2021-04-23 10:51:22,368 [INFO] CmdLine:57 -  6    node_18   ||                10.0%   |||               10.5%   [4] 
+2021-04-23 10:51:22,368 [INFO] CmdLine:57 -  8    node_20   |                  0.2%   |                  0.0%   [5] 
+2021-04-23 10:51:22,368 [INFO] CmdLine:57 -  9    node_22   |                  0.3%   |                  1.2%   [6]
+2021-04-23 10:51:22,369 [INFO] CmdLine:57 - Creating txt report file C:\Users\krani\.stm32cubemx\simplenn_analyze_report.txt
+2021-04-23 10:51:22,373 [INFO] CmdLine:57 - elapsed time (analyze): 1.234s
+2021-04-23 10:51:22,721 [INFO] CmdLine:122 - stm32ai exit with status: 0
+2021-04-23 10:51:22,724 [ERROR] PinnrParser:75 - No error detected
+2021-04-23 10:51:22,724 [ERROR] PinnrParser:91 - Keyset: [outputs, val_metrics, rom_cfact, exec_duration, cli_version_str, inputs, _allocate_inputs, error, error_str, date_time, model_name, model_n_params, rom_outputs, layers, rom_inputs, rom_size, tools_api_version, report_version, rom_heap_inspector, rom_n_macc, model_type, val_error_desc, _allocate_outputs, model_size, ram_size, val_error, cli_parameters, exec_cmd, model_files, name, tools_version, cli_version, compression, strategy, hash, ram_io_size]
+2021-04-23 10:51:22,724 [INFO] AInterface:472 - Successfully load: simplenn
+2021-04-23 10:51:22,730 [INFO] AIModelDetailledView:2242 - Analyze complete on AI model
+2021-04-23 10:51:22,865 [INFO] AIModelDetailledView:1925 - Analysis status: done
+2021-04-23 10:51:50,294 [INFO] UtilMem:74 - End SaveConfig() Used Memory: 643724536 Bytes (807403520)
+2021-04-23 10:51:51,894 [INFO] UtilMem:74 - End SaveConfig() Used Memory: 514956552 Bytes (807403520)
+2021-04-23 10:51:54,331 [INFO] UtilMem:74 - End SaveConfig() Used Memory: 538128368 Bytes (807403520)
+2021-04-23 10:51:55,215 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: SPI
+2021-04-23 10:51:55,216 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: SPI
+2021-04-23 10:51:55,216 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: SPI
+2021-04-23 10:51:55,216 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: RNG
+2021-04-23 10:51:55,216 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: FREERTOS
+2021-04-23 10:51:55,216 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: TIM6_7F7
+2021-04-23 10:51:55,216 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: TIM6_7F7
+2021-04-23 10:51:55,216 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: TIM1_8F7
+2021-04-23 10:51:55,216 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: TIM1_8F7
+2021-04-23 10:51:55,216 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: TIM1_8F7
+2021-04-23 10:51:55,217 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: SYS
+2021-04-23 10:51:55,217 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: RCC
+2021-04-23 10:51:55,217 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: CRC
+2021-04-23 10:51:55,217 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: I2C
+2021-04-23 10:51:55,217 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: I2C
+2021-04-23 10:51:55,217 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: NVIC
+2021-04-23 10:51:55,217 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: USART
+2021-04-23 10:51:55,217 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: STMicroelectronics.X-CUBE-AI.6.0.0
+2021-04-23 10:51:55,220 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: GPIO
+2021-04-23 10:51:55,221 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,221 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,221 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,222 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,222 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,222 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,222 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,222 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,222 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,222 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,222 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,223 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,223 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,223 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,223 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,223 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:51:55,224 [INFO] CodeGenerator:641 - code generatio: config db path: C:/Users/krani/.stm32cubemx/databases/DB.6.0.20/db/
+2021-04-23 10:51:58,363 [INFO] IP:3321 - RTE Config file name : RTE_Component
+2021-04-23 10:51:58,363 [INFO] IP:3339 - RTE template : RTE_Components.ftl
+2021-04-23 10:51:58,421 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\license.tmp_save
+2021-04-23 10:51:58,970 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\license.tmp
+2021-04-23 10:51:59,346 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\gpio.tmp_save
+2021-04-23 10:51:59,498 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\gpio.tmp
+2021-04-23 10:52:00,038 [ERROR] IPConfigManager:1461 - ERROR: the RefConfig FASTMODE_Config is not available in your config.xml file
+2021-04-23 10:52:00,177 [ERROR] IPConfigManager:1461 - ERROR: the RefConfig FASTMODE_Config is not available in your config.xml file
+2021-04-23 10:52:02,549 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:52:02,588 [INFO] Middleware:1263 - No code input for Bsp Dependency
+2021-04-23 10:52:02,606 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_inc.tmp_save
+2021-04-23 10:52:02,680 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_inc.tmp
+2021-04-23 10:52:02,693 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_kernelInit.tmp_save
+2021-04-23 10:52:02,772 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_kernelInit.tmp
+2021-04-23 10:52:02,782 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_kernelStart.tmp_save
+2021-04-23 10:52:02,852 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_kernelStart.tmp
+2021-04-23 10:52:02,864 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_typedefs.tmp_save
+2021-04-23 10:52:02,933 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_typedefs.tmp
+2021-04-23 10:52:02,944 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_vars.tmp_save
+2021-04-23 10:52:03,025 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_vars.tmp
+2021-04-23 10:52:03,037 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_pfp.tmp_save
+2021-04-23 10:52:03,113 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_pfp.tmp
+2021-04-23 10:52:03,125 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_obj_creat.tmp_save
+2021-04-23 10:52:03,211 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_obj_creat.tmp
+2021-04-23 10:52:03,224 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_default_thread.tmp_save
+2021-04-23 10:52:03,300 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_default_thread.tmp
+2021-04-23 10:52:03,310 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_threads.tmp_save
+2021-04-23 10:52:03,378 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_threads.tmp
+2021-04-23 10:52:03,398 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\FreeRTOSConfig.h_save
+2021-04-23 10:52:03,521 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\FreeRTOSConfig.h
+2021-04-23 10:52:03,539 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\freertos.c_save
+2021-04-23 10:52:03,655 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\freertos.c
+2021-04-23 10:52:03,658 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:52:03,673 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\cortex.tmp_save
+2021-04-23 10:52:03,769 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\cortex.tmp
+2021-04-23 10:52:03,771 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:52:03,772 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:52:03,775 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:52:03,776 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:52:03,778 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:52:03,779 [INFO] Middleware:1263 - No code input for Bsp Dependency
+2021-04-23 10:52:03,780 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:52:03,784 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:52:03,858 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_it.c_save
+2021-04-23 10:52:04,047 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_it.c
+2021-04-23 10:52:04,061 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\stm32f7xx_it.h_save
+2021-04-23 10:52:04,157 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\stm32f7xx_it.h
+2021-04-23 10:52:04,187 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_hal_msp.c_save
+2021-04-23 10:52:04,395 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_hal_msp.c
+2021-04-23 10:52:04,407 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\system.tmp_save
+2021-04-23 10:52:04,457 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\system.tmp
+2021-04-23 10:52:04,469 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_hal_timebase_tim.c_save
+2021-04-23 10:52:04,535 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_hal_timebase_tim.c
+2021-04-23 10:52:04,560 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\stm32f7xx_hal_conf.h_save
+2021-04-23 10:52:04,671 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\stm32f7xx_hal_conf.h
+2021-04-23 10:52:04,730 [WARN] IPConfigManager:2976 - IP not found : TIM
+2021-04-23 10:52:04,734 [WARN] CodeGenerator:3191 - IP not found : null
+2021-04-23 10:52:04,762 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\main.h_save
+2021-04-23 10:52:04,862 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\main.h
+2021-04-23 10:52:04,884 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\main.c_save
+2021-04-23 10:52:05,487 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\main.c
+2021-04-23 10:52:06,638 [INFO] AInterface:221 - ModelName:simplenn; files:[C:\Users\krani\Documents\BME\agv2\Microcontroller\Network\MCU_NN.onnx]; type:ONNX; compression:4
+2021-04-23 10:52:06,639 [INFO] AInterface:411 - workspaceTempDir: C:\Users\krani\AppData\Local\Temp\mxAI_workspace50217101009006909518219511708964
+2021-04-23 10:52:06,639 [INFO] AInterface:872 - Setting Env: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows
+2021-04-23 10:52:06,639 [INFO] AInterface:929 - Custom PATH variable: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/mingw64/bin;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/mingw64/libexec/gcc/x86_64-w64-mingw32/7.3.0;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/node/bin
+2021-04-23 10:52:06,640 [INFO] CmdLine:90 - Command: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/stm32ai generate --name simplenn -m C:/Users/krani/Documents/BME/agv2/Microcontroller/Network/MCU_NN.onnx --type onnx --compression 4 --verbosity 1 --workspace C:\Users\krani\AppData\Local\Temp\mxAI_workspace50217101009006909518219511708964 --output C:\Users\krani\.stm32cubemx 
+2021-04-23 10:52:06,641 [INFO] AIModelDetailledView:1925 - Analysis status: pending
+2021-04-23 10:52:10,684 [INFO] CmdLine:57 - Neural Network Tools for STM32AI v1.4.1 (STM.ai v6.0.0-RC6)
+2021-04-23 10:52:12,478 [INFO] CmdLine:57 -  
+2021-04-23 10:52:12,479 [INFO] CmdLine:57 - Generated files (5)
+2021-04-23 10:52:12,480 [INFO] CmdLine:57 - ------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:52:12,480 [INFO] CmdLine:57 -  C:\Users\krani\.stm32cubemx\simplenn_config.h
+2021-04-23 10:52:12,481 [INFO] CmdLine:57 -  C:\Users\krani\.stm32cubemx\simplenn.h
+2021-04-23 10:52:12,481 [INFO] CmdLine:57 -  C:\Users\krani\.stm32cubemx\simplenn.c
+2021-04-23 10:52:12,482 [INFO] CmdLine:57 -  C:\Users\krani\.stm32cubemx\simplenn_data.h
+2021-04-23 10:52:12,482 [INFO] CmdLine:57 -  C:\Users\krani\.stm32cubemx\simplenn_data.c
+2021-04-23 10:52:12,483 [INFO] CmdLine:57 - Creating txt report file C:\Users\krani\.stm32cubemx\simplenn_generate_report.txt
+2021-04-23 10:52:12,502 [INFO] CmdLine:57 - elapsed time (generate): 1.817s
+2021-04-23 10:52:12,798 [INFO] CmdLine:122 - stm32ai exit with status: 0
+2021-04-23 10:52:12,801 [ERROR] PinnrParser:75 - No error detected
+2021-04-23 10:52:12,801 [ERROR] PinnrParser:91 - Keyset: [outputs, val_metrics, rom_cfact, exec_duration, cli_version_str, inputs, _allocate_inputs, error, error_str, date_time, model_name, model_n_params, rom_outputs, layers, rom_inputs, rom_size, tools_api_version, report_version, rom_heap_inspector, rom_n_macc, model_type, val_error_desc, _allocate_outputs, model_size, ram_size, val_error, cli_parameters, exec_cmd, model_files, name, tools_version, cli_version, compression, strategy, hash, ram_io_size]
+2021-04-23 10:52:12,802 [INFO] AInterface:472 - Successfully load: simplenn
+2021-04-23 10:52:12,849 [INFO] AIModelDetailledView:1925 - Analysis status: done
+2021-04-23 10:52:15,163 [INFO] ProjectBuilder:2460 - Time for Copy HAL[1] : 1174mS.
+2021-04-23 10:52:15,164 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,164 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,165 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,165 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,165 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,165 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,166 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,166 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,166 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,166 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,166 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,166 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,166 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,166 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,166 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,166 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,167 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,167 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,167 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,167 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,167 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,167 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,167 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,168 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,168 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,168 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,168 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,168 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,168 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,168 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,168 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,169 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:52:15,169 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,169 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,169 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,169 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,169 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,169 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,170 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,170 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,170 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,170 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,170 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,170 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,170 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,170 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,171 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,171 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:52:15,181 [INFO] ProjectBuilder:3418 - Project Generator version: 3.13.0-B3
+2021-04-23 10:52:15,862 [INFO] ConfigFileManager:1242 - The Die is : DIE449
+2021-04-23 10:52:15,882 [INFO] ApiDbMcu:458 - Load IP Config File for FATFS
+2021-04-23 10:52:15,894 [INFO] ApiDbMcu:458 - Load IP Config File for LIBJPEG
+2021-04-23 10:52:16,017 [INFO] ApiDbMcu:458 - Load IP Config File for LWIP
+2021-04-23 10:52:16,086 [INFO] ApiDbMcu:458 - Load IP Config File for MBEDTLS
+2021-04-23 10:52:16,151 [INFO] ApiDbMcu:458 - Load IP Config File for USB_DEVICE
+2021-04-23 10:52:16,177 [INFO] ApiDbMcu:458 - Load IP Config File for USB_HOST
+2021-04-23 10:52:20,789 [INFO] ProjectBuilder:3584 - Time for Generating toolchain IDE Files: 5608mS.
+2021-04-23 10:52:20,791 [INFO] ProjectBuilder:2339 - Time for Copy CMSIS : 2mS.
+2021-04-23 10:52:20,812 [INFO] ProjectBuilder:2339 - Time for Copy CMSIS : 0mS.
+2021-04-23 10:52:57,100 [INFO] UtilMem:74 - End SaveConfig() Used Memory: 627669056 Bytes (899678208)
+2021-04-23 10:52:59,032 [INFO] UtilMem:74 - End SaveConfig() Used Memory: 366880344 Bytes (899678208)
+2021-04-23 10:53:04,364 [INFO] UtilMem:74 - End SaveConfig() Used Memory: 479598728 Bytes (899678208)
+2021-04-23 10:53:04,881 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: SPI
+2021-04-23 10:53:04,881 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: SPI
+2021-04-23 10:53:04,881 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: SPI
+2021-04-23 10:53:04,881 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: RNG
+2021-04-23 10:53:04,881 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: FREERTOS
+2021-04-23 10:53:04,881 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: TIM6_7F7
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: TIM6_7F7
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: TIM1_8F7
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: TIM1_8F7
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: TIM1_8F7
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: SYS
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: RCC
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: CRC
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: I2C
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: I2C
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: NVIC
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: USART
+2021-04-23 10:53:04,882 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: STMicroelectronics.X-CUBE-AI.6.0.0
+2021-04-23 10:53:04,883 [INFO] BlockDiagram:2735 - set Specific Code input for plugin: GPIO
+2021-04-23 10:53:04,884 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,884 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,884 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,884 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,885 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,885 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,885 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,885 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,885 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,885 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,885 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,885 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,885 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,885 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,886 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,886 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:04,887 [INFO] CodeGenerator:641 - code generatio: config db path: C:/Users/krani/.stm32cubemx/databases/DB.6.0.20/db/
+2021-04-23 10:53:07,807 [INFO] IP:3321 - RTE Config file name : RTE_Component
+2021-04-23 10:53:07,807 [INFO] IP:3339 - RTE template : RTE_Components.ftl
+2021-04-23 10:53:07,817 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\license.tmp_save
+2021-04-23 10:53:07,955 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\license.tmp
+2021-04-23 10:53:08,141 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\gpio.tmp_save
+2021-04-23 10:53:08,225 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\gpio.tmp
+2021-04-23 10:53:08,517 [ERROR] IPConfigManager:1461 - ERROR: the RefConfig FASTMODE_Config is not available in your config.xml file
+2021-04-23 10:53:08,700 [ERROR] IPConfigManager:1461 - ERROR: the RefConfig FASTMODE_Config is not available in your config.xml file
+2021-04-23 10:53:10,341 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:53:10,368 [INFO] Middleware:1263 - No code input for Bsp Dependency
+2021-04-23 10:53:10,377 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_inc.tmp_save
+2021-04-23 10:53:10,434 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_inc.tmp
+2021-04-23 10:53:10,438 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_kernelInit.tmp_save
+2021-04-23 10:53:10,501 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_kernelInit.tmp
+2021-04-23 10:53:10,504 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_kernelStart.tmp_save
+2021-04-23 10:53:10,579 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_kernelStart.tmp
+2021-04-23 10:53:10,583 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_typedefs.tmp_save
+2021-04-23 10:53:10,639 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_typedefs.tmp
+2021-04-23 10:53:10,644 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_vars.tmp_save
+2021-04-23 10:53:10,715 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_vars.tmp
+2021-04-23 10:53:10,719 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_pfp.tmp_save
+2021-04-23 10:53:10,769 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_pfp.tmp
+2021-04-23 10:53:10,773 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_obj_creat.tmp_save
+2021-04-23 10:53:10,832 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_obj_creat.tmp
+2021-04-23 10:53:10,836 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_default_thread.tmp_save
+2021-04-23 10:53:10,888 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_default_thread.tmp
+2021-04-23 10:53:10,892 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_threads.tmp_save
+2021-04-23 10:53:10,939 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\rtos_threads.tmp
+2021-04-23 10:53:10,949 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\FreeRTOSConfig.h_save
+2021-04-23 10:53:11,052 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\FreeRTOSConfig.h
+2021-04-23 10:53:11,064 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\freertos.c_save
+2021-04-23 10:53:11,159 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\freertos.c
+2021-04-23 10:53:11,162 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:53:11,171 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\cortex.tmp_save
+2021-04-23 10:53:11,254 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\cortex.tmp
+2021-04-23 10:53:11,257 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:53:11,259 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:53:11,263 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:53:11,265 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:53:11,269 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:53:11,270 [INFO] Middleware:1263 - No code input for Bsp Dependency
+2021-04-23 10:53:11,271 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:53:11,275 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] Command line
+2021-04-23 10:53:11,329 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_it.c_save
+2021-04-23 10:53:11,488 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_it.c
+2021-04-23 10:53:11,495 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\stm32f7xx_it.h_save
+2021-04-23 10:53:11,616 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\stm32f7xx_it.h
+2021-04-23 10:53:11,648 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_hal_msp.c_save
+2021-04-23 10:53:11,985 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_hal_msp.c
+2021-04-23 10:53:11,990 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\system.tmp_save
+2021-04-23 10:53:12,044 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\MXTmpFiles\system.tmp
+2021-04-23 10:53:12,050 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_hal_timebase_tim.c_save
+2021-04-23 10:53:12,139 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\stm32f7xx_hal_timebase_tim.c
+2021-04-23 10:53:12,174 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\stm32f7xx_hal_conf.h_save
+2021-04-23 10:53:12,305 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\stm32f7xx_hal_conf.h
+2021-04-23 10:53:12,353 [WARN] IPConfigManager:2976 - IP not found : TIM
+2021-04-23 10:53:12,354 [WARN] CodeGenerator:3191 - IP not found : null
+2021-04-23 10:53:12,372 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\main.h_save
+2021-04-23 10:53:12,471 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Inc\main.h
+2021-04-23 10:53:12,482 [INFO] CodeEngine:229 - oldGeneratedFile, C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\main.c_save
+2021-04-23 10:53:12,946 [INFO] CodeEngine:247 - Generated code: C:\Users\krani\Documents\BME\agv2\Supervision\AGV_freeRTOS\Core\Src\main.c
+2021-04-23 10:53:13,999 [INFO] AInterface:221 - ModelName:simplenn; files:[C:\Users\krani\Documents\BME\agv2\Microcontroller\Network\MCU_NN.onnx]; type:ONNX; compression:4
+2021-04-23 10:53:13,999 [INFO] AInterface:411 - workspaceTempDir: C:\Users\krani\AppData\Local\Temp\mxAI_workspace508907129040012291216677924489
+2021-04-23 10:53:14,000 [INFO] AInterface:872 - Setting Env: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows
+2021-04-23 10:53:14,000 [INFO] AInterface:929 - Custom PATH variable: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/mingw64/bin;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/mingw64/libexec/gcc/x86_64-w64-mingw32/7.3.0;C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/node/bin
+2021-04-23 10:53:14,000 [INFO] CmdLine:90 - Command: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows/stm32ai generate --name simplenn -m C:/Users/krani/Documents/BME/agv2/Microcontroller/Network/MCU_NN.onnx --type onnx --compression 4 --verbosity 1 --workspace C:\Users\krani\AppData\Local\Temp\mxAI_workspace508907129040012291216677924489 --output C:\Users\krani\.stm32cubemx 
+2021-04-23 10:53:14,002 [INFO] AIModelDetailledView:1925 - Analysis status: pending
+2021-04-23 10:53:17,472 [INFO] CmdLine:57 - Neural Network Tools for STM32AI v1.4.1 (STM.ai v6.0.0-RC6)
+2021-04-23 10:53:19,061 [INFO] CmdLine:57 -  
+2021-04-23 10:53:19,062 [INFO] CmdLine:57 - Generated files (5)
+2021-04-23 10:53:19,063 [INFO] CmdLine:57 - ------------------------------------------------------------------------------------------------------------------------
+2021-04-23 10:53:19,063 [INFO] CmdLine:57 -  C:\Users\krani\.stm32cubemx\simplenn_config.h
+2021-04-23 10:53:19,064 [INFO] CmdLine:57 -  C:\Users\krani\.stm32cubemx\simplenn.h
+2021-04-23 10:53:19,064 [INFO] CmdLine:57 -  C:\Users\krani\.stm32cubemx\simplenn.c
+2021-04-23 10:53:19,065 [INFO] CmdLine:57 -  C:\Users\krani\.stm32cubemx\simplenn_data.h
+2021-04-23 10:53:19,067 [INFO] CmdLine:57 -  C:\Users\krani\.stm32cubemx\simplenn_data.c
+2021-04-23 10:53:19,067 [INFO] CmdLine:57 - Creating txt report file C:\Users\krani\.stm32cubemx\simplenn_generate_report.txt
+2021-04-23 10:53:19,098 [INFO] CmdLine:57 - elapsed time (generate): 1.625s
+2021-04-23 10:53:19,444 [INFO] CmdLine:122 - stm32ai exit with status: 0
+2021-04-23 10:53:19,451 [ERROR] PinnrParser:75 - No error detected
+2021-04-23 10:53:19,451 [ERROR] PinnrParser:91 - Keyset: [outputs, val_metrics, rom_cfact, exec_duration, cli_version_str, inputs, _allocate_inputs, error, error_str, date_time, model_name, model_n_params, rom_outputs, layers, rom_inputs, rom_size, tools_api_version, report_version, rom_heap_inspector, rom_n_macc, model_type, val_error_desc, _allocate_outputs, model_size, ram_size, val_error, cli_parameters, exec_cmd, model_files, name, tools_version, cli_version, compression, strategy, hash, ram_io_size]
+2021-04-23 10:53:19,452 [INFO] AInterface:472 - Successfully load: simplenn
+2021-04-23 10:53:19,508 [INFO] AIModelDetailledView:1925 - Analysis status: done
+2021-04-23 10:53:20,229 [INFO] ProjectBuilder:2460 - Time for Copy HAL[1] : 238mS.
+2021-04-23 10:53:20,230 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,230 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,231 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,231 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,231 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,231 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,231 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,231 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,231 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,231 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,231 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,232 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,232 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,232 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,232 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,232 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,232 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,232 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,232 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,233 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,233 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,233 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,233 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,233 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,233 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,233 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,233 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,234 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,234 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,234 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,234 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,234 [ERROR] Middleware:2942 - Invalid RefComponent liste
+2021-04-23 10:53:20,234 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,235 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,235 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,235 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,235 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,235 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,235 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,235 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,235 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,235 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,236 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,236 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,236 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,236 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,236 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,236 [ERROR] ThirdPartyIpManager:536 - Invalid RefComponent liste
+2021-04-23 10:53:20,246 [INFO] ProjectBuilder:3418 - Project Generator version: 3.13.0-B3
+2021-04-23 10:53:20,772 [INFO] ConfigFileManager:1242 - The Die is : DIE449
+2021-04-23 10:53:24,003 [INFO] ProjectBuilder:3584 - Time for Generating toolchain IDE Files: 3757mS.
+2021-04-23 10:53:24,003 [INFO] ProjectBuilder:2339 - Time for Copy CMSIS : 0mS.
+2021-04-23 10:53:24,015 [INFO] ProjectBuilder:2339 - Time for Copy CMSIS : 0mS.
+2021-04-23 10:56:11,032 [INFO] UtilMem:74 - End SaveConfig() Used Memory: 638060544 Bytes (983564288)
+2021-04-23 11:31:20,884 [INFO] Activator:170 - 
+
+
+2021-04-23 11:31:20,888 [INFO] Activator:171 - !SESSION log4j initialized
+2021-04-23 11:31:47,129 [INFO] McuFinderGlobals:39 - Set McuFinder mode to 2 (CubeIDE integrated)
+2021-04-23 11:31:47,314 [INFO] ApplicationProperties:181 - Using Application install path: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236
+2021-04-23 11:31:47,331 [INFO] DbMcusXml:74 - Set database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/mcu/
+2021-04-23 11:31:47,336 [INFO] DbBoardsPdsc:56 - Set plugin database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/boardmanager/
+2021-04-23 11:31:47,336 [INFO] DbMcus:258 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 11:31:47,337 [INFO] DbBoards:264 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 11:31:47,340 [INFO] DbExamples:333 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 11:31:47,347 [INFO] DbMcusAds:85 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,349 [INFO] DbMcusDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,352 [INFO] DbMcusJson:65 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,354 [INFO] DbBoardsDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,356 [INFO] DbBoardsJson:58 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,428 [INFO] CrossReferenceDbSqlite:196 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/cs/
+2021-04-23 11:31:47,442 [INFO] DbExamplesSqlite:690 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,604 [INFO] RulesReader:52 - Compatibility file has been processed (237 Rules)
+2021-04-23 11:31:47,713 [INFO] MicroXplorer:622 - Detected Java Version = 11.0.9.1
+2021-04-23 11:31:47,715 [INFO] DbMcusXml:74 - Set database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/mcu/
+2021-04-23 11:31:47,715 [INFO] DbBoardsPdsc:56 - Set plugin database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/boardmanager/
+2021-04-23 11:31:47,716 [INFO] DbMcus:258 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 11:31:47,716 [INFO] DbBoards:264 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 11:31:47,716 [INFO] DbExamples:333 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 11:31:47,716 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,717 [INFO] DbMcusAds:85 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,717 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,717 [INFO] DbMcusDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,717 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,718 [INFO] DbMcusJson:65 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,718 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,718 [INFO] DbBoardsDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,718 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,718 [INFO] DbBoardsJson:58 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,719 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,719 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,719 [INFO] CrossReferenceDbSqlite:196 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/cs/
+2021-04-23 11:31:47,719 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,719 [INFO] DbExamplesSqlite:690 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,807 [INFO] MainPanel:204 - HeapMemory: 268435456
+2021-04-23 11:31:47,902 [INFO] DbMcusXml:74 - Set database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/mcu/
+2021-04-23 11:31:47,902 [INFO] DbBoardsPdsc:56 - Set plugin database path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/boardmanager/
+2021-04-23 11:31:47,902 [INFO] DbMcus:258 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 11:31:47,902 [INFO] DbBoards:264 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 11:31:47,902 [INFO] DbExamples:333 - Set plugin images path to: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/plugins/mcufinder/images/
+2021-04-23 11:31:47,903 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,903 [INFO] DbMcusAds:85 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,903 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,903 [INFO] DbMcusDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,904 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,904 [INFO] DbMcusJson:65 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,904 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,904 [INFO] DbBoardsDocs:110 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,904 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,904 [INFO] DbBoardsJson:58 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,904 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,904 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,905 [INFO] CrossReferenceDbSqlite:196 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/cs/
+2021-04-23 11:31:47,905 [WARN] DbFile:35 - Overriding database path with different value: C:\Users\krani\.stmcufinder\plugins\mcufinder/ => C:\Users\krani\.stmcufinder\plugins\mcufinder
+2021-04-23 11:31:47,905 [INFO] DbExamplesSqlite:690 - Set database path to: C:\Users\krani\.stmcufinder\plugins\mcufinder//mcu/
+2021-04-23 11:31:47,926 [INFO] ApplicationProperties:181 - Using Application install path: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236
+2021-04-23 11:31:47,928 [INFO] PluginManage:178 - Search for loadable plugins [exclusion list=, ]
+2021-04-23 11:31:47,929 [INFO] PluginManage:292 - Check plugin analytics
+2021-04-23 11:31:57,205 [INFO] AnalyticsPlugin:233 - Accepted Software Licenses: STM32CubeMX.6.1.2,STM32CubeMX.6.0.1,STM32CubeMX.6.2.0,STM32CubeMX.6.2.1
+2021-04-23 11:31:57,206 [INFO] AnalyticsPlugin:235 - Accepted CMSIS Pack Licenses: 
+2021-04-23 11:31:57,206 [INFO] AnalyticsPlugin:237 - Accepted Firmware Licenses: 
+2021-04-23 11:31:57,206 [INFO] PluginManage:342 - Loaded plugin analytics (category:tool,tabindex:-1)
+2021-04-23 11:31:57,206 [INFO] PluginManage:292 - Check plugin clock
+2021-04-23 11:31:57,223 [INFO] PluginManage:342 - Loaded plugin clock (category:base,tabindex:2)
+2021-04-23 11:31:57,223 [INFO] PluginManage:292 - Check plugin ddr
+2021-04-23 11:31:57,227 [INFO] PluginManage:342 - Loaded plugin ddr (category:tool,tabindex:6)
+2021-04-23 11:31:57,227 [INFO] PluginManage:292 - Check plugin filemanager
+2021-04-23 11:31:57,383 [INFO] PluginManage:342 - Loaded plugin filemanager (category:base,tabindex:10)
+2021-04-23 11:31:57,384 [INFO] PluginManage:292 - Check plugin ipmanager
+2021-04-23 11:31:57,395 [INFO] PluginManage:342 - Loaded plugin ipmanager (category:base,tabindex:5)
+2021-04-23 11:31:57,395 [INFO] PluginManage:292 - Check plugin pinoutandconfiguration
+2021-04-23 11:31:57,406 [INFO] PluginManage:342 - Loaded plugin pinoutandconfiguration (category:base,tabindex:1)
+2021-04-23 11:31:57,406 [INFO] PluginManage:292 - Check plugin pinoutconfig
+2021-04-23 11:31:57,439 [INFO] PluginManage:342 - Loaded plugin pinoutconfig (category:base,tabindex:0)
+2021-04-23 11:31:57,439 [INFO] PluginManage:292 - Check plugin power
+2021-04-23 11:31:57,453 [INFO] PluginManage:342 - Loaded plugin power (category:power,tabindex:4)
+2021-04-23 11:31:57,454 [INFO] PluginManage:292 - Check plugin projectmanager
+2021-04-23 11:31:57,480 [INFO] PluginManage:342 - Loaded plugin projectmanager (category:projectmanager,tabindex:3)
+2021-04-23 11:31:57,480 [INFO] PluginManage:292 - Check plugin thirdparty
+2021-04-23 11:31:57,703 [INFO] PluginManage:342 - Loaded plugin thirdparty (category:base,tabindex:-1)
+2021-04-23 11:31:57,703 [INFO] PluginManage:292 - Check plugin tools
+2021-04-23 11:31:57,703 [WARN] IntegrityCheckThread:59 - waiting for thirdparty lock release [integrity check]
+2021-04-23 11:31:57,705 [INFO] IntegrityCheckThread:61 - entering critical section [integrity check]
+2021-04-23 11:31:57,705 [INFO] ThirdPartyUpdaterWithRetryManager:56 - Updater plugin not ready yet. [1/15]
+2021-04-23 11:31:57,708 [INFO] PluginManage:342 - Loaded plugin tools (category:base,tabindex:7)
+2021-04-23 11:31:57,708 [INFO] PluginManage:292 - Check plugin tutovideos
+2021-04-23 11:31:58,077 [INFO] PluginManage:342 - Loaded plugin tutovideos (category:base,tabindex:-1)
+2021-04-23 11:31:58,077 [INFO] PluginManage:292 - Check plugin updater
+2021-04-23 11:31:58,095 [INFO] PluginManage:342 - Loaded plugin updater (category:base,tabindex:12)
+2021-04-23 11:31:58,096 [INFO] PluginManage:265 - PluginManage : Loaded plugins [13]
+2021-04-23 11:31:58,335 [INFO] PinOutPanel:1435 - setPackage(No Configuration,No Configuration)
+2021-04-23 11:31:58,460 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,460 [INFO] PluginManager:203 - loadIPPluginJar : add adc
+2021-04-23 11:31:58,463 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,463 [INFO] PluginManager:203 - loadIPPluginJar : add aes
+2021-04-23 11:31:58,466 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,466 [INFO] PluginManager:203 - loadIPPluginJar : add can
+2021-04-23 11:31:58,468 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,469 [INFO] PluginManager:203 - loadIPPluginJar : add comp
+2021-04-23 11:31:58,471 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,472 [INFO] PluginManager:203 - loadIPPluginJar : add cryp
+2021-04-23 11:31:58,474 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,475 [INFO] PluginManager:203 - loadIPPluginJar : add dfsdm
+2021-04-23 11:31:58,481 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,481 [INFO] PluginManager:203 - loadIPPluginJar : add dma
+2021-04-23 11:31:58,494 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,496 [INFO] PluginManager:203 - loadIPPluginJar : add fatfs
+2021-04-23 11:31:58,502 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,503 [INFO] PluginManager:203 - loadIPPluginJar : add fmc
+2021-04-23 11:31:58,510 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,511 [INFO] PluginManager:203 - loadIPPluginJar : add freertos
+2021-04-23 11:31:58,513 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,514 [INFO] PluginManager:203 - loadIPPluginJar : add genericplugin
+2021-04-23 11:31:58,516 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,517 [INFO] PluginManager:203 - loadIPPluginJar : add gfxmmu
+2021-04-23 11:31:58,525 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,525 [INFO] PluginManager:203 - loadIPPluginJar : add gic
+2021-04-23 11:31:58,529 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,530 [INFO] PluginManager:203 - loadIPPluginJar : add gpio
+2021-04-23 11:31:58,532 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,533 [INFO] PluginManager:203 - loadIPPluginJar : add gtzc
+2021-04-23 11:31:58,536 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,537 [INFO] PluginManager:203 - loadIPPluginJar : add hash
+2021-04-23 11:31:58,540 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,540 [INFO] PluginManager:203 - loadIPPluginJar : add i2c
+2021-04-23 11:31:58,543 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,543 [INFO] PluginManager:203 - loadIPPluginJar : add i2s
+2021-04-23 11:31:58,547 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,547 [INFO] PluginManager:203 - loadIPPluginJar : add ipddr
+2021-04-23 11:31:58,550 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,550 [INFO] PluginManager:203 - loadIPPluginJar : add lorawan
+2021-04-23 11:31:58,552 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,552 [INFO] PluginManager:203 - loadIPPluginJar : add ltdc
+2021-04-23 11:31:58,556 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,556 [INFO] PluginManager:203 - loadIPPluginJar : add mdma
+2021-04-23 11:31:58,560 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,561 [INFO] PluginManager:203 - loadIPPluginJar : add nvic
+2021-04-23 11:31:58,564 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,564 [INFO] PluginManager:203 - loadIPPluginJar : add opamp
+2021-04-23 11:31:58,568 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,568 [INFO] PluginManager:203 - loadIPPluginJar : add openamp
+2021-04-23 11:31:58,572 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,572 [INFO] PluginManager:203 - loadIPPluginJar : add pdm2pcm
+2021-04-23 11:31:58,579 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,583 [INFO] PluginManager:203 - loadIPPluginJar : add plateformsettings
+2021-04-23 11:31:58,585 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,585 [INFO] PluginManager:203 - loadIPPluginJar : add quadspi
+2021-04-23 11:31:58,589 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,589 [INFO] PluginManager:203 - loadIPPluginJar : add resmgrutility
+2021-04-23 11:31:58,592 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,592 [INFO] PluginManager:203 - loadIPPluginJar : add sai
+2021-04-23 11:31:58,596 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,596 [INFO] PluginManager:203 - loadIPPluginJar : add spi
+2021-04-23 11:31:58,601 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,602 [INFO] PluginManager:203 - loadIPPluginJar : add stm32_wpan
+2021-04-23 11:31:58,604 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,604 [INFO] PluginManager:203 - loadIPPluginJar : add tim
+2021-04-23 11:31:58,607 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,608 [INFO] PluginManager:203 - loadIPPluginJar : add touchsensing
+2021-04-23 11:31:58,610 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,610 [INFO] PluginManager:203 - loadIPPluginJar : add tracer_emb
+2021-04-23 11:31:58,612 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,613 [INFO] PluginManager:203 - loadIPPluginJar : add ts
+2021-04-23 11:31:58,614 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,615 [INFO] PluginManager:203 - loadIPPluginJar : add tsc
+2021-04-23 11:31:58,617 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,617 [INFO] PluginManager:203 - loadIPPluginJar : add ucpd
+2021-04-23 11:31:58,620 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:31:58,621 [INFO] PluginManager:203 - loadIPPluginJar : add usart
+2021-04-23 11:31:59,040 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 11:31:59,189 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 11:31:59,196 [INFO] DbMcusAds:132 - JSON generation date=Mon Mar 01 11:27:39 CET 2021 (1614594459504)
+2021-04-23 11:31:59,196 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 11:31:59,265 [WARN] DetailPanel:315 - Failed to get advertising image, set to default
+2021-04-23 11:31:59,510 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 11:31:59,513 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 11:31:59,513 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 11:31:59,514 [WARN] DetailPanel:315 - Failed to get advertising image, set to default
+2021-04-23 11:31:59,515 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 11:31:59,579 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 11:31:59,579 [WARN] ThirdParty:796 - waiting for thirdparty lock release [close project]
+2021-04-23 11:32:00,707 [INFO] ThirdPartyUpdaterWithRetryManager:56 - Updater plugin not ready yet. [2/15]
+2021-04-23 11:32:03,707 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 11:32:03,707 [ERROR] AbstractThirdPartyUpdaterManager:153 - class java.lang.Integer cannot be cast to class java.util.List (java.lang.Integer and java.util.List are in module java.base of loader 'bootstrap')
+2021-04-23 11:32:03,708 [INFO] ThirdParty:900 - Integrity check success = false
+2021-04-23 11:32:03,711 [INFO] IntegrityCheckThread:75 - exiting critical section [integrity check]
+2021-04-23 11:32:03,711 [INFO] IntegrityCheckThread:78 - End integrity checks thread
+2021-04-23 11:32:03,711 [INFO] ThirdParty:798 - entering critical section [close project]
+2021-04-23 11:32:03,714 [INFO] ThirdParty:809 - exiting critical section [close project]
+2021-04-23 11:32:03,720 [INFO] PinOutPanel:1435 - setPackage(No Configuration,No Configuration)
+2021-04-23 11:32:03,721 [FATAL] Updater:284 - Updater called before beeing initialized
+2021-04-23 11:32:03,743 [ERROR] Updater:1065 - MainUpdater not yet initialized. External WinMGr cannot be set.
+2021-04-23 11:32:03,745 [INFO] Updater:1002 - Updater Version found : 6.2.1
+2021-04-23 11:32:03,770 [INFO] ApplicationProperties:181 - Using Application install path: C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236
+2021-04-23 11:32:04,599 [INFO] MainUpdater:2661 - connection check result : 10
+2021-04-23 11:32:04,601 [INFO] MainUpdater:255 - Updater Check For Update Now.
+2021-04-23 11:32:04,602 [INFO] MicroXplorer:472 - Change Database Version : DB.6.0.21
+2021-04-23 11:32:04,648 [INFO] CheckServerUpdateThread:102 - End of CheckServer Thread
+2021-04-23 11:32:04,721 [INFO] MainUpdater:2661 - connection check result : 10
+2021-04-23 11:32:04,723 [INFO] MainUpdater:2661 - connection check result : 10
+2021-04-23 11:32:04,862 [INFO] MicroXplorer:442 - Change Database Path : 
+2021-04-23 11:32:04,863 [INFO] MicroXplorer:472 - Change Database Version : DB.6.0.21
+2021-04-23 11:32:04,863 [WARN] ThirdParty:796 - waiting for thirdparty lock release [close project]
+2021-04-23 11:32:04,863 [INFO] ThirdParty:798 - entering critical section [close project]
+2021-04-23 11:32:04,863 [INFO] ThirdParty:809 - exiting critical section [close project]
+2021-04-23 11:32:04,868 [INFO] PinOutPanel:1435 - setPackage(No Configuration,No Configuration)
+2021-04-23 11:32:04,869 [INFO] UtilMem:74 - Begin LoadConfig() Used Memory: 220577592 Bytes (274726912)
+2021-04-23 11:32:04,878 [INFO] MicroXplorer:442 - Change Database Path : C:/Users/krani/.stm32cubemx/databases/DB.6.0.20/db/
+2021-04-23 11:32:04,878 [INFO] MicroXplorer:472 - Change Database Version : DB.6.0.20
+2021-04-23 11:32:35,183 [INFO] OpenFileManager:303 - Change cursor
+2021-04-23 11:32:35,214 [WARN] IntegrityCheckThread:59 - waiting for thirdparty lock release [integrity check]
+2021-04-23 11:32:35,214 [INFO] IntegrityCheckThread:61 - entering critical section [integrity check]
+2021-04-23 11:32:35,284 [WARN] PackLoader:226 - Cannot read IP mode file for RoweBots.I-CUBE-UNISONRTOS.5.5.0-4
+2021-04-23 11:32:35,300 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-SFXS2LP1.3.0.0
+2021-04-23 11:32:35,310 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-EEPRMA1.3.0.0
+2021-04-23 11:32:35,319 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-NFC4.2.0.2
+2021-04-23 11:32:35,328 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-BLE2.3.2.0
+2021-04-23 11:32:35,362 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-SUBG2.4.0.0
+2021-04-23 11:32:35,378 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-TOF1.1.0.0
+2021-04-23 11:32:35,416 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-AZRTOS-H7.1.0.0
+2021-04-23 11:32:35,485 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-MEMS1.8.3.0
+2021-04-23 11:32:35,711 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-DISPLAY.1.0.0
+2021-04-23 11:32:35,947 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-ALGOBUILD.1.2.0
+2021-04-23 11:32:35,958 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-GNSS1.5.2.0
+2021-04-23 11:32:35,965 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-BLE1.6.1.0
+2021-04-23 11:32:35,969 [WARN] PackLoader:226 - Cannot read IP mode file for wolfSSL.I-CUBE-wolfSSL.4.7.0
+2021-04-23 11:32:35,973 [WARN] PackLoader:226 - Cannot read IP mode file for STMicroelectronics.X-CUBE-TOUCHGFX.4.16.1
+2021-04-23 11:32:35,973 [INFO] ThirdParty:900 - Integrity check success = true
+2021-04-23 11:32:35,973 [INFO] IntegrityCheckThread:75 - exiting critical section [integrity check]
+2021-04-23 11:32:35,974 [INFO] IntegrityCheckThread:78 - End integrity checks thread
+2021-04-23 11:32:39,443 [INFO] Context:587 - Trying to add GPIOservice into a context  which must be forbidden
+2021-04-23 11:32:40,452 [INFO] ApiDbMcu:458 - Load IP Config File for STMicroelectronics.X-CUBE-AI.6.0.0
+2021-04-23 11:32:40,811 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2868A1' from pack STMicroelectronics.X-CUBE-SFXS2LP1.3.0.0: no header file found
+2021-04-23 11:32:40,811 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2868A2' from pack STMicroelectronics.X-CUBE-SFXS2LP1.3.0.0: no header file found
+2021-04-23 11:32:40,811 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2915A1' from pack STMicroelectronics.X-CUBE-SFXS2LP1.3.0.0: no header file found
+2021-04-23 11:32:40,816 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,816 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,816 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,816 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,816 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,816 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,816 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,816 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,816 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,816 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,817 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,817 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,817 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,817 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,817 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,817 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,817 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,817 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,817 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,817 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,818 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,818 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,818 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,818 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,818 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,818 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,818 [WARN] ModelIntegratedComponent:51 - No mode defined for component null
+2021-04-23 11:32:40,828 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2868A1' from pack STMicroelectronics.X-CUBE-SUBG2.4.0.0: no header file found
+2021-04-23 11:32:40,828 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2868A2' from pack STMicroelectronics.X-CUBE-SUBG2.4.0.0: no header file found
+2021-04-23 11:32:40,828 [WARN] ApiManager:294 - Cannot register API 'Board Extension:S2915A1' from pack STMicroelectronics.X-CUBE-SUBG2.4.0.0: no header file found
+2021-04-23 11:32:40,836 [WARN] ApiManager:294 - Cannot register API 'Board Extension:EEPRMA1' from pack STMicroelectronics.X-CUBE-EEPRMA1.3.0.0: no header file found
+2021-04-23 11:32:40,837 [WARN] ApiManager:294 - Cannot register API 'Board Extension:EEPRMA2' from pack STMicroelectronics.X-CUBE-EEPRMA1.3.0.0: no header file found
+2021-04-23 11:32:41,023 [WARN] ApiManager:294 - Cannot register API 'Board Extension:IKS01A3' from pack STMicroelectronics.X-CUBE-MEMS1.8.3.0: no header file found
+2021-04-23 11:32:41,024 [WARN] ApiManager:294 - Cannot register API 'Board Extension:IKS01A2' from pack STMicroelectronics.X-CUBE-MEMS1.8.3.0: no header file found
+2021-04-23 11:32:41,024 [WARN] ApiManager:294 - Cannot register API 'Board Extension:IKS02A1' from pack STMicroelectronics.X-CUBE-MEMS1.8.3.0: no header file found
+2021-04-23 11:32:41,039 [INFO] RtosManager:470 - Registered RTOS mode: class=CMSIS, group=RTOS, mode=CMSIS_V1, owner=FREERTOS
+2021-04-23 11:32:41,039 [INFO] RtosManager:470 - Registered RTOS mode: class=CMSIS, group=RTOS2, mode=CMSIS_V2, owner=FREERTOS
+2021-04-23 11:32:41,039 [INFO] RtosManager:470 - Registered RTOS mode: class=RTOS, group=Core, mode=CMSIS_V1, owner=FREERTOS
+2021-04-23 11:32:41,040 [INFO] RtosManager:470 - Registered RTOS mode: class=RTOS, group=Core, mode=CMSIS_V2, owner=FREERTOS
+2021-04-23 11:32:41,040 [WARN] ModelIntegratedComponent:182 - Missing modes for component STMicroelectronics:FreeRTOS:0.0.1:STMicroelectronics:RTOS:FreeRTOS:Core:::10.2.0:
+2021-04-23 11:32:41,041 [WARN] ApiManager:294 - Cannot register API 'Board Extension:GNSS1A1' from pack STMicroelectronics.X-CUBE-GNSS1.5.2.0: no header file found
+2021-04-23 11:32:41,042 [WARN] ApiManager:294 - Cannot register API 'Board Support:Custom' from pack STMicroelectronics.X-CUBE-GNSS1.5.2.0: no header file found
+2021-04-23 11:32:41,042 [WARN] ApiManager:294 - Cannot register API 'Data Exchange:lib_gnss' from pack STMicroelectronics.X-CUBE-GNSS1.5.2.0: no header file found
+2021-04-23 11:32:41,043 [WARN] ApiManager:294 - Cannot register API 'Wireless:BlueNRG-MS' from pack STMicroelectronics.X-CUBE-BLE1.6.1.0: no header file found
+2021-04-23 11:32:41,044 [WARN] ApiManager:294 - Cannot register API 'Board Extension:NFC04A1' from pack STMicroelectronics.X-CUBE-NFC4.2.0.2: no header file found
+2021-04-23 11:32:41,046 [WARN] ApiManager:294 - Cannot register API 'Wireless:BlueNRG-2' from pack STMicroelectronics.X-CUBE-BLE2.3.2.0: no header file found
+2021-04-23 11:32:41,369 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:41,383 [INFO] PluginManager:203 - loadIPPluginJar : add ai.6.0.0
+2021-04-23 11:32:42,081 [INFO] ApiDbMcu:458 - Load IP Config File for FREERTOS
+2021-04-23 11:32:42,082 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 11:32:42,082 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 11:32:42,082 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 11:32:42,252 [INFO] RtosManager:784 - Current active RTOS is FREERTOS [Cortex-M7NS]
+2021-04-23 11:32:42,264 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (48MHZClocksFreq_Value)
+2021-04-23 11:32:42,264 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (ADC12outputFreq_Value)
+2021-04-23 11:32:42,264 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (ADC34outputFreq_Value)
+2021-04-23 11:32:42,264 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (FamilyName)
+2021-04-23 11:32:42,264 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (I2SClocksFreq_Value)
+2021-04-23 11:32:42,265 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (MCOFreq_Value)
+2021-04-23 11:32:42,265 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (PLLMCOFreq_Value)
+2021-04-23 11:32:42,265 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (PLLMUL)
+2021-04-23 11:32:42,266 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (PRESCALERUSB)
+2021-04-23 11:32:42,266 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (RTCHSEDivFreq_Value)
+2021-04-23 11:32:42,266 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Parameter (SDMMCFreq_Value) has invalid value (72000000)
+2021-04-23 11:32:42,266 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (SYSCLKSourceVirtual)
+2021-04-23 11:32:42,266 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM15Freq_Value)
+2021-04-23 11:32:42,266 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM16Freq_Value)
+2021-04-23 11:32:42,266 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM17Freq_Value)
+2021-04-23 11:32:42,266 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM1Freq_Value)
+2021-04-23 11:32:42,267 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM20Freq_Value)
+2021-04-23 11:32:42,267 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM2Freq_Value)
+2021-04-23 11:32:42,267 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM3Freq_Value)
+2021-04-23 11:32:42,267 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (TIM8Freq_Value)
+2021-04-23 11:32:42,268 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (VCOOutput2Freq_Value)
+2021-04-23 11:32:42,268 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (RCC) : Invalid parameter (VcooutputI2S)
+2021-04-23 11:32:42,271 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelName) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 11:32:42,271 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelKind) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 11:32:42,271 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelType) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 11:32:42,271 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Invalid parameter (LatestDirectoryUsed)
+2021-04-23 11:32:42,272 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelStructureFile) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 11:32:42,272 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelCompression) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 11:32:42,272 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelMacc) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 11:32:42,272 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelActualCompression) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 11:32:42,272 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelFlashOccupation) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 11:32:42,272 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Parameter (ModelRamOccupation) has Id (64a3d0d2452f8aaabcc0a2276342dedd0c7f56e1feda4df7654ecef4667a3de1) currently not set
+2021-04-23 11:32:42,272 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Invalid parameter (MaximumNumberOfInputLayer)
+2021-04-23 11:32:42,272 [INFO] ImportTextPane:162 - (OptionalMessage_ERROR) IP (STMicroelectronics.X-CUBE-AI.6.0.0) : Invalid parameter (MaximumNumberOfOutputLayer)
+2021-04-23 11:32:42,879 [INFO] UtilMem:74 - End LoadConfig() Used Memory: 489509376 Bytes (732954624)
+2021-04-23 11:32:42,881 [INFO] DbMcusXml:100 - Load MCU database from C:\ST\STM32CubeIDE_1.6.1\STM32CubeIDE\plugins\com.st.stm32cube.common.mx_6.2.1.202103241236\\db\/mcu/families.xml
+2021-04-23 11:32:43,729 [INFO] DbMcusJson:94 - JSON generation date=Mon Feb 08 14:35:07 CET 2021 (1612791307)
+2021-04-23 11:32:44,482 [INFO] DbMcus:175 - Found 1906 MCUs (1866 are supported by CubeMX, 1866 are visible in CubeMX)
+2021-04-23 11:32:44,482 [INFO] ApiDb:251 - Load user favorites file C:\Users\krani/.stm32cubeide/favorites.mcus.txt: 0 item(s)
+2021-04-23 11:32:44,483 [INFO] ApiDb:255 - User favorites MCUs=[]
+2021-04-23 11:32:44,483 [INFO] DbMcus:187 - Set 0 / 0 favorites MCUs
+2021-04-23 11:32:44,489 [WARN] ThirdParty:762 - waiting for thirdparty lock release [change project]
+2021-04-23 11:32:44,489 [INFO] ThirdParty:764 - entering critical section [change project]
+2021-04-23 11:32:44,489 [INFO] ThirdParty:952 - CMSIS Pack Vendor :RoweBots I-CUBE-UNISONRTOS 5.5.0-4
+2021-04-23 11:32:44,489 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-SFXS2LP1 3.0.0
+2021-04-23 11:32:44,489 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics USB_HOST 2.0.0
+2021-04-23 11:32:44,489 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics USB_DEVICE 3.0.0
+2021-04-23 11:32:44,489 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics HAL Drivers 0.0.0
+2021-04-23 11:32:44,490 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics MBEDTLS 2.16.2
+2021-04-23 11:32:44,490 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics MBEDTLS 2.14.1
+2021-04-23 11:32:44,490 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-SUBG2 4.0.0
+2021-04-23 11:32:44,490 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-TOF1 1.0.0
+2021-04-23 11:32:44,490 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-AZRTOS-H7 1.0.0
+2021-04-23 11:32:44,490 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics USB_DEVICE 2.0.0
+2021-04-23 11:32:44,490 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-EEPRMA1 3.0.0
+2021-04-23 11:32:44,490 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-MEMS1 8.3.0
+2021-04-23 11:32:44,491 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-DISPLAY 1.0.0
+2021-04-23 11:32:44,491 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics FreeRTOS 0.0.1
+2021-04-23 11:32:44,491 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics USB_DEVICE 1.0.0
+2021-04-23 11:32:44,491 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-AI 6.0.0
+2021-04-23 11:32:44,491 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-ALGOBUILD 1.2.0
+2021-04-23 11:32:44,491 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-GNSS1 5.2.0
+2021-04-23 11:32:44,491 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-BLE1 6.1.0
+2021-04-23 11:32:44,491 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics lwIP 2.0.3
+2021-04-23 11:32:44,492 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics lwIP 2.1.2
+2021-04-23 11:32:44,492 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics USB_HOST 1.0.0
+2021-04-23 11:32:44,492 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-NFC4 2.0.2
+2021-04-23 11:32:44,492 [INFO] ThirdParty:952 - CMSIS Pack Vendor :wolfSSL I-CUBE-wolfSSL 4.7.0
+2021-04-23 11:32:44,492 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-TOUCHGFX 4.16.1
+2021-04-23 11:32:44,492 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics PDM2PCM 3.1.0
+2021-04-23 11:32:44,492 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics PDM2PCM 3.2.0
+2021-04-23 11:32:44,492 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics PDM2PCM 3.3.0
+2021-04-23 11:32:44,492 [INFO] ThirdParty:952 - CMSIS Pack Vendor :STMicroelectronics X-CUBE-BLE2 3.2.0
+2021-04-23 11:32:44,493 [INFO] ThirdParty:770 - exiting critical section [change project]
+2021-04-23 11:32:44,826 [INFO] PinOutPanel:1435 - setPackage(No Configuration,No Configuration)
+2021-04-23 11:32:44,827 [INFO] PinOutPanel:1435 - setPackage(STM32F746ZGTx,LQFP144)
+2021-04-23 11:32:45,910 [INFO] UtilMem:74 - Before build in PCC Used Memory: 598648072 Bytes (815792128)
+2021-04-23 11:32:46,308 [INFO] SharedServices:72 - Folder for power plug-in: C:/Users/krani/.stm32cubemx/plugins/power
+2021-04-23 11:32:46,344 [INFO] SharedServices:72 - Folder for power plug-in: C:/Users/krani/.stm32cubemx/plugins/power
+2021-04-23 11:32:46,393 [INFO] SharedServices:72 - Folder for power plug-in: C:/Users/krani/.stm32cubemx/plugins/power
+2021-04-23 11:32:46,400 [INFO] SharedServices:72 - Folder for power plug-in: C:/Users/krani/.stm32cubemx/plugins/power
+2021-04-23 11:32:46,600 [INFO] UtilMem:74 - After build in PCC Used Memory: 578978472 Bytes (815792128)
+2021-04-23 11:32:46,601 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 11:32:46,601 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 11:32:46,601 [INFO] Middleware:501 - instanceName : STMicroelectronics.X-CUBE-AI.6.0.0 bspName : COM Port check condition success for : !SEMDeviceJjApplicationJjApplicationTemplate
+2021-04-23 11:32:46,660 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,660 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,660 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,660 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,660 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,660 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,661 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,661 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,661 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,661 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,662 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,662 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,662 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,662 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,662 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,663 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,663 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,663 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,663 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,663 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,664 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,664 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,664 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,664 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,665 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,665 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,666 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,666 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,667 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,667 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,667 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,668 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,668 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,669 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,669 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,670 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,671 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,671 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,672 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,673 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,674 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,675 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,676 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,676 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,677 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,678 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,680 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,681 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,682 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,683 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,684 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,685 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,686 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,687 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,688 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,688 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,689 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,690 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,690 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,691 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,692 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,692 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,693 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,694 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,695 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,695 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,696 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,697 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,698 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,698 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,699 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,700 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,701 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,702 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,703 [INFO] IPUIPlugin:64 - create IPUIPlugin
+2021-04-23 11:32:46,707 [INFO] AI:738 - onDisable adding AI com.st.microxplorer.plugins.ip.ai.AI@1edc198c on STMicroelectronics.X-CUBE-AI.6.0.0
+2021-04-23 11:32:46,716 [INFO] ApiDbMcu:458 - Load IP Config File for PDM2PCM
+2021-04-23 11:32:46,768 [WARN] FreeRTOS:989 - Null or empty value: should not occur! (nothing added to the table)
+2021-04-23 11:32:46,794 [INFO] LogOutputStream:76 - [STDOUT_REDIRECT] toolchainItems.length=====1
+2021-04-23 11:32:46,909 [INFO] RtosManager:597 - Active RTOS found at IOC load: FREERTOS [Cortex-M7NS]
+2021-04-23 11:32:46,917 [INFO] OpenFileManager:323 - Restore cursor
+2021-04-23 11:32:46,975 [INFO] UtilMem:74 - End SaveConfig() Used Memory: 651856552 Bytes (815792128)
+2021-04-23 11:32:47,693 [INFO] AIMainUI:1000 - Restoring parameters from IP...
+2021-04-23 11:32:47,693 [INFO] AIMainUI:1132 - No old model detected
+2021-04-23 11:32:47,746 [INFO] AInterface:96 - AInterface using toolDir: C:/Users/krani/STM32Cube/Repository/Packs/STMicroelectronics/X-CUBE-AI/6.0.0/Utilities/windows
+2021-04-23 11:32:47,757 [INFO] AIModelDetailledView:1925 - Analysis status: -
+2021-04-23 11:32:47,758 [INFO] AIModelDetailledView:822 - Selected model: ONNX
+2021-04-23 11:32:47,764 [ERROR] PinnrParser:75 - No error detected
+2021-04-23 11:32:47,764 [ERROR] PinnrParser:91 - Keyset: [outputs, val_metrics, rom_cfact, exec_duration, cli_version_str, inputs, _allocate_inputs, error, error_str, date_time, model_name, model_n_params, rom_outputs, layers, rom_inputs, rom_size, tools_api_version, report_version, rom_heap_inspector, rom_n_macc, model_type, val_error_desc, _allocate_outputs, model_size, ram_size, val_error, cli_parameters, exec_cmd, model_files, name, tools_version, cli_version, compression, strategy, hash, ram_io_size]
+2021-04-23 11:32:48,316 [ERROR] PinnrParser:75 - No error detected
+2021-04-23 11:32:48,316 [ERROR] PinnrParser:91 - Keyset: [outputs, val_metrics, rom_cfact, exec_duration, cli_version_str, inputs, _allocate_inputs, error, error_str, date_time, model_name, model_n_params, rom_outputs, layers, rom_inputs, rom_size, tools_api_version, report_version, rom_heap_inspector, rom_n_macc, model_type, val_error_desc, _allocate_outputs, model_size, ram_size, val_error, cli_parameters, exec_cmd, model_files, name, tools_version, cli_version, compression, strategy, hash, ram_io_size]
