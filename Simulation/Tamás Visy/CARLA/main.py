@@ -1,43 +1,52 @@
-# @title main
-import random
-import numpy as np
 import time
 
 from agents.kerasagent import KerasAgent
 from agents.networkagent import NetworkAgent
-from agents.state import State, convert, repack
-from environments.environment import Environment
+from agents.converter import convert, repack
+from environments.carlaenvironment import CarlaEnvironment
 from environments.status import Status
+from environments.replayenvironment import ReplayEnvironment
+from settings import *  # This saves us from multiple lines of individual imports
 from support.datakey import DataKey
 from support.logger import logger
 from threads.dashboardthread import DashboardThread
 
-TRAIN = True
-logger.info(f'Train is {TRAIN}')
-TRAIN_PER_DECISION = False
-logger.info(f'Train per decision is {TRAIN_PER_DECISION}')
-TRAIN_RESOLUTION_PERCENTAGE = 100
-logger.info(f'Train resolution is {TRAIN_RESOLUTION_PERCENTAGE}%')
-TARGET_FRAME_TIME = 0.25  # 0.025
-MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
+logger.warning(f'Train is {TRAIN}')
+logger.warning(f'Train per decision is {TRAIN_PER_DECISION}')
 
-
-def pure(run):
-    return run % 2
+# TODO (10) update control from (steering, vel) to (left-motor, right-motor)
 
 
 def main():
     logger.info('Starting')
 
-    env = Environment()
-    # agent = NetworkAgent()
-    agent = KerasAgent()
+    if ENVIRONMENT_TYPE is EnvironmentTypes.CARLA:
+        env = CarlaEnvironment()
+    elif ENVIRONMENT_TYPE is EnvironmentTypes.Test:
+        env = ReplayEnvironment()
+    else:
+        logger.critical('Unknown environment type in main, raising error')
+        raise RuntimeError('Unknown environment type in main')
+    logger.info(f'Environment is {type(env).__name__}')
+
+    if AGENT_TYPE is AgentTypes.Network:
+        agent = NetworkAgent(NETWORK_AGENT_MODEL_TYPE)
+    elif AGENT_TYPE is AgentTypes.Keras:
+        agent = KerasAgent()
+
+        # Converting to TfLite:
+        #   agent.load()
+        #   agent.save_as_tflite()
+    else:
+        logger.critical('Unknown agent type in main, raising error')
+        raise RuntimeError('Unknown agent type in main')
+    logger.info(f'Agent is {type(agent).__name__}')
+
     dashboard = DashboardThread()
     memory = []
-    run = 0
+    run_index = 0
 
     try:
-        env.connect()
         env.setup()
         agent.load()
 
@@ -54,48 +63,46 @@ def main():
             while status.finished is False:
                 frame_start = time.time_ns()
 
-                data, line, starting_dir = env.pull()
+                data, path, starting_dir = env.pull()
 
-                state = convert(repack(data, line, starting_dir))
+                state = convert(repack(data, path, starting_dir))
+
                 if TRAIN and TRAIN_PER_DECISION and prev_state is not None:
                     agent.optimize(state)
-                action, out = agent.predict(state, pure=pure(run), auto=not pure(run))
-                dashboard.handle(data, line, starting_dir, state, out, pure=pure(run))
+
+                # TODO (9) probably remove cheating
+                #  apply noise out here
+                action, out = agent.predict(state, pure=pure(run_index), auto=not pure(run_index))
+                dashboard.handle(data, path, starting_dir, state, out, pure=pure(run_index))
+
                 if out is not None:
                     env.put(DataKey.CONTROL_OUT, out)
-                # TODO (8) direction -1 broken somewhere
-                # TODO (6) change order phases in turn end :)
+
                 if prev_state is not None and prev_action is not None and state is not None:
                     memory.append([prev_state, prev_action, state])
                 prev_state = state
                 prev_action = action
 
-                frame_end = time.time_ns()
-                diff = None
-                if frame_end is not None and frame_start is not None:
-                    diff = (frame_end - frame_start) // 1_000_000
-                if diff is not None and diff // 1_000 < TARGET_FRAME_TIME:
-                    time.sleep(TARGET_FRAME_TIME - diff // 1_000)
+                apply_frame_time(frame_start)
                 status = env.check()
             logger.info('Finished')
             dashboard.clear()
             env.reset()
 
-            if pure(run):
+            if pure(run_index):
                 logger.info('This run was pure')
             logger.info(f'~~~ {status} ~~~')
             time.sleep(1.0)
 
             if TRAIN and not TRAIN_PER_DECISION:
-                if len(memory) >= MEMORY_SIZE:
-                    logger.info(f'Starting training with memory of {len(memory)}*{TRAIN_RESOLUTION_PERCENTAGE}%')
-                    # train_networkagent(agent, memory)
-                    train_kerasagent(agent, memory)
+                if len(memory) >= TRAIN_MEMORY_SIZE:
+                    logger.info(f'Starting training with memory of {len(memory)}')
+                    agent.train_on_memory(memory)
                     memory = []
                 else:
-                    logger.info(f'Memory not full, {len(memory)}/{MEMORY_SIZE}')
+                    logger.info(f'Memory not full, {len(memory)}/{TRAIN_MEMORY_SIZE}')
             logger.info('Continuing...')
-            run += 1
+            run_index += 1
 
     finally:
         agent.save()
@@ -105,25 +112,15 @@ def main():
         logger.debug('Cleaned up')
 
 
-def train_kerasagent(agent, memory):
-    states = [prev_state for (prev_state, action, new_state) in memory]
-    agent.train(states)
-
-
-def train_networkagent(agent, memory):
-    x = 0
-    r = [[], []]
-    for i, (prev_state, action, new_state) in enumerate(memory):
-        if i % (100 // TRAIN_RESOLUTION_PERCENTAGE) is 0:
-            x += 1
-            reward = agent.optimize(new_state, prev_state, action)
-            r[action].append(reward)
-    logger.info(f'Successfully trained {x} times')
-    for i, action_rewards in enumerate(r):
-        logger.info(f'Action rewards (ID, AVG, AMOUNT) '
-                    f'-:- {i}; {np.average(action_rewards)}; {len(action_rewards)}')
-    agent.model.reset()
-    agent.save()
+def apply_frame_time(frame_start):
+    frame_end = time.time_ns()
+    diff = None
+    if frame_end is not None and frame_start is not None:
+        diff = (frame_end - frame_start) // 1_000_000
+    if diff is not None and diff // 1_000 < TARGET_FRAME_TIME:
+        time.sleep(TARGET_FRAME_TIME - diff // 1_000)
+    else:
+        logger.warning('Frame time issue')
 
 
 if __name__ == '__main__':

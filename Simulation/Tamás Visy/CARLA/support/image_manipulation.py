@@ -1,40 +1,27 @@
 import cv2
 import numpy as np
 
-from support.logger import logger
-
 
 def im_resize(image, size):
+    """Returns a new version with given size of a (not normalized) image."""
     if image is None:
         return None
     return cv2.resize(image, size)
 
 
 def im_grayscale(im):
+    """Returns a grayscale version of a (not normalized) BGR image."""
     if im is not None:
-        # TODO (2) denormalization, normalization
-        # im = im_denormalize(im)
         im = im.astype(np.float32)
         im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-        # im = im_normalize(im)
         return im
     return None
 
+
 def im_color(im):
+    """Returns a colored version of a (not normalized) grayscale image."""
     if im is not None:
-        # TODO (2) denormalization, normalization
         im = im.astype(np.float32)
         im = cv2.cvtColor(im, cv2.COLOR_GRAY2RGB)
         return im
-    return None
-
-def im_denormalize(im):
-    if im is not None:
-        return im / 255
-    return None
-
-
-def im_normalize(im):
-    if im is not None:
-        return im / 255
     return None

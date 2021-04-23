@@ -5,8 +5,8 @@
 #include "myCOM.h"
 #include "math.h"
 
-#define LEFT_ENCODER 0
-#define RIGHT_ENCODER 1
+#define LEFT_SIDE 0
+#define RIGHT_SIDE 1
 
 extern TIM_HandleTypeDef htim6;
 extern TIM_HandleTypeDef htim7;

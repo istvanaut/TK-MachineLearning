@@ -35,7 +35,7 @@ void Motors_Init(TIM_HandleTypeDef *htim)
 
 void leftMotor(float value)
 {
-	osSemaphoreAcquire(SemMotorsHandle, 0);
+	osSemaphoreAcquire(SemMotorsHandle, osWaitForever);
 	leftMotorActualValue = value;
 	osSemaphoreRelease(SemMotorsHandle);
 
@@ -45,7 +45,7 @@ void leftMotor(float value)
 }
 void rightMotor(float value)
 {
-	osSemaphoreAcquire(SemMotorsHandle, 0);
+	osSemaphoreAcquire(SemMotorsHandle, osWaitForever);
 	rightMotorActualValue = value;
 	osSemaphoreRelease(SemMotorsHandle);
 
@@ -58,7 +58,7 @@ double getLeftMotorValue()
 {
 	double retTemp;
 
-	osSemaphoreAcquire(SemMotorsHandle, 0);
+	osSemaphoreAcquire(SemMotorsHandle, osWaitForever);
 	retTemp = leftMotorActualValue;
 	osSemaphoreRelease(SemMotorsHandle);
 
@@ -69,9 +69,9 @@ double getRightMotorValue()
 {
 	double retTemp;
 
-		osSemaphoreAcquire(SemMotorsHandle, 0);
-		retTemp = rightMotorActualValue;
-		osSemaphoreRelease(SemMotorsHandle);
+	osSemaphoreAcquire(SemMotorsHandle, osWaitForever);
+	retTemp = rightMotorActualValue;
+	osSemaphoreRelease(SemMotorsHandle);
 
-		return retTemp;
+	return retTemp;
 }

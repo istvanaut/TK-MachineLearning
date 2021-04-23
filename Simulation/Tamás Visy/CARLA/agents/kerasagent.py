@@ -1,12 +1,10 @@
 import random
 
-from agents.agent import Agent, choices
-from agents.state import feature_dimension
+from agents.agent import Agent
+from settings import choices
 from kerasmodel import KerasModel
 from support.logger import logger
 import numpy as np
-
-feature_dimension = feature_dimension()
 
 
 def states_to_trainables(data):
@@ -79,9 +77,13 @@ class KerasAgent(Agent):
         return action, choice
 
     def optimize(self, new_state, prev_state=None, action=None):
-        logger.critical('Use train instead of kerasagent optimize')
+        logger.critical('Optimize unsupported for this agent.')
 
-    def train(self, data=None):
+    def train_on_memory(self, memory):
+        states = [prev_state for (prev_state, action, new_state) in memory]
+        self.train_model(states)
+
+    def train_model(self, data=None):
         if data is None:
             val = None
             train = None
@@ -97,3 +99,6 @@ class KerasAgent(Agent):
             val = trainables[:val_len]
             train = trainables[val_len:]
         self.model.train(train=train, test=val, epochs=4)
+
+    def save_as_tflite(self):
+        self.model.save_as_tflite()
