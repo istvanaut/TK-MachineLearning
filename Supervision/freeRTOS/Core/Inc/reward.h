@@ -19,4 +19,4 @@ void SetLightSensorValueForTheFirstTime(void);
 int GetReward (void);
 uint8_t onTheTrack(void);
 void trackLost(void);
-uint8_t returnToLine(void);
+int8_t returnToLine(void);

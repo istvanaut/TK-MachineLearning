@@ -30,6 +30,8 @@ double savedAngle = 0;
 
 int8_t moveAnalysis(uint32_t LightSensor);
 
+extern TIM_HandleTypeDef htim14;
+
 void SetLightSensorValueForTheFirstTime()
 {
 	PrevLightSensor = GetLightSensorValues();
@@ -147,11 +149,15 @@ uint8_t onTheTrack(void){
 void trackLost(void){
 	savedAngle = getEuler().x;
 
+	TIM14->CNT = 0;
+	HAL_TIM_Base_Start(&htim14);
+
 	leftMotor(-0.6);
 	rightMotor(-0.6);
 }
 
-uint8_t returnToLine(void){
+// 0 if going backward, 1 if successfully back, -1 if 3sec is over
+int8_t returnToLine(void){
 
 	double deltaAngle;
 	uint32_t LEDs = GetLightSensorValues();
@@ -166,12 +172,22 @@ uint8_t returnToLine(void){
 
 	}
 
-
+	// successfully back
 	if(lineIsInTheMiddle >= 2)
 	{
+		HAL_TIM_Base_Stop(&htim14);
 		leftMotor(0);
 		rightMotor(0);
 		return 1;
+	}
+
+	// 3 sec is over
+	if(TIM14->CNT > 30000)
+	{
+		HAL_TIM_Base_Stop(&htim14);
+		leftMotor(0);
+		rightMotor(0);
+		return -1;
 	}
 
 	  deltaAngle = getEuler().x - savedAngle;
