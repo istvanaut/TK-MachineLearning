@@ -157,7 +157,6 @@ const osSemaphoreAttr_t SemUSSensorEdge_attributes = {
 };
 /* USER CODE BEGIN PV */
 
-uint8_t motorDisable = 0;
 
 // USSensor BEGIN
 
@@ -194,7 +193,11 @@ void StartTaskReward(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+typedef enum systemState{
+	NETWORK, TRACK_LOST, RETURNING_TO_TRACK
+}systemState;
 
+systemState actualState = NETWORK;
 /* USER CODE END 0 */
 
 /**
@@ -220,6 +223,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
+
 
   /* USER CODE END SysInit */
 
@@ -992,17 +996,19 @@ static void MX_GPIO_Init(void)
 void StartTaskDeafult(void *argument)
 {
   /* USER CODE BEGIN 5 */
+
 	leftMotor(-0.7);
 	rightMotor(-0.7);
-	uint32_t LEDs;
-	uint16_t leftSide;
-	uint16_t rightSide;
-	int LLS, LS, RS, RRS;
+	uint32_t LEDs;		// vonalkövetéshez
+	uint16_t leftSide; 	// vonalkövetéshez
+	uint16_t rightSide; 	// vonalkövetéshez
+	int LLS, LS, RS, RRS; // vonalkövetéshez
   /* Infinite loop */
   for(;;)
   {
-	  /*
-	  if (!motorDisable)
+	  /* VONAL KÖVETÉS*/
+
+	  if (actualState == NETWORK)
 	  {
 		  LLS = LS = RS = RRS = 0;
 		  LEDs = GetLightSensorValues();
@@ -1054,7 +1060,32 @@ void StartTaskDeafult(void *argument)
 			  rightMotor(0.6);
 		  }
 	  }
-	  */
+
+
+	  switch(actualState)
+	  {
+		  case NETWORK:
+			  // running the NN
+			  if(!onTheTrack()){
+				  actualState = TRACK_LOST;
+			  }
+			  break;
+
+		  case TRACK_LOST:
+			  trackLost();
+			  actualState = RETURNING_TO_TRACK;
+			  break;
+
+		  case RETURNING_TO_TRACK:
+			  if(returnToLine()){
+				  actualState = NETWORK;
+			  }
+			  break;
+
+		  default:
+			  leftMotor(0);
+			  rightMotor(0);
+	  }
 	  osDelay(10);
   }
   /* USER CODE END 5 */
@@ -1134,15 +1165,15 @@ void StartTaskEmergencyBreaking(void *argument)
 	  rDist = (unsigned int)getUSDistanceRight();
 	  mDist = (unsigned int)getLaserDistance();
 
-	  if (lDist < 50 || rDist < 50 || mDist < 500)
+	  if (lDist < 20 || rDist < 20 || mDist < 200)
 	  {
-		  motorDisable = 1;
+		  setMotorEnable(MOTOR_DISABLE);
 		  leftMotor(0);
 		  rightMotor(0);
 	  }
 	  else
 	  {
-		  motorDisable = 0;
+		  setMotorEnable(MOTOR_ENABLE);
 	  }
 
 	  osDelay(10);
