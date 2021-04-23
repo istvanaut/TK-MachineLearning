@@ -25,6 +25,8 @@
 uint32_t PrevLightSensor = 0;
 uint8_t PrevPos = 0;
 int8_t PrevAnalysedMove = 0;
+int8_t moveAnalysisResult = 0;
+double savedAngle = 0;
 
 int8_t moveAnalysis(uint32_t LightSensor);
 
@@ -96,6 +98,7 @@ int GetReward ()
 	uint8_t obstacle = (LaserDistance < 500 || USLeft < 50 || USRight < 50);
 	uint8_t lineLosted = PrevLightSensor && !LightSensor;
 	int8_t analysedMove = moveAnalysis(LightSensor);
+	moveAnalysisResult = analysedMove;
 
 	// Calculate reward
 	if(obstacle && (VelocityLeft > 0.01 || VelocityRight > 0.01))
@@ -134,8 +137,83 @@ int GetReward ()
 
 }
 
-void returnToLine(void){
+uint8_t onTheTrack(void){
+	if(moveAnalysisResult == -2){
+		return 0;
+	}
+	return 1;
+}
+
+void trackLost(void){
+	savedAngle = getEuler().x;
+
+	leftMotor(-0.6);
+	rightMotor(-0.6);
+}
+
+uint8_t returnToLine(void){
+
+	double deltaAngle;
+	uint32_t LEDs = GetLightSensorValues();
+	uint8_t lineIsInTheMiddle = 0;
+
+	uint32_t startVal = 0x00040000;
+	for (uint8_t i = 0; i < 6; i++)
+	{
+		if((startVal >> i) & LEDs){
+			lineIsInTheMiddle++;
+		}
+
+	}
 
 
-	return;
+	if(lineIsInTheMiddle >= 2)
+	{
+		leftMotor(0);
+		rightMotor(0);
+		return 1;
+	}
+
+	  deltaAngle = getEuler().x - savedAngle;
+	  if(deltaAngle > 180){
+		  deltaAngle -= 360;
+	  }
+	  else if(deltaAngle < -180){
+		  deltaAngle += 360;
+	  }
+
+	  // compare the 5 options
+	  if (deltaAngle < -7.5)
+	  {
+		  if (deltaAngle < -15)
+		  {
+			  leftMotor(-0.4);
+			  rightMotor(-0.6);
+		  }
+		  else
+		  {
+			  leftMotor(-0.45);
+			  rightMotor(-0.6);
+		  }
+	  }
+	  else if (deltaAngle > 7.5)
+	  {
+		  if (deltaAngle > 15)
+		  {
+			  leftMotor(-0.65);
+			  rightMotor(-0.4);
+		  }
+		  else
+		  {
+			  leftMotor(-0.63);
+			  rightMotor(-0.45);
+		  }
+	  }
+	  else
+	  {
+		  leftMotor(-0.6);
+		  rightMotor(-0.6);
+	  }
+
+	return 0;
 }
