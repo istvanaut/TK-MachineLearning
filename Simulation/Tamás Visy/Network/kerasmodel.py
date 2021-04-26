@@ -85,6 +85,9 @@ class KerasModel:
         self.network = network
         # self.predict_as_tensor = tf.function(self.model.call)
 
+    def save(self):
+        self.network.save_weights(file_name)
+
     def load(self):
         if os.path.isfile(f'{file_name}.data-00000-of-00001'):  # search for actual file
             self.network.load_weights(file_name)

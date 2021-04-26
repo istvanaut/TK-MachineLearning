@@ -7,6 +7,7 @@ from enum import Enum
 class AgentTypes(Enum):  # Implementations of Agent
     Network = 1
     Keras = 2
+    Omniscient = 3
 
 
 class NetworkAgentModelTypes(Enum):  # Implementations of NetworkAgents Model
@@ -25,7 +26,7 @@ class EnvironmentTypes(Enum):  # Implementations of Environment
 # Settings of training
 TRAIN = True
 TRAIN_PER_DECISION = False
-AGENT_TYPE = AgentTypes.Network
+AGENT_TYPE = AgentTypes.Keras
 NETWORK_AGENT_MODEL_TYPE = NetworkAgentModelTypes.FlatDense
 ENVIRONMENT_TYPE = EnvironmentTypes.CARLA
 TARGET_FRAME_TIME = 0.25

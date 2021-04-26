@@ -43,6 +43,12 @@ class KerasAgent(Agent):
 
         self.model = KerasModel()
 
+    def save(self):
+        self.model.save()
+
+    def save_as_tflite(self):
+        self.model.save_as_tflite()
+
     def load(self):
         self.model.create()
         self.model.load()
@@ -82,6 +88,3 @@ class KerasAgent(Agent):
             val = trainables[:val_len]
             train = trainables[val_len:]
         self.model.train(train=train, test=val, epochs=4)
-
-    def save_as_tflite(self):
-        self.model.save_as_tflite()
