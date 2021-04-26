@@ -68,7 +68,7 @@ class KerasAgent(Agent):
         logger.critical('Optimize unsupported for this agent.')
 
     def train_on_memory(self, memory):
-        states = [prev_state for (prev_state, action, new_state) in memory]
+        states = [prev_state for (prev_state, prev_action, state) in memory]
         self.train_model(states)
 
     def train_model(self, data=None):

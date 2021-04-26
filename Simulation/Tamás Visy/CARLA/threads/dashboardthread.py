@@ -11,11 +11,11 @@ class DashboardThread(Thread):
         self.window = None
 
     def run(self):
-        logger.info(f'{self.__class__.__name__} started')
+        logger.debug(f'{self.__class__.__name__} started')
         self.window = Window()
-        logger.info(f'{self.__class__.__name__} ready')
+        logger.debug(f'{self.__class__.__name__} ready')
         self.window.work()
-        logger.info(f'{self.__class__.__name__} finished')
+        logger.debug(f'{self.__class__.__name__} finished')
 
     def handle(self, state, out=None):
         if self.window is not None:

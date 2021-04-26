@@ -40,10 +40,10 @@ class NetworkAgent(Agent):
     def train_on_memory(self, memory):
         x = 0
         r = [[], []]
-        for (prev_state, action, new_state) in memory:
+        for (prev_state, prev_action, state) in memory:
             x += 1
-            reward = self.optimize(new_state, prev_state, action)
-            r[action].append(reward)
+            reward = self.optimize(state, prev_state, prev_action)
+            r[prev_action].append(reward)
         logger.info(f'Successfully trained {x} times')
         for i, action_rewards in enumerate(r):
             logger.info(f'Action rewards (ID, AVG, AMOUNT) '
@@ -81,5 +81,6 @@ class NetworkAgent(Agent):
             return LCNN
         if model_type is NetworkAgentModelTypes.SCNN:
             return SCNN
+        # TODO (6) add FlatDense here
         else:
             raise RuntimeError('Model class not found in NetworkAgent')

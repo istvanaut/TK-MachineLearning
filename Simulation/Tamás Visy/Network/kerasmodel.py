@@ -79,7 +79,7 @@ class KerasModel:
 
         network.compile(loss=loss, optimizer=SGD(lr=LEARNING_RATE), metrics=['accuracy'])
 
-        logger.warning('Skipping kerasmodel summary')
+        logger.debug('Skipping kerasmodel summary')
         # network.summary()
 
         self.network = network
@@ -91,7 +91,7 @@ class KerasModel:
     def load(self):
         if os.path.isfile(f'{file_name}.data-00000-of-00001'):  # search for actual file
             self.network.load_weights(file_name)
-            logger.info(f'Successfully loaded {file_name} model in KerasModel.load()')
+            logger.debug(f'Successfully loaded {file_name} model in KerasModel.load()')
         else:
             logger.error(f'{file_name} file not found in KerasModel.load()')
 
@@ -99,7 +99,7 @@ class KerasModel:
         # awaiting as {ndarray: (X,)}
         # inside: x {ndarray: (2,)}
         # inside: {ndarray: (width, height)}* and float?         *or other way (height, width)
-        logger.info(f'Num GPUs Available: {len(tf.config.experimental.list_physical_devices("GPU"))}')
+        logger.debug(f'Num GPUs Available: {len(tf.config.experimental.list_physical_devices("GPU"))}')
 
         model_checkpoint_callback = keras.callbacks.ModelCheckpoint(
             filepath=checkpoint_file_names,
@@ -114,7 +114,7 @@ class KerasModel:
         for i in list(range(1000))[::-1]:
             path = checkpoint_file_names.format(epoch=i)
             if not found and os.path.isfile(path):
-                logger.info(f'File exists, loading checkpoint {path}')
+                logger.debug(f'File exists, loading checkpoint {path}')
                 self.network.load_weights(path)
                 if epochs is None:
                     initial_epoch = i

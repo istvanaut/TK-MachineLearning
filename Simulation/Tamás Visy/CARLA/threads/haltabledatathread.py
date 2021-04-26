@@ -26,7 +26,7 @@ class HaltableDataThread(Thread):
         self.stop = True
 
     def beginning(self):
-        logger.info(f'{self.__class__.__name__} started')
+        logger.debug(f'{self.__class__.__name__} started')
 
     def loop(self):
         pass

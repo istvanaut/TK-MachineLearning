@@ -13,15 +13,13 @@ from support.datakey import DataKey
 from support.logger import logger
 from threads.dashboardthread import DashboardThread
 
-logger.warning(f'Train is {TRAIN}')
-logger.warning(f'Train per decision is {TRAIN_PER_DECISION}')
 
 # TODO (10) update control from (steering, vel) to (left-motor, right-motor)
 # TODO (8) refactor to carla, network and simulation parts (make difference clearer)
 
 
 def main():
-    logger.info('Starting')
+    logger.debug('main starting')
 
     if ENVIRONMENT_TYPE is EnvironmentTypes.CARLA:
         env = CarlaEnvironment()
@@ -30,7 +28,6 @@ def main():
     else:
         logger.critical('Unknown environment type in main, raising error')
         raise RuntimeError('Unknown environment type in main')
-    logger.info(f'Environment is {type(env).__name__}')
 
     if AGENT_TYPE is AgentTypes.Network:
         agent = NetworkAgent(NETWORK_AGENT_MODEL_TYPE)
@@ -45,7 +42,6 @@ def main():
     else:
         logger.critical('Unknown agent type in main, raising error')
         raise RuntimeError('Unknown agent type in main')
-    logger.info(f'Agent is {type(agent).__name__}')
 
     dashboard = DashboardThread()
 
@@ -54,15 +50,24 @@ def main():
 
     memory = []
 
+    log_settings(agent, env, statefilters, outfilters)
+
     try:
         env.setup()
         agent.load()
 
         env.start()
         dashboard.start()
-        logger.info('Starting...')
+        logger.info('Run starting...')
         while True:
             do_run(env, agent, dashboard, statefilters, outfilters, memory)
+
+            logger.info('Finished')
+            dashboard.clear()
+            env.reset()
+
+            train(agent, memory)
+            logger.info('Continuing...')
 
     finally:
         agent.save()
@@ -71,6 +76,21 @@ def main():
                 actor.destroy()
             del env  # Make sure to forget env after we cleaned up it's actors
         logger.debug('Cleaned up')
+
+
+def log_settings(agent, env, statefilters, outfilters):
+    logger.info(f'Train is {TRAIN}')
+    logger.info(f'Train per decision is {TRAIN_PER_DECISION}')
+    logger.info(f'Environment is {type(env).__name__}')
+    logger.info(f'Agent is {type(agent).__name__}')
+
+    if len(statefilters) > 0:
+        for i, sf in enumerate(statefilters):
+            logger.info(f'{i}. {type(sf).__name__}')
+
+    if len(outfilters) > 0:
+        for i, of in enumerate(outfilters):
+            logger.info(f'{i}. {type(of).__name__}')
 
 
 def do_run(env, agent, dashboard, statefilters, outfilters, memory):
@@ -117,21 +137,7 @@ def do_run(env, agent, dashboard, statefilters, outfilters, memory):
         apply_frame_time(frame_start)
 
         status = env.check()
-
-    logger.info('Finished')
-    dashboard.clear()
-    env.reset()
-    logger.info(f'~~~ {status} ~~~')
-    time.sleep(1.0)
-
-    if TRAIN and not TRAIN_PER_DECISION:
-        if len(memory) >= TRAIN_MEMORY_SIZE:
-            logger.info(f'Starting training with memory of {len(memory)}')
-            agent.train_on_memory(memory)
-            memory.clear()
-        else:
-            logger.info(f'Memory not full, {len(memory)}/{TRAIN_MEMORY_SIZE}')
-    logger.info('Continuing...')
+    logger.info(f'{status}')
 
 
 def apply_frame_time(frame_start):
@@ -143,6 +149,17 @@ def apply_frame_time(frame_start):
         time.sleep(TARGET_FRAME_TIME - diff // 1_000)
     else:
         logger.warning('Frame time issue')
+
+
+def train(agent, memory):
+    # memory is a list, containing (prev_state, prev_action, state) triplets
+    if TRAIN and not TRAIN_PER_DECISION:
+        if len(memory) >= TRAIN_MEMORY_SIZE:
+            logger.info(f'Starting training with memory of {len(memory)}')
+            agent.train_on_memory(memory)
+            memory.clear()
+        else:
+            logger.info(f'Memory not full, {len(memory)}/{TRAIN_MEMORY_SIZE}')
 
 
 if __name__ == '__main__':
