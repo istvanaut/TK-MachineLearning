@@ -26,17 +26,11 @@ class EnvironmentTypes(Enum):  # Implementations of Environment
 # Settings of training
 TRAIN = True
 TRAIN_PER_DECISION = False
-AGENT_TYPE = AgentTypes.Keras
+AGENT_TYPE = AgentTypes.Network
 NETWORK_AGENT_MODEL_TYPE = NetworkAgentModelTypes.FlatDense
 ENVIRONMENT_TYPE = EnvironmentTypes.CARLA
 TARGET_FRAME_TIME = 0.25
-TRAIN_MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
-
-
-# Determines if the run is 'pure' -> no noise or auto-driving applied to agent output
-def pure(run_index):
-    return True
-
+TRAIN_MEMORY_SIZE = 1024  # Or use something depending on TARGET_FRAME_TIME, like a * TARGET_FRAME_TIME + b
 
 # Agent settings
 choices = [[0.25, -0.1],
