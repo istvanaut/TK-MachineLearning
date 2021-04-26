@@ -8,6 +8,7 @@ from environments.carlaenvironment import CarlaEnvironment
 from environments.status import Status
 from environments.replayenvironment import ReplayEnvironment
 from filters.imagenoisefilter import ImageNoiseFilter
+from filters.motornoisefilter import MotorNoiseFilter
 from settings import *  # This saves us from multiple lines of individual imports
 from support.datakey import DataKey
 from support.logger import logger
@@ -45,12 +46,12 @@ def main():
 
     dashboard = DashboardThread()
 
-    statefilters = [ImageNoiseFilter(st_dev=0.03)]
-    outfilters = []
+    statefilters = [ImageNoiseFilter(st_dev=0.02)]
+    outputfilters = [MotorNoiseFilter(st_dev=0.1)]
 
     memory = []
 
-    log_settings(agent, env, statefilters, outfilters)
+    log_settings(agent, env, statefilters, outputfilters)
 
     try:
         env.setup()
@@ -60,9 +61,8 @@ def main():
         dashboard.start()
         logger.info('Run starting...')
         while True:
-            do_run(env, agent, dashboard, statefilters, outfilters, memory)
+            do_run(env, agent, dashboard, statefilters, outputfilters, memory)
 
-            logger.info('Finished')
             dashboard.clear()
             env.reset()
 
@@ -78,22 +78,28 @@ def main():
         logger.debug('Cleaned up')
 
 
-def log_settings(agent, env, statefilters, outfilters):
+def log_settings(agent, env, statefilters, outputfilters):
     logger.info(f'Train is {TRAIN}')
     logger.info(f'Train per decision is {TRAIN_PER_DECISION}')
     logger.info(f'Environment is {type(env).__name__}')
     logger.info(f'Agent is {type(agent).__name__}')
 
     if len(statefilters) > 0:
+        logger.info('StateFilters:')
         for i, sf in enumerate(statefilters):
-            logger.info(f'{i}. {type(sf).__name__}')
+            logger.info(f'\t{i}. {type(sf).__name__}')
+    else:
+        logger.info('No StateFilters')
 
-    if len(outfilters) > 0:
-        for i, of in enumerate(outfilters):
-            logger.info(f'{i}. {type(of).__name__}')
+    if len(outputfilters) > 0:
+        logger.info('OutputFilters:')
+        for i, of in enumerate(outputfilters):
+            logger.info(f'\t{i}. {type(of).__name__}')
+    else:
+        logger.info('No OutputFilters')
 
 
-def do_run(env, agent, dashboard, statefilters, outfilters, memory):
+def do_run(env, agent, dashboard, statefilters, outputfilters, memory):
     env.clear()
     status = Status()
     prev_state = None
@@ -118,7 +124,7 @@ def do_run(env, agent, dashboard, statefilters, outfilters, memory):
         action, out = agent.predict(state)
 
         # Apply filters to output
-        for of in outfilters:
+        for of in outputfilters:
             action, out = of.filter(action, out)
 
         # Update dashboard

@@ -79,7 +79,7 @@ class Window:
         self.draw_image(image)
 
         count = len(names)
-        square_sides = np.ceil(np.sqrt(count))
+        square_sides = int(np.ceil(np.sqrt(count)))
         # TODO (3) better without + 50?
         side_start = min(self.window_size) + 50
         top_start = 50
@@ -134,7 +134,7 @@ class Window:
             text = '~T~'
         elif type(text) is str:
             pass
-        elif isinstance(text, list) or isinstance(text, tuple):
+        elif isinstance(text, list) or isinstance(text, tuple) or type(text) is np.ndarray:
             # If text is a list - show first 3 char's of first 3 items
             t = []
             for i in range(min(len(text), 4)):

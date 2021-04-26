@@ -114,7 +114,7 @@ def convert(packed_state):
     angular_acceleration[0] = np.tanh(angular_acceleration[0])
     angular_acceleration[1] = np.tanh(angular_acceleration[1])
     angular_acceleration[2] = np.tanh(angular_acceleration[2])
-    # TODO (8) normalize angular_acceleration
+    # TODO (8) scale angular_acceleration
 
     # position: m, {list: 3} - floats
     # -> {list: 3}, scaled, normalized
