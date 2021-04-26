@@ -6,7 +6,7 @@ from support.datakey import DataKey
 from support.logger import logger
 
 
-class BaseThread(Thread):
+class HaltableDataThread(Thread):
 
     def __init__(self, data):
         super().__init__()

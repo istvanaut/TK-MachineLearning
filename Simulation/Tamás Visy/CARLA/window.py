@@ -19,7 +19,6 @@ class Window:
         self.starting_dir = None
         self.state = None
         self.agent_out = None
-        self.pure = False
         self.i = 0
         colors = []
         color_1 = (200, 200, 200)
@@ -61,15 +60,14 @@ class Window:
             pygame.display.update()
 
     def clear(self):
-        self.handle(None, None, None, None, None, False)
+        self.handle(None, None, None, None, None)
 
-    def handle(self, data, path, starting_dir, state, out, pure):
+    def handle(self, data, path, starting_dir, state, out):
         self.data = data
         self.path = path
         self.starting_dir = starting_dir
         self.state = state
         self.agent_out = out
-        self.pure = pure
 
     def add_event(self, event):
         pygame.event.post(pygame.event.Event(event))
@@ -80,8 +78,6 @@ class Window:
     def update_screen(self):
         image, data, names = self.state.get_formatted()
         self.insert_placeholder(data, names)
-        names.insert(4, 'some kind of cheaty drive')
-        data.insert(4, (not self.pure))
 
         names.append('out')
         data.append(self.agent_out)

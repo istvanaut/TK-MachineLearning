@@ -1,5 +1,3 @@
-import random
-
 import numpy as np
 
 from Networks import CNNwDense, CNNwRNN, LCNN
@@ -27,23 +25,13 @@ class NetworkAgent(Agent):
                                         height=AGENT_IM_HEIGHT, width=AGENT_IM_WIDTH,
                                         n_actions=choices_count, model=self.model_class)
 
-    def predict(self, state, pure=True, auto=False):
+    def predict(self, state):
         if state is None:
             return None, None
         action = self.model.predict(state)
         try:
             # Copy value, not reference
             choice = self.choices[action][:]
-
-            if pure is not True:
-                choice[1] += -0.05 + random.random() / 10
-
-            if pure is not True and auto is True:
-                if action is 0:
-                    choice[1] *= -1 * state.side
-                if action is 1:
-                    choice[1] *= 1 * state.side
-
             return action, choice
         except RuntimeError:
             logger.error(f'Error when trying to find right value for {action}')

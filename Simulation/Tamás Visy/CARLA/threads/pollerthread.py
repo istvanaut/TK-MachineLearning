@@ -1,11 +1,11 @@
 import time
 
 from support.logger import logger
-from threads.basethread import BaseThread
+from threads.haltabledatathread import HaltableDataThread
 from support.datakey import DataKey
 
 
-class PollerThread(BaseThread):
+class PollerThread(HaltableDataThread):
     vehicle = None
 
     def set_vehicle(self, v):

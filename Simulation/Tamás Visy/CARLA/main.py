@@ -15,6 +15,7 @@ logger.warning(f'Train is {TRAIN}')
 logger.warning(f'Train per decision is {TRAIN_PER_DECISION}')
 
 # TODO (10) update control from (steering, vel) to (left-motor, right-motor)
+# TODO (8) refactor to carla, network and simulation parts (make difference clearer)
 
 
 def main():
@@ -54,6 +55,7 @@ def main():
         dashboard.start()
         logger.info('Starting...')
         while True:
+            # TODO (6) try to refactor this
             env.clear()
             status = Status()
 
@@ -70,10 +72,9 @@ def main():
                 if TRAIN and TRAIN_PER_DECISION and prev_state is not None:
                     agent.optimize(state)
 
-                # TODO (9) remove cheating
-                #  apply noise out here
-                action, out = agent.predict(state, pure=pure(run_index), auto=not pure(run_index))
-                dashboard.handle(data, path, starting_dir, state, out, pure=pure(run_index))
+                action, out = agent.predict(state)
+
+                dashboard.handle(data, path, starting_dir, state, out)
 
                 if out is not None:
                     env.put(DataKey.CONTROL_OUT, out)
