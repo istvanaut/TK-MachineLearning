@@ -2,7 +2,7 @@ from environments.carlaenvironment import CarlaEnvironment
 from environments.replayenvironment import ReplayEnvironment
 from filters.imagenoisefilter import ImageNoiseFilter
 from filters.motornoisefilter import MotorNoiseFilter
-from mainloops import normal_main_loop
+from mainloops import normal_main_loop, train_multiple_main_loop
 from settings import ENVIRONMENT_TYPE, EnvironmentTypes, TRAIN, TRAIN_PER_DECISION
 from support.logger import logger
 from threads.dashboardthread import DashboardThread
@@ -35,7 +35,8 @@ def main():
         env.start()
         dashboard.start()
 
-        normal_main_loop(env, dashboard, statefilters, outputfilters)
+        # normal_main_loop(env, dashboard, statefilters, outputfilters)
+        train_multiple_main_loop(env, dashboard, statefilters, outputfilters)
 
     finally:
         if env is not None:
