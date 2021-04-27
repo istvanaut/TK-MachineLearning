@@ -141,7 +141,7 @@ class KerasModel:
         test_x = np.array([i[0] for i in test]).reshape([-1, INPUT_SHAPE[0], INPUT_SHAPE[1], INPUT_SHAPE[2]])
         test_y = np.array([i[1] for i in test])
 
-        logger.info('Starting training on {} data with {} data as test set'.format(len(train_x), len(test_x)))
+        logger.debug('Starting training on {} data with {} data as test set'.format(len(train_x), len(test_x)))
 
         if epochs is None:
             e = 10

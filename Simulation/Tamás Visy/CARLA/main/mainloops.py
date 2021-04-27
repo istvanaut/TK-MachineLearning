@@ -1,13 +1,14 @@
 from agents.kerasagent import KerasAgent
 from agents.networkagent import NetworkAgent
 from agents.omniscientagent import OmniscientAgent
+from filters.imagenoisefilter import ImageNoiseFilter
 from filters.motornoisefilter import MotorNoiseFilter
 from mainsupport import train, do_run
 from settings import AGENT_TYPE, AgentTypes, NETWORK_AGENT_MODEL_TYPE, NetworkAgentModelTypes
 from support.logger import logger
 
 
-def normal_main_loop(env, dashboard, statefilters, outputfilters):
+def normal_main_loop(env, dashboard):
     if AGENT_TYPE is AgentTypes.Network:
         agent = NetworkAgent(NETWORK_AGENT_MODEL_TYPE)
     elif AGENT_TYPE is AgentTypes.Keras:
@@ -18,6 +19,9 @@ def normal_main_loop(env, dashboard, statefilters, outputfilters):
         logger.critical('Unknown agent type in main, raising error')
         raise RuntimeError('Unknown agent type in main')
     agent.load()
+
+    statefilters = [ImageNoiseFilter(st_dev=0.001)]  # st_dev = 0.02 is alright
+    outputfilters = [MotorNoiseFilter(st_dev=0.001)]  # st_dev = 0.05 is alright
 
     memory = []
     i = 0
@@ -35,38 +39,45 @@ def normal_main_loop(env, dashboard, statefilters, outputfilters):
         i += 1
 
 
-def log_agents_for_train_multiple_main_loop(trainer, trainees):
-    if trainer is not None:
-        logger.info(f'Trainer is {type(trainer).__name__}')
+def log_list(li_name, li):
+    if li is not None and len(li) > 0:
+        logger.info(f'{li_name}:')
+        for i, x in enumerate(li):
+            logger.info(f'\t{i}. {type(x).__name__}')
     else:
-        logger.info(f'No Trainer is used')
-
-    if len(trainees) > 0:
-        logger.info('Trainees:')
-        for i, t in enumerate(trainees):
-            logger.info(f'\t{i}. {type(t).__name__}')
-    else:
-        logger.info(f'No Trainees')
+        logger.info(f'No {li_name}')
 
 
-def train_multiple_main_loop(env, dashboard, statefilters, outputfilters):
+def train_multiple_main_loop(env, dashboard):
     # TODO (6) filters name, log, show properly
     trainer_agent = OmniscientAgent()
 
-    trainees = [KerasAgent(), NetworkAgent(NetworkAgentModelTypes.SCNN)]
+    trainees = [NetworkAgent(NetworkAgentModelTypes.SCNN), KerasAgent()]
+
+    trainer_statefilters = [ImageNoiseFilter(st_dev=0.0001)]  # st_dev = 0.02 is alright
+    trainee_statefilters = []  # st_dev = 0.02 is alright
+    trainer_outputfilters = [MotorNoiseFilter(st_dev=0.05)]  # st_dev = 0.05 is alright
+    trainee_outputfilters = [MotorNoiseFilter(st_dev=0.001)]  # st_dev = 0.05 is alright
+
+    memory = []
 
     trainer_agent.load()
     for t in trainees:
         t.load()
 
-    log_agents_for_train_multiple_main_loop(trainer_agent, trainees)
+    logger.info(f'TrainerAgent is {type(trainer_agent).__name__}')
+    log_list('Trainees', trainees)
+    log_list('Trainer StateFilters', trainer_statefilters)
+    log_list('Trainee StateFilters', trainee_statefilters)
+    log_list('Trainer OutputFilters', trainer_outputfilters)
+    log_list('Trainee OutputFilters', trainee_outputfilters)
 
-    memory = []
-    while True:
+    for j in range(10):
+        logger.info(f'Starting epoch {j}')
         for i in range(4):
             env.load_path(i)
 
-            traveled = do_run(trainer_agent, env, dashboard, statefilters, [MotorNoiseFilter(st_dev=0.15)], memory)
+            traveled = do_run(trainer_agent, env, dashboard, trainer_statefilters, trainer_outputfilters, memory)
             logger.info(f'TrainerAgent finished Course {i}, traveled {traveled} meters')
 
             dashboard.clear()
@@ -74,11 +85,11 @@ def train_multiple_main_loop(env, dashboard, statefilters, outputfilters):
             logger.info('Continuing...')
 
         for trainee in trainees:
-            train(trainee, memory)
+            train(trainee, memory[:])
             for i in range(4):
                 env.load_path(i)
 
-                traveled = do_run(trainee, env, dashboard, statefilters, outputfilters, memory)
+                traveled = do_run(trainee, env, dashboard, trainee_statefilters, trainee_outputfilters, [])
                 logger.info(f'Trainee {type(trainee).__name__} finished Course {i}, traveled {traveled} meters')
                 # TODO (6) give names to agents - using the hash of their model
 

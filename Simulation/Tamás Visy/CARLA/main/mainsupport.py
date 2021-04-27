@@ -70,7 +70,7 @@ def train(agent, memory):
     # memory is a list, containing (prev_state, prev_action, state) triplets
     if TRAIN and not TRAIN_PER_DECISION:
         if TRAIN_MEMORY_SIZE is None or len(memory) >= TRAIN_MEMORY_SIZE:
-            logger.info(f'Starting training with memory of {len(memory)}')
+            logger.info(f'{type(agent).__name__} is starting training with memory of {len(memory)}')
             agent.train_on_memory(memory)
             memory.clear()
         else:

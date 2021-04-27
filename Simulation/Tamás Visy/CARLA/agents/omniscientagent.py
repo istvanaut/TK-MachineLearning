@@ -19,10 +19,10 @@ class OmniscientAgent(Agent):
             return 0, choices[0]
 
     def optimize(self, new_state):
-        logger.error('OmniscientAgent does not optimize')
+        logger.debug('OmniscientAgent does not optimize')
 
     def save(self):
-        logger.error('OmniscientAgent does not save')
+        logger.debug('OmniscientAgent does not save')
 
     def load(self):
-        logger.error('OmniscientAgent does not load')
+        logger.debug('OmniscientAgent does not load')
