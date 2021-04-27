@@ -1,6 +1,8 @@
+import random
+
 import numpy as np
 
-from Networks import CNNwDense, CNNwRNN, LCNN
+from Networks import CNNwDense, CNNwRNN, LCNN, FlatDense
 from Networks.SCNN import SCNN
 from ReinforcementModel import ReinforcementModel
 from agents.agent import Agent
@@ -81,6 +83,8 @@ class NetworkAgent(Agent):
             return LCNN
         if model_type is NetworkAgentModelTypes.SCNN:
             return SCNN
-        # TODO (6) add FlatDense here
+        if model_type is NetworkAgentModelTypes.FlatDense:
+            return FlatDense
         else:
             raise RuntimeError('Model class not found in NetworkAgent')
+

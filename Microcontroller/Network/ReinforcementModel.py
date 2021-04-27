@@ -47,7 +47,7 @@ class ReinforcementModel:
         self.EPS_START = 0.9
         self.EPS_END = 0.05  # with 2 choices this means 0.4/2 -> 20% are wrong random choices (should be tolerable)
         self.EPS_DECAY = 200 # This should equal a couple of short runs
-        self.TARGET_UPDATE = 50
+        self.TARGET_UPDATE = 100
         self.steps_done = 0
         self.time_step = 0
         self.n_training = 0
@@ -101,7 +101,6 @@ class ReinforcementModel:
         # After TARGET_UPDATE steps, replaces the target network's weights with the policy network's
         if reward is None:
             reward = self.reward(prev_state=self.prev_state, new_state=new_state)
-
         # if random.random() > 0.5:
         #     print(action, reward)
         self.rewards[self.n_training].append(reward)
