@@ -7,7 +7,7 @@ from support.datakey import DataKey
 from support.logger import logger
 
 
-def do_run(env, agent, dashboard, statefilters, outputfilters, memory):
+def do_run(agent, env, dashboard, statefilters, outputfilters, memory):
     env.clear()
     status = Status()
     prev_state = None
@@ -51,7 +51,8 @@ def do_run(env, agent, dashboard, statefilters, outputfilters, memory):
         apply_frame_time(frame_start)
 
         status = env.check()
-    logger.info(f'{status}')
+    logger.debug(f'{status}')
+    return status.traveled
 
 
 def apply_frame_time(frame_start):
