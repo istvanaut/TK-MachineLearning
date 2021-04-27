@@ -1,4 +1,5 @@
 import random
+import threading
 
 import numpy as np
 import icarla
@@ -13,6 +14,7 @@ from support.logger import logger
 from threads.controllerthread import ControllerThread
 from support.data import Data
 from threads.pollerthread import PollerThread
+from threads.spectatorfollowthread import SpectatorFollowThread
 
 
 # Town05 has best paths on the inside of the motorway (still in the town)
@@ -34,6 +36,7 @@ class CarlaEnvironment(Environment):
 
         self.c = ControllerThread(self.data)
         self.p = PollerThread(self.data)
+        self.s = SpectatorFollowThread(self.data)
 
         self.connection = Connection()
 
@@ -48,6 +51,8 @@ class CarlaEnvironment(Environment):
     def start(self):
         self.c.start()
         self.p.start()
+        self.s.start()
+        self.s.set_spectator_and_connection(icarla, self.connection)
 
     def reset(self, do_update_path=True):
         logger.debug('Resetting actors')
@@ -65,16 +70,7 @@ class CarlaEnvironment(Environment):
                                     self.path.start[1] + 5 * np.sin(self.path.direction()[1]),
                                     12.0).location
         rotation = icarla.rotation([-85, self.path.direction()[1] / np.pi * 180.0, 0])
-        self.__spectator_move_and_rotate(position, rotation)
         logger.info('Environment reset successful')
-
-    def __spectator_move_and_rotate(self, position, direction):
-        icarla.move(self.connection.world.get_spectator(),
-                    position)
-
-        # Apparently UE4 spectator doesn't like exact 90 degrees, keep it less?
-        icarla.rotate(self.connection.world.get_spectator(),
-                      direction)
 
     def clear(self):
         # Clears all data -> removes thread_halt -> threads can resume
@@ -91,18 +87,7 @@ class CarlaEnvironment(Environment):
         s = Status()
         s.check(self)
 
-        pos = self.data.get(DataKey.SENSOR_POSITION)
-        # TODO update rot to use line direction at current position
-        rot = self.data.get(DataKey.SENSOR_DIRECTION)
-        if pos is not None and rot is not None:
-            # position = icarla.transform(pos[0] + 5 * np.cos(rot[1]),
-            #                             pos[1] + 5 * np.sin(rot[1]),
-            #                             12.0).location
-            position = icarla.transform(pos[0],
-                                        pos[1],
-                                        12.0).location
-            rotation = icarla.rotation([-85, rot[1], 0])
-            self.__spectator_move_and_rotate(position, rotation)
+
         return s
 
     def __set_conditions(self):
