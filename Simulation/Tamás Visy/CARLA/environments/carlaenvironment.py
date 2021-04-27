@@ -51,7 +51,6 @@ class CarlaEnvironment(Environment):
     def start(self):
         self.c.start()
         self.p.start()
-        self.s.set_spectator(self.connection.world.get_spectator())
         self.s.start()
 
     def reset(self, do_update_path=True):
@@ -67,6 +66,8 @@ class CarlaEnvironment(Environment):
 
         icarla.move(self.vehicle, icarla.transform(self.path.start[0], self.path.start[1], 0.25).location)
         icarla.rotate(self.vehicle, icarla.rotation_from_radian(self.path.direction()))
+
+        self.s.set_spectator_and_path(self.connection.world.get_spectator(), self.path)
 
         logger.debug('Environment reset successful')
 

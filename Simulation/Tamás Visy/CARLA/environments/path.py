@@ -47,8 +47,7 @@ class Path:
         if point is None:
             return self.segment(0).direction()
         else:
-            self.find_segment(point).direction()
-            return None
+            return self.find_segment(point).direction()
 
     def find_closest_point_index(self, point):
         dist = distance(point, self.points[0])

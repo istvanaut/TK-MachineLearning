@@ -108,13 +108,15 @@ def convert(packed_state):
     acceleration[1] = np.tanh(acceleration[1] / ACCELERATION_EACH_GOOD_VALUE)
     acceleration[2] = np.tanh(acceleration[2] / ACCELERATION_EACH_GOOD_VALUE)
 
+    # angular acceleration: ???
+    # -> ??? - subjective to the car?, scaled, normalized
     if angular_acceleration is None:
         angular_acceleration = [0, 0, 0]
+    ANUGLAR_ACCELERATION_EACH_GOOD_VALUE = 45.0
     # Normalized
-    angular_acceleration[0] = np.tanh(angular_acceleration[0])
-    angular_acceleration[1] = np.tanh(angular_acceleration[1])
-    angular_acceleration[2] = np.tanh(angular_acceleration[2])
-    # TODO (8) scale angular_acceleration
+    angular_acceleration[0] = np.tanh(angular_acceleration[0] / ANUGLAR_ACCELERATION_EACH_GOOD_VALUE)
+    angular_acceleration[1] = np.tanh(angular_acceleration[1] / ANUGLAR_ACCELERATION_EACH_GOOD_VALUE)
+    angular_acceleration[2] = np.tanh(angular_acceleration[2] / ANUGLAR_ACCELERATION_EACH_GOOD_VALUE)
 
     # position: m, {list: 3} - floats
     # -> {list: 3}, scaled, normalized
