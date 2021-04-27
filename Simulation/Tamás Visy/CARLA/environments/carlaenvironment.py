@@ -51,8 +51,8 @@ class CarlaEnvironment(Environment):
     def start(self):
         self.c.start()
         self.p.start()
+        self.s.set_spectator(self.connection.world.get_spectator())
         self.s.start()
-        self.s.set_spectator_and_connection(icarla, self.connection)
 
     def reset(self, do_update_path=True):
         logger.debug('Resetting actors')
@@ -67,10 +67,7 @@ class CarlaEnvironment(Environment):
 
         icarla.move(self.vehicle, icarla.transform(self.path.start[0], self.path.start[1], 0.25).location)
         icarla.rotate(self.vehicle, icarla.rotation_from_radian(self.path.direction()))
-        position = icarla.transform(self.path.start[0] + 5 * np.cos(self.path.direction()[1]),
-                                    self.path.start[1] + 5 * np.sin(self.path.direction()[1]),
-                                    12.0).location
-        rotation = icarla.rotation([-85, self.path.direction()[1] / np.pi * 180.0, 0])
+
         logger.debug('Environment reset successful')
 
     def clear(self):
