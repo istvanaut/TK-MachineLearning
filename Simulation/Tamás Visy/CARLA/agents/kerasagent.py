@@ -87,4 +87,7 @@ class KerasAgent(Agent):
             val_len = len(trainables)//10
             val = trainables[:val_len]
             train = trainables[val_len:]
-        self.model.train(train=train, test=val, epochs=4)
+        if len(train) > 0:
+            self.model.train(train=train, test=val, epochs=4)
+        else:
+            logger.error('Train has length 0')

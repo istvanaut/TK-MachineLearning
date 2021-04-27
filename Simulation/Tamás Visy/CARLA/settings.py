@@ -26,11 +26,11 @@ class EnvironmentTypes(Enum):  # Implementations of Environment
 # Settings of training
 TRAIN = True
 TRAIN_PER_DECISION = False
-AGENT_TYPE = AgentTypes.Network
+AGENT_TYPE = AgentTypes.Keras
 NETWORK_AGENT_MODEL_TYPE = NetworkAgentModelTypes.FlatDense
 ENVIRONMENT_TYPE = EnvironmentTypes.CARLA
 TARGET_FRAME_TIME = 0.25
-TRAIN_MEMORY_SIZE = 1024  # Or use something depending on TARGET_FRAME_TIME, like a * TARGET_FRAME_TIME + b
+TRAIN_MEMORY_SIZE = None  # 1024  # Or use something depending on TARGET_FRAME_TIME, like a * TARGET_FRAME_TIME + b
 
 # Agent settings
 choices = [[0.25, -0.1],
