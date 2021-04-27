@@ -2,11 +2,11 @@ import time
 
 import icarla
 from support.logger import logger
-from threads.basethread import BaseThread
+from threads.haltabledatathread import HaltableDataThread
 from support.datakey import DataKey
 
 
-class ControllerThread(BaseThread):
+class ControllerThread(HaltableDataThread):
     vehicle = None
 
     def __init__(self, data):

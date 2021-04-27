@@ -7,7 +7,7 @@
 
 #include "motors.h"
 
-#define ARR 2251u
+#define ARR 6751u
 
 extern osSemaphoreId_t SemMotorsHandle;
 

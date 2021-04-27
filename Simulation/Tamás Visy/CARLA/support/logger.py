@@ -5,6 +5,7 @@ from settings import WRITE_FILE, LEVEL
 logFormatter = logging.Formatter('%(asctime)s.%(msecs)03d\t  [%(threadName)s]\t[%(levelname)-3.3s]:\t%(message)s',
                                  '%Y.%m.%d %H:%M:%S')
 logger = logging.getLogger('carla_logger')
+# TODO (5) create logger level setting which always prints
 logger.level = LEVEL
 
 consoleHandler = logging.StreamHandler()

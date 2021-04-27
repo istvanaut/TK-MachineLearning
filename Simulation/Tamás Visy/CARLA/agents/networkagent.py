@@ -2,6 +2,7 @@ import random
 
 import numpy as np
 
+from Networks import CNNwDense, CNNwRNN, LCNN, FlatDense
 from Networks.SCNN import SCNN
 from ReinforcementModel import ReinforcementModel
 from agents.agent import Agent
@@ -10,8 +11,7 @@ from agents.state import get_feature_dimension
 from support.logger import logger
 
 feature_dimension = get_feature_dimension()
-AGENT_MODEL_PATH = 'files/tensor.pt'
-MODEL_TYPE = SCNN
+NETWORKAGENT_MODEL_PATH = 'files/torch/tensor.pt'
 
 
 class NetworkAgent(Agent):
@@ -27,23 +27,13 @@ class NetworkAgent(Agent):
                                         height=AGENT_IM_HEIGHT, width=AGENT_IM_WIDTH,
                                         n_actions=choices_count, model=self.model_class)
 
-    def predict(self, state, pure=True, auto=False):
+    def predict(self, state):
         if state is None:
             return None, None
         action = self.model.predict(state)
         try:
             # Copy value, not reference
             choice = self.choices[action][:]
-
-            if pure is not True:
-                choice[1] += -0.05 + random.random() / 10
-
-            if pure is not True and auto is True:
-                if action is 0:
-                    choice[1] *= -1 * state.side
-                if action is 1:
-                    choice[1] *= 1 * state.side
-
             return action, choice
         except RuntimeError:
             logger.error(f'Error when trying to find right value for {action}')
@@ -52,10 +42,10 @@ class NetworkAgent(Agent):
     def train_on_memory(self, memory):
         x = 0
         r = [[], []]
-        for (prev_state, action, new_state) in memory:
+        for (prev_state, prev_action, state) in memory:
             x += 1
-            reward = self.optimize(new_state, prev_state, action)
-            r[action].append(reward)
+            reward = self.optimize(state, prev_state, prev_action)
+            r[prev_action].append(reward)
         logger.info(f'Successfully trained {x} times')
         for i, action_rewards in enumerate(r):
             logger.info(f'Action rewards (ID, AVG, AMOUNT) '
@@ -95,3 +85,6 @@ class NetworkAgent(Agent):
             return SCNN
         if model_type is NetworkAgentModelTypes.FlatDense:
             return FlatDense
+        else:
+            raise RuntimeError('Model class not found in NetworkAgent')
+
