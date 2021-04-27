@@ -41,7 +41,7 @@ AGENT_IM_HEIGHT = 32
 AGENT_IM_WIDTH = 32
 
 # Logging settings
-WRITE_FILE = False
+WRITE_FILE = True
 LEVEL = logging.INFO
 
 # Environment & status settings

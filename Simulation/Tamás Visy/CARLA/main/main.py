@@ -26,7 +26,7 @@ def main():
     dashboard = DashboardThread()
 
     statefilters = [ImageNoiseFilter(st_dev=0.001)]  # st_dev = 0.02 is alright
-    outputfilters = [MotorNoiseFilter(st_dev=0.01)]  # st_dev = 0.1 is alright
+    outputfilters = [MotorNoiseFilter(st_dev=0.1)]  # st_dev = 0.1 is alright
 
     log_settings(env, statefilters, outputfilters)
 

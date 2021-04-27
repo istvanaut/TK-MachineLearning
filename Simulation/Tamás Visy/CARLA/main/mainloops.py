@@ -1,6 +1,7 @@
 from agents.kerasagent import KerasAgent
 from agents.networkagent import NetworkAgent
 from agents.omniscientagent import OmniscientAgent
+from filters.motornoisefilter import MotorNoiseFilter
 from mainsupport import train, do_run
 from settings import AGENT_TYPE, AgentTypes, NETWORK_AGENT_MODEL_TYPE, NetworkAgentModelTypes
 from support.logger import logger
@@ -49,6 +50,7 @@ def log_agents_for_train_multiple_main_loop(trainer, trainees):
 
 
 def train_multiple_main_loop(env, dashboard, statefilters, outputfilters):
+    # TODO (6) filters name, log, show properly
     trainer_agent = OmniscientAgent()
 
     trainees = [KerasAgent(), NetworkAgent(NetworkAgentModelTypes.SCNN)]
@@ -64,7 +66,7 @@ def train_multiple_main_loop(env, dashboard, statefilters, outputfilters):
         for i in range(4):
             env.load_path(i)
 
-            traveled = do_run(trainer_agent, env, dashboard, statefilters, outputfilters, memory)
+            traveled = do_run(trainer_agent, env, dashboard, statefilters, [MotorNoiseFilter(st_dev=0.15)], memory)
             logger.info(f'TrainerAgent finished Course {i}, traveled {traveled} meters')
 
             dashboard.clear()
