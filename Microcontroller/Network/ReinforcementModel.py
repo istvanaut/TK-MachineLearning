@@ -42,12 +42,12 @@ class ReinforcementModel:
         #   A reward function is loaded into the reward variable
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logger.info(f'Device is {self.device}')
-        self.BATCH_SIZE = 128
+        self.BATCH_SIZE = 256
         self.GAMMA = 0.999
         self.EPS_START = 0.9
-        self.EPS_END = 0.4  # with 2 choices this means 0.4/2 -> 20% are wrong random choices (should be tolerable)
-        self.EPS_DECAY = 500  # This should equal a couple of short runs
-        self.TARGET_UPDATE = 10
+        self.EPS_END = 0.05  # with 2 choices this means 0.4/2 -> 20% are wrong random choices (should be tolerable)
+        self.EPS_DECAY = 200 # This should equal a couple of short runs
+        self.TARGET_UPDATE = 50
         self.steps_done = 0
         self.time_step = 0
         self.n_training = 0
@@ -64,8 +64,8 @@ class ReinforcementModel:
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()
         self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=0.001)
-        self.memory = ReplayMemory(20000)
-        self.reward = RewardFunctions.base_reward
+        self.memory = ReplayMemory(10000)
+        self.reward = RewardFunctions.inline_reward
 
     def predict(self, state):
         # Select an action
@@ -93,13 +93,15 @@ class ReinforcementModel:
         else:
             return torch.tensor([[random.randrange(self.n_actions)]], device=self.device, dtype=torch.long)
 
-    def optimize(self, new_state, prev_state=None, action=None):
+    def optimize(self, new_state, prev_state=None, action=None, reward=None):
         if prev_state and action:
             self.prev_state = prev_state
             self.action = torch.tensor([[action]], dtype=torch.int64)
         # Calculates the rewards, saves the state and the transition.
         # After TARGET_UPDATE steps, replaces the target network's weights with the policy network's
-        reward = self.reward(prev_state=self.prev_state, new_state=new_state)
+        if reward is None:
+            reward = self.reward(prev_state=self.prev_state, new_state=new_state)
+
         # if random.random() > 0.5:
         #     print(action, reward)
         self.rewards[self.n_training].append(reward)

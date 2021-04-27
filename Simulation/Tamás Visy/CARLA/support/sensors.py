@@ -5,6 +5,10 @@ from settings import RADAR_RANGE
 from support.datakey import DataKey
 import numpy as np
 
+IM_WIDTH = 400
+IM_HEIGHT = 400
+RADAR_RANGE = 40.0
+
 
 def recently(event_time):
     """Determines whether an event has happened within 1.0 second.\n

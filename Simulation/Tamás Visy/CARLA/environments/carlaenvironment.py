@@ -1,5 +1,4 @@
 import random
-import threading
 
 import numpy as np
 import icarla
@@ -24,6 +23,7 @@ from threads.spectatorfollowthread import SpectatorFollowThread
 # TODO (5) refactor every "self.connection.world. ..."
 #  in this file and in others
 
+
 class CarlaEnvironment(Environment):
     def __init__(self):
         self.actors = []
@@ -41,7 +41,7 @@ class CarlaEnvironment(Environment):
         self.connection = Connection()
 
     def setup(self):
-        logger.info('Environment setup')
+        logger.debug('Environment setup')
         self.connection.connect()
         self.__set_conditions()
         self.__update_path()
@@ -57,12 +57,13 @@ class CarlaEnvironment(Environment):
     def reset(self, do_update_path=True):
         logger.debug('Resetting actors')
         self.clear()
-        logger.debug('Halting threads')
+        logger.warning('Halting threads')
         self.data.put(DataKey.THREAD_HALT, True)
         self.vehicle.apply_control(icarla.vehicle_control(throttle=0, steer=0))
         icarla.set_velocity(self.vehicle, icarla.vector3d())
 
-        self.__update_path()
+        if do_update_path:
+            self.__update_path()
 
         icarla.move(self.vehicle, icarla.transform(self.path.start[0], self.path.start[1], 0.25).location)
         icarla.rotate(self.vehicle, icarla.rotation_from_radian(self.path.direction()))
@@ -70,7 +71,7 @@ class CarlaEnvironment(Environment):
                                     self.path.start[1] + 5 * np.sin(self.path.direction()[1]),
                                     12.0).location
         rotation = icarla.rotation([-85, self.path.direction()[1] / np.pi * 180.0, 0])
-        logger.info('Environment reset successful')
+        logger.debug('Environment reset successful')
 
     def clear(self):
         # Clears all data -> removes thread_halt -> threads can resume
@@ -86,8 +87,6 @@ class CarlaEnvironment(Environment):
     def check(self):
         s = Status()
         s.check(self)
-
-
         return s
 
     def __set_conditions(self):
@@ -108,8 +107,10 @@ class CarlaEnvironment(Environment):
             for actor in actors.filter('sensor.*.*'):
                 actor.destroy()
             if len(actors.filter('vehicle.*.*')) > 0 and len(actors.filter('sensor.*.*')) > 0:
-                logger.info('Cleaned up old actors')
-                # Setting nice weather
+                logger.debug('Cleaned up old actors')
+            else:
+                logger.warning('Issues while cleaning up old actors')
+        # Setting nice weather
         self.__set_weather()
 
     def __set_weather(self):
@@ -120,10 +121,10 @@ class CarlaEnvironment(Environment):
         weather.wetness = 0.0
 
         self.connection.world.set_weather(weather)
-        logger.info('Applied nice weather')
+        logger.debug('Applied nice weather')
 
     def __spawn(self):
-        logger.info('Spawning actors, sensors')
+        logger.debug('Spawning actors, sensors')
         spawn_vehicle(self, self.path.start, self.path.direction())
         spawn_camera(self)
         spawn_radar(self)

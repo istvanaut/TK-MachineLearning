@@ -8,18 +8,14 @@ from support.logger import logger
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 
-
 QUIT = pygame.QUIT
+# TODO (7) make window less ugly
 
 
 class Window:
     def __init__(self):
-        self.data = None
-        self.path = None
-        self.starting_dir = None
         self.state = None
         self.agent_out = None
-        self.pure = False
         self.i = 0
         colors = []
         color_1 = (200, 200, 200)
@@ -61,15 +57,11 @@ class Window:
             pygame.display.update()
 
     def clear(self):
-        self.handle(None, None, None, None, None, False)
+        self.handle(None, None)
 
-    def handle(self, data, path, starting_dir, state, out, pure):
-        self.data = data
-        self.path = path
-        self.starting_dir = starting_dir
+    def handle(self, state, out):
         self.state = state
         self.agent_out = out
-        self.pure = pure
 
     def add_event(self, event):
         pygame.event.post(pygame.event.Event(event))
@@ -79,10 +71,7 @@ class Window:
 
     def update_screen(self):
         image, data, names = self.state.get_formatted()
-
         self.insert_placeholder(data, names)
-        names.insert(4, 'some kind of cheaty drive')
-        data.insert(4, (not self.pure))
 
         names.append('out')
         data.append(self.agent_out)
@@ -90,7 +79,7 @@ class Window:
         self.draw_image(image)
 
         count = len(names)
-        square_sides = np.ceil(np.sqrt(count))
+        square_sides = int(np.ceil(np.sqrt(count)))
         # TODO (3) better without + 50?
         side_start = min(self.window_size) + 50
         top_start = 50
@@ -145,7 +134,7 @@ class Window:
             text = '~T~'
         elif type(text) is str:
             pass
-        elif isinstance(text, list) or isinstance(text, tuple):
+        elif isinstance(text, list) or isinstance(text, tuple) or type(text) is np.ndarray:
             # If text is a list - show first 3 char's of first 3 items
             t = []
             for i in range(min(len(text), 4)):

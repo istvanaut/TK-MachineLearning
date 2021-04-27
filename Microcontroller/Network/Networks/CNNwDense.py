@@ -13,7 +13,7 @@ class CNNwDense(nn.Module):
     # ----------     -----   |      |
     #                        |Output| => Action
     # __________     _____   |Layer |
-    # |Features| ==> |RNN| =>|      |
+    # |Features| ==> |Dense| =>|      |
     # ----------     -----   ---------
     #
     #
@@ -49,7 +49,7 @@ class CNNwDense(nn.Module):
         self.dense1 = nn.Linear(linear_input_size, 64)
 
         # Recursive Neural Network
-        self.dense2 = nn.Linear(dim_features, 32)
+        self.dense2 = nn.Linear(dim_features(), 32)
         self.dense3 = nn.Linear(32, 64)
         # Output layer
         self.dense4 = nn.Linear(128, 32)
@@ -69,7 +69,7 @@ class CNNwDense(nn.Module):
         y = F.leaky_relu(self.dense2(y))
         y=  F.leaky_relu(self.dense3(y))
         x = torch.cat((x, y), dim=1)
-        x = F.sigmoid(self.dense4(x))
+        x = F.leaky_relu(self.dense4(x))
         x=self.dense5(x)
-        print('Q-values:'+str(x))
+        #print('Q-values:'+str(x))
         return x

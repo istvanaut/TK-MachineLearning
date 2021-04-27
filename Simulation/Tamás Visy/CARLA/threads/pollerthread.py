@@ -1,11 +1,11 @@
 import time
 
 from support.logger import logger
-from threads.basethread import BaseThread
+from threads.haltabledatathread import HaltableDataThread
 from support.datakey import DataKey
 
 
-class PollerThread(BaseThread):
+class PollerThread(HaltableDataThread):
     vehicle = None
 
     def set_vehicle(self, v):
@@ -28,12 +28,17 @@ class PollerThread(BaseThread):
                 self.data.put(DataKey.SENSOR_POSITION, p)
                 self.data.put(DataKey.SENSOR_DIRECTION, r)
 
-                # TODO (7) get angular velocity and time of pull
+                # estimated time passed since last tick
+                # TODO (6) extract this as setting
+                time_to_sleep = 0.05
+                aa = self.vehicle.get_angular_velocity() / time_to_sleep
+                aa = [aa.x, aa.y, aa.y]
+                self.data.put(DataKey.SENSOR_ANGULAR_ACCELERATION, aa)
 
                 v = self.vehicle.get_velocity()
                 v = [v.x, v.y, v.z]  # m/s
                 self.data.put(DataKey.SENSOR_VELOCITY, v)
-                time.sleep(0.05)
+                time.sleep(time_to_sleep)
             except RuntimeError as r:
                 logger.error(f'Error: {r}')
                 logger.warning(f'Setting vehicle to None')

@@ -13,6 +13,7 @@ REPLAY_STATUSES_FILE_NAME = 'files/replay_statuses.npy'
 # Returnables is a numpy array of (data, path, starting_dir) from CarlaEnvironment.pull()
 def load_replay_pulls_from_file():
     if os.path.isfile(REPLAY_PULLS_FILE_NAME):
+        # TODO (9) write numpy allow pickle version reminder
         return np.load(REPLAY_PULLS_FILE_NAME)
     else:
         logger.critical(f'File {REPLAY_PULLS_FILE_NAME} not found for ReplayEnvironment')

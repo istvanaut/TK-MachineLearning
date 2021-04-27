@@ -6,7 +6,7 @@ from support.datakey import DataKey
 from support.logger import logger
 
 
-class BaseThread(Thread):
+class HaltableDataThread(Thread):
 
     def __init__(self, data):
         super().__init__()
@@ -26,7 +26,7 @@ class BaseThread(Thread):
         self.stop = True
 
     def beginning(self):
-        logger.info(f'{self.__class__.__name__} started')
+        logger.debug(f'{self.__class__.__name__} started')
 
     def loop(self):
         pass
