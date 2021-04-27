@@ -93,3 +93,5 @@ class NetworkAgent(Agent):
             return LCNN
         if model_type is NetworkAgentModelTypes.SCNN:
             return SCNN
+        if model_type is NetworkAgentModelTypes.FlatDense:
+            return FlatDense

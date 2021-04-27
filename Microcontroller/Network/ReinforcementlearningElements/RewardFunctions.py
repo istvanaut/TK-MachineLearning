@@ -40,7 +40,4 @@ def inline_reward(prev_state, new_state):
         reward -= distance_point * new_state.distance_from_path ** 2
     else:
         reward += 0
-    print(prev_state.velocity)
-    print(new_state.velocity)
-    print(reward)
     return reward
