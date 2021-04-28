@@ -40,6 +40,7 @@ extern "C" {
 #include "lezerSensor.h"
 #include "ACCSensor.h"
 #include "reward.h"
+#include "network.h"
 
 #include "string.h"
 #include "stdint.h"
@@ -98,6 +99,10 @@ void Error_Handler(void);
 #define STLK_RX_GPIO_Port GPIOD
 #define STLK_TX_Pin GPIO_PIN_9
 #define STLK_TX_GPIO_Port GPIOD
+#define ESP_RDY_Pin GPIO_PIN_11
+#define ESP_RDY_GPIO_Port GPIOD
+#define ESP_CS_Pin GPIO_PIN_12
+#define ESP_CS_GPIO_Port GPIOD
 #define USB_PowerSwitchOn_Pin GPIO_PIN_6
 #define USB_PowerSwitchOn_GPIO_Port GPIOG
 #define USB_OverCurrent_Pin GPIO_PIN_7
