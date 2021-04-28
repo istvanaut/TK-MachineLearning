@@ -1,6 +1,8 @@
 import random
 
 # This is where the reward functions will be defined
+from support.logger import logger
+
 close_distance = 0.5
 middle_distance = 0.5
 long_distance = 1.0
@@ -32,11 +34,15 @@ def base_reward(prev_state, new_state):
 
 
 def inline_reward(prev_state, new_state):
+    if prev_state is None:
+        logger.warning('Prev state is nne in inline reward')
+        return 0.0
     reward = 0.0
     distance_point = 1
-    if new_state.distance_from_path <= close_distance:
-        reward += 0
+    if new_state.velocity<0.001 and prev_state.velocity<0.001:
+        reward-=distance_point
+    if new_state.distance_from_path >= close_distance:
+        reward -= distance_point * new_state.distance_from_path ** 2
     else:
-        reward -= distance_point*new_state.distance_from_path**2
-
+        reward += 0
     return reward

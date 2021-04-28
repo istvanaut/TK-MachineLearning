@@ -54,28 +54,39 @@ def rotation(d):
     return carla.Rotation(pitch=d[0], yaw=d[1], roll=d[2])
 
 
-def move(actor, loc):
+def move(actor, loc, safe=True):
+    """
+    Moves the actor to a given location
+
+    | If safe mode is enabled, move becomes a blocking function which retries if it failed"""
     actor.set_location(loc)
-    time.sleep(0.5)  # for some reason we must wait for the simulator to process this
-    d = actor.get_location().distance(loc)
-    if d > 1.0:
-        logger.warning(f'Failed moving {actor.type_id} to {loc}, retry...')
-        logger.info(f'Actors transform is {actor.get_transform()}')
-        actor.set_transform(carla.Transform(add_locations(loc, location(0, 0, 1)), rotation([0, 0, 0])))
-        time.sleep(0.5)
+
+    if safe:
+        time.sleep(0.5)  # for some reason we must wait for the simulator to process this
         d = actor.get_location().distance(loc)
-        if d > 3.0:
-            logger.error(f'Failed moving {actor.type_id} to {loc}')
+        if d > 1.0:
+            logger.warning(f'Failed moving {actor.type_id} to {loc}, retry...')
             logger.info(f'Actors transform is {actor.get_transform()}')
-            return
-    logger.debug(f'Moved {actor.type_id} to {loc}')
+            actor.set_transform(carla.Transform(add_locations(loc, location(0, 0, 1)), rotation([0, 0, 0])))
+            time.sleep(0.5)
+            d = actor.get_location().distance(loc)
+            if d > 3.0:
+                logger.error(f'Failed moving {actor.type_id} to {loc}')
+                logger.info(f'Actors transform is {actor.get_transform()}')
+                return
+        # logger.debug(f'Moved {actor.type_id} to {loc}')
 
 
 def add_locations(loc0, loc1):
     return carla.Location(x=loc0.x + loc1.x, y=loc0.y + loc1.y, z=loc0.z + loc1.z)
 
 
-def rotate(actor, rot):
+def rotate(actor, rot, safe=True):
+    """
+    Rotates the actor to a given rotation in degrees
+
+    | If safe mode is enabled, rotate becomes a blocking function which retries if it failed
+    | Rotate seems to work even if safe mode is disabled"""
     loc = actor.get_transform().location
 
     while rot.pitch <= -180.0:
@@ -87,29 +98,38 @@ def rotate(actor, rot):
 
     t = transform(loc.x, loc.y, loc.z, rot.pitch, rot.yaw, rot.roll)
     actor.set_transform(t)
-    # for some reason we must wait for the simulator to process this
-    time.sleep(0.5)
-    # Then we test if it worked
-    r1 = actor.get_transform().rotation
-    r2 = rot
-    diff = ((r1.pitch - r2.pitch) ** 2 + (r1.yaw - r2.yaw) ** 2 + (r1.roll - r2.roll) ** 2) ** 0.5
-    if diff > 1.0:
-        logger.warning(f'Failed rotating {actor.type_id} to {rot}')
-        logger.info(f'Rotation is {r1}')
-    else:
-        logger.debug(f'Rotated {actor.type_id} to {rot}')
 
-
-def set_velocity(actor, velocity):
-    first = True
-    while (actor.get_velocity().x**2+actor.get_velocity().y**2+actor.get_velocity().z**2)**0.5 > 0.1:
-        if not first:
-            logger.debug('Previous attempt at setting vehicle velocity unsuccessful')
-        logger.debug('Setting vehicle velocity to 0...')
-        actor.set_target_velocity(velocity)
+    if safe:
+        # for some reason we must wait for the simulator to process this
         time.sleep(0.5)
-        first = False
-    logger.debug('Velocity is approx. 0')
+        # Then we test if it worked
+        r1 = actor.get_transform().rotation
+        r2 = rot
+        diff = ((r1.pitch - r2.pitch) ** 2 + (r1.yaw - r2.yaw) ** 2 + (r1.roll - r2.roll) ** 2) ** 0.5
+        if diff > 1.0:
+            logger.warning(f'Failed rotating {actor.type_id} to {rot}')
+            logger.info(f'Rotation is {r1}')
+        else:
+            logger.debug(f'Rotated {actor.type_id} to {rot}')
+
+
+def set_velocity(actor, velocity, safe=True):
+    """
+    Sets the velocity of the actor to a given speed
+
+    | If safe mode is enabled, set_velocity becomes a blocking function which retries if it failed"""
+    if not safe:
+        actor.set_target_velocity(velocity)
+    if safe:
+        first = True
+        while (actor.get_velocity().x**2+actor.get_velocity().y**2+actor.get_velocity().z**2)**0.5 > 0.1:
+            if not first:
+                logger.debug('Previous attempt at setting vehicle velocity unsuccessful')
+            logger.debug('Setting vehicle velocity to 0...')
+            actor.set_target_velocity(velocity)
+            time.sleep(0.5)
+            first = False
+        logger.debug('Velocity is approx. 0')
 
 
 def rotation_from_radian(rot):

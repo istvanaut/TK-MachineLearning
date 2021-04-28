@@ -79,16 +79,22 @@ class KerasModel:
 
         network.compile(loss=loss, optimizer=SGD(lr=LEARNING_RATE), metrics=['accuracy'])
 
-        logger.warning('Skipping kerasmodel summary')
+        logger.debug('Skipping kerasmodel summary')
         # network.summary()
 
         self.network = network
         # self.predict_as_tensor = tf.function(self.model.call)
 
+    def save(self):
+        if self.network is not None:
+            self.network.save_weights(file_name)
+        else:
+            logger.warning('Cannot save network as it is None')
+
     def load(self):
         if os.path.isfile(f'{file_name}.data-00000-of-00001'):  # search for actual file
             self.network.load_weights(file_name)
-            logger.info(f'Successfully loaded {file_name} model in KerasModel.load()')
+            logger.debug(f'Successfully loaded {file_name} model in KerasModel.load()')
         else:
             logger.error(f'{file_name} file not found in KerasModel.load()')
 
@@ -96,7 +102,7 @@ class KerasModel:
         # awaiting as {ndarray: (X,)}
         # inside: x {ndarray: (2,)}
         # inside: {ndarray: (width, height)}* and float?         *or other way (height, width)
-        logger.info(f'Num GPUs Available: {len(tf.config.experimental.list_physical_devices("GPU"))}')
+        logger.debug(f'Num GPUs Available: {len(tf.config.experimental.list_physical_devices("GPU"))}')
 
         model_checkpoint_callback = keras.callbacks.ModelCheckpoint(
             filepath=checkpoint_file_names,
@@ -111,7 +117,7 @@ class KerasModel:
         for i in list(range(1000))[::-1]:
             path = checkpoint_file_names.format(epoch=i)
             if not found and os.path.isfile(path):
-                logger.info(f'File exists, loading checkpoint {path}')
+                logger.debug(f'File exists, loading checkpoint {path}')
                 self.network.load_weights(path)
                 if epochs is None:
                     initial_epoch = i
@@ -135,16 +141,17 @@ class KerasModel:
         test_x = np.array([i[0] for i in test]).reshape([-1, INPUT_SHAPE[0], INPUT_SHAPE[1], INPUT_SHAPE[2]])
         test_y = np.array([i[1] for i in test])
 
-        logger.info('Starting training on {} data with {} data as test set'.format(len(train_x), len(test_x)))
+        logger.debug('Starting training on {} data with {} data as test set'.format(len(train_x), len(test_x)))
 
         if epochs is None:
             e = 10
         else:
             e = epochs
         # (4.) Training the CNN
+        logger.debug('Not printing epoch training data in KerasModel')
         self.network.fit(train_x, train_y, validation_data=(test_x, test_y),
                          epochs=e, initial_epoch=initial_epoch,
-                         callbacks=[model_checkpoint_callback])
+                         callbacks=[model_checkpoint_callback], verbose=0)
 
         # Saving the weights
         self.network.save_weights(file_name)

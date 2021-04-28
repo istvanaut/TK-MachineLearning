@@ -7,7 +7,7 @@ from support.logger import logger
 PATH_FILE_NAME = 'files/path.npy'
 
 path_file_points = np.load(PATH_FILE_NAME)
-logger.info(f'Loaded file {PATH_FILE_NAME} for path.py')
+logger.debug(f'Loaded file {PATH_FILE_NAME} for path.py')
 
 
 class Path:
@@ -47,8 +47,7 @@ class Path:
         if point is None:
             return self.segment(0).direction()
         else:
-            self.find_segment(point).direction()
-            return None
+            return self.find_segment(point).direction()
 
     def find_closest_point_index(self, point):
         dist = distance(point, self.points[0])

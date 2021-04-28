@@ -1,11 +1,13 @@
 import time
 
 from support.logger import logger
-from threads.basethread import BaseThread
+from threads.haltabledatathread import HaltableDataThread
 from support.datakey import DataKey
 
+POLL_TIME = 0.05
 
-class PollerThread(BaseThread):
+
+class PollerThread(HaltableDataThread):
     vehicle = None
 
     def set_vehicle(self, v):
@@ -16,29 +18,40 @@ class PollerThread(BaseThread):
             time.sleep(1.0)
         else:
             try:
-                a = self.vehicle.get_acceleration()
-                a = [a.x, a.y, a.z]  # m/s2
-                self.data.put(DataKey.SENSOR_ACCELERATION, a)
+                self.poll_acceleration()
 
-                t = self.vehicle.get_transform()
-                p = t.location
-                r = t.rotation
-                p = [p.x, p.y, p.z]  # m
-                r = [r.pitch, r.yaw, r.roll]  # degrees?
-                self.data.put(DataKey.SENSOR_POSITION, p)
-                self.data.put(DataKey.SENSOR_DIRECTION, r)
+                self.poll_position_and_direction()
 
-                # estimated time passed since last tick
-                time_to_sleep = 0.05
-                aa = self.vehicle.get_angular_velocity() / time_to_sleep
-                aa = [aa.x, aa.y, aa.y]
-                self.data.put(DataKey.SENSOR_ANGULAR_ACCELERATION, aa)
+                self.poll_angular_acceleration()
 
-                v = self.vehicle.get_velocity()
-                v = [v.x, v.y, v.z]  # m/s
-                self.data.put(DataKey.SENSOR_VELOCITY, v)
-                time.sleep(time_to_sleep)
+                self.poll_velocity()
+
+                time.sleep(POLL_TIME)
             except RuntimeError as r:
                 logger.error(f'Error: {r}')
                 logger.warning(f'Setting vehicle to None')
                 self.vehicle = None
+
+    def poll_velocity(self):
+        v = self.vehicle.get_velocity()
+        v = [v.x, v.y, v.z]  # m/s
+        self.data.put(DataKey.SENSOR_VELOCITY, v)
+
+    def poll_angular_acceleration(self):
+        aa = self.vehicle.get_angular_velocity() / POLL_TIME  # poll time is an estimation
+        aa = [aa.x, aa.y, aa.y]
+        self.data.put(DataKey.SENSOR_ANGULAR_ACCELERATION, aa)
+
+    def poll_position_and_direction(self):
+        t = self.vehicle.get_transform()
+        p = t.location
+        r = t.rotation
+        p = [p.x, p.y, p.z]  # m
+        r = [r.pitch, r.yaw, r.roll]  # degrees?
+        self.data.put(DataKey.SENSOR_POSITION, p)
+        self.data.put(DataKey.SENSOR_DIRECTION, r)
+
+    def poll_acceleration(self):
+        a = self.vehicle.get_acceleration()
+        a = [a.x, a.y, a.z]  # m/s2
+        self.data.put(DataKey.SENSOR_ACCELERATION, a)

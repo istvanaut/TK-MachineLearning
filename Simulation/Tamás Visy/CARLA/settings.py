@@ -7,6 +7,7 @@ from enum import Enum
 class AgentTypes(Enum):  # Implementations of Agent
     Network = 1
     Keras = 2
+    Omniscient = 3
 
 
 class NetworkAgentModelTypes(Enum):  # Implementations of NetworkAgents Model
@@ -14,27 +15,22 @@ class NetworkAgentModelTypes(Enum):  # Implementations of NetworkAgents Model
     CNNwRNN = 2
     LCNN = 3
     SCNN = 4
+    FlatDense = 5
 
 
 class EnvironmentTypes(Enum):  # Implementations of Environment
     CARLA = 1
-    Test = 2
+    Replay = 2
 
 
 # Settings of training
 TRAIN = True
 TRAIN_PER_DECISION = False
 AGENT_TYPE = AgentTypes.Keras
-NETWORK_AGENT_MODEL_TYPE = NetworkAgentModelTypes.SCNN
+NETWORK_AGENT_MODEL_TYPE = NetworkAgentModelTypes.FlatDense
 ENVIRONMENT_TYPE = EnvironmentTypes.CARLA
 TARGET_FRAME_TIME = 0.25
-TRAIN_MEMORY_SIZE = 1024  # 128 + (10 * (1 / TARGET_FRAME_TIME)) // 1
-
-
-# Determines if the run is 'pure' -> no noise or auto-driving applied to agent output
-def pure(run_index):
-    return True
-
+TRAIN_MEMORY_SIZE = None  # 1024  # Or use something depending on TARGET_FRAME_TIME, like a * TARGET_FRAME_TIME + b
 
 # Agent settings
 choices = [[0.25, -0.1],
@@ -45,7 +41,7 @@ AGENT_IM_HEIGHT = 32
 AGENT_IM_WIDTH = 32
 
 # Logging settings
-WRITE_FILE = False
+WRITE_FILE = True
 LEVEL = logging.INFO
 
 # Environment & status settings

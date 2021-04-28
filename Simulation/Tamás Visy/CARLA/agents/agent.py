@@ -1,6 +1,6 @@
 class Agent:
 
-    def predict(self, state, pure=True, auto=False):
+    def predict(self, state):
         raise NotImplementedError
 
     def optimize(self, new_state):

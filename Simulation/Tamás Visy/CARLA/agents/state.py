@@ -6,6 +6,8 @@ def get_feature_dimension():
 
 
 class State:
+    # TODO (8) add direction related to path (closest segment)
+    # TODO (7) is end
 
     def __init__(self, image=None, radar=None, collision=None, velocity=None, acceleration=None, position=None,
                  direction=None, obstacle=None, distance_from_path=None, side=None, angular_acceleration=None):
