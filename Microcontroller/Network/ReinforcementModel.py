@@ -1,6 +1,6 @@
 import math
 import random
-
+from torchsummary import summary
 import numpy as np
 import torch
 import torch.optim as optim
@@ -46,8 +46,8 @@ class ReinforcementModel:
         self.GAMMA = 0.999
         self.EPS_START = 0.9
         self.EPS_END = 0.05  # with 2 choices this means 0.4/2 -> 20% are wrong random choices (should be tolerable)
-        self.EPS_DECAY = 200 # This should equal a couple of short runs
-        self.TARGET_UPDATE = 100
+        self.EPS_DECAY = 200  # This should equal a couple of short runs
+        self.TARGET_UPDATE = 75
         self.steps_done = 0
         self.time_step = 0
         self.n_training = 0
@@ -66,6 +66,7 @@ class ReinforcementModel:
         self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=0.001)
         self.memory = ReplayMemory(10000)
         self.reward = RewardFunctions.inline_reward
+        summary(self.target_net, [(1, 32, 32), (1, 1, dim_features())])
 
     def predict(self, state):
         # Select an action
