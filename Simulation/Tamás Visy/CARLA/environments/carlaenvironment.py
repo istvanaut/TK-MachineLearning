@@ -44,31 +44,22 @@ class CarlaEnvironment(Environment):
         logger.debug('Environment setup')
         self.connection.connect()
         self.__set_conditions()
-        self.__update_path()
+        # self.__update_path()
         self.__spawn()
-        self.reset(do_update_path=False)
+        self.reset()
 
     def start(self):
         self.c.start()
         self.p.start()
         self.s.start()
 
-    def reset(self, do_update_path=True):
+    def reset(self):
         logger.debug('Resetting actors')
         self.clear()
         logger.warning('Halting threads')
         self.data.put(DataKey.THREAD_HALT, True)
         self.vehicle.apply_control(icarla.vehicle_control(throttle=0, steer=0))
         icarla.set_velocity(self.vehicle, icarla.vector3d())
-
-        if do_update_path:
-            self.__update_path()
-
-        icarla.move(self.vehicle, icarla.transform(self.path.start[0], self.path.start[1], 0.25).location)
-        icarla.rotate(self.vehicle, icarla.rotation_from_radian(self.path.direction()))
-
-        self.s.set_spectator_and_path(self.connection.world.get_spectator(), self.path)
-
         logger.debug('Environment reset successful')
 
     def clear(self):
@@ -123,16 +114,18 @@ class CarlaEnvironment(Environment):
 
     def __spawn(self):
         logger.debug('Spawning actors, sensors')
-        spawn_vehicle(self, self.path.start, self.path.direction())
+        if self.path is None:
+            spawn_vehicle(self, [0.0, 0.0], [0.0, 0.0, 0.0])
+        else:
+            spawn_vehicle(self, self.path.start, self.path.direction())
         spawn_camera(self)
         spawn_radar(self)
         spawn_collision(self)
         spawn_obstacle(self)
 
-    def __update_path(self):
+    def __update_path(self, i):
         self.path = get_path()
         # TODO (3) make prettier
-        r = random.random()
         # if r < 1/6:
         #     logger.info('Environment: normal short')
         #     self.path.slice(None, 20)
@@ -141,16 +134,23 @@ class CarlaEnvironment(Environment):
         #     self.path.slice(70, None)
         #     self.path.invert()
         # elif
-        if r < 1 / 4:
+        if i % 4 is 0:
             logger.info('Environment: normal full')
             pass
-        elif r < 2 / 4:
+        elif i % 4 is 1:
             logger.info('Environment: backwards full')
             self.path.invert()
-        elif r < 3 / 4:
+        elif i % 4 is 2:
             logger.info('Environment: normal turn (left)')
             self.path.slice(30, 60)
-        else:
+        elif i % 4 is 3:
             logger.info('Environment: backwards turn (right)')
             self.path.slice(40, 70)
             self.path.invert()
+
+    def load_path(self, i):
+        self.__update_path(i)
+        icarla.move(self.vehicle, icarla.transform(self.path.start[0], self.path.start[1], 0.25).location)
+        icarla.rotate(self.vehicle, icarla.rotation_from_radian(self.path.direction()))
+
+        self.s.set_knowledge(self.connection.world.get_spectator(), self.vehicle, self.path)

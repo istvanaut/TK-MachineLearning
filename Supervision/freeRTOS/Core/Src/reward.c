@@ -28,8 +28,6 @@ int8_t PrevAnalysedMove = 0;
 int8_t moveAnalysisResult = 0;
 double savedAngle = 0;
 
-int8_t moveAnalysis(uint32_t LightSensor);
-
 extern TIM_HandleTypeDef htim14;
 
 void SetLightSensorValueForTheFirstTime()
@@ -65,6 +63,7 @@ int8_t moveAnalysis(uint32_t LightSensor){
 
 	//If no line detected
 	if(rightIdx == 0){
+		moveAnalysisResult = -2; //TODO Sem
 		return -2;
 	}
 
@@ -80,6 +79,7 @@ int8_t moveAnalysis(uint32_t LightSensor){
 
 	PrevPos = newPos;
 
+	moveAnalysisResult = ret; // TODO SEm
 	return ret;
 }
 
@@ -89,7 +89,6 @@ int GetReward ()
 	int reward = 0;
 
 	// Sensor values
-	uint32_t LightSensor = GetLightSensorValues(); // MSB:left side LSB right side
 	double VelocityLeft = GetSpeedOfMotor(LEFT_SIDE); // m/s
 	double VelocityRight = GetSpeedOfMotor(RIGHT_SIDE); // m/s
 	uint32_t LaserDistance = getLaserDistance(); //mm
@@ -98,9 +97,7 @@ int GetReward ()
 
 	// Calculated values
 	uint8_t obstacle = (LaserDistance < 500 || USLeft < 50 || USRight < 50);
-	uint8_t lineLosted = PrevLightSensor && !LightSensor;
-	int8_t analysedMove = moveAnalysis(LightSensor);
-	moveAnalysisResult = analysedMove;
+	int8_t analysedMove = moveAnalysisResult; //TODO Sem
 
 	// Calculate reward
 	if(obstacle && (VelocityLeft > 0.01 || VelocityRight > 0.01))
@@ -108,9 +105,6 @@ int GetReward ()
 
 	if(!obstacle && (VelocityLeft < 0.01 && VelocityRight < 0.01))
 		reward += NO_OBSTACLE_AND_NO_RUNNING;
-
-	if(lineLosted)
-		reward += LINE_LOSTED;
 
 	if(analysedMove == -1){
 		reward += MOVING_AWAY;
@@ -128,9 +122,11 @@ int GetReward ()
 	if(PrevAnalysedMove == -2 && analysedMove != -2){
 		reward += LINE_FOUND;
 	}
+	else if(PrevAnalysedMove != -2 && analysedMove == -2){
+		reward += LINE_LOSTED;
+	}
 
 	PrevAnalysedMove = analysedMove;
-	PrevLightSensor = LightSensor;
 
 	printf("Analysed move: %d, Reward: %d\n", analysedMove, reward);
 

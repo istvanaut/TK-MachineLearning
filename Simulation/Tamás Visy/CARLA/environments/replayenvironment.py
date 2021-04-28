@@ -60,3 +60,7 @@ class ReplayEnvironment(Environment):
 
     def setup(self):
         pass
+
+    def load_path(self, i):
+        # TODO (4) possible load i. replay
+        pass

@@ -74,7 +74,7 @@ def move(actor, loc, safe=True):
                 logger.error(f'Failed moving {actor.type_id} to {loc}')
                 logger.info(f'Actors transform is {actor.get_transform()}')
                 return
-        logger.debug(f'Moved {actor.type_id} to {loc}')
+        # logger.debug(f'Moved {actor.type_id} to {loc}')
 
 
 def add_locations(loc0, loc1):

@@ -95,7 +95,7 @@ class ReinforcementModel:
             return torch.tensor([[random.randrange(self.n_actions)]], device=self.device, dtype=torch.long)
 
     def optimize(self, new_state, prev_state=None, action=None, reward=None):
-        if prev_state and action:
+        if prev_state is not None and action is not None:
             self.prev_state = prev_state
             self.action = torch.tensor([[action]], dtype=torch.int64)
         # Calculates the rewards, saves the state and the transition.

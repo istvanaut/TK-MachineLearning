@@ -86,7 +86,10 @@ class KerasModel:
         # self.predict_as_tensor = tf.function(self.model.call)
 
     def save(self):
-        self.network.save_weights(file_name)
+        if self.network is not None:
+            self.network.save_weights(file_name)
+        else:
+            logger.warning('Cannot save network as it is None')
 
     def load(self):
         if os.path.isfile(f'{file_name}.data-00000-of-00001'):  # search for actual file
@@ -138,16 +141,17 @@ class KerasModel:
         test_x = np.array([i[0] for i in test]).reshape([-1, INPUT_SHAPE[0], INPUT_SHAPE[1], INPUT_SHAPE[2]])
         test_y = np.array([i[1] for i in test])
 
-        logger.info('Starting training on {} data with {} data as test set'.format(len(train_x), len(test_x)))
+        logger.debug('Starting training on {} data with {} data as test set'.format(len(train_x), len(test_x)))
 
         if epochs is None:
             e = 10
         else:
             e = epochs
         # (4.) Training the CNN
+        logger.debug('Not printing epoch training data in KerasModel')
         self.network.fit(train_x, train_y, validation_data=(test_x, test_y),
                          epochs=e, initial_epoch=initial_epoch,
-                         callbacks=[model_checkpoint_callback])
+                         callbacks=[model_checkpoint_callback], verbose=0)
 
         # Saving the weights
         self.network.save_weights(file_name)

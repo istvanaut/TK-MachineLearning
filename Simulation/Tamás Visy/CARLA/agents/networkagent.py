@@ -46,9 +46,9 @@ class NetworkAgent(Agent):
             x += 1
             reward = self.optimize(state, prev_state, prev_action)
             r[prev_action].append(reward)
-        logger.info(f'Successfully trained {x} times')
+        logger.debug(f'Successfully trained {x} times')
         for i, action_rewards in enumerate(r):
-            logger.info(f'Action rewards (ID, AVG, AMOUNT) '
+            logger.debug(f'Action rewards (ID, AVG, AMOUNT) '
                         f'-:- {i}; {np.average(action_rewards)}; {len(action_rewards)}')
         self.model.reset()
         self.save()

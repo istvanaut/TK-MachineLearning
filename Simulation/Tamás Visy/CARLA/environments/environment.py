@@ -6,7 +6,7 @@ class Environment:
     def start(self):
         raise NotImplementedError
 
-    def reset(self, do_update_path=True):
+    def reset(self):
         raise NotImplementedError
 
     def clear(self):
@@ -22,3 +22,6 @@ class Environment:
     def check(self):
         raise NotImplementedError
         # return a Status
+
+    def load_path(self, i):
+        raise NotImplementedError

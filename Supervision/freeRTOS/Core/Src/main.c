@@ -42,11 +42,16 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+CRC_HandleTypeDef hcrc;
+
 I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 
+RNG_HandleTypeDef hrng;
+
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
+SPI_HandleTypeDef hspi3;
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
@@ -181,6 +186,9 @@ static void MX_I2C2_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM7_Init(void);
 static void MX_TIM14_Init(void);
+static void MX_CRC_Init(void);
+static void MX_RNG_Init(void);
+static void MX_SPI3_Init(void);
 void StartTaskDeafult(void *argument);
 void StartTaskLightSensor(void *argument);
 void StartTaskEncoders(void *argument);
@@ -212,6 +220,12 @@ int main(void)
 
   /* USER CODE END 1 */
 
+  /* Enable I-Cache---------------------------------------------------------*/
+  SCB_EnableICache();
+
+  /* Enable D-Cache---------------------------------------------------------*/
+  SCB_EnableDCache();
+
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -242,6 +256,9 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM7_Init();
   MX_TIM14_Init();
+  MX_CRC_Init();
+  MX_RNG_Init();
+  MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
   initMyCOM(&huart3);
   Encoder_Init();
@@ -249,6 +266,7 @@ int main(void)
   initUS(&htim3);
   initACCSensor(&hi2c2);
   initlezer(&htim1);
+  initStateHandle();
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -373,7 +391,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 4;
   RCC_OscInitStruct.PLL.PLLN = 216;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 3;
+  RCC_OscInitStruct.PLL.PLLQ = 10;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -398,14 +416,46 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USART3|RCC_PERIPHCLK_I2C1
-                              |RCC_PERIPHCLK_I2C2;
+                              |RCC_PERIPHCLK_I2C2|RCC_PERIPHCLK_CLK48;
   PeriphClkInitStruct.Usart3ClockSelection = RCC_USART3CLKSOURCE_PCLK1;
   PeriphClkInitStruct.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
   PeriphClkInitStruct.I2c2ClockSelection = RCC_I2C2CLKSOURCE_PCLK1;
+  PeriphClkInitStruct.Clk48ClockSelection = RCC_CLK48SOURCE_PLL;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief CRC Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_CRC_Init(void)
+{
+
+  /* USER CODE BEGIN CRC_Init 0 */
+
+  /* USER CODE END CRC_Init 0 */
+
+  /* USER CODE BEGIN CRC_Init 1 */
+
+  /* USER CODE END CRC_Init 1 */
+  hcrc.Instance = CRC;
+  hcrc.Init.DefaultPolynomialUse = DEFAULT_POLYNOMIAL_ENABLE;
+  hcrc.Init.DefaultInitValueUse = DEFAULT_INIT_VALUE_ENABLE;
+  hcrc.Init.InputDataInversionMode = CRC_INPUTDATA_INVERSION_NONE;
+  hcrc.Init.OutputDataInversionMode = CRC_OUTPUTDATA_INVERSION_DISABLE;
+  hcrc.InputDataFormat = CRC_INPUTDATA_FORMAT_BYTES;
+  if (HAL_CRC_Init(&hcrc) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN CRC_Init 2 */
+
+  /* USER CODE END CRC_Init 2 */
+
 }
 
 /**
@@ -501,6 +551,32 @@ static void MX_I2C2_Init(void)
 }
 
 /**
+  * @brief RNG Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_RNG_Init(void)
+{
+
+  /* USER CODE BEGIN RNG_Init 0 */
+
+  /* USER CODE END RNG_Init 0 */
+
+  /* USER CODE BEGIN RNG_Init 1 */
+
+  /* USER CODE END RNG_Init 1 */
+  hrng.Instance = RNG;
+  if (HAL_RNG_Init(&hrng) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN RNG_Init 2 */
+
+  /* USER CODE END RNG_Init 2 */
+
+}
+
+/**
   * @brief SPI1 Initialization Function
   * @param None
   * @retval None
@@ -577,6 +653,46 @@ static void MX_SPI2_Init(void)
   /* USER CODE BEGIN SPI2_Init 2 */
 
   /* USER CODE END SPI2_Init 2 */
+
+}
+
+/**
+  * @brief SPI3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI3_Init(void)
+{
+
+  /* USER CODE BEGIN SPI3_Init 0 */
+
+  /* USER CODE END SPI3_Init 0 */
+
+  /* USER CODE BEGIN SPI3_Init 1 */
+
+  /* USER CODE END SPI3_Init 1 */
+  /* SPI3 parameter configuration*/
+  hspi3.Instance = SPI3;
+  hspi3.Init.Mode = SPI_MODE_MASTER;
+  hspi3.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi3.Init.CLKPhase = SPI_PHASE_2EDGE;
+  hspi3.Init.NSS = SPI_NSS_SOFT;
+  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+  hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi3.Init.CRCPolynomial = 7;
+  hspi3.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  hspi3.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
+  if (HAL_SPI_Init(&hspi3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI3_Init 2 */
+
+  /* USER CODE END SPI3_Init 2 */
 
 }
 
@@ -960,6 +1076,9 @@ static void MX_GPIO_Init(void)
                           |LD3_Pin|LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -992,6 +1111,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : ESP_RDY_Pin */
+  GPIO_InitStruct.Pin = ESP_RDY_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(ESP_RDY_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : ESP_CS_Pin */
+  GPIO_InitStruct.Pin = ESP_CS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(ESP_CS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : USB_PowerSwitchOn_Pin */
   GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin;
@@ -1039,15 +1171,15 @@ void StartTaskDeafult(void *argument)
 
 	leftMotor(-0.7);
 	rightMotor(-0.7);
-	uint32_t LEDs;		// vonalkövetéshez
-	uint16_t leftSide; 	// vonalkövetéshez
-	uint16_t rightSide; 	// vonalkövetéshez
-	int LLS, LS, RS, RRS; // vonalkövetéshez
+	//uint32_t LEDs;		// vonalkövetéshez
+	//uint16_t leftSide; 	// vonalkövetéshez
+	//uint16_t rightSide; 	// vonalkövetéshez
+	//int LLS, LS, RS, RRS; // vonalkövetéshez
   /* Infinite loop */
   for(;;)
   {
 	  /* VONAL KÖVETÉS*/
-
+	  /*
 	  if (actualState == NETWORK)
 	  {
 		  LLS = LS = RS = RRS = 0;
@@ -1100,12 +1232,40 @@ void StartTaskDeafult(void *argument)
 			  rightMotor(0.6);
 		  }
 	  }
+*/
 
+	  /*
+	   switch(state)
+	  {
+	  case INIT:
+		  osDelay(4000);
+		  printf("INIT state\n");
+		  initStateHandle();
+		  break;
+	  case LOAD:
+		  printf("LOAD state\n");
+		  loadStateHandle();
+		  break;
 
+	  case RUNNING:
+		  printf("RUNNING state\n");
+		  runningStateHandle();
+		  break;
+	  default:
+		  nextState = INIT;
+	  }
+	  state = nextState;
+
+	  osDelay(CONTROL_DELAY);
+
+	   */
+	  int8_t ret;
 	  switch(actualState)
 	  {
 		  case NETWORK:
 			  // running the NN
+			  networkSwitch();
+
 			  if(!onTheTrack()){
 				  actualState = TRACK_LOST;
 			  }
@@ -1117,7 +1277,7 @@ void StartTaskDeafult(void *argument)
 			  break;
 
 		  case RETURNING_TO_TRACK:
-			  int8_t ret = returnToLine();
+			  ret = returnToLine();
 			  if(ret == 1)
 			  {
 				  actualState = NETWORK;
@@ -1295,9 +1455,9 @@ void StartTaskReward(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	GetReward();
+	moveAnalysis(GetLightSensorValues());
 
-    osDelay(1000);
+    osDelay(100);
   }
   /* USER CODE END StartTaskReward */
 }

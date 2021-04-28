@@ -20,3 +20,4 @@ int GetReward (void);
 uint8_t onTheTrack(void);
 void trackLost(void);
 int8_t returnToLine(void);
+int8_t moveAnalysis(uint32_t LightSensor);

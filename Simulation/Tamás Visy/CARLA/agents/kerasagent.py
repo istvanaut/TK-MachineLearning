@@ -30,7 +30,7 @@ def balance(trainables):
             rightchoices.append(trainable)
     leftchoices = leftchoices[:min(len(leftchoices), len(rightchoices))]
     rightchoices = rightchoices[:min(len(leftchoices), len(rightchoices))]
-    logger.info(f'Trainables: {len(trainables)} -> {len(leftchoices)+len(rightchoices)}')
+    logger.debug(f'Trainables: {len(trainables)} -> {len(leftchoices)+len(rightchoices)}')
     return leftchoices+rightchoices
 
 
@@ -87,4 +87,7 @@ class KerasAgent(Agent):
             val_len = len(trainables)//10
             val = trainables[:val_len]
             train = trainables[val_len:]
-        self.model.train(train=train, test=val, epochs=4)
+        if len(train) > 0:
+            self.model.train(train=train, test=val, epochs=5)
+        else:
+            logger.error('Train has length 0')
