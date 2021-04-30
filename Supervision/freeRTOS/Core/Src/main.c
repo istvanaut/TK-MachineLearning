@@ -1099,11 +1099,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : USER_Btn_Pin */
-  GPIO_InitStruct.Pin = USER_Btn_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  /*Configure GPIO pin : USER_BUTTON_Pin */
+  GPIO_InitStruct.Pin = USER_BUTTON_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(USER_Btn_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(USER_BUTTON_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PA3 PA4 */
   GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4;
@@ -1179,15 +1179,15 @@ void StartTaskDeafult(void *argument)
 
 	leftMotor(-0.7);
 	rightMotor(-0.7);
-	//uint32_t LEDs;		// vonalkövetéshez
-	//uint16_t leftSide; 	// vonalkövetéshez
-	//uint16_t rightSide; 	// vonalkövetéshez
-	//int LLS, LS, RS, RRS; // vonalkövetéshez
+	uint32_t LEDs;		// vonalkövetéshez
+	uint16_t leftSide; 	// vonalkövetéshez
+	uint16_t rightSide; 	// vonalkövetéshez
+	int LLS, LS, RS, RRS; // vonalkövetéshez
   /* Infinite loop */
   for(;;)
   {
 	  /* VONAL KÖVETÉS*/
-	  /*
+
 	  if (actualState == NETWORK)
 	  {
 		  LLS = LS = RS = RRS = 0;
@@ -1240,7 +1240,7 @@ void StartTaskDeafult(void *argument)
 			  rightMotor(0.6);
 		  }
 	  }
-*/
+
 
 	  /*
 	   switch(state)
@@ -1272,7 +1272,7 @@ void StartTaskDeafult(void *argument)
 	  {
 		  case NETWORK:
 			  // running the NN
-			  networkSwitch();
+			  //networkSwitch();
 
 			  if(!onTheTrack()){
 				  actualState = TRACK_LOST;
@@ -1298,6 +1298,9 @@ void StartTaskDeafult(void *argument)
 
 		  case REQUEST_USER_CONTROL:
 			  // TODO if user button pushed -> state: NETWORK
+			  if(HAL_GPIO_ReadPin(USER_BUTTON_GPIO_Port, USER_BUTTON_Pin) == GPIO_PIN_SET){
+				  actualState = NETWORK;
+			  }
 			  break;
 
 		  default:
