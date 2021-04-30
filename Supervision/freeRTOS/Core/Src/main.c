@@ -67,14 +67,14 @@ osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
   .stack_size = 512 * 4,
-  .priority = (osPriority_t) osPriorityAboveNormal,
+  .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for lightSensorTask */
 osThreadId_t lightSensorTaskHandle;
 const osThreadAttr_t lightSensorTask_attributes = {
   .name = "lightSensorTask",
   .stack_size = 512 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
+  .priority = (osPriority_t) osPriorityAboveNormal,
 };
 /* Definitions for encodersTask */
 osThreadId_t encodersTaskHandle;
@@ -1179,15 +1179,15 @@ void StartTaskDeafult(void *argument)
 
 	leftMotor(MOTOR_NORMAL);
 	rightMotor(MOTOR_NORMAL);
-	uint32_t LEDs;		// vonalkövetéshez
-	uint16_t leftSide; 	// vonalkövetéshez
+	uint32_t LEDs;			// vonalkövetéshez
+	uint16_t leftSide; 		// vonalkövetéshez
 	uint16_t rightSide; 	// vonalkövetéshez
-	int LLS, LS, RS, RRS; // vonalkövetéshez
+	int LLS, LS, RS, RRS; 	// vonalkövetéshez
   /* Infinite loop */
   for(;;)
   {
 	  /* VONAL KÖVETÉS*/
-
+/*
 	  if (actualState == NETWORK)
 	  {
 		  LLS = LS = RS = RRS = 0;
@@ -1218,7 +1218,7 @@ void StartTaskDeafult(void *argument)
 			  else if (LLS < LS)
 			  {
 				  leftMotor(MOTOR_SLOW);
-				  rightMotor(MOTOR_NORMAL);
+				  rightMotor(MOTOR_FAST);
 			  }
 		  }
 		  else if (LS + LLS < RS + RRS)
@@ -1230,20 +1230,20 @@ void StartTaskDeafult(void *argument)
 			  }
 			  else if (RRS < RS)
 			  {
-				  leftMotor(MOTOR_NORMAL);
+				  leftMotor(MOTOR_FAST);
 				  rightMotor(MOTOR_SLOW);
 			  }
 		  }
 		  else
 		  {
-			  leftMotor(MOTOR_FASTEST);
-			  rightMotor(MOTOR_FASTEST);
+			  leftMotor(MOTOR_FAST);
+			  rightMotor(MOTOR_FAST);
 		  }
 	  }
+*/
 
-
-	  /*
-	   switch(state)
+/*
+	  switch(state)
 	  {
 	  case INIT:
 		  osDelay(4000);
@@ -1266,13 +1266,13 @@ void StartTaskDeafult(void *argument)
 
 	  osDelay(CONTROL_DELAY);
 
-	   */
+*/
 	  int8_t ret;
 	  switch(actualState)
 	  {
 		  case NETWORK:
 			  // running the NN
-			  //networkSwitch();
+			  networkSwitch();
 
 			  if(!onTheTrack()){
 				  actualState = TRACK_LOST;
@@ -1391,10 +1391,12 @@ void StartTaskEmergencyBreaking(void *argument)
 		  setMotorEnable(MOTOR_DISABLE);
 		  leftMotor(MOTOR_STOP);
 		  rightMotor(MOTOR_STOP);
+		  HAL_TIM_Base_Stop(&htim14);
 	  }
 	  else
 	  {
 		  setMotorEnable(MOTOR_ENABLE);
+		  HAL_TIM_Base_Start(&htim14);
 	  }
 
 	  osDelay(10);

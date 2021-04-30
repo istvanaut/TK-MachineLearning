@@ -1,16 +1,16 @@
 Neural Network Tools for STM32AI v1.4.1 (STM.ai v6.0.0-RC6)
-Created date       : 2021-04-30 11:09:06
-Parameters         : generate --name simplenn -m D:/onlabgithub/TK-MachineLearning/Supervision/MCU_NN.onnx --type onnx --compression 4 --verbosity 1 --workspace C:\Users\kolon\AppData\Local\Temp\mxAI_workspace41023322086993413290030506925908 --output C:\Users\kolon\.stm32cubemx
+Created date       : 2021-04-30 15:53:45
+Parameters         : generate --name simplenn -m D:/GitHub/AGV_E2E/TK-MachineLearning/Supervision/MCU_NN.onnx --type onnx --compression 4 --verbosity 1 --workspace C:\Users\krist\AppData\Local\Temp\mxAI_workspace232440369907650013144060652633089000 --output C:\Users\krist\.stm32cubemx
 
 Exec/report summary (generate)
 ------------------------------------------------------------------------------------------------------------------------
-model file         : D:\onlabgithub\TK-MachineLearning\Supervision\MCU_NN.onnx
+model file         : D:\GitHub\AGV_E2E\TK-MachineLearning\Supervision\MCU_NN.onnx
 type               : onnx
 c_name             : simplenn
 compression        : 4
 quantize           : None
-workspace dir      : C:\Users\kolon\AppData\Local\Temp\mxAI_workspace41023322086993413290030506925908
-output dir         : C:\Users\kolon\.stm32cubemx
+workspace dir      : C:\Users\krist\AppData\Local\Temp\mxAI_workspace232440369907650013144060652633089000
+output dir         : C:\Users\krist\.stm32cubemx
 
 model_name         : MCU_NN
 model_hash         : 164e32791dd83822876da2e8eca7bd09
@@ -148,8 +148,8 @@ id   name      c_macc                    c_rom                     c_id
 
 Generated files (5)
 ------------------------------------------------------------------------------------------------------------------------
-C:\Users\kolon\.stm32cubemx\simplenn_config.h
-C:\Users\kolon\.stm32cubemx\simplenn.h
-C:\Users\kolon\.stm32cubemx\simplenn.c
-C:\Users\kolon\.stm32cubemx\simplenn_data.h
-C:\Users\kolon\.stm32cubemx\simplenn_data.c
+C:\Users\krist\.stm32cubemx\simplenn_config.h
+C:\Users\krist\.stm32cubemx\simplenn.h
+C:\Users\krist\.stm32cubemx\simplenn.c
+C:\Users\krist\.stm32cubemx\simplenn_data.h
+C:\Users\krist\.stm32cubemx\simplenn_data.c

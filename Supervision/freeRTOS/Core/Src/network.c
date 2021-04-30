@@ -7,13 +7,11 @@
 
 #include "network.h"
 
+#define WEIGHTS_CHUNKS 2048
 
 extern CRC_HandleTypeDef hcrc;
-
 extern RNG_HandleTypeDef hrng;
-
 extern SPI_HandleTypeDef hspi3;
-
 extern UART_HandleTypeDef huart3;
 
 static ai_handle network = AI_HANDLE_NULL;
@@ -158,68 +156,71 @@ void initStateHandle(void)
 	aiInit();
 }
 void loadStateHandle(void){
-	char buf[8];
-	uint8_t resp;
-	uint8_t request;
-	HAL_StatusTypeDef status;
+    char buf[8];
+    uint8_t resp;
+    uint8_t request;
+    HAL_StatusTypeDef status;
+    //destroy nn
+    network = ai_simplenn_destroy(network);
+    if(network != NULL)
+    {
+        //error
+        // printf("Network destroy error\n");
+        HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD2_Pin|LD3_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOB, LD3_Pin, GPIO_PIN_SET);
+        nextState = INIT;
+    }
+    else
+    {
+        /*Request weights from ESP*/
+        HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD2_Pin|LD3_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOB, LD3_Pin, GPIO_PIN_SET);
+        // printf("Checking ESP connection...\n");
+        request = ESP_PING;
+        /*Test connection*/
+        do
+        {
+            transmitToESP(&request, 1, HAL_MAX_DELAY);
+            // printf("Waiting for esp ACK\n");
+            status = receiveFromESP(&resp, sizeof(resp), 200);
+            // printf("%d\n",resp);
+        }while(status!= HAL_OK || resp != ESP_RESP_OK);
+        // printf("ESP OK\n");
 
-	//destroy nn
-	network = ai_simplenn_destroy(network);
-	if(network != NULL)
-	{
-		//error
-		printf("Network destroy error\n");
-		HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD2_Pin|LD3_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOB, LD3_Pin, GPIO_PIN_SET);
-		nextState = INIT;
-	}
-	else
-	{
-		/*Request weights from ESP*/
-		HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD2_Pin|LD3_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(GPIOB, LD3_Pin, GPIO_PIN_SET);
+        /* Getting weights*/
+        // printf("Requesting weights\n");
+        request = ESP_REQUEST_WEIGHTS;
+        transmitToESP(&request, 1, HAL_MAX_DELAY);
+        // printf("Request sent\n");
+        // printf("Starting receiving weights in chunks!\n");
+        int k = 0;
+        request = ESP_REQUEST_WEIGHTS;
 
-		printf("Checking ESP connection...\n");
-		request = ESP_PING;
-
-		/*Test connection*/
-		do
-		{
-			transmitToESP(&request, 1, HAL_MAX_DELAY);
-			printf("Waiting for esp ACK\n");
-
-			status = receiveFromESP(&resp, sizeof(resp), 200);
-			printf("%d\n",resp);
-		}while(status!= HAL_OK || resp != ESP_RESP_OK);
-		printf("ESP OK\n");
-
-
-		/* Getting weights*/
-		printf("Requesting weights\n");
-		request = ESP_REQUEST_WEIGHTS;
-		transmitToESP(&request, 1, HAL_MAX_DELAY);
-		printf("Request sent\n");
-
-		printf("Starting receiving weights\n");
-		if(HAL_OK == receiveFromESP(ai_simplenn_data_weights_get(), sizeof(*ai_simplenn_data_weights_get()), HAL_MAX_DELAY))
-		{
-			printf("Weights received successfully!!!\n");
-			HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD2_Pin|LD3_Pin, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD2_Pin, GPIO_PIN_SET);
-		}
-		else
-		{
-			printf("Weights reception failed!\n");
-			HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD2_Pin|LD3_Pin, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOB, LD3_Pin, GPIO_PIN_SET);
-				}
-		aiInit();
-		nextState = RUNNING;
-		printf("AI_INITED\n");
-		cycleCounter = 0u;
-	}
-
-
+        for(k = 0; k < AI_SIMPLENN_DATA_WEIGHTS_SIZE / WEIGHTS_CHUNKS; k++)
+        {
+            transmitToESP(&request, 1, HAL_MAX_DELAY);
+            receiveFromESP(ai_simplenn_data_weights_get() + k * WEIGHTS_CHUNKS , WEIGHTS_CHUNKS, HAL_MAX_DELAY);
+            // printf("Chunk %d received\n",k);
+            HAL_Delay(1);
+        }
+        /*Receive remaining chunk*/
+        // printf("Remaining chunks: %d\n",AI_SIMPLENN_DATA_WEIGHTS_SIZE - k * WEIGHTS_CHUNKS);
+        request = ESP_REQUEST_WEIGHTS;
+        if(k * WEIGHTS_CHUNKS < AI_SIMPLENN_DATA_WEIGHTS_SIZE)
+        {
+            transmitToESP(&request, 1, HAL_MAX_DELAY);
+            receiveFromESP((uint8_t*)ai_simplenn_data_weights_get() + k * WEIGHTS_CHUNKS , AI_SIMPLENN_DATA_WEIGHTS_SIZE - k * WEIGHTS_CHUNKS, HAL_MAX_DELAY);
+            // printf("Last chunk received\n");
+        }
+        if(((uint8_t*)ai_simplenn_data_weights_get())[0] == 0x7c) // printf("Equal 0x7c\n");
+        if(((uint8_t*)ai_simplenn_data_weights_get())[1] == 0x26) // printf("Equal 0x26\n");
+        if(((uint8_t*)ai_simplenn_data_weights_get())[AI_SIMPLENN_DATA_WEIGHTS_SIZE-1] == 0x3d) // printf("Equal 0x3d\n");
+        if(((uint8_t*)ai_simplenn_data_weights_get())[AI_SIMPLENN_DATA_WEIGHTS_SIZE-2] == 0x64) // printf("Equal 0x64\n");
+        aiInit();
+        nextState = RUNNING;
+        // printf("AI_INITED\n");
+        cycleCounter = 0u;
+    }
 }
 float calculateReward(sensorSatate* data)
 {
@@ -293,8 +294,8 @@ void runningStateHandle(void)
 	previousStates.rightM = 2.4f;
 
 #else
-	printf("Real values\n");
-	currentStates.usLeft = getUSDistanceLeft();;
+	// printf("Real values\n");
+	currentStates.usLeft = getUSDistanceLeft();
 	currentStates.usRight = getUSDistanceRight();
 	currentStates.laser = getLaserDistance();
 	currentStates.lightsensor = GetLightSensorValues();
@@ -307,11 +308,11 @@ void runningStateHandle(void)
 	transmitToESP(&request, 1, HAL_MAX_DELAY);
 	osDelay(10);
 	status = receiveFromESP(camera_frame, CAMERA_WIDTH*CAMERA_HEIGHT, HAL_MAX_DELAY);
-	if(HAL_OK == status) printf("Camera OK!!\n");
-	if(camera_frame[0] == 0xEA) printf("0equals\n");
-	if(camera_frame[0] == 0xEB) printf("0notequals\n");
-	if(camera_frame[1] == 0x7C) printf("1astequals\n");
-	if(camera_frame[CAMERA_WIDTH*CAMERA_HEIGHT-1] == 0xDB) printf("lastequals\n");
+	if(HAL_OK == status) // printf("Camera OK!!\n");
+	if(camera_frame[0] == 0xEA) // printf("0equals\n");
+	if(camera_frame[0] == 0xEB) // printf("0notequals\n");
+	if(camera_frame[1] == 0x7C) // printf("1astequals\n");
+	if(camera_frame[CAMERA_WIDTH*CAMERA_HEIGHT-1] == 0xDB) // printf("lastequals\n");
 
 #endif
 
@@ -350,7 +351,7 @@ void runningStateHandle(void)
 		transmitToESP((uint8_t*)(&currentStates),4*sizeof(uint32_t) , HAL_MAX_DELAY);
 		osDelay(1);
 
-		printf("States transmitted\n");
+		// printf("States transmitted\n");
 	}
 
 	for(uint32_t i = 0; i < AI_SIMPLENN_IN_1_SIZE; i++)
@@ -361,15 +362,15 @@ void runningStateHandle(void)
 
 	HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD3_Pin|LD2_Pin, GPIO_PIN_SET);
 	//HAL_Delay(2000);
-	printf("Generating random number\n");
+	// printf("Generating random number\n");
 	/*Generate random number*/
 	if(HAL_OK == HAL_RNG_GenerateRandomNumber(&hrng, &rNum))
 	{
-		printf("Random number generated: %g\n", rNum / ((float)0xFFFFFFFFu));
+		// printf("Random number generated: %g\n", rNum / ((float)0xFFFFFFFFu));
 	}
 
 	eps_threshold = EPS_END + (EPS_START - EPS_END) * expf(-1*(double)cycleCounter / EPS_DECAY);
-	printf("Eps_threshold: %g\n",eps_threshold);
+	// printf("Eps_threshold: %g\n",eps_threshold);
 	/* 2 - Call inference engine */
 	if((rNum / ((float)0xFFFFFFFFu)) < eps_threshold)
 	{
@@ -390,7 +391,7 @@ void runningStateHandle(void)
 				maxI = k;
 			}
 		}
-		printf("Max num: %g\n",out_data[maxI]);
+		// printf("Max num: %g\n",out_data[maxI]);
 
 
 
@@ -399,7 +400,7 @@ void runningStateHandle(void)
 	{
 		HAL_RNG_GenerateRandomNumber(&hrng, &rNum);
 		maxI = rNum % 4;
-		printf("RandomMAX = %u\n",maxI);
+		// printf("RandomMAX = %u\n",maxI);
 	}
 	switch(maxI)
 			{
@@ -459,6 +460,4 @@ void runningStateHandle(void)
 		cycleCounter++;
 		nextState = RUNNING;
 	}
-
-
 }
