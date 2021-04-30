@@ -1177,8 +1177,8 @@ void StartTaskDeafult(void *argument)
 {
   /* USER CODE BEGIN 5 */
 
-	leftMotor(-0.7);
-	rightMotor(-0.7);
+	leftMotor(MOTOR_NORMAL);
+	rightMotor(MOTOR_NORMAL);
 	uint32_t LEDs;		// vonalkövetéshez
 	uint16_t leftSide; 	// vonalkövetéshez
 	uint16_t rightSide; 	// vonalkövetéshez
@@ -1212,32 +1212,32 @@ void StartTaskDeafult(void *argument)
 		  {
 			  if (LLS > LS)
 			  {
-				  leftMotor(0.4);
-				  rightMotor(0.6);
+				  leftMotor(MOTOR_SLOWEST);
+				  rightMotor(MOTOR_FAST);
 			  }
 			  else if (LLS < LS)
 			  {
-				  leftMotor(0.45);
-				  rightMotor(0.6);
+				  leftMotor(MOTOR_SLOW);
+				  rightMotor(MOTOR_NORMAL);
 			  }
 		  }
 		  else if (LS + LLS < RS + RRS)
 		  {
 			  if (RRS > RS)
 			  {
-				  leftMotor(0.65);
-				  rightMotor(0.4);
+				  leftMotor(MOTOR_FAST);
+				  rightMotor(MOTOR_SLOWEST);
 			  }
 			  else if (RRS < RS)
 			  {
-				  leftMotor(0.63);
-				  rightMotor(0.45);
+				  leftMotor(MOTOR_NORMAL);
+				  rightMotor(MOTOR_SLOW);
 			  }
 		  }
 		  else
 		  {
-			  leftMotor(0.6);
-			  rightMotor(0.6);
+			  leftMotor(MOTOR_FASTEST);
+			  rightMotor(MOTOR_FASTEST);
 		  }
 	  }
 
@@ -1304,8 +1304,8 @@ void StartTaskDeafult(void *argument)
 			  break;
 
 		  default:
-			  leftMotor(0);
-			  rightMotor(0);
+			  leftMotor(MOTOR_STOP);
+			  rightMotor(MOTOR_STOP);
 	  }
 	  osDelay(10);
   }
@@ -1389,8 +1389,8 @@ void StartTaskEmergencyBreaking(void *argument)
 	  if (lDist < 20 || rDist < 20 || mDist < 200)
 	  {
 		  setMotorEnable(MOTOR_DISABLE);
-		  leftMotor(0);
-		  rightMotor(0);
+		  leftMotor(MOTOR_STOP);
+		  rightMotor(MOTOR_STOP);
 	  }
 	  else
 	  {

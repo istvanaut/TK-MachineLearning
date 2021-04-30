@@ -116,7 +116,12 @@ void Error_Handler(void);
 #define LD2_Pin GPIO_PIN_7
 #define LD2_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-
+#define MOTOR_STOP 0.0
+#define MOTOR_SLOWEST 0.45
+#define MOTOR_SLOW 0.55
+#define MOTOR_NORMAL 0.65
+#define MOTOR_FAST 0.75
+#define MOTOR_FASTEST 0.85
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

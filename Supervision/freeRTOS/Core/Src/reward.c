@@ -167,8 +167,8 @@ void trackLost(void){
 	TIM14->CNT = 0;
 	HAL_TIM_Base_Start(&htim14);
 
-	leftMotor(-0.6);
-	rightMotor(-0.6);
+	leftMotor(-MOTOR_NORMAL);
+	rightMotor(-MOTOR_NORMAL);
 }
 
 // 0 if going backward, 1 if successfully back, -1 if 3sec is over
@@ -191,8 +191,8 @@ int8_t returnToLine(void){
 	if(lineIsInTheMiddle >= 2)
 	{
 		HAL_TIM_Base_Stop(&htim14);
-		leftMotor(0);
-		rightMotor(0);
+		leftMotor(MOTOR_STOP);
+		rightMotor(MOTOR_STOP);
 		return 1;
 	}
 
@@ -200,8 +200,8 @@ int8_t returnToLine(void){
 	if(TIM14->CNT > 30000)
 	{
 		HAL_TIM_Base_Stop(&htim14);
-		leftMotor(0);
-		rightMotor(0);
+		leftMotor(MOTOR_STOP);
+		rightMotor(MOTOR_STOP);
 		return -1;
 	}
 
@@ -218,32 +218,32 @@ int8_t returnToLine(void){
 	  {
 		  if (deltaAngle < -15)
 		  {
-			  leftMotor(-0.4);
-			  rightMotor(-0.6);
+			  leftMotor(-MOTOR_SLOWEST);
+			  rightMotor(-MOTOR_FAST);
 		  }
 		  else
 		  {
-			  leftMotor(-0.45);
-			  rightMotor(-0.6);
+			  leftMotor(-MOTOR_SLOW);
+			  rightMotor(-MOTOR_NORMAL);
 		  }
 	  }
 	  else if (deltaAngle > 7.5)
 	  {
 		  if (deltaAngle > 15)
 		  {
-			  leftMotor(-0.65);
-			  rightMotor(-0.4);
+			  leftMotor(-MOTOR_FAST);
+			  rightMotor(-MOTOR_SLOWEST);
 		  }
 		  else
 		  {
-			  leftMotor(-0.63);
-			  rightMotor(-0.45);
+			  leftMotor(-MOTOR_NORMAL);
+			  rightMotor(-MOTOR_SLOW);
 		  }
 	  }
 	  else
 	  {
-		  leftMotor(-0.6);
-		  rightMotor(-0.6);
+		  leftMotor(-MOTOR_NORMAL);
+		  rightMotor(-MOTOR_NORMAL);
 	  }
 
 	return 0;
