@@ -96,3 +96,4 @@ def train_multiple_main_loop(env, dashboard):
                 dashboard.clear()
                 env.reset()
                 logger.info('Continuing...')
+        memory.clear()
