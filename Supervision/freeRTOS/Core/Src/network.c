@@ -309,7 +309,7 @@ void runningStateHandle(void)
 	osDelay(10);
 	status = receiveFromESP(camera_frame, CAMERA_WIDTH*CAMERA_HEIGHT, HAL_MAX_DELAY);
 	if(HAL_OK == status) // printf("Camera OK!!\n");
-	if(camera_frame[0] == 0xEA) // printf("0equals\n");
+	if(camera_frame[0] == 0xEA) // printf("0equals\n");3
 	if(camera_frame[0] == 0xEB) // printf("0notequals\n");
 	if(camera_frame[1] == 0x7C) // printf("1astequals\n");
 	if(camera_frame[CAMERA_WIDTH*CAMERA_HEIGHT-1] == 0xDB) // printf("lastequals\n");

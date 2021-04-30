@@ -47,7 +47,7 @@
 //#define AILOG
 //#define TEST
 //#define LOGGING
-//#define HAS_CAMERA
+#define HAS_CAMERA
 
 typedef struct
 {
