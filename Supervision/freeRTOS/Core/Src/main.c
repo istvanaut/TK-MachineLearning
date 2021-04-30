@@ -161,6 +161,11 @@ osSemaphoreId_t SemUSSensorEdgeHandle;
 const osSemaphoreAttr_t SemUSSensorEdge_attributes = {
   .name = "SemUSSensorEdge"
 };
+/* Definitions for SemReward */
+osSemaphoreId_t SemRewardHandle;
+const osSemaphoreAttr_t SemReward_attributes = {
+  .name = "SemReward"
+};
 /* USER CODE BEGIN PV */
 
 
@@ -306,6 +311,9 @@ int main(void)
 
   /* creation of SemUSSensorEdge */
   SemUSSensorEdgeHandle = osSemaphoreNew(1, 1, &SemUSSensorEdge_attributes);
+
+  /* creation of SemReward */
+  SemRewardHandle = osSemaphoreNew(1, 1, &SemReward_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */

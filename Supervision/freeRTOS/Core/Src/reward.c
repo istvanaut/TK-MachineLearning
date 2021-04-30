@@ -21,6 +21,8 @@
  */
 #include "reward.h"
 
+extern osSemaphoreId_t SemRewardHandle;
+
 // Variables
 uint32_t PrevLightSensor = 0;
 uint8_t PrevPos = 0;
@@ -29,6 +31,21 @@ int8_t moveAnalysisResult = 0;
 double savedAngle = 0;
 
 extern TIM_HandleTypeDef htim14;
+
+void setMoveAnalysisResult(int8_t value){
+	osSemaphoreAcquire(SemRewardHandle, osWaitForever);
+	moveAnalysisResult = value;
+	osSemaphoreRelease(SemRewardHandle);
+	return;
+}
+
+int8_t getMoveAnalysisResult(void){
+	int8_t retVal = 0;
+	osSemaphoreAcquire(SemRewardHandle, osWaitForever);
+	retVal = moveAnalysisResult;
+	osSemaphoreRelease(SemRewardHandle);
+	return retVal;
+}
 
 void SetLightSensorValueForTheFirstTime()
 {
@@ -63,7 +80,8 @@ int8_t moveAnalysis(uint32_t LightSensor){
 
 	//If no line detected
 	if(rightIdx == 0){
-		moveAnalysisResult = -2; //TODO Sem
+		 //TODO Sem
+		setMoveAnalysisResult(-2);
 		return -2;
 	}
 
@@ -79,7 +97,7 @@ int8_t moveAnalysis(uint32_t LightSensor){
 
 	PrevPos = newPos;
 
-	moveAnalysisResult = ret; // TODO SEm
+	setMoveAnalysisResult(ret); // TODO SEm
 	return ret;
 }
 
@@ -97,7 +115,8 @@ int GetReward ()
 
 	// Calculated values
 	uint8_t obstacle = (LaserDistance < 500 || USLeft < 50 || USRight < 50);
-	int8_t analysedMove = moveAnalysisResult; //TODO Sem
+	 //TODO Sem
+	int8_t analysedMove = getMoveAnalysisResult();
 
 	// Calculate reward
 	if(obstacle && (VelocityLeft > 0.01 || VelocityRight > 0.01))
@@ -136,7 +155,7 @@ int GetReward ()
 }
 
 uint8_t onTheTrack(void){
-	if(moveAnalysisResult == -2){
+	if(getMoveAnalysisResult() == -2){ //TODO Sem
 		return 0;
 	}
 	return 1;

@@ -1,6 +1,6 @@
 Neural Network Tools for STM32AI v1.4.1 (STM.ai v6.0.0-RC6)
-Created date       : 2021-04-28 11:44:38
-Parameters         : generate --name simplenn -m D:/onlabgithub/TK-MachineLearning/Supervision/MCU_NN.onnx --type onnx --compression 4 --verbosity 1 --workspace C:\Users\kolon\AppData\Local\Temp\mxAI_workspace16440353307823001765532618488983329 --output C:\Users\kolon\.stm32cubemx
+Created date       : 2021-04-30 10:44:22
+Parameters         : generate --name simplenn -m D:/onlabgithub/TK-MachineLearning/Supervision/MCU_NN.onnx --type onnx --compression 4 --verbosity 1 --workspace C:\Users\kolon\AppData\Local\Temp\mxAI_workspace26216206620005867316507264055514 --output C:\Users\kolon\.stm32cubemx
 
 Exec/report summary (generate)
 ------------------------------------------------------------------------------------------------------------------------
@@ -9,7 +9,7 @@ type               : onnx
 c_name             : simplenn
 compression        : 4
 quantize           : None
-workspace dir      : C:\Users\kolon\AppData\Local\Temp\mxAI_workspace16440353307823001765532618488983329
+workspace dir      : C:\Users\kolon\AppData\Local\Temp\mxAI_workspace26216206620005867316507264055514
 output dir         : C:\Users\kolon\.stm32cubemx
 
 model_name         : MCU_NN
