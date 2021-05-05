@@ -1,18 +1,9 @@
-/venv/
-/.idea/
-/venvn/
-/Simulation/Tamás Visy/CARLA/files/carla-0.9.10-py3.7-win-amd64.egg
-/Microcontroller/Network/carla.log
-/Simulation/Tamás Visy/CARLA/files/carla.log
-/Simulation/Tamás Visy/CARLA/files/tensor.pt
-/Simulation/Tamás Visy/CARLA/files/keras/checkpoints/
-/Simulation/Tamás Visy/CARLA/files/keras/checkpoint
-/Simulation/Tamás Visy/CARLA/files/keras/keras.model.data-00000-of-00001
-/Simulation/Tamás Visy/CARLA/files/keras/keras.model.index
-/Simulation/Tamás Visy/CARLA/files/logs/
-/Simulation/Tamás Visy/CARLA/files/replay_pulls.npy
-/Simulation/Tamás Visy/CARLA/files/replay_statuses.npy
-/Simulation/Tamás Visy/CARLA/files/tflite/
-/Simulation/Tamás Visy/CARLA/files/torch/
-/Simulation/Tamás Visy/CARLA/files/keras/
-/Simulation/Tamás Visy/CARLA/files/keras.zip
+/.idea
+/Simulation/files/keras/
+/Simulation/files/carla-0.9.10-py3.7-win-amd64.egg
+/Simulation/files/logs_archive/
+/Simulation/files/carla.log
+/Simulation/files/replay_pulls.npy
+/Simulation/files/tflite/
+/Simulation/files/torch/
+/Simulation/files/replay_statuses.npy
