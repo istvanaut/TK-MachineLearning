@@ -66,7 +66,7 @@ class ReinforcementModel:
         self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=0.001)
         self.memory = ReplayMemory(10000)
         self.reward = RewardFunctions.inline_reward
-        summary(self.target_net, [(1, 32, 32), (1, 1, dim_features())])
+        summary(self.target_net, [(1, height, width), (1, 1, dim_features())])
 
     def predict(self, state):
         # Select an action
@@ -119,6 +119,15 @@ class ReinforcementModel:
         if self.time_step % self.TARGET_UPDATE == 0:
             self.target_net.load_state_dict(self.policy_net.state_dict())
         return reward
+
+    def optimize_ESP(self):
+        self.optimize_model()
+        self.time_step += 1
+        # Update the target network, copying all weights and biases in DQN
+        if self.time_step % self.TARGET_UPDATE == 0:
+            self.target_net.load_state_dict(self.policy_net.state_dict())
+        return reward
+
 
     def optimize_model(self):
         if len(self.memory) < self.BATCH_SIZE:
