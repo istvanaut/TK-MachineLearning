@@ -147,7 +147,7 @@ int GetReward ()
 
 	PrevAnalysedMove = analysedMove;
 
-	printf("Analysed move: %d, Reward: %d\n", analysedMove, reward);
+	// printf("Analysed move: %d, Reward: %d\n", analysedMove, reward);
 
 	return reward;
 
@@ -200,9 +200,17 @@ int8_t returnToLine(void){
 	if(TIM14->CNT > 30000)
 	{
 		HAL_TIM_Base_Stop(&htim14);
-		leftMotor(MOTOR_STOP);
-		rightMotor(MOTOR_STOP);
-		return -1;
+		if (LEDs == 0)
+		{
+			leftMotor(MOTOR_STOP);
+			rightMotor(MOTOR_STOP);
+			return -1;
+		}
+		else
+		{
+			TIM14->CNT = 0;
+			HAL_TIM_Base_Start(&htim14);
+		}
 	}
 
 	  deltaAngle = getEuler().x - savedAngle;
