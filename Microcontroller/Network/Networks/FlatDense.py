@@ -16,10 +16,10 @@ class FlatDense(nn.Module):
         #   n_actions         - number of actions on the output of the network
         super(FlatDense, self).__init__()
 
-        self.dense1 = nn.Linear(height * width, 64)
+        self.dense1 = nn.Linear(height * width, 32)
 
         # Recursive Neural Network
-        self.dense2 = nn.Linear(64, 64)
+        self.dense2 = nn.Linear(32, 64)
         self.dense3 = nn.Linear(64, 64)
         self.dense4 = nn.Linear(64, n_actions)
         # Output layer
