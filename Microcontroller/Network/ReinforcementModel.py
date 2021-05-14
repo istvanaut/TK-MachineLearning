@@ -126,7 +126,6 @@ class ReinforcementModel:
         # Update the target network, copying all weights and biases in DQN
         if self.time_step % self.TARGET_UPDATE == 0:
             self.target_net.load_state_dict(self.policy_net.state_dict())
-        return reward
 
 
     def optimize_model(self):
