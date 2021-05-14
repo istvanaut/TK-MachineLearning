@@ -18,7 +18,7 @@ from support.logger import logger
 def transform_state(state):
     image, array, _ = state.get_formatted()
     image = np.expand_dims(image, axis=0)
-    image = np.expand_dims(image, axis=1)
+    array=[0 if _ is None else _ for _ in array]
     return torch.from_numpy(image).float(), torch.tensor([[array]]).float()
 
 

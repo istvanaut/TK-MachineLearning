@@ -28,14 +28,14 @@ class ReplayMemory(object):
         return random.sample(self.memory, batch_size)
 
     def save(self):
-        f = dict(zip(self.time, self.memory))
+        f = list(zip(self.time, self.memory))
         w = csv.writer(open("output.csv", "w"))
 
         top_row = ['Time', 'state_image', 'state_features', 'action', 'next_image', 'next_features', 'reward']
         w.writerow(top_row)
-        for key, tuple in dict.items():
-            val = [_ for _ in tuple]
-            w.writerow([key]+val)
+        for row in f:
+            val = [_.tolist() for _ in row[1]]
+            w.writerow([row[0]]+val)
 
     def __len__(self):
         return len(self.memory)

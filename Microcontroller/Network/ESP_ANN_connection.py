@@ -4,7 +4,7 @@ from ReinforcementModel import ReinforcementModel
 from Networks import FlatDense
 
 
-class ConnectionTrainer():
+class ConnectionTrainer:
     def __init__(self):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.prev_image = None
