@@ -11,26 +11,36 @@ enum US_SENSOR{
 	LEFT, RIGHT
 };
 
+//Semaphores for operating system
 extern osSemaphoreId_t SemLeftUSSensorHandle;
 extern osSemaphoreId_t SemRightUSSensorHandle;
 extern osSemaphoreId_t SemUSSensorEdgeHandle;
 
+//Left sensor variables
 volatile uint32_t UStimeDifferenceLeft = 0;
 volatile uint32_t USStartTimeLeft;
 volatile uint32_t USStopTimeLeft;
 static volatile uint32_t USdistanceLeft = 0;
 static volatile uint8_t USrisingEdgeDetectedLeft = 0;
 
+//Right sensor variables
 volatile uint32_t UStimeDifferenceRight = 0;
 volatile uint32_t USStartTimeRight;
 volatile uint32_t USStopTimeRight;
 static volatile uint32_t USdistanceRight = 0;
 static volatile uint8_t USrisingEdgeDetectedRight = 0;
 
+//Current Measuring sensor
 volatile enum US_SENSOR currentUSSensor = LEFT;
 
+//Timer for US sensors with 4 channel
+//Left:  PWM - CH4
+//		 Input Capture - CH3
+//Right: PWM - CH2
+//		 Input Capture - CH1
 TIM_HandleTypeDef* UStim;
 
+//Initialize US sensor timer and start measuring with left sensor
 void initUS(TIM_HandleTypeDef *htim){
 	UStim = htim;
 	//Start LEFT
@@ -39,6 +49,7 @@ void initUS(TIM_HandleTypeDef *htim){
 	HAL_TIM_Base_Start_IT(UStim);
 }
 
+//For 1 ultrasonic sensor
 /*
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance == UStim->Instance){
@@ -64,6 +75,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim){
 }
 */
 
+//Return last measured left US distance. Wait until semaphore is free
+//Never use in ISR!
 //Distance in cm
 uint32_t getUSDistanceLeft(void){
 	uint32_t temp;
@@ -73,6 +86,8 @@ uint32_t getUSDistanceLeft(void){
 	return temp;
 }
 
+//Return last measured right US distance. Wait until semaphore is free
+//Never use in ISR!
 //Distance in cm
 uint32_t getUSDistanceRight(void){
 	uint32_t temp;
@@ -82,6 +97,8 @@ uint32_t getUSDistanceRight(void){
 	return temp;
 }
 
+//Set left US distance. If semaphore is acquired, new value won't be saved
+//Can be called from ISR
 void setUSDistanceLeftCallBack(uint32_t value){
 	if(osSemaphoreAcquire(SemLeftUSSensorHandle, 0) == osOK){
 		USdistanceLeft = value;
@@ -90,6 +107,8 @@ void setUSDistanceLeftCallBack(uint32_t value){
 	return;
 }
 
+//Set right US distance. If semaphore is acquired, new value won't be saved
+//Can be called from ISR
 void setUSDistanceRightCallBack(uint32_t value){
 	if(osSemaphoreAcquire(SemRightUSSensorHandle, 0) == osOK){
 		USdistanceRight = value;
@@ -98,6 +117,8 @@ void setUSDistanceRightCallBack(uint32_t value){
 	return;
 }
 
+//Set left rising edge. If semaphore is acquired, new value won't be saved
+//Can be called from ISR
 void setUSRisingEdgeLeftCallBack(uint8_t value){
 	if(osSemaphoreAcquire(SemUSSensorEdgeHandle, 0) == osOK){
 		USrisingEdgeDetectedLeft = value;
@@ -106,6 +127,8 @@ void setUSRisingEdgeLeftCallBack(uint8_t value){
 	return;
 }
 
+//Set left rising edge. If semaphore is acquired, new value won't be saved
+//Can be called from ISR
 void setUSRisingEdgeRightCallBack(uint8_t value){
 	if(osSemaphoreAcquire(SemUSSensorEdgeHandle, 0) == osOK){
 		USrisingEdgeDetectedRight = value;
@@ -114,6 +137,8 @@ void setUSRisingEdgeRightCallBack(uint8_t value){
 	return;
 }
 
+//Return left rising edge value. If semaphore is acquired, return 0
+//Can be called from ISR
 uint8_t getUSRisingEdgeLeftCallback(void){
 	uint8_t temp = 0;
 	if(osSemaphoreAcquire(SemUSSensorEdgeHandle, 0) == osOK){
@@ -123,6 +148,8 @@ uint8_t getUSRisingEdgeLeftCallback(void){
 	return temp;
 }
 
+//Return right rising edge value. If semaphore is acquired, return 0
+//Can be called from ISR
 uint8_t getUSRisingEdgeRightCallback(void){
 	uint8_t temp = 0;
 	if(osSemaphoreAcquire(SemUSSensorEdgeHandle, 0) == osOK){
@@ -132,7 +159,7 @@ uint8_t getUSRisingEdgeRightCallback(void){
 	return temp;
 }
 
-//Is should be called from HAL_TIM_IC_CaptureCallback
+//It should be called from HAL_TIM_IC_CaptureCallback
 void USSensorInputCaptureCallback(TIM_HandleTypeDef *htim){
 	//US Sensor Left BEGIN
 
@@ -185,6 +212,7 @@ void USSensorInputCaptureCallback(TIM_HandleTypeDef *htim){
 }
 
 //It should be called from HAL_TIM_PeriodElapsedCallback
+//When timer elapsed, it changes the measuring sensor
 void USSensorPeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance != UStim->Instance)
 		return;
