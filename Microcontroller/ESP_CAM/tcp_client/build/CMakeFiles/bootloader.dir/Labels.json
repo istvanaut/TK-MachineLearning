@@ -2,34 +2,34 @@
 	"sources" : 
 	[
 		{
-			"file" : "D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/CMakeFiles/bootloader"
+			"file" : "C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/CMakeFiles/bootloader"
 		},
 		{
-			"file" : "D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/CMakeFiles/bootloader.rule"
+			"file" : "C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/CMakeFiles/bootloader.rule"
 		},
 		{
-			"file" : "D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/CMakeFiles/bootloader-complete.rule"
+			"file" : "C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/CMakeFiles/bootloader-complete.rule"
 		},
 		{
-			"file" : "D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+			"file" : "C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
 		},
 		{
-			"file" : "D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+			"file" : "C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
 		},
 		{
-			"file" : "D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+			"file" : "C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
 		},
 		{
-			"file" : "D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+			"file" : "C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
 		},
 		{
-			"file" : "D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+			"file" : "C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
 		},
 		{
-			"file" : "D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+			"file" : "C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
 		},
 		{
-			"file" : "D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+			"file" : "C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
 		}
 	],
 	"target" : 

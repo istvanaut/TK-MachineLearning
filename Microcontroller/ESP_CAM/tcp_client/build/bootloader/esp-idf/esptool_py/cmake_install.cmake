@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Balazs/Desktop/esp-idf/components/esptool_py
+# Install script for directory: C:/Users/krani/esp/esp-idf/components/esptool_py
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

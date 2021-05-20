@@ -1,4 +1,4 @@
-/* * Data converted from D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 .section .rodata.embedded

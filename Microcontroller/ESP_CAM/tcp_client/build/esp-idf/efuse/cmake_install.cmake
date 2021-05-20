@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Balazs/Desktop/esp-idf/components/efuse
+# Install script for directory: C:/Users/krani/esp/esp-idf/components/efuse
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

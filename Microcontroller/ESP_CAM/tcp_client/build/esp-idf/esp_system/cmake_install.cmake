@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Balazs/Desktop/esp-idf/components/esp_system
+# Install script for directory: C:/Users/krani/esp/esp-idf/components/esp_system
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/build/esp-idf/esp_system/port/cmake_install.cmake")
+  include("C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/build/esp-idf/esp_system/port/cmake_install.cmake")
 
 endif()
 

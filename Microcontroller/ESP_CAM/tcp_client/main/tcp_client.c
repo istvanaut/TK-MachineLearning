@@ -61,6 +61,7 @@
 #define PORT CONFIG_EXAMPLE_PORT
 
 static const char *TAG = "example";
+static const char *TAGSTATES = "STATES";
 static const char *payload = "Weights";
 
 static const char *TAG2 = "Camera";
@@ -164,11 +165,28 @@ Pins in use. The SPI Master can use the GPIO mux, so feel free to change these i
 #define REQ_SEND_STATE_1            0x03u
 #define REQ_SEND_STATE_2            0x04u
 #define REQ_PING                    0X05u
+#define START_REQUEST_WEIGHTS	    0x06u
+#define REQ_LAST_CHUNK			    0x07u
 
 #define CAM_WIDTH   32
 #define CAM_HEIGHT  32
 
-#define WEIGHTS_SIZE     4848
+
+#define WEIGHTS_SIZE            157328
+#define WEIGHTS_CHUNKS          1024
+#define WEIGHTS_LAST_CHUNK      (WEIGHTS_SIZE - (WEIGHTS_SIZE / WEIGHTS_CHUNKS)*WEIGHTS_CHUNKS)
+
+// define socket requests
+#define SOCK_REQ_DEFAULT            0x00u
+#define SOCK_REQ_WEIGHTS            0x01u
+#define SOCK_REQ_STATES             0x02u
+#define SOCK_REQ_START_WEIGHTS      0x03u
+#define SOCK_REQ_LAST_CHUNK         0x04u
+
+
+#define SOCK_RESP_OK        0x01u
+#define SOCK_RESP_NOK       0x00u
+
 
 typedef struct
 {
@@ -192,6 +210,22 @@ typedef struct {
 	uint32_t laserC;
     /* data */
 }sensorStateC;
+typedef struct{
+    uint32_t lightsensorP;
+	uint32_t usLeftP;
+	uint32_t usRightP;
+	uint32_t laserP;
+	/* Performed previous action*/
+	float leftM;
+	float rightM;
+    float reward;
+    uint32_t lightsensorC;
+	uint32_t usLeftC;
+	uint32_t usRightC;
+	uint32_t laserC;
+    uint8_t imgp[CAM_HEIGHT*CAM_WIDTH];
+    uint8_t imgc[CAM_HEIGHT*CAM_WIDTH];
+}allStates;
 union sensorStatePU
 {
     sensorState* statesP;
@@ -202,6 +236,24 @@ union sensorStateCU
     sensorStateC* statesC;
     uint8_t* buf;
 };
+
+int mySend(int socket, const void *buffer, size_t length, int flags)
+{
+    int totalSent = 0;
+    int sent;
+    while(totalSent < length)
+    {
+        sent = send(socket, buffer + totalSent, length - totalSent, flags);
+        if(sent == -1)
+        {
+            ESP_LOGE(TAGSTATES, "Error sending data");
+            return -1;
+        }
+        totalSent += sent;
+    }
+    return totalSent;
+}
+
 
 //Called after a transaction is queued and ready for pickup by master. We use this to set the handshake line high.
 void my_post_setup_cb(spi_slave_transaction_t *trans) {
@@ -214,6 +266,7 @@ void my_post_trans_cb(spi_slave_transaction_t *trans) {
 }
 
 uint8_t* camera_frame;
+uint8_t* camera_frame_prev;
 
 
 
@@ -290,7 +343,7 @@ static void tcp_client_task(void *pvParameters)
         .sclk_io_num=GPIO_SCLK,
         .quadwp_io_num = -1,
         .quadhd_io_num = -1,
-        .max_transfer_sz=WEIGHTS_SIZE+4
+        .max_transfer_sz=WEIGHTS_CHUNKS+4
     };
 
     //Configuration for the SPI slave interface
@@ -328,10 +381,10 @@ static void tcp_client_task(void *pvParameters)
     memset(&t, 0, sizeof(t));
 
     /*Define DMA buffers in DMA capable memory*/
-    uint8_t *weights_dma = (uint8_t *)heap_caps_malloc(WEIGHTS_SIZE, MALLOC_CAP_DMA);
+    uint8_t *weights_dma = (uint8_t *)heap_caps_malloc(WEIGHTS_CHUNKS, MALLOC_CAP_DMA);
     //uint8_t *sensorStates_dma = (uint8_t *)heap_caps_malloc(11*sizeof(uint32_t),MALLOC_CAP_DMA);
     camera_frame = (uint8_t *)heap_caps_malloc(CAM_WIDTH*CAM_HEIGHT, MALLOC_CAP_DMA);
-
+    camera_frame_prev = (uint8_t *)heap_caps_malloc(CAM_WIDTH*CAM_HEIGHT, MALLOC_CAP_DMA);
     union sensorStateCU dataC;
     union sensorStatePU dataP;
     sensorState statePrev;
@@ -340,22 +393,28 @@ static void tcp_client_task(void *pvParameters)
     printf("Sizeu: %u\n", sizeof(uint32_t));
     printf("Sizes: %u\n", sizeof(sensorState));
     printf("Sizew: %u\n", sizeof(weights_dma));
-    for (int i =0; i<WEIGHTS_SIZE;i++)
+    /*for (int i =0; i<WEIGHTS_CHUNKS;i++)
     {
         weights_dma[i] = 0xAA;
-    }
-    for (int i =0; i<CAM_WIDTH*CAM_HEIGHT;i++)
+    }*/
+    /*for (int i =0; i<CAM_WIDTH*CAM_HEIGHT;i++)
     {
-        camera_frame[i] = 0x7C;
+        camera_frame[i] = 0xBD;
+        camera_frame_prev[i] = 0x11;
     }
     camera_frame[0] = 0xEA;
-    camera_frame[CAM_WIDTH*CAM_HEIGHT-1] = 0xDB;
-    weights_dma[1] = 0xEE;
-    weights_dma[2500] = 0xCE;
-    weights_dma[4847] = 0xED;
-    
-    camera_fb_t *pic;
-
+    camera_frame[CAM_WIDTH*CAM_HEIGHT-1] = 0xDB;*/
+    //weights_dma[1] = 0xEE;
+    //weights_dma[2500] = 0xCE;
+    //weights_dma[4847] = 0xED;
+    uint8_t req_sock = SOCK_REQ_DEFAULT;
+    uint8_t *resp_sock =(uint8_t *)heap_caps_malloc(1, MALLOC_CAP_DMA);
+    camera_fb_t *pic = NULL;
+    allStates statesBuf;
+    //memset(pic->buf,0x00,pic->len);
+    int err;
+    int w_cnt = 0;
+    int nSent = 0;
     while(1)
     {
         #if defined(CONFIG_EXAMPLE_IPV4)
@@ -396,7 +455,7 @@ static void tcp_client_task(void *pvParameters)
         }
 
         ESP_LOGI(TAG, "Successfully connected");
-
+        w_cnt = 0;
         while (1)
         {
 
@@ -424,17 +483,51 @@ static void tcp_client_task(void *pvParameters)
             switch (request)
             {
             case REQ_PING:
-                printf("REQ_PING qn");
+                printf("REQ_PING \n");
                 t.length=8;
                 sendbuf[0] = RESP_OK;
                 t.tx_buffer = sendbuf;
                 t.rx_buffer = NULL;
+                trans_nextstate = STATE_WAITING_FOR_REQUEST;
+                break;
+            case START_REQUEST_WEIGHTS:
+                printf("START_REQUEST_WEIGHTS\n");
+                w_cnt = 0;
+                req_sock = SOCK_REQ_START_WEIGHTS;
+                mySend(sock, &req_sock, 1u, 0);
+                sendbuf[0] = RESP_OK;
+                t.tx_buffer = sendbuf;
+                t.rx_buffer = NULL;
+                trans_nextstate = STATE_WAITING_FOR_REQUEST;
+                skip = true;
                 break;
             case REQ_WEIGHTS:
                 printf("REQ_WEIGHTS\n");
-                t.length= 8 * WEIGHTS_SIZE;
+                
                 t.tx_buffer = weights_dma;
                 t.rx_buffer = NULL;
+                req_sock = SOCK_REQ_WEIGHTS;
+                printf("Receiving weights from PC\n");
+                printf("Iterator: %d\n",w_cnt);
+                mySend(sock, &req_sock, 1u, 0);
+                recv(sock, weights_dma, WEIGHTS_CHUNKS, MSG_WAITALL);
+                printf("Datafirst: %d\n",weights_dma[0]);
+                
+                t.length= 8 * WEIGHTS_CHUNKS;
+                trans_nextstate = STATE_WAITING_FOR_REQUEST;
+                w_cnt++;
+                break;
+            case REQ_LAST_CHUNK:
+                req_sock = SOCK_REQ_LAST_CHUNK;
+                t.tx_buffer = weights_dma;
+                t.rx_buffer = NULL;
+                printf("Receiving remaining weights: %d\n",WEIGHTS_SIZE - w_cnt * WEIGHTS_CHUNKS);
+                mySend(sock, &req_sock, 1u, 0);
+                recv(sock, weights_dma , WEIGHTS_SIZE - (WEIGHTS_SIZE / WEIGHTS_CHUNKS)*WEIGHTS_CHUNKS, MSG_WAITALL);
+               
+                t.length= 8 * (WEIGHTS_SIZE - (WEIGHTS_SIZE / WEIGHTS_CHUNKS)*WEIGHTS_CHUNKS);
+                trans_nextstate = STATE_WAITING_FOR_REQUEST;
+                w_cnt = 0;
                 break;
             case REQ_SEND_STATE_1:
                 printf("REQ_SEND_STATE_1\n");
@@ -444,6 +537,7 @@ static void tcp_client_task(void *pvParameters)
                 t.rx_buffer=recvbuf;
                 dataP.buf = recvbuf;
                 memset(recvbuf, 0xA5, 129);
+                trans_nextstate = STATE_WAITING_FOR_REQUEST;
                 break;
             case REQ_SEND_STATE_2:
                 printf("REQ_SEND_STATE_2\n");
@@ -453,24 +547,42 @@ static void tcp_client_task(void *pvParameters)
                 t.rx_buffer=recvbuf;
                 dataC.buf = recvbuf;
                 memset(recvbuf, 0xA5, 129);
+                
+                
+                // send picture too.
+                trans_nextstate = STATE_WAITING_FOR_REQUEST;
                 break;
             case REQ_CAMERA_PIC:
                 printf("REQ_CAMERA_PIC\n");
                 ESP_LOGI(TAG, "Taking picture...");
                 pic = esp_camera_fb_get();
-
+                //memset(pic->buf,0x43u,pic->len);
+                //copy current image to the previous since it corresponds to the previous state by now
+                //memcpy(camera_frame,pic->buf,CAM_WIDTH*CAM_HEIGHT);
+                //memcpy(statesBuf.imgp,camera_frame_prev,CAM_WIDTH*CAM_HEIGHT);
+                //memcpy(camera_frame_prev,camera_frame,CAM_WIDTH*CAM_HEIGHT);
+                //memcpy(statesBuf.imgc,camera_frame,CAM_WIDTH*CAM_HEIGHT);
+                
+                
                 for(int i = 0; i < pic->len; i++)
                 {
                     camera_frame[i] = pic->buf[i];
                 }
+                for(int i = 0; i < pic->len; i++)
+                {
+                    statesBuf.imgp[i] = camera_frame_prev[i];
+                }
+                for(int i = 0; i < pic->len; i++)
+                {
+                    camera_frame_prev[i] = camera_frame[i];
+                }
+                for(int i = 0; i < pic->len; i++)
+                {
+                    statesBuf.imgc[i] = camera_frame[i];
+                }
                 ESP_LOGI(TAG, "For cycle finished...");
-
-                if(camera_frame[0] == pic->buf[0]){ESP_LOGI(TAG, "Equal 0...");}
-                else{ESP_LOGI(TAG, "Not Equal 0...");}
-                if(camera_frame[500] == pic->buf[500]){ESP_LOGI(TAG, "Equal 500...");}
-                if(camera_frame[1000] == pic->buf[1000]){ESP_LOGI(TAG, "Equal 1000...");}
-
-                int err = send(sock, camera_frame, pic->len, 0);
+                /*
+                err = send(sock, camera_frame, 1024u, 0);
                 if (err < 0) 
                 {
                     ESP_LOGE(TAG, "Error occurred during sending picture: errno %d", errno);
@@ -494,12 +606,13 @@ static void tcp_client_task(void *pvParameters)
                     rx_buffer[len] = 0; // Null-terminate whatever we received and treat like a string
                     ESP_LOGI(TAG, "Received %d bytes from %s:", len, host_ip);
                     ESP_LOGI(TAG, "%s", rx_buffer);
-                }
+                }*/
                 /* Remember to use Semaphore here when integrating!!!*/
-                if(camera_frame[0] == 0xEA) printf("Equals");
+                //if(camera_frame[0] == 0xEA) printf("Equals");
                 t.length = 8 * CAM_WIDTH*CAM_HEIGHT;
                 t.tx_buffer = camera_frame;
                 t.rx_buffer = NULL;
+                trans_nextstate = STATE_WAITING_FOR_REQUEST;
                 break;
             default:
                 // useless data received presumably, so go back to request state
@@ -509,11 +622,12 @@ static void tcp_client_task(void *pvParameters)
                 sendbuf[0] = RESP_NOK;
                 t.tx_buffer=sendbuf;
                 t.rx_buffer=NULL;
+                trans_nextstate = STATE_WAITING_FOR_REQUEST;
                 break;
             }
             
             
-            trans_nextstate = STATE_WAITING_FOR_REQUEST;
+            
             break;
         default:
             break;
@@ -544,7 +658,8 @@ static void tcp_client_task(void *pvParameters)
                 }
                 else
                 {
-                    if(request == REQ_SEND_STATE_1 && trans_state == STATE_SENDING_RESPONSE)
+                    
+                    if((request == REQ_SEND_STATE_1) && (trans_state == STATE_SENDING_RESPONSE))
                     {
                         
                         printf("Received: %s\n", recvbuf); 
@@ -556,7 +671,28 @@ static void tcp_client_task(void *pvParameters)
                         printf("leftM value Previous: %g\n", dataP.statesP->leftM);
                         printf("rightM sensor value Previous: %g\n", dataP.statesP->rightM);
                         printf("reward sensor value: %g\n", dataP.statesP->reward);
-                        
+                        printf("\n SENDING SOCK_REQ_STATES TO PC VIA SOCKET\n");
+                        req_sock = SOCK_REQ_STATES;
+                        err = mySend(sock, &req_sock, 1u, 0);
+                        if (err < 0) 
+                        {
+                            ESP_LOGE(TAG, "Error occurred during sending request header: errno %d", errno);
+                            break;
+                        }
+                        statesBuf.laserP = dataP.statesP->laserP;
+                        statesBuf.leftM = dataP.statesP->leftM;
+                        statesBuf.lightsensorP = dataP.statesP->lightsensorP;
+                        statesBuf.reward = dataP.statesP->reward;
+                        statesBuf.rightM = dataP.statesP->rightM;
+                        statesBuf.usLeftP = dataP.statesP->usLeftP;
+                        statesBuf.usRightP = dataP.statesP->usRightP;
+                        err = mySend(sock, dataP.buf, 28u, 0);
+                        if (err < 0) 
+                        {
+                            ESP_LOGE(TAG, "Error occurred during sending state2: errno %d", errno);
+                            break;
+                        }
+
                     }
                     if(request == REQ_SEND_STATE_2 && trans_state == STATE_SENDING_RESPONSE)
                     {
@@ -568,7 +704,36 @@ static void tcp_client_task(void *pvParameters)
                         printf("usLeft value Current: %u\n", dataC.statesC->usLeftC);
                         printf("usRight value Current: %u\n", dataC.statesC->usRightC);
                         printf("laser value Current: %u\n", dataC.statesC->laserC);
+                        printf("\n SENDING SENSORSTATES2 TO PC VIA SOCKET\n");
                         
+                        
+                        statesBuf.laserC = dataC.statesC->laserC;
+                        statesBuf.lightsensorC = dataC.statesC->lightsensorC;
+                        statesBuf.usLeftC = dataC.statesC->usLeftC;
+                        statesBuf.usRightC = dataC.statesC->usRightC;
+                        err = mySend(sock, dataC.buf, 16u, 0);
+                        if (err < 0) 
+                        {
+                            ESP_LOGE(TAG, "Error occurred during sending state2: errno %d", errno);
+                            break;
+                        }
+                        printf("\n SENDING camera_frame_prev TO PC VIA SOCKET\n");
+                        vTaskDelay(2);
+                        err = mySend(sock, camera_frame_prev, 1024u, 0);
+                        if (err < 0) 
+                        {
+                            ESP_LOGE(TAG, "Error occurred during sending state2: errno %d", errno);
+                            break;
+                        }
+                        printf("\n SENDING camera_frame TO PC VIA SOCKET\n");
+                        vTaskDelay(2);
+                        err = mySend(sock, camera_frame, 1024u, 0);
+                        if (err < 0) 
+                        {
+                            ESP_LOGE(TAG, "Error occurred during sending state2: errno %d", errno);
+                            break;
+                        }
+                        vTaskDelay(2);
                     }
                 }
                 

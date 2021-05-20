@@ -1,4 +1,4 @@
-# Install script for directory: D:/AGV_Git_Cap/Microcontroller/ESP_CAM/tcp_client/main
+# Install script for directory: C:/Users/krani/Documents/BME/AGVFinal/Microcontroller/ESP_CAM/tcp_client/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
