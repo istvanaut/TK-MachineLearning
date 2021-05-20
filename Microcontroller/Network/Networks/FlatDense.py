@@ -15,7 +15,6 @@ class FlatDense(nn.Module):
         #   height, width   - the parameters of the input picture.
         #   n_actions         - number of actions on the output of the network
         super(FlatDense, self).__init__()
-
         self.dense1 = nn.Linear(height * width, 32)
 
         # Recursive Neural Network

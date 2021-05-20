@@ -1,15 +1,21 @@
+import time
+
 import torch
 import numpy as np
-from ReinforcementModel import ReinforcementModel
-from Networks import FlatDense
+import cv2
 
+from Networks.SCNN import SCNN
+from ReinforcementModel import ReinforcementModel
+from Networks.FlatDense import FlatDense
+from sklearn.preprocessing import normalize
 
 class ConnectionTrainer:
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.prev_image = None
         self.Reinforcement_model = ReinforcementModel(dim_features=self.get_feature_dimension, height=32,
                                                       width=32, n_actions=4, model=FlatDense)
+        if kwargs.get('path') is not None:
+            self.Reinforcement_model.load_model(kwargs.get('path'), self.get_feature_dimension(), 32, 2, 4, model=FlatDense)
 
     def get_feature_dimension(self):
         return 10
@@ -18,15 +24,16 @@ class ConnectionTrainer:
                   prev_leftUltrasonicSensor,
                   prev_rightUltrasonicSensor,
                   prev_laserDistance,
-                  curr_image,
+                  prev_image,
                   prev_leftMotorValue,
                   prev_right_motorValue,
                   reward,
                   curr_lightSensor,
                   curr_leftUltrasonicSensor,
                   curr_rightUltrasonicSensor,
-                  curr_laserDistance
-                  ):
+                  curr_laserDistance,
+                  curr_image,
+                  **kwargs):
         # lightSensor_Previous
         # left_UltrasonicSensor_Previous
         # right_UltrasonicSensor_Previous
@@ -40,27 +47,28 @@ class ConnectionTrainer:
         # left_UltrasonicSensor_Current
         # right_UltrasonicSensor_Current
         # laserDistance_Current
-        global prev_image
 
-        current_image = curr_image
-
-        if self.prev_image is None:
-            self.prev_image = current_image
-            return
-
-        prev_features = torch.tensor(prev_lightSensor, prev_leftUltrasonicSensor, prev_rightUltrasonicSensor,
-                                     prev_laserDistance)
-        new_features = torch.tensor(curr_lightSensor, curr_leftUltrasonicSensor, curr_rightUltrasonicSensor,
-                                    curr_laserDistance)
-        action = torch.tensor(prev_leftMotorValue, prev_right_motorValue)
+        prev_features = torch.tensor([prev_lightSensor, prev_leftUltrasonicSensor, prev_rightUltrasonicSensor,
+                                     prev_laserDistance])
+        new_features = torch.tensor([curr_lightSensor, curr_leftUltrasonicSensor, curr_rightUltrasonicSensor,
+                                    curr_laserDistance])
+        if(prev_leftMotorValue[0]>0.1 and prev_right_motorValue[0]>0.1):
+            action=2
+        if (prev_leftMotorValue[0] > 0.1 and prev_right_motorValue[0] < 0.1):
+            action =0
+        if (prev_leftMotorValue[0] < 0.1 and prev_right_motorValue[0] > 0.1 ):
+            action =1
+        if (prev_leftMotorValue[0] < 0.1 and prev_right_motorValue[0] < 0.1):
+            action =3
+        action = torch.tensor([[action]])
 
         prev_image = np.array(prev_image).reshape(1, 32, 32)
 
-        current_image = np.array(current_image).reshape(1, 32, 32)
+        current_image = np.array(curr_image).reshape(1, 32, 32)
+        prev_image=torch.tensor(prev_image/255)
+        current_image=torch.tensor(current_image/255)
+        self.Reinforcement_model.memory.push(prev_image.float(), prev_features.float(), action, current_image.float(), new_features.float(), torch.tensor(reward).float(), **kwargs)
 
-        self.Reinforcement_model.memory.push(prev_image, prev_features, action, current_image, new_features, reward)
-
-        self.prev_image = current_image
 
     def trainModel(self):
         for i in range(self.Reinforcement_model.TARGET_UPDATE):
