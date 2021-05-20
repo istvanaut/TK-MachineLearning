@@ -10,7 +10,7 @@ static bno055_vector_t euler;
 static bno055_vector_t accOffset;
 
 
-
+//Initialize the sensor in NDOF mode and measure the offset values
 void initACCSensor(I2C_HandleTypeDef* hi2c_device){
 	setACC_OS_RUNNING(0);
 	bno055_assignI2C(hi2c_device);
@@ -21,6 +21,8 @@ void initACCSensor(I2C_HandleTypeDef* hi2c_device){
 	//accOffset = bno055_getVectorLinearAccel();
 }
 
+//Measure the acceleration in each axis and subtract the offset values
+//It is using blocking semaphore. DO NOT call from ISR.
 void AccMeasure(void){
 	bno055_vector_t temp;
 	temp = bno055_getVectorAccelerometer();
@@ -32,11 +34,13 @@ void AccMeasure(void){
 	temp.x *= -1;
 	temp.y *= -1;
 
-	osSemaphoreAcquire(SemACCHandle, 0);
+	osSemaphoreAcquire(SemACCHandle, osWaitForever);
 	acceleration = temp;
 	osSemaphoreRelease(SemACCHandle);
 }
 
+//Return the acceleration values
+//It is using blocking semaphore. DO NOT call from ISR.
 bno055_vector_t getAcc(void){
 	bno055_vector_t temp;
 	osSemaphoreAcquire(SemACCHandle, osWaitForever);
@@ -45,6 +49,8 @@ bno055_vector_t getAcc(void){
 	return temp;
 }
 
+//Measure the angular velocity in each axis
+//It is using blocking semaphore. DO NOT call from ISR.
 void GyroMeasure(void){
 	bno055_vector_t temp;
 	temp = bno055_getVectorGyroscope();
@@ -54,6 +60,8 @@ void GyroMeasure(void){
 	osSemaphoreRelease(SemACCHandle);
 }
 
+//Return the angular velocities
+//It is using blocking semaphore. DO NOT call from ISR.
 bno055_vector_t getGyro(void){
 	bno055_vector_t temp;
 	osSemaphoreAcquire(SemACCHandle, osWaitForever);
@@ -62,6 +70,8 @@ bno055_vector_t getGyro(void){
 	return temp;
 }
 
+//Measure the relative angle from starting position and transform it to -180° and +180° range
+//It is using blocking semaphore. DO NOT call from ISR.
 void EulerMeasure(void){
 	bno055_vector_t temp;
 	temp = bno055_getVectorEuler();
@@ -74,6 +84,8 @@ void EulerMeasure(void){
 	osSemaphoreRelease(SemACCHandle);
 }
 
+//Return the relative angle from starting position
+//It is using blocking semaphore. DO NOT call from ISR.
 bno055_vector_t getEuler(void){
 	bno055_vector_t temp;
 	osSemaphoreAcquire(SemACCHandle, osWaitForever);
@@ -82,8 +94,9 @@ bno055_vector_t getEuler(void){
 	return temp;
 }
 
+
 //0: OS not running 1: OS running
-//0: It will use HAL_Delay 1: It will use OS_delay
+//0: It is using HAL_Delay 1: It is using OS_delay
 void setACC_OS_RUNNING(uint8_t value){
 	bno055_setFreeRTOSRunning(value);
 }
