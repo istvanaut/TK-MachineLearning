@@ -1,6 +1,5 @@
 import logging
-
-from settings import WRITE_FILE, LEVEL
+from Simulation.Main.settings import WRITE_FILE, LEVEL
 
 logFormatter = logging.Formatter('%(asctime)s.%(msecs)03d\t  [%(threadName)s]\t[%(levelname)-3.3s]:\t%(message)s',
                                  '%Y.%m.%d %H:%M:%S')

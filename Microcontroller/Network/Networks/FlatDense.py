@@ -15,12 +15,18 @@ class FlatDense(nn.Module):
         #   height, width   - the parameters of the input picture.
         #   n_actions         - number of actions on the output of the network
         super(FlatDense, self).__init__()
-        self.dense1 = nn.Linear(height * width, 32)
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.height = height
+        self.width = width
+        self.dim_features = 0
+        self.n_actions = n_actions
 
-        # Recursive Neural Network
+        # Input layer
+        self.dense1 = nn.Linear(self.height * self.width, 32)
+        # Hidden layers
         self.dense2 = nn.Linear(32, 64)
         self.dense3 = nn.Linear(64, 64)
-        self.dense4 = nn.Linear(64, n_actions)
+        self.dense4 = nn.Linear(64, self.n_actions)
         # Output layer
 
         self.dropout = nn.Dropout(p=0.2)
@@ -33,3 +39,8 @@ class FlatDense(nn.Module):
         y = self.dropout(F.leaky_relu(self.dense2(y)))
         y = self.dropout(F.leaky_relu(self.dense3(y)))
         return self.dense4(y)
+
+    def proxy_input(self):
+        image = torch.randn(1, self.height * self.width).to(self.device)
+        feature = torch.tensor([self.dim_features]).to(self.device)
+        return image, feature

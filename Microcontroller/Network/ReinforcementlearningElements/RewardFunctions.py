@@ -1,7 +1,6 @@
 import random
 
 # This is where the reward functions will be defined
-from support.logger import logger
 
 close_distance = 0.5
 middle_distance = 0.5

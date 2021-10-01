@@ -6,19 +6,15 @@ import torch
 import torch.optim as optim
 import torch.nn.functional as F
 
-from Networks.CNNwRNN import CNNwRNN
-from ReinforcementlearningElements import RewardFunctions
-from ReinforcementlearningElements.ReplayMemory import ReplayMemory, Transition
-
-import matplotlib.pyplot as plt
-
-from support.logger import logger
+from Microcontroller.Network.ReinforcementlearningElements import RewardFunctions
+from Microcontroller.Network.ReinforcementlearningElements.ReplayMemory import ReplayMemory
+from Simulation.Main.support.logger import logger
 
 
 def transform_state(state):
     image, array, _ = state.get_formatted()
     image = np.expand_dims(image, axis=0)
-    array=[0 if _ is None else _ for _ in array]
+    array = [0 if _ is None else _ for _ in array]
     return torch.from_numpy(image).float(), torch.tensor([[array]]).float()
 
 
@@ -66,7 +62,7 @@ class ReinforcementModel:
         self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=0.001)
         self.memory = ReplayMemory(10000)
         self.reward = RewardFunctions.inline_reward
-        summary(self.target_net, [(1, height, width), (1, 1, dim_features())])
+        summary(self.target_net, [(1, height, width), (1, 1, dim_features)])
 
     def predict(self, state):
         # Select an action
@@ -126,7 +122,6 @@ class ReinforcementModel:
         # Update the target network, copying all weights and biases in DQN
         if self.time_step % self.TARGET_UPDATE == 0:
             self.target_net.load_state_dict(self.policy_net.state_dict())
-
 
     def optimize_model(self):
         if len(self.memory) < self.BATCH_SIZE:
