@@ -11,7 +11,7 @@ class NetworkExporter:
     def __init__(self):
         self.filename = r"ExportedModel/MCU_NN.onnx"
         self.output_directory = "ExportedModel/model"
-        self.exe_path = r"D:\\University\\AVG-Önlab\\stm32ai-windows-6.0.0\\windows\\stm32ai.exe"
+        self.exe_path = r"D:\\University\\AVG-Onlab\\stm32ai-windows-6.0.0\\windows\\stm32ai.exe"
 
     def export_to_ONNX(self, model):
         torch.onnx.export(model.target_net,

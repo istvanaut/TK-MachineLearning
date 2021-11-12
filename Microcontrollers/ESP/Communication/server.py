@@ -57,6 +57,9 @@ class Socket:
             self.handle_request(int.from_bytes(data, byteorder='little'))
 
     def handle_request(self, request_type):
+        if self.config.REQ_ACTION == request_type:
+            self.send_action()
+
         if self.config.REQ_STATES == request_type:
             self.get_states()
 
@@ -95,14 +98,19 @@ class Socket:
     @staticmethod
     def process_data(data_array):
         # This function concatenates incoming data which has been received in chunks
-        size = len(data_array)
-        if size == 0:
+        if not len(data_array):
             return None
         else:
             data = data_array[0]
             for i in range(1, len(data_array)):
                 data = data + data_array[i]
             return data
+
+    def send_action(self):
+        self.send(self.config.SEND_IMAGE.to_bytes(length=1, byteorder='little'))
+        response=self.receive(1)
+        print(response)
+
 
     def get_states(self):
         print("Receiving states")
@@ -156,7 +164,8 @@ def main():
     try:
         server_socket.start()
         server_socket.start_listening()
-    except:
+    except Exception as e:
+        print(e)
         server_socket.close()
 
 
