@@ -96,6 +96,7 @@ SPI receiver
 
 // define state
 #define STATE_LISTEN                0x00u
+#define STATE_LINEFOLLOW            0x01u
 
 
 #define SOCK_RESP_OK        0x01u
@@ -109,7 +110,7 @@ static const char *TAGSTATES = "STATES";
 //static const char *payload = "Weights";
 
 static const char *TAG2 = "Camera";
-uint8_t* recieved_state;
+uint8_t recieved_state[1];
 uint8_t* weights_dma;
 uint8_t* camera_frame;
 uint8_t* camera_frame_prev;
@@ -151,6 +152,7 @@ static esp_err_t initCamera()
 
 spi_bus_config_t buscfg;
 gpio_config_t io_conf;
+
 static spi_device_handle_t configureSPI(){
     esp_err_t ret;
     //Configuration for the SPI bus
@@ -238,11 +240,21 @@ static int connectToSocket(){
 
 static void getStateFromSokcet(int sock){
     uint8_t req_sock;
-     // Signal to socket to prepare weights
     ESP_LOGI(TAG, "Requesting state...");
     req_sock = SOCK_REQ_DEFAULT;
     sendToSocket(sock, &req_sock, 1u, 0);
     recv(sock, recieved_state, 1, MSG_WAITALL);
+    sendToSocket(sock, &recieved_state, 1u, 0);
+}
+
+static void sendLineFollowRequest(spi_device_handle_t spi){
+    esp_err_t ret;
+    static spi_transaction_t trans;
+    memset(&trans, 0, sizeof(spi_transaction_t));
+    trans.length=8;
+    trans.tx_data[0] = 0x01u;
+    ret=spi_device_transmit(spi, &trans);
+    assert(ret==ESP_OK);
 }
 
 static void getWeightsFromSocket(spi_device_handle_t spi, int sock){
@@ -257,6 +269,7 @@ static void getWeightsFromSocket(spi_device_handle_t spi, int sock){
     // Request weights
     for(i =0; i<(WEIGHTS_SIZE / WEIGHTS_CHUNKS); ++i){
         ESP_LOGI(TAG, "Requesting chunk: %d", i);
+        memset(&trans[i], 0, sizeof(spi_transaction_t));
         req_sock = SOCK_REQ_WEIGHTS;
         sendToSocket(sock, &req_sock, 1u, 0);
         recv(sock, weights_dma, WEIGHTS_CHUNKS, MSG_WAITALL);
@@ -267,6 +280,7 @@ static void getWeightsFromSocket(spi_device_handle_t spi, int sock){
         assert(ret==ESP_OK);
     }
     ESP_LOGI(TAG, "Requesting last weights...");
+    memset(&trans[i], 0, sizeof(spi_transaction_t));
     req_sock = SOCK_REQ_LAST_CHUNK;
     sendToSocket(sock, &req_sock, 1u, 0);
     recv(sock, weights_dma, WEIGHTS_LAST_CHUNK, MSG_WAITALL);
@@ -275,6 +289,15 @@ static void getWeightsFromSocket(spi_device_handle_t spi, int sock){
     trans[i].rx_buffer = NULL;
     ret=spi_device_queue_trans(spi, &trans[i], portMAX_DELAY);
     assert(ret==ESP_OK);
+}
+
+static void handleState(spi_device_handle_t spi, int sock, uint8_t state){
+    switch(state){
+        case STATE_LISTEN:
+            break;
+        case STATE_LINEFOLLOW:
+            sendLineFollowRequest(spi);
+    }
 }
 
 static void tcpClientTask(void *pvParameters)
@@ -291,11 +314,12 @@ static void tcpClientTask(void *pvParameters)
         while (true)
         {
             getStateFromSokcet(sock);
-            if(state!=recieved_state[0]){
-                state=recieved_state[0];
+            //if(state!=recieved_state[0]){
+                //state=recieved_state[0];
                 // send stop to nucleo
-            }   
-            getWeightsFromSocket(spi, sock);
+            //}
+            //handleNewState(spi, sock, state);   
+            //getWeightsFromSocket(spi, sock);
         }
 
         if (sock != -1) 

@@ -1187,7 +1187,7 @@ void StartTaskDeafult(void *argument)
   for(;;)
   {
 	  /* VONAL KÖVETÉS*/
-/*
+
 	  if (actualState == NETWORK)
 	  {
 		  LLS = LS = RS = RRS = 0;
@@ -1240,7 +1240,7 @@ void StartTaskDeafult(void *argument)
 			  rightMotor(MOTOR_FAST);
 		  }
 	  }
-*/
+
 
 /*
 	  switch(state)
@@ -1267,6 +1267,7 @@ void StartTaskDeafult(void *argument)
 	  osDelay(CONTROL_DELAY);
 
 */
+	  /*
 	  int8_t ret;
 	  switch(actualState)
 	  {
@@ -1306,7 +1307,7 @@ void StartTaskDeafult(void *argument)
 		  default:
 			  leftMotor(MOTOR_STOP);
 			  rightMotor(MOTOR_STOP);
-	  }
+	  }*/
 	  osDelay(10);
   }
   /* USER CODE END 5 */
