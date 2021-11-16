@@ -1,0 +1,9 @@
+{
+  "C_Cpp.intelliSenseEngine": "Tag Parser",
+  "files.associations": {
+    "esp_event_loop.h": "c",
+    "sensor_states.h": "c",
+    "*.inc": "c",
+    "*.ipp": "c"
+  }
+}
