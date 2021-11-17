@@ -6,14 +6,18 @@ class SocketConfig:
         self.TOTAL_SIZE = self.REQUEST_SIZE + self.PAYLOAD_SIZE + self.CAMERA_SIZE
 
         # Request types
+        self.REQ_ACTION = 0
         self.REQ_WEIGHTS = 1
         self.REQ_STATES = 2
         self.REQ_START_WEIGHTS = 3
         self.REQ_LAST_CHUNK = 4
 
+        # States
+        self.SEND_IMAGE = 1
+
         self.WEIGHTS_CHUNKS = 1024  # size of weight chunks
 
         self.payload_sizes = [28, 16, 1024, 1024]
 
-        self.HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
+        self.HOST = '192.168.131.153'  # Standard loopback interface address (localhost)
         self.PORT = 3333  # Port to listen on (non-privileged ports are > 1023)
