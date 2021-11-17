@@ -88,15 +88,18 @@ SPI receiver
 #define WEIGHTS_LAST_CHUNK      (WEIGHTS_SIZE - (WEIGHTS_SIZE / WEIGHTS_CHUNKS)*WEIGHTS_CHUNKS)
 
 // define socket requests
-#define SOCK_REQ_DEFAULT            0x00u
-#define SOCK_REQ_WEIGHTS            0x01u
-#define SOCK_REQ_STATES             0x02u
-#define SOCK_REQ_START_WEIGHTS      0x03u
-#define SOCK_REQ_LAST_CHUNK         0x04u
+#define SOCK_REQ_STOP               0x00u
+#define SOCK_REQ_LINE_FOLLOWING     0x01u
+#define SOCK_REQ_SEND_IMAGE         0x02u
+#define SOCK_REQ_WAIT_FOR_WEIGHTS   0x03u
+#define SOCK_REQ_NETWORK            0x04u
+#define SOCK_REQ_CONTINUE           0x05u
 
 // define state
 #define STATE_LISTEN                0x00u
-#define STATE_LINEFOLLOW            0x01u
+#define STATE_START_WEIGHTS         0x01u
+#define STATE_SEND_CHUNK            0x02u
+#define STATE_SEND_LAST_CHUNK       0x03u
 
 
 #define SOCK_RESP_OK        0x01u
@@ -238,21 +241,22 @@ static int connectToSocket(){
     return sock;
 }
 
-static void getStateFromSokcet(int sock){
+static void getRequestFromSokcet(int sock, uint8_t state){
     uint8_t req_sock;
     ESP_LOGI(TAG, "Requesting state...");
-    req_sock = SOCK_REQ_DEFAULT;
+    req_sock = state;
     sendToSocket(sock, &req_sock, 1u, 0);
     recv(sock, recieved_state, 1, MSG_WAITALL);
     sendToSocket(sock, &recieved_state, 1u, 0);
+    ESP_LOGI(TAG, "Requesting chunk: %d", recieved_state[0]);
 }
 
-static void sendLineFollowRequest(spi_device_handle_t spi){
+static void sendRequestToSlave(spi_device_handle_t spi){
     esp_err_t ret;
     static spi_transaction_t trans;
     memset(&trans, 0, sizeof(spi_transaction_t));
     trans.length=8;
-    trans.tx_data[0] = 0x01u;
+    trans.tx_data[0] = recieved_state[0];
     ret=spi_device_transmit(spi, &trans);
     assert(ret==ESP_OK);
 }
@@ -264,13 +268,13 @@ static void getWeightsFromSocket(spi_device_handle_t spi, int sock){
     esp_err_t ret;
     // Signal to socket to prepare weights
     ESP_LOGI(TAG, "Requesting weights...");
-    req_sock = SOCK_REQ_START_WEIGHTS;
+    req_sock = STATE_START_WEIGHTS;
     sendToSocket(sock, &req_sock, 1u, 0);
     // Request weights
     for(i =0; i<(WEIGHTS_SIZE / WEIGHTS_CHUNKS); ++i){
         ESP_LOGI(TAG, "Requesting chunk: %d", i);
         memset(&trans[i], 0, sizeof(spi_transaction_t));
-        req_sock = SOCK_REQ_WEIGHTS;
+        req_sock = STATE_SEND_CHUNK;
         sendToSocket(sock, &req_sock, 1u, 0);
         recv(sock, weights_dma, WEIGHTS_CHUNKS, MSG_WAITALL);
         trans[i].length=8*WEIGHTS_CHUNKS;
@@ -281,7 +285,7 @@ static void getWeightsFromSocket(spi_device_handle_t spi, int sock){
     }
     ESP_LOGI(TAG, "Requesting last weights...");
     memset(&trans[i], 0, sizeof(spi_transaction_t));
-    req_sock = SOCK_REQ_LAST_CHUNK;
+    req_sock = STATE_SEND_LAST_CHUNK;
     sendToSocket(sock, &req_sock, 1u, 0);
     recv(sock, weights_dma, WEIGHTS_LAST_CHUNK, MSG_WAITALL);
     trans[i].length=8*WEIGHTS_CHUNKS;
@@ -291,12 +295,41 @@ static void getWeightsFromSocket(spi_device_handle_t spi, int sock){
     assert(ret==ESP_OK);
 }
 
-static void handleState(spi_device_handle_t spi, int sock, uint8_t state){
-    switch(state){
-        case STATE_LISTEN:
+static void sendImageToSocket(int sock, camera_fb_t* image){
+    for(int i = 0; i < image->len; i++)
+    {
+        camera_frame[i] = image->buf[i]; 
+    }
+    printf("\n SENDING camera_frame TO PC VIA SOCKET\n");
+    vTaskDelay(2);
+    int err = sendToSocket(sock, camera_frame, 1024u, 0); 
+    if (err < 0) 
+    {
+        ESP_LOGE(TAG, "Error occurred during sending image: errno %d", err);
+    }
+    vTaskDelay(2);
+}
+
+static void handleRequest(spi_device_handle_t spi, int sock){
+    switch(recieved_state[0]){
+        case SOCK_REQ_STOP:
+            sendRequestToSlave(spi);
             break;
-        case STATE_LINEFOLLOW:
-            sendLineFollowRequest(spi);
+        case SOCK_REQ_LINE_FOLLOWING:
+            sendRequestToSlave(spi);
+            break;
+        case SOCK_REQ_SEND_IMAGE:;
+            camera_fb_t *image = NULL;
+            image = esp_camera_fb_get();
+            sendImageToSocket(sock, image);
+            break;
+        case SOCK_REQ_WAIT_FOR_WEIGHTS:
+            getWeightsFromSocket(spi, sock);
+            break;
+        case SOCK_REQ_NETWORK:
+            break;
+        case SOCK_REQ_CONTINUE:
+            break;
     }
 }
 
@@ -304,6 +337,7 @@ static void tcpClientTask(void *pvParameters)
 {
     printf("App_main started");
     spi_device_handle_t spi=configureSPI();
+    camera_frame = (uint8_t *)heap_caps_malloc(CAM_WIDTH*CAM_HEIGHT, MALLOC_CAP_DMA);
     uint8_t state = STATE_LISTEN;
     printf("Initialized\n");
     while(true)
@@ -313,13 +347,8 @@ static void tcpClientTask(void *pvParameters)
             break;
         while (true)
         {
-            getStateFromSokcet(sock);
-            //if(state!=recieved_state[0]){
-                //state=recieved_state[0];
-                // send stop to nucleo
-            //}
-            //handleNewState(spi, sock, state);   
-            //getWeightsFromSocket(spi, sock);
+            getRequestFromSokcet(sock, state);
+            handleRequest(spi, sock);
         }
 
         if (sock != -1) 
