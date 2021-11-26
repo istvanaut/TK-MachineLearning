@@ -1,3 +1,6 @@
+
+
+
 class SocketConfig:
     def __init__(self):
         self.REQUEST_SIZE = 1  # Request size in byte
@@ -11,6 +14,18 @@ class SocketConfig:
         self.REQ_STATES = 2
         self.REQ_START_WEIGHTS = 3
         self.REQ_LAST_CHUNK = 4
+        self.REQ_WAITING_FOR_COMMAND = 1
+
+        # Request Dictionary
+        self.commands = {
+            0: "stop",
+            1: "line_following",
+            2: "send_image",
+            3: "wait_for_weights",
+            4: "use_network",
+            5: "no_new_command"
+        }
+
 
         # States
         self.SEND_IMAGE = 1

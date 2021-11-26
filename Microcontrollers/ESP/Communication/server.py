@@ -12,6 +12,7 @@ from Microcontrollers.ESP.Communication.ProcessedState import ProcessedState
 from Microcontrollers.ESP.Communication.SocketConfig import SocketConfig
 
 
+
 class Socket:
     def __init__(self):
         self.config = SocketConfig()
@@ -57,20 +58,34 @@ class Socket:
             self.handle_request(int.from_bytes(data, byteorder='little'))
 
     def handle_request(self, request_type):
-        if self.config.REQ_ACTION == request_type:
-            self.send_action()
+        if self.config.REQ_WAITING_FOR_COMMAND == request_type:
+            self.ask_for_command()
 
-        if self.config.REQ_STATES == request_type:
-            self.get_states()
+        # if self.config.REQ_ACTION == request_type:
+        #     self.send_action()
+        #
+        # if self.config.REQ_STATES == request_type:
+        #     self.get_states()
+        #
+        # if self.config.REQ_START_WEIGHTS == request_type:
+        #     self.prepare_weights()
+        #
+        # if self.config.REQ_WEIGHTS == request_type:
+        #     self.send_weights()
+        #
+        # if self.config.REQ_LAST_CHUNK == request_type:
+        #     self.send_last_chunk()
 
-        if self.config.REQ_START_WEIGHTS == request_type:
-            self.prepare_weights()
-
-        if self.config.REQ_WEIGHTS == request_type:
-            self.send_weights()
-
-        if self.config.REQ_LAST_CHUNK == request_type:
-            self.send_last_chunk()
+    def ask_for_command(self):
+        try:
+            for k, v in self.config.commands.items():
+                print("for {} press {}".format(v, k))
+            command = int(input())
+            assert 0 <= command < len(self.config.commands)
+            eval("self." + self.config.commands[command])(command)
+        except:
+            print("No such Command")
+            self.ask_for_command()
 
     def extract_network(self):
         self.exporter.export_to_ONNX(self.network.Reinforcement_model)
@@ -157,6 +172,30 @@ class Socket:
         print("REQ_LAST_CHUNK")
         self.send(self.weights[int(
             int(len(self.weights) / self.config.WEIGHTS_CHUNKS) * self.config.WEIGHTS_CHUNKS):])
+
+    def stop(self, command_key):
+        self.send(command_key.to_bytes(length=1, byteorder='little'))
+        self.receive(1)
+
+    def line_following(self, command_key):
+        self.send(command_key.to_bytes(length=1, byteorder='little'))
+        self.receive(1)
+
+    def send_image(self, command_key):
+        self.send(command_key.to_bytes(length=1, byteorder='little'))
+        chunks = self.receive(self.config.CAMERA_SIZE)
+        image_in_bytes = self.process_data(chunks)
+
+    def wait_for_weights(self, command_key):
+        self.send(command_key.to_bytes(length=1, byteorder='little'))
+        self.prepare_weights()
+        self.send_weights()
+
+    def use_network(self, command_key):
+        self.send(command_key.to_bytes(length=1, byteorder='little'))
+
+    def no_new_command(self, command_key):
+        self.send(command_key.to_bytes(length=1, byteorder='little'))
 
 
 def main():
