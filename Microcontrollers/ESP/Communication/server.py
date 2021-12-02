@@ -3,6 +3,7 @@
 
 import socket as socket_lib
 import time
+from threading import Timer
 
 from Microcontroller.Network.ESP_ANN_connection import ConnectionTrainer
 from Microcontroller.Network.Networks.FlatDense import FlatDense
@@ -80,10 +81,19 @@ class Socket:
         try:
             for k, v in self.config.commands.items():
                 print("for {} press {}".format(v, k))
-            command = int(input())
+
+            def timeoutFunc():
+                self.no_new_command(5)
+                print("No new command sent. If you have new commands you can send")
+
+            timeout = 3
+            t = Timer(timeout, timeoutFunc)
+            t.start()
+            prompt = f"\n If you don't make any command in {timeout} seconds no_new_command will be sent...\n"
+            command = int(input(prompt))
             assert 0 <= command < len(self.config.commands)
             eval("self." + self.config.commands[command])(command)
-        except:
+        except (AssertionError, ValueError):
             print("No such Command")
             self.ask_for_command()
 
@@ -125,7 +135,6 @@ class Socket:
         self.send(self.config.SEND_IMAGE.to_bytes(length=1, byteorder='little'))
         response=self.receive(1)
         print(response)
-
 
     def get_states(self):
         print("Receiving states")
