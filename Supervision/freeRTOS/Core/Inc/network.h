@@ -30,8 +30,8 @@
 #define RUNNING     				2u
 
 /*Defines for inter MCU communication*/
-#define CAM_WIDTH   				64u
-#define CAM_HEIGHT 					64u
+#define CAM_WIDTH   				96u
+#define CAM_HEIGHT 					96u
 #define ESP_RESP_OK					1u
 #define ESP_RESP_NOK				0u
 
@@ -43,8 +43,8 @@
 #define ESP__START_REQUEST_WEIGHTS	0x06u
 #define ESP_REQ_LAST_CHUNK			0x07u
 
-#define CAMERA_WIDTH				32
-#define CAMERA_HEIGHT				32
+#define CAMERA_WIDTH				96
+#define CAMERA_HEIGHT				96
 
 
 /*define if you want to log AI related data*/
@@ -78,10 +78,10 @@ int aiInit(void);
 int aiRun(const void *in_data, void *out_data);
 HAL_StatusTypeDef transmitToESP(uint8_t *pData, uint16_t Size, uint32_t Timeout);
 HAL_StatusTypeDef receiveFromESP(uint8_t *pData, uint16_t Size, uint32_t Timeout);
-void initStateHandle(void);
-void loadStateHandle(void);
+void intiNetwork(void);
+void loadNetwork(void);
 float calculateReward(sensorSatate* data);
-void runningStateHandle(void);
+void runningNetwork(void);
 void networkSwitch(void);
 
 

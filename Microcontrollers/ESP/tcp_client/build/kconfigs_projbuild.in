@@ -1,6 +1,0 @@
-source "C:/Users/Daniel/esp/esp-idf/components/app_update/Kconfig.projbuild"
-source "C:/Users/Daniel/esp/esp-idf/components/bootloader/Kconfig.projbuild"
-source "C:/Users/Daniel/esp/esp-idf/components/esptool_py/Kconfig.projbuild"
-source "C:/Users/Daniel/esp/esp-idf/components/partition_table/Kconfig.projbuild"
-source "C:/Users/Daniel/esp/esp-idf/examples/common_components/protocol_examples_common/Kconfig.projbuild"
-source "D:/TK-MachineLearning/Microcontrollers/ESP/tcp_client/main/Kconfig.projbuild"

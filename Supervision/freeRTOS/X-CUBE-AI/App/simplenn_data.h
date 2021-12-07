@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    simplenn_data.h
   * @author  AST Embedded Analytics Research Platform
-  * @date    Fri Apr 30 15:53:45 2021
+  * @date    Tue Dec  7 15:37:42 2021
   * @brief   AI Tool Automatic Code Generator for Embedded NN computing
   ******************************************************************************
   * @attention
@@ -27,9 +27,9 @@
 
 #define AI_SIMPLENN_DATA_CONFIG           AI_HANDLE_NULL
 
-#define AI_SIMPLENN_DATA_ACTIVATIONS_SIZE     (1024)
+#define AI_SIMPLENN_DATA_ACTIVATIONS_SIZE     (152)
 
-#define AI_SIMPLENN_DATA_WEIGHTS_SIZE         (170512)
+#define AI_SIMPLENN_DATA_WEIGHTS_SIZE         (222632)
 
 #define AI_SIMPLENN_DATA_ACTIVATIONS(ptr_)  \
   AI_BUFFER_OBJ_INIT( \

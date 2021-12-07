@@ -209,10 +209,10 @@ void StartTaskReward(void *argument);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 typedef enum systemState{
-	NETWORK, TRACK_LOST, RETURNING_TO_TRACK, REQUEST_USER_CONTROL
+	STOP, LINE_FOLLOW, RETURNING_TO_TRACK
 }systemState;
 
-systemState actualState = NETWORK;
+systemState actualState = STOP;
 /* USER CODE END 0 */
 
 /**
@@ -271,7 +271,7 @@ int main(void)
   initUS(&htim3);
   initACCSensor(&hi2c2);
   initlezer(&htim1);
-  initStateHandle();
+  intiNetwork();
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -681,13 +681,12 @@ static void MX_SPI3_Init(void)
   /* USER CODE END SPI3_Init 1 */
   /* SPI3 parameter configuration*/
   hspi3.Instance = SPI3;
-  hspi3.Init.Mode = SPI_MODE_MASTER;
+  hspi3.Init.Mode = SPI_MODE_SLAVE;
   hspi3.Init.Direction = SPI_DIRECTION_2LINES;
   hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi3.Init.CLKPhase = SPI_PHASE_2EDGE;
+  hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi3.Init.NSS = SPI_NSS_SOFT;
-  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
   hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -1084,9 +1083,6 @@ static void MX_GPIO_Init(void)
                           |LD3_Pin|LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -1120,18 +1116,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : ESP_RDY_Pin */
-  GPIO_InitStruct.Pin = ESP_RDY_Pin;
+  /*Configure GPIO pins : ESP_RDY_Pin ESP_CS_Pin */
+  GPIO_InitStruct.Pin = ESP_RDY_Pin|ESP_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(ESP_RDY_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : ESP_CS_Pin */
-  GPIO_InitStruct.Pin = ESP_CS_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(ESP_CS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pin : USB_PowerSwitchOn_Pin */
   GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin;
@@ -1183,65 +1172,75 @@ void StartTaskDeafult(void *argument)
 	uint16_t leftSide; 		// vonalkövetéshez
 	uint16_t rightSide; 	// vonalkövetéshez
 	int LLS, LS, RS, RRS; 	// vonalkövetéshez
-  /* Infinite loop */
-  for(;;)
-  {
-	  /* VONAL KÖVETÉS*/
+	uint8_t action[1] = {0};
+	uint8_t ack[1] = {1};
+	int condition = 0;
 
-	  if (actualState == NETWORK)
-	  {
-		  LLS = LS = RS = RRS = 0;
-		  LEDs = GetLightSensorValues();
-		  rightSide = (uint16_t)(LEDs);
-		  leftSide = (uint16_t)(LEDs >> 16);
+	/* Infinite loop */
+	for(;;){
+		if(!HAL_GPIO_ReadPin(ESP_CS_GPIO_Port, ESP_CS_Pin));
+			HAL_SPI_TransmitReceive(&hspi3, ack, action, sizeof(action), 500);
+		switch(action[0]){
+			case STOP:
+				leftMotor(MOTOR_STOP);
+				rightMotor(MOTOR_STOP);
+				break;
+			case LINE_FOLLOW:
+				LLS = LS = RS = RRS = 0;
+				LEDs = GetLightSensorValues();
+				rightSide = (uint16_t)(LEDs);
+				leftSide = (uint16_t)(LEDs >> 16);
 
-		  // divide the sensors into 4 sectros
-		  for(int i = 0; i < 8; i++)
-		  {
-			  RRS += (rightSide >> i) & 0x01;
-			  LS += (leftSide >> i) & 0x01;
-		  }
-		  for(int i = 8; i < 16; i++)
-		  {
-			  RS += (rightSide >> i) & 0x01;
-			  LLS += (leftSide >> i) & 0x01;
-		  }
+				// divide the sensors into 4 sectros
+				for(int i = 0; i < 8; i++)
+				{
+					RRS += (rightSide >> i) & 0x01;
+					LS += (leftSide >> i) & 0x01;
+				}
+				for(int i = 8; i < 16; i++)
+				{
+					RS += (rightSide >> i) & 0x01;
+					LLS += (leftSide >> i) & 0x01;
+				}
 
-		  // compare the 4 sectors
-		  if (LS + LLS > RS + RRS)
-		  {
-			  if (LLS > LS)
-			  {
-				  leftMotor(MOTOR_SLOWEST);
-				  rightMotor(MOTOR_FAST);
-			  }
-			  else if (LLS < LS)
-			  {
-				  leftMotor(MOTOR_SLOW);
-				  rightMotor(MOTOR_FAST);
-			  }
-		  }
-		  else if (LS + LLS < RS + RRS)
-		  {
-			  if (RRS > RS)
-			  {
-				  leftMotor(MOTOR_FAST);
-				  rightMotor(MOTOR_SLOWEST);
-			  }
-			  else if (RRS < RS)
-			  {
-				  leftMotor(MOTOR_FAST);
-				  rightMotor(MOTOR_SLOW);
-			  }
-		  }
-		  else
-		  {
-			  leftMotor(MOTOR_FAST);
-			  rightMotor(MOTOR_FAST);
-		  }
-	  }
-
-
+				// compare the 4 sectors
+				if (LS + LLS > RS + RRS)
+				{
+					if (LLS > LS)
+					{
+						leftMotor(MOTOR_SLOWEST);
+						rightMotor(MOTOR_FAST);
+					}
+					else if (LLS < LS)
+					{
+						leftMotor(MOTOR_SLOW);
+						rightMotor(MOTOR_FAST);
+					}
+				}
+				else if (LS + LLS < RS + RRS)
+				{
+					if (RRS > RS)
+					{
+						leftMotor(MOTOR_FAST);
+						rightMotor(MOTOR_SLOWEST);
+					}
+					else if (RRS < RS)
+					{
+						leftMotor(MOTOR_FAST);
+						rightMotor(MOTOR_SLOW);
+					}
+				}
+				else
+				{
+					leftMotor(MOTOR_FAST);
+					rightMotor(MOTOR_FAST);
+				}
+				break;
+			default:
+				break;
+		}
+		osDelay(10);
+	}
 /*
 	  switch(state)
 	  {
@@ -1308,8 +1307,7 @@ void StartTaskDeafult(void *argument)
 			  leftMotor(MOTOR_STOP);
 			  rightMotor(MOTOR_STOP);
 	  }*/
-	  osDelay(10);
-  }
+
   /* USER CODE END 5 */
 }
 
@@ -1476,7 +1474,7 @@ void StartTaskReward(void *argument)
   /* USER CODE END StartTaskReward */
 }
 
- /**
+/**
   * @brief  Period elapsed callback in non blocking mode
   * @note   This function is called  when TIM13 interrupt took place, inside
   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment

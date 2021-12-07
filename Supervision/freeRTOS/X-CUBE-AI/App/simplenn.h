@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    simplenn.h
   * @author  AST Embedded Analytics Research Platform
-  * @date    Fri Apr 30 15:53:45 2021
+  * @date    Tue Dec  7 15:37:42 2021
   * @brief   AI Tool Automatic Code Generator for Embedded NN computing
   ******************************************************************************
   * @attention
@@ -37,7 +37,7 @@
 /******************************************************************************/
 #define AI_SIMPLENN_IN_NUM        (1)
 #define AI_SIMPLENN_IN { \
-  AI_BUFFER_OBJ_INIT(AI_BUFFER_FORMAT_FLOAT, 1, 1, 1024, 1, NULL), \
+  AI_BUFFER_OBJ_INIT(AI_BUFFER_FORMAT_FLOAT, 9216, 1, 1, 1, NULL), \
 }
 #define AI_SIMPLENN_IN_SIZE { \
   AI_SIMPLENN_IN_1_SIZE, \
@@ -45,10 +45,10 @@
 #define AI_SIMPLENN_IN_SIZE_BYTES { \
   AI_SIMPLENN_IN_1_SIZE_BYTES, \
 }
-#define AI_SIMPLENN_IN_1_HEIGHT      (1)
+#define AI_SIMPLENN_IN_1_HEIGHT      (9216)
 #define AI_SIMPLENN_IN_1_WIDTH       (1)
-#define AI_SIMPLENN_IN_1_CHANNEL     (1024)
-#define AI_SIMPLENN_IN_1_SIZE        (1 * 1 * 1024)
+#define AI_SIMPLENN_IN_1_CHANNEL     (1)
+#define AI_SIMPLENN_IN_1_SIZE        (9216 * 1 * 1)
 #define AI_SIMPLENN_IN_1_SIZE_BYTES  (AI_SIMPLENN_IN_1_SIZE * 4)
 
 /******************************************************************************/
@@ -69,7 +69,7 @@
 #define AI_SIMPLENN_OUT_1_SIZE_BYTES  (AI_SIMPLENN_OUT_1_SIZE * 4)
 
 /******************************************************************************/
-#define AI_SIMPLENN_N_NODES (7)
+#define AI_SIMPLENN_N_NODES (5)
 
 
 AI_API_DECLARE_BEGIN
