@@ -23,51 +23,30 @@
 #include "socket_communication.h"
 
 #include "spi_config.h"
-#include "esp_system.h"
-#include "driver/spi_master.h"
-#include "driver/gpio.h"
 
 #define WEIGHTS_SIZE        157328
 #define CHUNK_SIZE          1024
 #define LAST_CHUNK_SIZE     (WEIGHTS_SIZE - (WEIGHTS_SIZE / CHUNK_SIZE)*CHUNK_SIZE)
 #define NUMBER_OF_CHUNKS    (WEIGHTS_SIZE / CHUNK_SIZE)
 
+// Wifi socket
 WiFiClient client;
+// Nucleo interface
+SPIClass * nucleo = NULL;
+// State of ESP
 uint8_t state = 0;
 
-SPIClass * nucleo = NULL;
-  //spi_device_handle_t spi;
-  
+
 void setup() {
   // Serial port for debugging purposes
   Serial.begin(115200);
 
+  //Nucleo setup
   nucleo = new SPIClass(HSPI);
   nucleo->begin(GPIO_SCLK, GPIO_MISO, GPIO_MOSI, GPIO_SS);
   pinMode(GPIO_SS, OUTPUT); //HSPI SS
-  // Connect to Wi-Fi
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
-  }
-  if (!SPIFFS.begin(true)) {
-    Serial.println("An Error has occurred while mounting SPIFFS");
-    ESP.restart();
-  }
-  else {
-    delay(500);
-    Serial.println("SPIFFS mounted successfully");
-  }
-
-  // Print ESP32 Local IP Address
-  Serial.print("IP Address: http://");
-  Serial.println(WiFi.localIP());
-
-  // Turn-off the 'brownout detector'
-  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
-
-
+  digitalWrite(GPIO_SS, HIGH); // Write HIGH to signal no incoming transaction
+  
   // Final camera configs
   // OV2640 camera module
   camera_config_t config;
@@ -106,6 +85,28 @@ void setup() {
     Serial.printf("Camera init failed with error 0x%x", err);
     ESP.restart();
   }
+    // Connect to Wi-Fi
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
+  }
+  if (!SPIFFS.begin(true)) {
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    ESP.restart();
+  }
+  else {
+    delay(500);
+    Serial.println("SPIFFS mounted successfully");
+  }
+
+  // Print ESP32 Local IP Address
+  Serial.print("IP Address: http://");
+  Serial.println(WiFi.localIP());
+
+  // Turn-off the 'brownout detector'
+  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
+  
   // Conncect to socket
   if (!client.connect(host, port)) {
 
@@ -116,32 +117,6 @@ void setup() {
   }
 
   Serial.println("Connected to server successful!");
- /*/ unsigned char hexBuffer[4];
-  // Intial state
-  state = STATE_LISTEN;
-  spi_bus_config_t buscfg;
-        buscfg.miso_io_num = GPIO_MISO;
-        buscfg.mosi_io_num = GPIO_MOSI;
-        buscfg.sclk_io_num = GPIO_SCLK;
-        buscfg.quadwp_io_num = -1;
-        buscfg.quadhd_io_num = -1;
-        buscfg.max_transfer_sz = 8+4;
-  //Initialize the SPI bus
-  ret = spi_bus_initialize(HSPI_HOST, &buscfg, 2);
-  memcpy((char*)hexBuffer,(char*)&ret,sizeof(int));
-  size_t sent = client.write(hexBuffer, 4);
-  ESP_ERROR_CHECK(ret);
-  
-  spi_device_interface_config_t devcfg;
-        devcfg.clock_speed_hz=1*1000*1000;           //Clock out at 10 MHz
-        devcfg.mode=0;                               //SPI mode 0
-        devcfg.spics_io_num=GPIO_SS;               //CS pin
-        devcfg.queue_size=1;                          //We want to be able to queue 7 transactions at a time
-  
-  ret=spi_bus_add_device(HSPI_HOST, &devcfg, &spi);
-  client.write(hexBuffer, 4);
-  ESP_ERROR_CHECK(ret);*/
-  digitalWrite(GPIO_SS, HIGH);
 }
 
 void loop() {
@@ -183,16 +158,9 @@ void handleAction(uint8_t action)
 }
 
 void sendRequestToSlave(uint8_t request) {
-  /*esp_err_t ret;
-  static spi_transaction_t trans[1];
-  trans[0].length=8;
-  trans[0].flags=SPI_TRANS_USE_TXDATA;
-  trans[0].tx_data[0]=request;
-  ret=spi_device_queue_trans(spi, &trans[0], portMAX_DELAY);
-  assert(ret==ESP_OK);*/
   nucleo->beginTransaction(SPISettings(spiClk, MSBFIRST, SPI_MODE0));
   digitalWrite(GPIO_SS, LOW);
-  delay(400);
+  delay(250); // We delay so we can make sure the slave is listening
   uint8_t resp = nucleo->transfer(request);
   digitalWrite(GPIO_SS, HIGH);
   nucleo->endTransaction();
