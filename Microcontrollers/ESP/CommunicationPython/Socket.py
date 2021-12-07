@@ -169,6 +169,8 @@ class Socket:
                   len(self.weights)//self.config.WEIGHTS_CHUNKS * self.config.WEIGHTS_CHUNKS:])
         if self.waiting_for_initial_weights:
             self.waiting_for_initial_weights = False
+        self.k_chunk += 1
+        self.cnt_chunk += self.config.WEIGHTS_CHUNKS
 
     def stop(self, command_key):
         self.send(command_key.to_bytes(length=1, byteorder='little'))
