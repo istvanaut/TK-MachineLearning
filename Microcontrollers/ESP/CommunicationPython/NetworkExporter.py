@@ -30,7 +30,7 @@ class NetworkExporter:
         subprocess.call(args, shell=True)
 
     def extract_weights(self):
-        array_text = "static const ai_u8 s_simplenn_weights[157328] = {"
+        array_text = "static const ai_u8 s_simplenn_weights[222632] = {"
 
         with open(self.output_directory+'\simplenn_data.c', 'r') as weights:
             text = weights.read()

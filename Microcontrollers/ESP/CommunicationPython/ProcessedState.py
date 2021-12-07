@@ -1,7 +1,7 @@
 import struct
 import numpy as np
 
-from Microcontrollers.ESP.Communication.State import State
+from Microcontrollers.ESP.CommunicationPython.State import State
 
 
 class ProcessedState:
