@@ -23,7 +23,8 @@ class SocketConfig:
             2: "send_image",
             3: "wait_for_weights",
             4: "use_network",
-            5: "no_new_command"
+            5: "no_new_command",
+            6: "request_states"
         }
 
 

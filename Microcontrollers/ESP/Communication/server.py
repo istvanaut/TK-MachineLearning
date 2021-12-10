@@ -23,7 +23,7 @@ class Socket:
         self.addr = None
         self.weights = None
         self.start_time = None
-        self.processed_states = []
+        self.processed_states = ProcessedState()
         self.network = ConnectionTrainer(
             model=ReinforcementModel(dim_features=0, height=32, width=32, n_actions=4, model=FlatDense))
         self.waiting_for_initial_weights = True
@@ -141,23 +141,23 @@ class Socket:
         data_structured = [self.receive(size) for size in self.config.payload_sizes]
         print("States received")
 
-        processed_state = ProcessedState([self.process_data(data) for data in data_structured])
-        self.processed_states.append(processed_state)
+        processed_data = [self.process_data(data) for data in data_structured]
+        self.processed_states.addProcessedData(processed_data)
 
-        self.network.storeData(processed_state.previous_state.light_sensor,
-                               processed_state.previous_state.ultra_sound_left,
-                               processed_state.previous_state.ultra_sound_right,
-                               processed_state.previous_state.laser,
-                               processed_state.previous_state.image,
-                               processed_state.previous_state.left_motor,
-                               processed_state.previous_state.right_motor,
-                               processed_state.previous_state.reward,
-                               processed_state.current_state.light_sensor,
-                               processed_state.current_state.ultra_sound_left,
-                               processed_state.current_state.ultra_sound_right,
-                               processed_state.current_state.laser,
-                               processed_state.current_state.image,
-                               time=self.start_time - time.time())
+        # self.network.storeData(processed_state.previous_state.light_sensor,
+        #                        processed_state.previous_state.ultra_sound_left,
+        #                        processed_state.previous_state.ultra_sound_right,
+        #                        processed_state.previous_state.laser,
+        #                        processed_state.previous_state.image,
+        #                        processed_state.previous_state.left_motor,
+        #                        processed_state.previous_state.right_motor,
+        #                        processed_state.previous_state.reward,
+        #                        processed_state.current_state.light_sensor,
+        #                        processed_state.current_state.ultra_sound_left,
+        #                        processed_state.current_state.ultra_sound_right,
+        #                        processed_state.current_state.laser,
+        #                        processed_state.current_state.image,
+        #                        time=self.start_time - time.time())
 
     def prepare_weights(self):
         print("REQ_START_WEIGHTS")
@@ -205,6 +205,10 @@ class Socket:
 
     def no_new_command(self, command_key):
         self.send(command_key.to_bytes(length=1, byteorder='little'))
+
+    def request_states(self, command_key):
+        self.send(command_key.to_bytes(length=1, byteorder='little'))
+        self.get_states()
 
 
 def main():
