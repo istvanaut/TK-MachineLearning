@@ -53,7 +53,10 @@
 #define LOGGING
 #define HAS_CAMERA
 
-#define WEIGHTS_CHUNKS		1024
+#define WEIGHTS_SIZE        157328
+#define CHUNK_SIZE          1024
+#define LAST_CHUNK_SIZE     (WEIGHTS_SIZE - (WEIGHTS_SIZE / CHUNK_SIZE)*CHUNK_SIZE)
+#define NUMBER_OF_CHUNKS    (WEIGHTS_SIZE / CHUNK_SIZE)
 
 /*define if you want to log AI related data*/
 //#define AILOG

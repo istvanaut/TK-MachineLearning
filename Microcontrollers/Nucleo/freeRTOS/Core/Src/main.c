@@ -209,7 +209,7 @@ void StartTaskReward(void *argument);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 typedef enum systemState{
-	STOP, LINE_FOLLOW, RETURNING_TO_TRACK
+	STOP, LINE_FOLLOW, RECEIVING_IMAGE, RECEIVING_WEIGHTS, NETWORK
 }systemState;
 
 systemState actualState = STOP;
@@ -684,8 +684,8 @@ static void MX_SPI3_Init(void)
   hspi3.Init.Mode = SPI_MODE_SLAVE;
   hspi3.Init.Direction = SPI_DIRECTION_2LINES;
   hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi3.Init.CLKPolarity = SPI_POLARITY_HIGH;
+  hspi3.Init.CLKPhase = SPI_PHASE_2EDGE;
   hspi3.Init.NSS = SPI_NSS_SOFT;
   hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
@@ -1083,6 +1083,9 @@ static void MX_GPIO_Init(void)
                           |LD3_Pin|LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(ESP_HANDSHAKE_GPIO_Port, ESP_HANDSHAKE_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -1116,11 +1119,18 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ESP_RDY_Pin ESP_CS_Pin */
-  GPIO_InitStruct.Pin = ESP_RDY_Pin|ESP_CS_Pin;
+  /*Configure GPIO pin : ESP_HANDSHAKE_Pin */
+  GPIO_InitStruct.Pin = ESP_HANDSHAKE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(ESP_HANDSHAKE_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : ESP_CS_Pin */
+  GPIO_InitStruct.Pin = ESP_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+  HAL_GPIO_Init(ESP_CS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : USB_PowerSwitchOn_Pin */
   GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin;
@@ -1165,7 +1175,6 @@ static void MX_GPIO_Init(void)
 void StartTaskDeafult(void *argument)
 {
   /* USER CODE BEGIN 5 */
-
 	leftMotor(MOTOR_NORMAL);
 	rightMotor(MOTOR_NORMAL);
 	uint32_t LEDs;			// vonalkövetéshez
@@ -1178,8 +1187,14 @@ void StartTaskDeafult(void *argument)
 
 	/* Infinite loop */
 	for(;;){
-		if(!HAL_GPIO_ReadPin(ESP_CS_GPIO_Port, ESP_CS_Pin));
-			HAL_SPI_TransmitReceive(&hspi3, ack, action, sizeof(action), 500);
+		if(!HAL_GPIO_ReadPin(ESP_CS_GPIO_Port, ESP_CS_Pin))
+			HAL_SPI_Receive(&hspi3, action, sizeof(action), 500);
+		// Return to track, and repeat loop
+		if(!onTheTrack()){
+			trackLost();
+			continue;
+		}
+
 		switch(action[0]){
 			case STOP:
 				leftMotor(MOTOR_STOP);
@@ -1235,6 +1250,13 @@ void StartTaskDeafult(void *argument)
 					leftMotor(MOTOR_FAST);
 					rightMotor(MOTOR_FAST);
 				}
+				break;
+			case RECEIVING_IMAGE:
+				break;
+			case RECEIVING_WEIGHTS:
+				loadNetwork();
+				break;
+			case NETWORK:
 				break;
 			default:
 				break;

@@ -128,7 +128,6 @@ int aiRun(const void *in_data, void *out_data){
 HAL_StatusTypeDef transmitToESP(uint8_t *pData, uint16_t Size, uint32_t Timeout){
 	HAL_StatusTypeDef status;
 	// wait for ESP to signal ready
-	while(!HAL_GPIO_ReadPin(ESP_RDY_GPIO_Port, ESP_RDY_Pin));
 	// pull slave select low
 	HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_RESET);
 	// transmit data
@@ -140,14 +139,16 @@ HAL_StatusTypeDef transmitToESP(uint8_t *pData, uint16_t Size, uint32_t Timeout)
 
 HAL_StatusTypeDef receiveFromESP(uint8_t *pData, uint16_t Size, uint32_t Timeout){
 	HAL_StatusTypeDef status;
-	// wait for ESP to signal ready
-	while(!HAL_GPIO_ReadPin(ESP_RDY_GPIO_Port, ESP_RDY_Pin));
-	// pull slave select low
-	HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_RESET);
+	// nucleo signals ready
+	HAL_GPIO_WritePin(ESP_HANDSHAKE_GPIO_Port, ESP_HANDSHAKE_Pin, GPIO_PIN_RESET);
+	HAL_Delay(1);
+	// wait for cs
+	while(HAL_GPIO_ReadPin(ESP_CS_GPIO_Port, ESP_CS_Pin)){};
+	// nucleo pulls ready line high
+	HAL_GPIO_WritePin(ESP_HANDSHAKE_GPIO_Port, ESP_HANDSHAKE_Pin, GPIO_PIN_SET);
 	// receive data
 	status = HAL_SPI_Receive(&hspi3, pData, Size, Timeout);
-	// pull slave select pin high
-	HAL_GPIO_WritePin(ESP_CS_GPIO_Port, ESP_CS_Pin, GPIO_PIN_SET);
+	HAL_Delay(1);
 	return status;
 }
 
@@ -177,42 +178,19 @@ void loadNetwork(void){
 		HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD2_Pin|LD3_Pin, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOB, LD3_Pin, GPIO_PIN_SET);
 
-		printf("Checking ESP connection...\n");
-		request = ESP_PING;
-
-		/*Test connection*/
-		do
-		{
-			transmitToESP(&request, 1, HAL_MAX_DELAY);
-			printf("Waiting for esp ACK\n");
-
-			status = receiveFromESP(&resp, sizeof(resp), 200);
-			printf("%d\n",resp);
-		}while(status!= HAL_OK || resp != ESP_RESP_OK);
-		printf("ESP OK\n");
-
-
-		/* Getting weights*/
-		printf("Requesting weights\n");
-		//request = ESP_REQUEST_WEIGHTS;
-		//transmitToESP(&request, 1, HAL_MAX_DELAY);
-		//printf("Request sent\n");
+		/* Waiting for weights*/
+		printf("Waiting for weights\n");
 
 		printf("Starting receiving weights in chunks!\n");
+		HAL_Delay(500);
 		int k = 0;
-		request = ESP__START_REQUEST_WEIGHTS;
-		transmitToESP(&request, 1, HAL_MAX_DELAY);
-		HAL_Delay(1);
-		request = ESP_REQUEST_WEIGHTS;
+		int i=0;
 		for(k = 0; k < AI_SIMPLENN_DATA_WEIGHTS_SIZE / WEIGHTS_CHUNKS; k++)
 		{
-			transmitToESP(&request, 1, HAL_MAX_DELAY);
-			HAL_Delay(1);
-			receiveFromESP(ai_simplenn_data_weights_get() + k * WEIGHTS_CHUNKS , WEIGHTS_CHUNKS, HAL_MAX_DELAY);
-			/*printf("Chunk %d received\n",k);
-			printf("Accessing element: %d\n",k*WEIGHTS_CHUNKS);
-			printf("Chunk: %d\n",*(ai_simplenn_data_weights_get() + k * WEIGHTS_CHUNKS));*/
-			HAL_Delay(1);
+			for(int i = 0; i<WEIGHTS_CHUNKS; i++)
+			{
+				receiveFromESP(ai_simplenn_data_weights_get() + k * WEIGHTS_CHUNKS+i , 1, HAL_MAX_DELAY);
+			}
 		}
 		/*Receive remaining chunk*/
 		printf("Remaining chunks: %d\n",AI_SIMPLENN_DATA_WEIGHTS_SIZE - k * WEIGHTS_CHUNKS);
@@ -220,32 +198,16 @@ void loadNetwork(void){
 		HAL_Delay(1);
 		if((AI_SIMPLENN_DATA_WEIGHTS_SIZE / WEIGHTS_CHUNKS) * WEIGHTS_CHUNKS < AI_SIMPLENN_DATA_WEIGHTS_SIZE)
 		{
-
-			transmitToESP(&request, 1, HAL_MAX_DELAY);
-			HAL_Delay(1);
-			receiveFromESP(ai_simplenn_data_weights_get() + (AI_SIMPLENN_DATA_WEIGHTS_SIZE / WEIGHTS_CHUNKS) * WEIGHTS_CHUNKS , AI_SIMPLENN_DATA_WEIGHTS_SIZE - (AI_SIMPLENN_DATA_WEIGHTS_SIZE / WEIGHTS_CHUNKS) * WEIGHTS_CHUNKS, HAL_MAX_DELAY);
+			for(int i = 0; i<AI_SIMPLENN_DATA_WEIGHTS_SIZE-(AI_SIMPLENN_DATA_WEIGHTS_SIZE / WEIGHTS_CHUNKS) * WEIGHTS_CHUNKS; i++)
+			{
+				receiveFromESP(ai_simplenn_data_weights_get() + (AI_SIMPLENN_DATA_WEIGHTS_SIZE / WEIGHTS_CHUNKS) * WEIGHTS_CHUNKS + i , 1, HAL_MAX_DELAY);
+			}
 			printf("Last chunk received\n");
 		}
-
-		/*for(int i = 0; i < AI_SIMPLENN_DATA_WEIGHTS_SIZE; i = i + 100)
-		{
-			printf("%p, ",ai_simplenn_data_weights_get()[i]);
-		}
-		printf("\n\nLast-1: %p",ai_simplenn_data_weights_get()[AI_SIMPLENN_DATA_WEIGHTS_SIZE-1]);
-		printf("\nLast-2: %p",ai_simplenn_data_weights_get()[AI_SIMPLENN_DATA_WEIGHTS_SIZE-2]);*/
-		/*if(*ai_simplenn_data_weights_get(void) == (uint8_t)0x7c) printf("\nEqual 0x7c\n");
-		if(*(ai_simplenn_data_weights_get()+1) == (uint8_t)0x7c) printf("Equal1 0x7c\n");
-		if(ai_simplenn_data_weights_get()[2] == (uint8_t)0x7c) printf("Equal2 0x7c\n");
-		if(ai_simplenn_data_weights_get()[1] == (uint8_t) 0x26) printf("Equal 0x26\n");
-		if(ai_simplenn_data_weights_get()[AI_SIMPLENN_DATA_WEIGHTS_SIZE-1] == (uint8_t)0x3d) printf("Equal 0x3d\n");
-		if(ai_simplenn_data_weights_get()[AI_SIMPLENN_DATA_WEIGHTS_SIZE-2] == (uint8_t)0x64) printf("Equal 0x64\n");*/
 		aiInit();
 		nextState = RUNNING;
 		printf("\nAI_INITED\n");
 		cycleCounter = 0u;
-
-
-		//osDelay(4000);
 	}
 
 

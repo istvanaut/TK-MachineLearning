@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    simplenn_config.h
   * @author  AST Embedded Analytics Research Platform
-  * @date    Tue Dec  7 15:37:42 2021
+  * @date    Thu Dec  9 16:01:28 2021
   * @brief   AI Tool Automatic Code Generator for Embedded NN computing
   ******************************************************************************
   * @attention

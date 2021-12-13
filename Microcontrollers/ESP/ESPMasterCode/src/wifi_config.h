@@ -1,3 +1,4 @@
+#include "WiFi.h"
 // Replace with your network credentials
 const char* ssid = "Galaxy A31F7EE";
 const char* password = "fihp0659";
