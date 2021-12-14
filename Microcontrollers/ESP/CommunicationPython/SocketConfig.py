@@ -20,7 +20,8 @@ class SocketConfig:
             2: "send_image",
             3: "wait_for_weights",
             4: "use_network",
-            5: "no_new_command"
+            5: "no_new_command",
+            6: "request_states"
         }
 
 
@@ -29,7 +30,7 @@ class SocketConfig:
 
         self.WEIGHTS_CHUNKS = 1024  # size of weight chunks
 
-        self.payload_sizes = [28, 16, 1024, 1024]
+        self.payload_sizes = [28, 16, 9216, 9216]
 
         self.HOST = '0.0.0.0'  # Standard loopback interface address (localhost)
         self.PORT = 3333  # Port to listen on (non-privileged ports are > 1023)
