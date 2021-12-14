@@ -1,2 +1,0 @@
-This is the directory for the Supervision team.
-(At least one file is required so Github recognizes the directory)
