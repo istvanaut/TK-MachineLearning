@@ -6,6 +6,7 @@ from PIL import Image
 import io
 import socket as socket_lib
 import time
+from threading import Timer
 
 from Microcontroller.Network.ESP_ANN_connection import ConnectionTrainer
 from Microcontroller.Network.Networks.FlatDense import FlatDense
@@ -25,7 +26,7 @@ class Socket:
         self.addr = None
         self.weights = None
         self.start_time = None
-        self.processed_states = []
+        self.processed_states = ProcessedState()
         self.network = ConnectionTrainer(
             model=ReinforcementModel(dim_features=0, height=96, width=96, n_actions=4, model=FlatDense))
         self.waiting_for_initial_weights = True
@@ -81,11 +82,19 @@ class Socket:
         try:
             for k, v in self.config.commands.items():
                 print("for {} press {}".format(v, k))
-            command = int(input())
+
+            def timeoutFunc():
+                self.no_new_command(5)
+                print("No new command sent. If you have new commands you can send")
+
+            timeout = 3
+            t = Timer(timeout, timeoutFunc)
+            t.start()
+            prompt = f"\n If you don't make any command in {timeout} seconds no_new_command will be sent...\n"
+            command = int(input(prompt))
             assert 0 <= command < len(self.config.commands)
             eval("self." + self.config.commands[command])(command)
-        except:
-            traceback.print_exc()
+        except (AssertionError, ValueError):
             print("No such Command")
             self.ask_for_command()
 
@@ -128,29 +137,13 @@ class Socket:
         response=self.receive(1)
         print(response)
 
-
     def get_states(self):
         print("Receiving states")
         data_structured = [self.receive(size) for size in self.config.payload_sizes]
         print("States received")
 
-        processed_state = ProcessedState([self.process_data(data) for data in data_structured])
-        self.processed_states.append(processed_state)
-
-        self.network.storeData(processed_state.previous_state.light_sensor,
-                               processed_state.previous_state.ultra_sound_left,
-                               processed_state.previous_state.ultra_sound_right,
-                               processed_state.previous_state.laser,
-                               processed_state.previous_state.image,
-                               processed_state.previous_state.left_motor,
-                               processed_state.previous_state.right_motor,
-                               processed_state.previous_state.reward,
-                               processed_state.current_state.light_sensor,
-                               processed_state.current_state.ultra_sound_left,
-                               processed_state.current_state.ultra_sound_right,
-                               processed_state.current_state.laser,
-                               processed_state.current_state.image,
-                               time=self.start_time - time.time())
+        processed_data = [self.process_data(data) for data in data_structured]
+        self.processed_states.addProcessedData(processed_data)
 
     def prepare_weights(self):
         print("Preping weights")
@@ -174,7 +167,7 @@ class Socket:
 
     def line_following(self, command_key):
         self.send(command_key.to_bytes(length=1, byteorder='little'))
-        print(self.receive(1))
+        self.receive(1)
 
     def send_image(self, command_key):
         self.send(command_key.to_bytes(length=1, byteorder='little'))
@@ -195,3 +188,21 @@ class Socket:
 
     def no_new_command(self, command_key):
         self.send(command_key.to_bytes(length=1, byteorder='little'))
+
+    def request_states(self, command_key):
+        self.send(command_key.to_bytes(length=1, byteorder='little'))
+        self.get_states()
+
+
+def main():
+    server_socket = Socket()
+    try:
+        server_socket.start()
+        server_socket.start_listening()
+    except Exception as e:
+        print(e)
+        server_socket.close()
+
+
+if __name__ == '__main__':
+    main()

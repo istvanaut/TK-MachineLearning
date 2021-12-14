@@ -9,3 +9,4 @@
 /Simulation/files/torch/
 /Simulation/files/replay_statuses.npy
 /venv/
+/Microcontrollers/ESP/CommunicationPython/__pycache__
