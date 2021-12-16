@@ -155,6 +155,12 @@ The server waits for user input on the command line, and starts communication pr
 If no user input is entered the server send a NO_NEW_COMMAND signal to the ESP, which continues as if nothing has happened.
 The server also has persistent data storage. Information that is insterted into the **ProcessedState** class can be saved into a json based db.
 
+## Develpoment
+Server can be started with the *StartSocket.py* script.
+Current event handlers are implemented in the **Socket** class.
+The nerual network is generated in the *ExportedModel* folder.
+The *.onnx* file generated must mach the file in the Nucleo project root.
+
 
 # Contact
 For more information or issues no contained in this project write to the following people:
