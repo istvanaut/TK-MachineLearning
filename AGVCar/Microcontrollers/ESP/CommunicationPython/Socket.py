@@ -63,20 +63,6 @@ class Socket:
         if self.config.REQ_WAITING_FOR_COMMAND == request_type:
             self.ask_for_command()
 
-        # if self.config.REQ_ACTION == request_type:
-        #     self.send_action()
-        #
-        # if self.config.REQ_STATES == request_type:
-        #     self.get_states()
-        #
-        # if self.config.REQ_START_WEIGHTS == request_type:
-        #     self.prepare_weights()
-        #
-        # if self.config.REQ_WEIGHTS == request_type:
-        #     self.send_weights()
-        #
-        # if self.config.REQ_LAST_CHUNK == request_type:
-        #     self.send_last_chunk()
 
     def ask_for_command(self):
         try:
