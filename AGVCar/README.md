@@ -1,8 +1,11 @@
 # AGV Car Project
 
-This repo contains the resources for the AGV project.
+This repo contains the resources for the AGV car project.
 The goal of the project is to create a self-driving car, which uses a neural network for driving.
 The project had many approaches during the semesters, this document aims to collect, describe the project for future development.
+The main concept that the project uses currenlty is to use reinforcment learning to follow a line on the ground.
+Performance is calculated from sensor input, and the car is controlled by two microcontrollers.
+
 
 Sections:
 * Architecture
@@ -16,7 +19,7 @@ Sections:
 * Future Tasks
 
 # Dictionary
-Reward - Reward is calculated based on the network's decision
+Reward - Reward is calculated based on the network's decision, and sensor input
 State - State of the vehicle (position, speed, sensor data, image, decision of network, reward)
 
 # Architeture
@@ -47,14 +50,14 @@ There are currently two versions of the code:
 * ESPRESSIF VS-CODE
 * Arduino IDE
   
-Both of them are built similarly, but each of them was incapable of SPI communication, more on this later.
+Both of them are built similarly, but each of them were incapable of SPI communication, more on this later.
 The structure of the code and workflow is that the ESP connects to the socket and sends out a request.
 These requests include:
 * WAITING_FOR_COMMAND - This indicates to the server that the controller is waiting for the action to perform.
 
 Then based on the response of the server the ESP handles received actions.
 
-Receives actions can be:
+Received actions can be:
 * STOP - Send stop message to Nucleo and stop all tasks
 * LINE_FOLLOW - Start a pre implemented line following algorithm on Nucleo
 * SEND_IMAGE - Sends the image to the server
@@ -63,12 +66,13 @@ Receives actions can be:
 * NO_NEW_COMMAND - There has not been new input on the server, continue as before
 
 The controller uses the camera to create images for the neural network and send them to the server.
-Due to computational capacities, the image is grayscale. The smallest available configuration is 96X96.
-information about this we could not find on GitHub, but in the ESPRESSIF we get this size as a suggestion.
-More information about camera configuration can be found on the ESP32-CAM GitHub.
-Definitions and values can be found in the header file.
+Due to computational capacities, the image is grayscale.
+The smallest available configuration is 96X96.
+Information about this we could not find on GitHub, but in the ESPRESSIF we get this size as a suggestion.
+More information about camera configuration can be found on the [ESP32-CAM GitHub](https://github.com/espressif/esp32-camera).
+Definitions and values can be found in the [header file](https://github.com/espressif/esp32-camera/blob/master/driver/include/esp_camera.h).
 
-We have sed SPI communication between the two controllers.
+We have set SPI communication between the two controllers.
 The table below will list the pin layout that is currently used.
 
 | Name      | PIN |
@@ -80,21 +84,22 @@ The table below will list the pin layout that is currently used.
 | HANDSHAKE | 2   |
 
 The handshake was used when the Nucle was a master controller for signalling that the ESP is ready for communication.
+This pin in the future can help ih configuring communcation between controllers, so that both of them is ready for transmit.
 
 ### Development
 
 Currently, there are two alternatives to begin development with.
-The first one is a C framework, ESPRESSIF (link).
-The second is the Arduino IDE (link).
+The first one is a C framework, [ESPRESSIF] (https://docs.espressif.com/projects/esp-idf/en/latest/esp32/index.html#).
+The second is the Arduino IDE.
 These projects both implement the same thing, configuring and fault detection is easier on the Arduino IDE.
 To be able to connect to a wife network it is advised to use a mobile hotspot since the local wifi's setting doesn't allow hosting (internet is not needed, just the network).
-During development, the reset button has to be pressed on the controller to begin code transfer.
+During development, the reset button has to be pressed on the ESP controller to begin code transfer.
 This doesn't work all the time.
 For 100% success, we have used putty to connect to the serial with a rate of 115200 and press reset.
 
 ### Adruino IDE
 
-Code can be found here.
+Code can be found [here](https://github.com/istvanaut/TK-MachineLearning/tree/main/AGVCar/Microcontrollers/ESP/ESPMasterCode).
 
 The main difference is that this code uses a serial monitor, accessible through a browser.
 This was helpful in the configuration as when the ESP is connected to the Nucleo there is no access to the serial manually.
@@ -106,12 +111,12 @@ Issues:
 * The ESP SPI.h library is limited in data transfer. We were only able to send 1 to 4 bytes of data. This is too slow to transfer the network weights
 * Documentation and resources are hard to find to the ESP specific functions
 
-### ESPRESS-IDF
+### ESPRESSIF
 
-Code can be found here.
+Code can be found [here](https://github.com/istvanaut/TK-MachineLearning/tree/main/AGVCar/Microcontrollers/ESP/tcp_client).
 
 This framework provides robust development.
-It contains lots of examples and is well documented(link).
+It contains lots of examples and is well documented, althoug some of the example projects are hard to find and no onger working.
 
 For socket communication, the password and host IP can be set in the *sdkconfig* file.
 
@@ -138,7 +143,7 @@ Documentation for the SPI communication is linked with a description of framewor
 ## NUCLEO
 
 The Nucleo is responsible for storing sensor inputs, requesting an image from the ESP, running the neural network for decision making and spinning the servos.
-Code for the Nucleo is well constructed and mostly autogenerated by the Cube IDE. Information from the Nucle can be found [here](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html).
+Code for the Nucleo is well constructed and mostly autogenerated by the Cube IDE. Information from the Nucleo can be found [here](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html).
 
 ### STM32 Cube IDE
 
@@ -148,11 +153,13 @@ When launching the .ioc project file many configurations can be applied visually
 
 Look for definitions and constant values in the header files.
 There is a pre implemented line following algorithm which can be found in the main.c file.
+If there is an object before the front sensors, the emergency break is applied and all other functionalites are stopped.
 
 ### Issues
-* The project might not detect the X-CUBE dependency. This hast to be linked manually in the ide by opening the .ioc. Then *Pinout & Configuration>SoftwarePacks>X-CUBE-AI>simplenn* and link the onnx file that can be found in the Nucleo main project root.
+* The project might not detect the X-CUBE dependency. This hast to be linked manually in the IDE by opening the .ioc. Then *Pinout & Configuration>SoftwarePacks>X-CUBE-AI>simplenn* and link the onnx file that can be found in the Nucleo main project root.
 * C-CUBE-AI generates flags for the build that cause some build errors, such as no *__heap_malloc__ not found*. To resolve flags have to be deleted in the project *Properties>C/C++ Builds>Settings>MCU GCC Linker>Miscellaneous*. Remove everything, *-u_print_float* is optional. This usually happens after each code generation.
 * At debug if there is no line under the car the debug will be stuck in the light sensor task, the best way to debug is to lift the car with a wallet, so it does not roll off from the desk.
+* If the lightsensor does not light up reset or lift the device. 
 
 ### Tasks
 * Handle master input from ESP. Communications have an example in-network.c, should be put into a separate file.
@@ -184,14 +191,12 @@ The **ReinforcmentModel** is the training model.
 It loads the network and performs training.
 The training data is stored in a **ReplayMamory**.
 This is where data should be saved when it arrives from the ESP.
-For more information about the Network, library read [here]. 
+For more information about the Network, library read [here](https://github.com/istvanaut/TK-MachineLearning/blob/main/AGVCar/Documentation/NeuralNetworkDocument.pdf). 
 
 # Simulaton
 In the first semester of the project, a simulation environment was created in Carla to pretrain the network.
 The network performed well in the simulation, but we couldn't try them on the vehicle as it was misconfigured.
 In the future training in Carla could provide the starting weights for the network.
-
-
 
 # Contact
 For more information or issues not contained in this description write to the following people:
