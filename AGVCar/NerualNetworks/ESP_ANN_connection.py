@@ -1,9 +1,7 @@
-import time
-
 import torch
 import numpy as np
 
-from AGVCar.Microcontroller.Network.Networks.FlatDense import FlatDense
+from AGVCar.NerualNetworks.Networks import FlatDense
 
 
 class ConnectionTrainer:

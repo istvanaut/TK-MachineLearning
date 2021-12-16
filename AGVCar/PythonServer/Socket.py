@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
 # !/usr/bin/env python3
-import traceback
 
 from PIL import Image
-import io
 import socket as socket_lib
 import time
-from threading import Timer
 
-from AGVCar.Microcontroller.Network.ESP_ANN_connection import ConnectionTrainer
-from AGVCar.Microcontroller.Network.Networks.FlatDense import FlatDense
-from AGVCar.Microcontroller.Network.ReinforcementModel import ReinforcementModel
+from AGVCar.NerualNetworks.ESP_ANN_connection import ConnectionTrainer
+from AGVCar.NerualNetworks.Networks.FlatDense import FlatDense
+from AGVCar.NerualNetworks.ReinforcementModel import ReinforcementModel
 from AGVCar.PythonServer.NetworkExporter import NetworkExporter
 from AGVCar.PythonServer.ProcessedState import ProcessedState
 from AGVCar.PythonServer.SocketConfig import SocketConfig

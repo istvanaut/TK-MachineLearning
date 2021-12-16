@@ -7,9 +7,9 @@ import torch.optim as optim
 import torch.nn.functional as F
 from torchsummary import summary
 
-from AGVCar.Microcontroller.Network.Networks import CNNwRNN
-from AGVCar.Microcontroller.Network.ReinforcementlearningElements import RewardFunctions
-from AGVCar.Microcontroller.Network.ReinforcementlearningElements.ReplayMemory import ReplayMemory, Transition
+from AGVCar.NerualNetworks.Networks import CNNwRNN
+from AGVCar.NerualNetworks.ReinforcementlearningElements import RewardFunctions
+from AGVCar.NerualNetworks.ReinforcementlearningElements.ReplayMemory import ReplayMemory, Transition
 from AGVCar.Simulation.Main.support.logger import logger
 
 

@@ -3,8 +3,8 @@ import subprocess
 
 from binascii import unhexlify
 
-from AGVCar.Microcontroller.Network.Networks.FlatDense import FlatDense
-from AGVCar.Microcontroller.Network.ReinforcementModel import ReinforcementModel
+from AGVCar.NerualNetworks.Networks import FlatDense
+from AGVCar.NerualNetworks.ReinforcementModel import ReinforcementModel
 
 
 class NetworkExporter:
