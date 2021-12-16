@@ -2,7 +2,7 @@
 
 This repo contains the resources for the AGV project.
 The goal of the project is to create a self-driving car, which uses a neural network for driving.
-The project has many approaches during the semesters, this document aims to collect, descrive the project for future develpopment.
+The project had many approaches during the semesters, this document aims to collect, describe the project for future develpopment.
 
 Sections:
 * Architecture
