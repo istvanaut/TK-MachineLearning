@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # !/usr/bin/env python3
+from threading import Timer
 
 from PIL import Image
 import socket as socket_lib
@@ -28,7 +29,6 @@ class Socket:
         self.waiting_for_initial_weights = True
 
     def start(self):
-        #self.processed_states.getDataFromDb()
         self.extract_network()
         self.socket = socket_lib.socket(socket_lib.AF_INET, socket_lib.SOCK_STREAM)
         self.socket.bind((self.config.HOST, self.config.PORT))
@@ -65,13 +65,13 @@ class Socket:
             for k, v in self.config.commands.items():
                 print("for {} press {}".format(v, k))
 
-            ##def timeoutFunc():
-            ##        self.no_new_command(5)
-        ##    print("No new command sent. If you have new commands you can send")
+            def timeoutFunc():
+                self.no_new_command(5)
+                print("No new command sent. If you have new commands you can send")
 
             timeout = 3
-            ##t = Timer(timeout, timeoutFunc)
-            ##t.start()
+            t = Timer(timeout, timeoutFunc)
+            t.start()
             prompt = f"\n If you don't make any command in {timeout} seconds no_new_command will be sent...\n"
             command = int(input(prompt))
             assert 0 <= command < len(self.config.commands)
