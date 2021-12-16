@@ -33,6 +33,9 @@ The ESP32-CAM is responsible for communication between the car and the python se
 It is also responisble for taking the image and sending the image to both sides of the communication.
 The Python Server is a socket based application, which waits for the connection of the ESP32-CAM client and sends commands and receives data gathered from the two controllers.
 After gathering data, the server trains a Neural Network, and sends the network to the Nucleo Controller through the ESP.
+The general structure is also explained on the image bleow.
+
+![Architecture] (https://github.com/istvanaut/TK-MachineLearning/blob/main/AGVCar/Documentation/Architecture.svg)
 
 # Microcontollers
 
