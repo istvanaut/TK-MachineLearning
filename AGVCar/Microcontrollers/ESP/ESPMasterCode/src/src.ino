@@ -32,7 +32,7 @@ WiFiClient client;
 
 // Nucleo interface
 SPIClass * nucleo = NULL; // SPI class interface, cannot send more than one byte
-spi_device_handle_t spi; // ESP-IDF spi interface
+
 
 // State of ESP
 uint8_t state = STATE_LISTEN;

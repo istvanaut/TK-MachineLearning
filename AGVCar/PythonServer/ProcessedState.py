@@ -4,14 +4,12 @@ import numpy as np
 from tinydb import TinyDB, Query, where
 from tinydb.table import Document
 
-from Microcontrollers.ESP.CommunicationPython.State import State
-
 
 class ProcessedState:
     def __init__(self, **kwargs):
 
         # Db Path
-        self.dbPath = '../../../db/statedb.json'
+        self.dbPath = 'db/statedb.json'
 
         self.statesList = []
 
@@ -52,21 +50,21 @@ class ProcessedState:
         }
 
         self.statesList.append({'prev_state': prev_state_dict, 'curr_state': curr_state_dict})
+        return prev_state_dict, curr_state_dict
 
     # Search from db with TinyDb Queries.
     # Documentation: https://tinydb.readthedocs.io/en/latest/usage.html#handling-data
     # Use 'state' instead of query instance. Expected type: String
     def getDataFromDb(self, query):
         db = TinyDB(self.dbPath)
-        state = Query()
-        queryList = db.search(eval(query))
+        query_list = db.search(eval(query))
 
         # Correcting format of images
-        for states in queryList:
+        for states in query_list:
             states['prev_state']['image'] = np.array(states['prev_state']['image'])
             states['curr_state']['image'] = np.array(states['curr_state']['image'])
 
-        self.statesList = self.statesList + queryList
+        self.statesList = self.statesList + query_list
 
     # Saves all states in statesList or if exists, updates.
     def saveActualStates(self):

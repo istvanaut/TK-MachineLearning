@@ -257,7 +257,15 @@ static void sendRequestToSlave(uint8_t request){
     trans_desc.length = (8*1); // total data bits
     trans_desc.tx_buffer = txData;
     txData[0] = request; // command bits;
-    err = spi_device_polling_transmit(spi, &trans_desc);
+    err = spi_device_acquire_bus(spi, portMAX_DELAY);
+    ESP_LOGE(TAG, "Transaction error: %d", err);
+    err = spi_device_polling_start(spi, &trans_desc, portMAX_DELAY);
+    //err = spi_device_transmit(spi, &trans_desc);
+    ESP_LOGE(TAG, "Transaction error: %d", err);
+    ESP_ERROR_CHECK(err);
+    spi_transaction_t *rtrans;
+    err = spi_device_polling_end(spi, portMAX_DELAY);
+    ESP_LOGE(TAG, "Transaction error: %d", err);
     ESP_ERROR_CHECK(err);
 }
 

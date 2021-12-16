@@ -5,4 +5,4 @@ const char* password = "fihp0659";
 
 // Socket information
 const uint16_t port = 3333;
-const char * host = "192.168.249.153";
+const char * host = "192.168.215.153";

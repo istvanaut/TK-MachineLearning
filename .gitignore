@@ -10,3 +10,6 @@
 /AGVCar/Simulation/files/replay_statuses.npy
 /venv/
 /AGVCar/Microcontrollers/ESP/CommunicationPython/__pycache__
+/AGVCar/Microcontrollers/ESP/tcp_client/build
+
+/AGVCar/Microcontrollers/ESP/tcp_client/build/

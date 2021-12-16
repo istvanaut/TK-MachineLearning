@@ -8,13 +8,12 @@ import socket as socket_lib
 import time
 from threading import Timer
 
-from Microcontroller.Network.ESP_ANN_connection import ConnectionTrainer
-from Microcontroller.Network.Networks.FlatDense import FlatDense
-from Microcontroller.Network.ReinforcementModel import ReinforcementModel
-from Microcontrollers.ESP.CommunicationPython.NetworkExporter import NetworkExporter
-from Microcontrollers.ESP.CommunicationPython.ProcessedState import ProcessedState
-from Microcontrollers.ESP.CommunicationPython.SocketConfig import SocketConfig
-
+from AGVCar.Microcontroller.Network.ESP_ANN_connection import ConnectionTrainer
+from AGVCar.Microcontroller.Network.Networks.FlatDense import FlatDense
+from AGVCar.Microcontroller.Network.ReinforcementModel import ReinforcementModel
+from AGVCar.PythonServer.NetworkExporter import NetworkExporter
+from AGVCar.PythonServer.ProcessedState import ProcessedState
+from AGVCar.PythonServer.SocketConfig import SocketConfig
 
 
 class Socket:
@@ -32,6 +31,7 @@ class Socket:
         self.waiting_for_initial_weights = True
 
     def start(self):
+        #self.processed_states.getDataFromDb()
         self.extract_network()
         self.socket = socket_lib.socket(socket_lib.AF_INET, socket_lib.SOCK_STREAM)
         self.socket.bind((self.config.HOST, self.config.PORT))
@@ -63,19 +63,18 @@ class Socket:
         if self.config.REQ_WAITING_FOR_COMMAND == request_type:
             self.ask_for_command()
 
-
     def ask_for_command(self):
         try:
             for k, v in self.config.commands.items():
                 print("for {} press {}".format(v, k))
 
-            def timeoutFunc():
-                self.no_new_command(5)
-                print("No new command sent. If you have new commands you can send")
+            ##def timeoutFunc():
+            ##        self.no_new_command(5)
+        ##    print("No new command sent. If you have new commands you can send")
 
             timeout = 3
-            t = Timer(timeout, timeoutFunc)
-            t.start()
+            ##t = Timer(timeout, timeoutFunc)
+            ##t.start()
             prompt = f"\n If you don't make any command in {timeout} seconds no_new_command will be sent...\n"
             command = int(input(prompt))
             assert 0 <= command < len(self.config.commands)
@@ -120,7 +119,7 @@ class Socket:
 
     def send_action(self):
         self.send(self.config.SEND_IMAGE.to_bytes(length=1, byteorder='little'))
-        response=self.receive(1)
+        response = self.receive(1)
         print(response)
 
     def get_states(self):
@@ -140,12 +139,12 @@ class Socket:
 
     def send_weights(self):
         print("Sending weights")
-        for i in range(len(self.weights)//self.config.WEIGHTS_CHUNKS):
+        for i in range(len(self.weights) // self.config.WEIGHTS_CHUNKS):
             self.send(self.weights[
                       i * self.config.WEIGHTS_CHUNKS:(i + 1) * self.config.WEIGHTS_CHUNKS])
         print("Sending last chunk of weights")
         self.send(self.weights[
-                  len(self.weights)//self.config.WEIGHTS_CHUNKS * self.config.WEIGHTS_CHUNKS:])
+                  len(self.weights) // self.config.WEIGHTS_CHUNKS * self.config.WEIGHTS_CHUNKS:])
 
     def stop(self, command_key):
         self.send(command_key.to_bytes(length=1, byteorder='little'))

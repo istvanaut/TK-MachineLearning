@@ -1,13 +1,15 @@
 import math
 import random
-from torchsummary import summary
 import numpy as np
+import matplotlib as plt
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
+from torchsummary import summary
 
-from Microcontroller.Network.ReinforcementlearningElements import RewardFunctions
-from Microcontroller.Network.ReinforcementlearningElements.ReplayMemory import ReplayMemory
+from AGVCar.Microcontroller.Network.Networks import CNNwRNN
+from AGVCar.Microcontroller.Network.ReinforcementlearningElements import RewardFunctions
+from AGVCar.Microcontroller.Network.ReinforcementlearningElements.ReplayMemory import ReplayMemory, Transition
 from AGVCar.Simulation.Main.support.logger import logger
 
 

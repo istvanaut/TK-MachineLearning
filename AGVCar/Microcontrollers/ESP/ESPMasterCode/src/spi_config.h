@@ -10,11 +10,14 @@
 #define EnableDMA true
 
 static const int SPI_Clk = 1000000; // 1 MHz
-
+spi_bus_config_t bus_config = { };
+spi_device_interface_config_t dev_config = { };  // initializes all field to 0
+spi_device_handle_t spi; // ESP-IDF spi interface
+  
 esp_err_t fInitializeSPI_Channel()
 {
   esp_err_t intError;
-  spi_bus_config_t bus_config = { };
+
   bus_config.sclk_io_num = GPIO_SCLK; // CLK
   bus_config.mosi_io_num = GPIO_MOSI; // MOSI
   bus_config.miso_io_num = GPIO_MISO; // MISO
@@ -28,7 +31,6 @@ esp_err_t fInitializeSPI_Channel()
 esp_err_t fInitializeSPI_Devices(spi_device_handle_t h)
 {
   esp_err_t intError;
-  spi_device_interface_config_t dev_config = { };  // initializes all field to 0
   dev_config.address_bits     = 0;
   dev_config.command_bits     = 0;
   dev_config.dummy_bits       = 0;
@@ -42,33 +44,32 @@ esp_err_t fInitializeSPI_Devices(spi_device_handle_t h)
   dev_config.queue_size       = 1;
   dev_config.pre_cb           = NULL;
   dev_config.post_cb          = NULL;
-  intError = spi_bus_add_device(HSPI_HOST, &dev_config, &h);
+  intError = spi_bus_add_device(HSPI_HOST, &dev_config, &spi);
   return intError;
 } 
 
-void sendRequestToSlave(spi_device_handle_t &h, uint8_t request) {
+void sendRequestToSlave(spi_device_handle_t h, uint8_t request) {
   esp_err_t err;
   uint8_t txData[1] = { };
   uint8_t rxData[1] = { };
   spi_transaction_t trans_desc;
   memset(&trans_desc, 0, sizeof(trans_desc));
-  trans_desc = { };
   trans_desc.addr =  0;
   trans_desc.cmd = 0;
   trans_desc.flags = 0 ;
   trans_desc.length = (8*1); // total data bits
   trans_desc.tx_buffer = txData;
   txData[0] = request; // command bits
-  spi_device_acquire_bus(h, portMAX_DELAY);
-  WebSerial.println(0x06u);
-  delay(5000);
-  err = spi_device_polling_start( h, &trans_desc, portMAX_DELAY);
+  err = spi_device_acquire_bus(spi, portMAX_DELAY);
   WebSerial.println(err);
   delay(5000);
-  err = spi_device_polling_end(h, portMAX_DELAY);
+  err = spi_device_polling_start( spi, &trans_desc, portMAX_DELAY);
   WebSerial.println(err);
   delay(5000);
-  spi_device_release_bus(h);
+  err = spi_device_polling_end(spi, portMAX_DELAY);
+  WebSerial.println(err);
+  delay(5000);
+  spi_device_release_bus(spi);
   if (err != ESP_OK) {
     WebSerial.print("Transaction failed, error code: ");
     WebSerial.println(err);

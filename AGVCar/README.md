@@ -161,6 +161,16 @@ Current event handlers are implemented in the **Socket** class.
 The nerual network is generated in the *ExportedModel* folder.
 The *.onnx* file generated must mach the file in the Nucleo project root.
 
+## Tasks
+* When communication between the two controllers are established, data reseving needs to be implemented based on the incoming data structure. 
+
+
+# Simulaton
+In the first semester of the porject a simulation enicorment was created in Carla to pretrain the network.
+Network performed well in the simulation, but we couldn't try them on the vehicle as it was misconfigured.
+In the future training in Carla could provide the starting weigths for the network.
+
+
 
 # Contact
 For more information or issues no contained in this project write to the following people:

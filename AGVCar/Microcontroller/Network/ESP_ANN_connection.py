@@ -3,8 +3,7 @@ import time
 import torch
 import numpy as np
 
-from Microcontroller.Network.Networks.FlatDense import FlatDense
-from Microcontroller.Network.ReinforcementModel import ReinforcementModel
+from AGVCar.Microcontroller.Network.Networks.FlatDense import FlatDense
 
 
 class ConnectionTrainer:
