@@ -7,7 +7,7 @@
    CONDITIONS OF ANY KIND, either express or implied.
 */
 
-
+// xSemaphoreGive
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -44,6 +44,7 @@
 
 #include <sys/param.h>
 #include "freertos/event_groups.h"
+#include "freertos/sm.h"
 #include "esp_netif.h"
 #include "protocol_examples_common.h"
 #include "addr_from_stdin.h"
@@ -150,42 +151,38 @@ static esp_err_t initCamera()
     return ESP_OK;
 }
 
-    spi_bus_config_t buscfg={
-        .sclk_io_num = GPIO_SCLK, // CLK
-        .mosi_io_num = GPIO_MOSI, // MOSI
-        .miso_io_num = GPIO_MISO, // MISO
-        .quadwp_io_num = -1, // Not used
-        .quadhd_io_num = -1, // Not used
-        .max_transfer_sz = 1024,
-    };
+spi_bus_config_t buscfg={
+    .sclk_io_num = GPIO_SCLK, // CLK
+    .mosi_io_num = GPIO_MOSI, // MOSI
+    .miso_io_num = GPIO_MISO, // MISO
+    .quadwp_io_num = -1, // Not used
+    .quadhd_io_num = -1, // Not used
+    .max_transfer_sz = 1024,
+};
 
-     spi_device_interface_config_t devcfg={
-            .address_bits     = 0,
-            .command_bits     = 0,
-            .dummy_bits       = 0,
-            .mode             = 1,// for DMA, only 1 or 3 is available
-            .duty_cycle_pos   = 0,
-            .cs_ena_posttrans = 0,
-            .cs_ena_pretrans  = 0,
-            .clock_speed_hz=10*1000*1000, 
-            .spics_io_num     = GPIO_CS,
-            .flags            = 0,
-            .queue_size       = 1,
-            .pre_cb           = NULL,
-            .post_cb          = NULL,                          //We want to be able to queue 7 transactions at a time
-   };
+spi_device_interface_config_t devcfg={
+    .address_bits     = 0,
+    .command_bits     = 0,
+    .dummy_bits       = 0,
+    .mode             = 1,      // for DMA, only 1 or 3 is available
+    .duty_cycle_pos   = 0,
+    .cs_ena_posttrans = 0,
+    .cs_ena_pretrans  = 0,
+    .clock_speed_hz   = 10*1000*1000, 
+    .spics_io_num     = GPIO_CS,
+    .flags            = 0,
+    .queue_size       = 1,
+    .pre_cb           = NULL,
+    .post_cb          = NULL,   // We want to be able to queue 7 transactions at a time
+};
 
 static void configureSPI(){
     esp_err_t ret;
     //Configuration for the SPI bus
-
-
-    ret = spi_bus_initialize(HSPI_HOST, &buscfg, true);
+    ret = spi_bus_initialize(HSPI_HOST, &buscfg, DMA_CHAN);
     ESP_ERROR_CHECK(ret);
-    //Configure handshake line as output
-    
+
     //Attach the NUCLEO to the SPI bus
-   
     ret=spi_bus_add_device(HSPI_HOST, &devcfg, &spi);
     ESP_ERROR_CHECK(ret);
 }
@@ -248,6 +245,7 @@ static void getRequestFromSokcet(int sock, uint8_t state){
 static void sendRequestToSlave(uint8_t request){
     esp_err_t err;
     uint8_t txData[1] = { };
+    txData[0] = request; // command bits;
     uint8_t rxData[1] = { };
     spi_transaction_t trans_desc;
     memset(&trans_desc, 0, sizeof(trans_desc));
@@ -256,15 +254,8 @@ static void sendRequestToSlave(uint8_t request){
     trans_desc.flags = 0 ;
     trans_desc.length = (8*1); // total data bits
     trans_desc.tx_buffer = txData;
-    txData[0] = request; // command bits;
-    err = spi_device_acquire_bus(spi, portMAX_DELAY);
-    ESP_LOGE(TAG, "Transaction error: %d", err);
-    err = spi_device_polling_start(spi, &trans_desc, portMAX_DELAY);
-    //err = spi_device_transmit(spi, &trans_desc);
-    ESP_LOGE(TAG, "Transaction error: %d", err);
-    ESP_ERROR_CHECK(err);
-    spi_transaction_t *rtrans;
-    err = spi_device_polling_end(spi, portMAX_DELAY);
+   
+    err = spi_device_transmit(spi, &trans_desc);
     ESP_LOGE(TAG, "Transaction error: %d", err);
     ESP_ERROR_CHECK(err);
 }
