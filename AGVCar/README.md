@@ -19,8 +19,8 @@ Sections:
 * Future Tasks
 
 # Dictionary
-Reward - Reward is calculated based on the network's decision, and sensor input
-State - State of the vehicle (position, speed, sensor data, image, decision of network, reward)
+* Reward - Reward is calculated based on the network's decision, and sensor input
+* State - State of the vehicle (position, speed, sensor data, image, decision of network, reward)
 
 # Architecture
 
