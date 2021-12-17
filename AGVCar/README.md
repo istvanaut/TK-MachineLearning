@@ -85,6 +85,7 @@ The table below will list the pin layout that is currently used.
 
 The handshake was used when the Nucleo was a master controller for signalling that the ESP is ready for communication.
 This pin in the future can help with configuring communication between controllers, so that both of them is ready for transmit.
+The library we have ended up using can be found [here](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/spi_master.html). 
 
 ### Development
 
